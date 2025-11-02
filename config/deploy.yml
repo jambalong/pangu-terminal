@@ -132,13 +132,3 @@ accessories:
         - POSTGRES_PASSWORD
     volumes:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
-
-production:
-  <<: *default
-  database: wuwa_planner_production
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  username: rails
-  password: <%= ENV["POSTGRES_PASSWORD"] %>
-  host: wuwa-planner-db
