@@ -10,9 +10,74 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_02_114736) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_14_084441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "forte_node_costs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "material_type", null: false
+    t.integer "node_tier", null: false
+    t.string "node_type", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "level_costs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "credit_cost", default: 0, null: false
+    t.integer "exp_required", default: 0, null: false
+    t.integer "level", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "materials", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "exp_value", default: 0, null: false
+    t.string "material_type", null: false
+    t.string "name", null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "resonator_ascension_costs", force: :cascade do |t|
+    t.integer "ascension_rank", null: false
+    t.datetime "created_at", null: false
+    t.string "material_type", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "resonator_material_maps", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "material_id", null: false
+    t.string "material_type", null: false
+    t.integer "rarity", default: 1, null: false
+    t.bigint "resonator_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["material_id"], name: "index_resonator_material_maps_on_material_id"
+    t.index ["resonator_id"], name: "index_resonator_material_maps_on_resonator_id"
+  end
+
+  create_table "resonators", force: :cascade do |t|
+    t.string "attribute_type", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "rarity", default: 4, null: false
+    t.datetime "updated_at", null: false
+    t.string "weapon_type", null: false
+  end
+
+  create_table "skill_costs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "level", null: false
+    t.string "material_type", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "solid_cable_messages", force: :cascade do |t|
     t.binary "channel", null: false
@@ -156,10 +221,53 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_02_114736) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "weapon_ascension_costs", force: :cascade do |t|
+    t.integer "ascension_rank", null: false
+    t.datetime "created_at", null: false
+    t.string "material_type", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "weapon_material_maps", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "material_id", null: false
+    t.string "material_type", null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "weapon_id", null: false
+    t.index ["material_id"], name: "index_weapon_material_maps_on_material_id"
+    t.index ["weapon_id"], name: "index_weapon_material_maps_on_weapon_id"
+  end
+
+  create_table "weapon_type_materials", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "material_id", null: false
+    t.string "material_type", null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+    t.string "weapon_type", null: false
+    t.index ["material_id"], name: "index_weapon_type_materials_on_material_id"
+  end
+
+  create_table "weapons", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
+    t.string "weapon_type", null: false
+  end
+
+  add_foreign_key "resonator_material_maps", "materials"
+  add_foreign_key "resonator_material_maps", "resonators"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "weapon_material_maps", "materials"
+  add_foreign_key "weapon_material_maps", "weapons"
+  add_foreign_key "weapon_type_materials", "materials"
 end

@@ -1,0 +1,2 @@
+class Resonator < ApplicationRecord
+end

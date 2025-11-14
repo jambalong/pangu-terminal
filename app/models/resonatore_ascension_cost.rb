@@ -1,0 +1,2 @@
+class ResonatorAscensionCost < ApplicationRecord
+end

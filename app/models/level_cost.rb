@@ -1,0 +1,2 @@
+class LevelCost < ApplicationRecord
+end
