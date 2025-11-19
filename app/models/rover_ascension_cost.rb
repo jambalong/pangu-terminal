@@ -1,0 +1,2 @@
+class RoverAscensionCost < ApplicationRecord
+end

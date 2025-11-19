@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_18_001058) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_19_234626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,6 +70,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_18_001058) do
     t.integer "rarity", default: 4, null: false
     t.datetime "updated_at", null: false
     t.string "weapon_type", null: false
+  end
+
+  create_table "rover_ascension_costs", force: :cascade do |t|
+    t.integer "ascension_rank", null: false
+    t.datetime "created_at", null: false
+    t.string "material_type", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "skill_costs", force: :cascade do |t|
