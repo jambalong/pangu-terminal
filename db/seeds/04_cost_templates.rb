@@ -129,7 +129,7 @@ def create_resonator_level_cost(level, exp)
   )
 end
 
-RESONATOR_LEVEL_COSTS.each do | cost |
+RESONATOR_LEVEL_COSTS.each do |cost|
   create_resonator_level_cost(cost[:level], cost[:exp])
 end
 
@@ -178,7 +178,7 @@ def create_rover_ascension_cost(rank, type, rarity, quantity)
   ).update!(quantity: quantity)
 end
 
-ROVER_ASCENSION_COSTS.each do | cost |
+ROVER_ASCENSION_COSTS.each do |cost|
   create_rover_ascension_cost(cost[:rank], cost[:type], cost[:rarity], cost[:quantity])
 end
 
@@ -227,7 +227,7 @@ def create_resonator_ascension_cost(rank, type, rarity, quantity)
   ).update!(quantity: quantity)
 end
 
-RESONATOR_ASCENSION_COSTS.each do | cost |
+RESONATOR_ASCENSION_COSTS.each do |cost|
   create_resonator_ascension_cost(cost[:rank], cost[:type], cost[:rarity], cost[:quantity])
 end
 
@@ -295,7 +295,7 @@ def create_skill_cost(level, type, rarity, quantity)
   ).update!(quantity: quantity)
 end
 
-SKILL_COSTS.each do | cost |
+SKILL_COSTS.each do |cost|
   create_skill_cost(cost[:level], cost[:type], cost[:rarity], cost[:quantity])
 end
 
@@ -335,7 +335,7 @@ def create_forte_node_cost(node, tier, type, rarity, quantity)
   ).update!(quantity: quantity)
 end
 
-FORTE_NODE_COSTS.each do | cost |
+FORTE_NODE_COSTS.each do |cost|
   create_forte_node_cost(cost[:node], cost[:tier], cost[:type], cost[:rarity], cost[:quantity])
 end
 
@@ -576,11 +576,11 @@ def create_weapon_level_cost_r4(level, exp)
   )
 end
 
-WEAPON_LEVEL_COSTS_R5.each do | cost |
+WEAPON_LEVEL_COSTS_R5.each do |cost|
   create_weapon_level_cost_r5(cost[:level], cost[:exp])
 end
 
-WEAPON_LEVEL_COSTS_R4.each do | cost |
+WEAPON_LEVEL_COSTS_R4.each do |cost|
   create_weapon_level_cost_r4(cost[:level], cost[:exp])
 end
 
@@ -664,7 +664,7 @@ def create_weapon_ascension_cost(stars, rank, type, rarity, quantity)
   ).update!(quantity: quantity)
 end
 
-WEAPON_ASCENSION_COSTS.each | cost |
+WEAPON_ASCENSION_COSTS.each |cost|
   create_weapon_ascension_cost(cost[:stars], cost[:rank], cost[:type], cost[:rarity], cost[:quantity])
 end
 
