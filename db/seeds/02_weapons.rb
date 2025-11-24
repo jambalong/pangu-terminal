@@ -131,7 +131,8 @@ WEAPON_DATA.each do | weapon_type, rarities |
 
       # e.g. "Bloodpact's Pledge" => :bloodpacts_pledge
       # e.g. "Gauntlets#21D" => :gauntlets21d
-      $SEED_DATA[name.downcase.gsub(/['#]/, '').gsub(/\s+/, '_').to_sym] = weapon
+      lookup_key = name.downcase.gsub(/['#]/, '').gsub(/\s+/, '_').to_sym
+      $SEED_DATA[lookup_key] = weapon
     end
   end
 end

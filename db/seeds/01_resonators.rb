@@ -95,7 +95,8 @@ RESONATOR_DATA.each do |rarity, elements|
 
       # e.g. "Rover-Aero" => rover_aero
       # e.g. "Xiangli Yao" => xiangli_yao
-      $SEED_DATA[data[:name].downcase.gsub(/\s+/, '_').gsub('-', '_').to_sym] = resonator
+      lookup_key = data[:name].downcase.gsub(/\s+/, '_').gsub('-', '_').to_sym
+      $SEED_DATA[lookup_key] = resonator
     end
   end
 end
