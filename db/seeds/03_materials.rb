@@ -23,6 +23,9 @@ def seed_material_set(data_array, type, category, default_exp=0)
       exp_value: data[:exp] || default_exp
     )
 
+    # e.g. "Mysterious Code" => mysterious_code
+    # e.g. "Gold-Dissolving Feather" => :gold_dissolving_feather
+    # e.g. "Loong's Pearl" => :loongs_pearl
     lookup_key = data[:name].downcase.gsub("'", '').gsub(/\s+/, '_').gsub('-', '_').to_sym
     $SEED_DATA[lookup_key] = material
   end
@@ -58,7 +61,7 @@ seed_material_set(WEAPON_EXP_DATA, "WeaponEXP", "Weapon EXP Material")
 
 # --- Resonator Ascension Materials ---
 BOSS_DROP_DATA = [
-  { name: "Myserious Code", rarity: 5 },
+  { name: "Mysterious Code", rarity: 5 },
   { name: "Abyssal Husk", rarity: 4 },
   { name: "Blazing Bone", rarity: 4 },
   { name: "Blighted Crown of Puppet King", rarity: 4 },
