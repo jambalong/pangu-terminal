@@ -94,9 +94,12 @@ RESONATOR_DATA.each do |rarity, elements|
         weapon_type: data[:weapon_type]
       )
 
-      # e.g. "Rover-Aero" => rover_aero
       # e.g. "Xiangli Yao" => xiangli_yao
-      lookup_key = data[:name].downcase.gsub(/\s+/, '_').gsub('-', '_').to_sym
+      # e.g. "Rover-Aero" => rover_aero
+      # e.g. "Lux & Umbra" => :lux_umbra
+      # e.g. "Gauntlets#21D" => :gauntlets21d
+      # e.g. "Loong's Pearl" => :loongs_pearl
+      lookup_key = data[:name].downcase.gsub(/['#&]/, '').strip.gsub('-', '_').gsub(/\s+/, '_').to_sym
       $SEED_DATA[lookup_key] = resonator
     end
   end

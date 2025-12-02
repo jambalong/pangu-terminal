@@ -23,10 +23,12 @@ def seed_material_set(data_array, type, category, default_exp=0)
       exp_value: data[:exp] || default_exp
     )
 
-    # e.g. "Mysterious Code" => mysterious_code
-    # e.g. "Gold-Dissolving Feather" => :gold_dissolving_feather
+    # e.g. "Xiangli Yao" => xiangli_yao
+    # e.g. "Rover-Aero" => rover_aero
+    # e.g. "Lux & Umbra" => :lux_umbra
+    # e.g. "Gauntlets#21D" => :gauntlets21d
     # e.g. "Loong's Pearl" => :loongs_pearl
-    lookup_key = data[:name].downcase.gsub("'", '').gsub(/\s+/, '_').gsub('-', '_').to_sym
+    lookup_key = data[:name].downcase.gsub(/['#&]/, '').strip.gsub('-', '_').gsub(/\s+/, '_').to_sym
     $SEED_DATA[lookup_key] = material
   end
 end
