@@ -18,7 +18,7 @@ def seed_material_set(data_array, type, category, default_exp=0)
     material = Material.find_or_initialize_by(name: data[:name])
     material.update!(
       rarity: data[:rarity],
-      material_type: material_type,
+      material_type: type,
       category: category,
       exp_value: data[:exp] || default_exp
     )
