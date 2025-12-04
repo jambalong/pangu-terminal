@@ -476,3 +476,32 @@ puts "  --> Weapon Material Maps created."
 
 # TODO: Map Weapon Type to Forgery Drops
 
+# --- 4. Map weapon type to their unique material requirements ---
+# This method handles all Weapon Types and Forgery Drops requirements
+# It creates records in the WeaponTypeMaterial table.
+def map_weapon_type_materials(weapon_type, material_set)
+  material_set.each_with_index do |material, idx|
+    rarity = idx + 2
+
+    WeaponTypeMaterial.find_or_initialize_by(
+      weapon_type: weapon_type,
+      material_type: "ForgeryDrop",
+      rarity: rarity
+    ).update!(material: material)
+  end
+end
+
+WEAPON_TYPE_MAPPING_DATA = {
+  "Sword" => MATERIALS[:metallic_drip_set],
+  "Broadblade" => MATERIALS[:waveworn_residue_set],
+  "Pistols" => MATERIALS[:phlogiston_set],
+  "Gauntlets" => MATERIALS[:cadence_set],
+  "Rectifier" => MATERIALS[:helix_set]
+}.freeze
+
+puts "  --> Mapping Weapon Type Materials..."
+WEAPON_TYPE_MAPPING_DATA.each do |weapon_type, material_set|
+  map_weapon_type_materials(weapon_type, material_set)
+end
+
+puts "  --> Weapon Type Material Maps created."
