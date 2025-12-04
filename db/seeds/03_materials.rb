@@ -13,7 +13,7 @@
 # ===============================================
 puts "  --> Creating Materials..."
 
-def seed_material_set(data_array, type, category, default_exp=0)
+def seed_material_set(data_array, type, category, default_exp = 0)
   data_array.each do |data|
     material = Material.find_or_initialize_by(name: data[:name])
     material.update!(

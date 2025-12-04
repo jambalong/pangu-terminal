@@ -9,7 +9,7 @@
 puts "  --> Creating Mapping Tables..."
 
 # --- 1. Fetch all resonators, weapons, and materials ---
-# NOTE: This relies on 01_resonators.rb, 02_weapons.rb, and 03_materials.rb 
+# NOTE: This relies on 01_resonators.rb, 02_weapons.rb, and 03_materials.rb
 # creating these items and saving them to $SEED_DATA
 
 RESONATORS = {
@@ -473,8 +473,6 @@ WEAPON_MAPPING_DATA.each do |material_set, weapon_array|
 end
 
 puts "  --> Weapon Material Maps created."
-
-# TODO: Map Weapon Type to Forgery Drops
 
 # --- 4. Map weapon type to their unique material requirements ---
 # This method handles all Weapon Types and Forgery Drops requirements

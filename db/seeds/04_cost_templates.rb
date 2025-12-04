@@ -138,13 +138,13 @@ ROVER_ASCENSION_COSTS = [
   # Ascension Rank 1 (Unlocks Level 20)
   { rank: 1, type: "Credit", rarity: 3, quantity: 5000 },
   { rank: 1, type: "EnemyDrop", rarity: 2, quantity: 4 },
-  
+
   # Ascension Rank 2 (Unlocks Level 40)
   { rank: 2, type: "Credit", rarity: 3, quantity: 10000 },
   { rank: 2, type: "EnemyDrop", rarity: 3, quantity: 4 },
   { rank: 2, type: "BossDrop", rarity: 5, quantity: 1 },
   { rank: 2, type: "Flower", rarity: 1, quantity: 4 },
-  
+
   # Ascension Rank 3 (Unlocks Level 50)
   { rank: 3, type: "Credit", rarity: 3, quantity: 15000 },
   { rank: 3, type: "EnemyDrop", rarity: 3, quantity: 8 },
@@ -187,13 +187,13 @@ RESONATOR_ASCENSION_COSTS = [
   # Ascension Rank 1 (Unlocks Level 20)
   { rank: 1, type: "Credit", rarity: 3, quantity: 5000 },
   { rank: 1, type: "EnemyDrop", rarity: 2, quantity: 4 },
-  
+
   # Ascension Rank 2 (Unlocks Level 40)
   { rank: 2, type: "Credit", rarity: 3, quantity: 10000 },
   { rank: 2, type: "EnemyDrop", rarity: 3, quantity: 4 },
   { rank: 2, type: "BossDrop", rarity: 4, quantity: 3 },
   { rank: 2, type: "Flower", rarity: 1, quantity: 4 },
-  
+
   # Ascension Rank 3 (Unlocks Level 50)
   { rank: 3, type: "Credit", rarity: 3, quantity: 15000 },
   { rank: 3, type: "EnemyDrop", rarity: 3, quantity: 8 },
@@ -237,12 +237,12 @@ SKILL_COSTS = [
   { level: 2, type: "Credit", rarity: 3, quantity: 1500 },
   { level: 2, type: "EnemyDrop", rarity: 2, quantity: 2 },
   { level: 2, type: "ForgeryDrop", rarity: 2, quantity: 2 },
-  
+
   # Skill Level 2 -> 3
   { level: 3, type: "Credit", rarity: 3, quantity: 2000 },
   { level: 3, type: "EnemyDrop", rarity: 2, quantity: 3 },
   { level: 3, type: "ForgeryDrop", rarity: 2, quantity: 3 },
-  
+
   # Skill Level 3 -> 4
   # Note: Material rarity increases here
   { level: 4, type: "Credit", rarity: 3, quantity: 4500 },
@@ -284,7 +284,7 @@ SKILL_COSTS = [
   { level: 6, type: "Credit", rarity: 3, quantity: 100000 },
   { level: 6, type: "EnemyDrop", rarity: 5, quantity: 4 },
   { level: 6, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 6, type: "ForgeryDrop", rarity: 5, quantity: 6 },
+  { level: 6, type: "ForgeryDrop", rarity: 5, quantity: 6 }
 ].freeze
 
 def create_skill_cost(level, type, rarity, quantity)
@@ -323,7 +323,7 @@ FORTE_NODE_COSTS = [
   { node: "Stat Bonus", tier: 2, type: "Credit", rarity: 3, quantity: 100000 },
   { node: "Stat Bonus", tier: 2, type: "EnemyDrop", rarity: 5, quantity: 3 },
   { node: "Stat Bonus", tier: 2, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node: "Stat Bonus", tier: 2, type: "ForgeryDrop", rarity: 5, quantity: 3 },
+  { node: "Stat Bonus", tier: 2, type: "ForgeryDrop", rarity: 5, quantity: 3 }
 ].freeze
 
 def create_forte_node_cost(node, tier, type, rarity, quantity)
@@ -441,7 +441,7 @@ WEAPON_LEVEL_COSTS_R5 = [
   { level: 86, exp: 91400 },
   { level: 87, exp: 99000 },
   { level: 88, exp: 108400 },
-  { level: 89, exp: 120000},
+  { level: 89, exp: 120000 },
   { level: 90, exp: 134100 }
 ].freeze
 
@@ -652,7 +652,7 @@ WEAPON_ASCENSION_COSTS = [
   # 4-stars Ascension Rank 6
   { stars: 4, rank: 6, type: "Credit", rarity: 3, quantity: 96000 },
   { stars: 4, rank: 6, type: "EnemyDrop", rarity: 5, quantity: 7 },
-  { stars: 4, rank: 6, type: "ForgeryDrop", rarity: 5, quantity: 10 },
+  { stars: 4, rank: 6, type: "ForgeryDrop", rarity: 5, quantity: 10 }
 ].freeze
 
 def create_weapon_ascension_cost(stars, rank, type, rarity, quantity)
