@@ -1,0 +1,2 @@
+class ResonatorLevelCost < ApplicationRecord
+end

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class LevelCostTest < ActiveSupport::TestCase
+class WeaponLevelCostTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -1,9 +1,25 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# This block ensures that if ANY file fails, the whole database
+# rolls back to a clean state, preventing "half-seeded" data.
+ActiveRecord::Base.transaction do
+  puts "🌱 Seeding Database..."
+
+  $SEED_DATA = {}
+
+  # 1. Find all .rb files in the db/seeds directory
+  # 2. Sort them (so 01 runs before 02)
+  # 3. Load them
+  Dir[Rails.root.join("db", "seeds", "*.rb")].sort.each do |file|
+    puts "  --> Processing #{File.basename(file)}..."
+
+    # 'load' executes the code in the file
+    load file
+  end
+
+  puts "✅ SEEDING COMPLETED!"
+rescue StandardError => e
+  puts "❌ SEEDING FAILED!"
+  puts "Error: #{e.message}"
+  puts e.backtrace.first(5).join("\n")
+  # Re-raise the error to ensure the transaction rolls back
+  raise ActiveRecord::Rollback
+end

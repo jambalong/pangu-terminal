@@ -1,0 +1,2 @@
+class WeaponLevelCost < ApplicationRecord
+end

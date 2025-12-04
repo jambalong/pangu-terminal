@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_14_084441) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_20_214420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,16 +24,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_084441) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "level_costs", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "credit_cost", default: 0, null: false
-    t.integer "exp_required", default: 0, null: false
-    t.integer "level", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "materials", force: :cascade do |t|
+    t.string "category", null: false
     t.datetime "created_at", null: false
+    t.text "description"
     t.integer "exp_value", default: 0, null: false
     t.string "material_type", null: false
     t.string "name", null: false
@@ -50,6 +44,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_084441) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "resonator_level_costs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "credit_cost", default: 0, null: false
+    t.integer "exp_required", default: 0, null: false
+    t.integer "level", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "resonator_material_maps", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "material_id", null: false
@@ -62,12 +64,21 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_084441) do
   end
 
   create_table "resonators", force: :cascade do |t|
-    t.string "attribute_type", null: false
     t.datetime "created_at", null: false
+    t.string "element", null: false
     t.string "name", null: false
     t.integer "rarity", default: 4, null: false
     t.datetime "updated_at", null: false
     t.string "weapon_type", null: false
+  end
+
+  create_table "rover_ascension_costs", force: :cascade do |t|
+    t.integer "ascension_rank", null: false
+    t.datetime "created_at", null: false
+    t.string "material_type", null: false
+    t.integer "quantity", default: 0, null: false
+    t.integer "rarity", default: 1, null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "skill_costs", force: :cascade do |t|
@@ -228,6 +239,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_084441) do
     t.integer "quantity", default: 0, null: false
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
+    t.integer "weapon_rarity", default: 4, null: false
+  end
+
+  create_table "weapon_level_costs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "credit_cost", default: 0, null: false
+    t.integer "exp_required", default: 0, null: false
+    t.integer "level", null: false
+    t.datetime "updated_at", null: false
+    t.integer "weapon_rarity", default: 4, null: false
   end
 
   create_table "weapon_material_maps", force: :cascade do |t|
