@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_20_214420) do
     t.integer "exp_required", default: 0, null: false
     t.integer "level", null: false
     t.datetime "updated_at", null: false
+    t.integer "weapon_rarity", default: 4, null: false
   end
 
   create_table "resonator_material_maps", force: :cascade do |t|
