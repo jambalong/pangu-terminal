@@ -44,7 +44,7 @@ RESONATOR_DATA = {
     "Havoc" => [
       { name: "Camellya", weapon_type: "Sword" },
       { name: "Cantarella", weapon_type: "Rectifier" },
-      { name: "Chisa", weapon_type: "Broadblade"}
+      { name: "Chisa", weapon_type: "Broadblade" },
       { name: "Phrolova", weapon_type: "Rectifier" },
       { name: "Roccia", weapon_type: "Gauntlets" },
       { name: "Rover-Havoc", weapon_type: "Sword" }
