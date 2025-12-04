@@ -202,19 +202,19 @@ MATERIALS = {
   stone_rose:             $SEED_DATA[:stone_rose],
 
   # Enemy Drops
-  whisperin_set: [
+  whisperin_core_set: [
     $SEED_DATA[:lf_whisperin_core],
     $SEED_DATA[:mf_whisperin_core],
     $SEED_DATA[:hf_whisperin_core],
     $SEED_DATA[:ff_whisperin_core]
   ],
-  howler_set: [
+  howler_core_set: [
     $SEED_DATA[:lf_howler_core],
     $SEED_DATA[:mf_howler_core],
     $SEED_DATA[:hf_howler_core],
     $SEED_DATA[:ff_howler_core]
   ],
-  polygon_set: [
+  polygon_core_set: [
     $SEED_DATA[:lf_polygon_core],
     $SEED_DATA[:mf_polygon_core],
     $SEED_DATA[:hf_polygon_core],
@@ -324,34 +324,34 @@ RESONATOR_MAPPING_DATA = [
   [ RESONATORS[:augusta],       MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:luminous_calendula],    MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
   [ RESONATORS[:brant],         MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_set], MATERIALS[:the_netherworlds_stare] ],
   [ RESONATORS[:calcharo],      MATERIALS[:thundering_tacet_core],         MATERIALS[:iris],                  MATERIALS[:ring_set],           MATERIALS[:monument_bell] ],
-  [ RESONATORS[:camellya],      MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_set],      MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:cantarella],    MATERIALS[:cleansing_conch],               MATERIALS[:seaside_cendrelis],     MATERIALS[:polygon_set],        MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:carlotta],      MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_set],        MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:camellya],      MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:cantarella],    MATERIALS[:cleansing_conch],               MATERIALS[:seaside_cendrelis],     MATERIALS[:polygon_core_set],   MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:carlotta],      MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
   [ RESONATORS[:cartethyia],    MATERIALS[:unfading_glory],                MATERIALS[:bamboo_iris],           MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
   [ RESONATORS[:changli],       MATERIALS[:rage_tacet_core],               MATERIALS[:pavo_plum],             MATERIALS[:ring_set],           MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:chisa],         MATERIALS[:abyssal_husk],                  MATERIALS[:summer_flower],         MATERIALS[:polygon_set],        MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:chisa],         MATERIALS[:abyssal_husk],                  MATERIALS[:summer_flower],         MATERIALS[:polygon_core_set],   MATERIALS[:when_irises_bloom] ],
   [ RESONATORS[:ciaccona],      MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:encore],        MATERIALS[:rage_tacet_core],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_set],      MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:encore],        MATERIALS[:rage_tacet_core],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
   [ RESONATORS[:galbrena],      MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:stone_rose],            MATERIALS[:tidal_residuum_set], MATERIALS[:curse_of_the_abyss] ],
-  [ RESONATORS[:iuno],          MATERIALS[:abyssal_husk],                  MATERIALS[:sliverglow_bloom],      MATERIALS[:polygon_set],        MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:jianxin],       MATERIALS[:roaring_rock_fist],             MATERIALS[:lanternberry],          MATERIALS[:whisperin_set],      MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:jinhsi],        MATERIALS[:elegy_tacet_core],              MATERIALS[:loongs_pearl],          MATERIALS[:howler_set],         MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:jiyan],         MATERIALS[:roaring_rock_fist],             MATERIALS[:pecok_flower],          MATERIALS[:howler_set],         MATERIALS[:monument_bell] ],
-  [ RESONATORS[:lingyang],      MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:coriolus],              MATERIALS[:whisperin_set],      MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:lupa],          MATERIALS[:unfading_glory],                MATERIALS[:bloodleaf_viburnum],    MATERIALS[:howler_set],         MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:phoebe],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:whisperin_set],      MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:phrolova],      MATERIALS[:truth_in_lies],                 MATERIALS[:afterlife],             MATERIALS[:polygon_set],        MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:qiuyuan],       MATERIALS[:truth_in_lies],                 MATERIALS[:wintry_bell],           MATERIALS[:whisperin_set],      MATERIALS[:curse_of_the_abyss] ],
+  [ RESONATORS[:iuno],          MATERIALS[:abyssal_husk],                  MATERIALS[:sliverglow_bloom],      MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:jianxin],       MATERIALS[:roaring_rock_fist],             MATERIALS[:lanternberry],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:jinhsi],        MATERIALS[:elegy_tacet_core],              MATERIALS[:loongs_pearl],          MATERIALS[:howler_core_set],    MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:jiyan],         MATERIALS[:roaring_rock_fist],             MATERIALS[:pecok_flower],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
+  [ RESONATORS[:lingyang],      MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:lupa],          MATERIALS[:unfading_glory],                MATERIALS[:bloodleaf_viburnum],    MATERIALS[:howler_core_set],    MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:phoebe],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:whisperin_core_set], MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:phrolova],      MATERIALS[:truth_in_lies],                 MATERIALS[:afterlife],             MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:qiuyuan],       MATERIALS[:truth_in_lies],                 MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set], MATERIALS[:curse_of_the_abyss] ],
   [ RESONATORS[:roccia],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:tidal_residuum_set], MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:rover_aero],    MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_set],      MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:rover_havoc],   MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_set],      MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:rover_spectro], MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_set],      MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:shorekeeper],   MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_set],      MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:verina],        MATERIALS[:elegy_tacet_core],              MATERIALS[:belle_poppy],           MATERIALS[:howler_set],         MATERIALS[:monument_bell] ],
-  [ RESONATORS[:xiangli_yao],   MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:violet_coral],          MATERIALS[:whisperin_set],      MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:yinlin],        MATERIALS[:group_abomination_tacet_core],  MATERIALS[:coriolus],              MATERIALS[:whisperin_set],      MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:zani],          MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_set],        MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:zhezhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_set],         MATERIALS[:monument_bell] ]
+  [ RESONATORS[:rover_aero],    MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:rover_havoc],   MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:rover_spectro], MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:shorekeeper],   MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_core_set], MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:verina],        MATERIALS[:elegy_tacet_core],              MATERIALS[:belle_poppy],           MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
+  [ RESONATORS[:xiangli_yao],   MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:violet_coral],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:yinlin],        MATERIALS[:group_abomination_tacet_core],  MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:zani],          MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:zhezhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ]
 ].freeze
 
 puts "  --> Mapping Resonator Materials..."
