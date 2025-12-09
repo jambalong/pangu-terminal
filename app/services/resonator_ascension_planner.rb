@@ -17,6 +17,8 @@ class ResonatorAscensionPlanner < ApplicationService
 
   def call
     validate_inputs!
+
+    calculate_leveling_costs
   end
 
   private
@@ -55,5 +57,23 @@ class ResonatorAscensionPlanner < ApplicationService
     end
 
     raise "Input Validation Error: #{errors.join('; ')}" unless errors.empty?
+  end
+
+  def calculate_leveling_costs
+    level_costs = ResonatorLevelCost.where(level: @current_level..@target_level)
+    total_exp = 0
+
+    level_costs.each do |cost|
+      total_exp += cost.required_exp
+      @materials_totals[:SHELL_CREDIT_ID]+= cost.credit_cost
+    end
+
+    @materials_totals[:SHELL_CREDIT_ID] += total_credit
+    convert_exp_to_potions(total_exp)
+  end
+
+  def convert_exp_to_potions(total_exp)
+    potion = Material.find_by(name: "Basic Resonance Potion")
+    @materials_totals[potion.id] += total_exp / potion.exp_value
   end
 end
