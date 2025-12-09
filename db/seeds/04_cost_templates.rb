@@ -555,7 +555,7 @@ WEAPON_LEVEL_COSTS_R4 = [
 def create_weapon_level_cost_r5(level, exp)
   credit = (exp * 0.4).to_i
 
-  ResonatorLevelCost.find_or_initialize_by(
+  WeaponLevelCost.find_or_initialize_by(
     weapon_rarity: 5,
     level: level
   ).update!(
@@ -567,7 +567,7 @@ end
 def create_weapon_level_cost_r4(level, exp)
   credit = (exp * 0.4).to_i
 
-  ResonatorLevelCost.find_or_initialize_by(
+  WeaponLevelCost.find_or_initialize_by(
     weapon_rarity: 4,
     level: level
   ).update!(
