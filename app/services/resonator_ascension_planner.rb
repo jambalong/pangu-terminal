@@ -21,6 +21,7 @@ class ResonatorAscensionPlanner < ApplicationService
 
     calculate_leveling_costs
     calculate_ascension_costs
+    calculate_skill_leveling_costs
 
     @materials_totals
   rescue => e
@@ -102,7 +103,7 @@ class ResonatorAscensionPlanner < ApplicationService
       end
 
       if material
-        @materials_totals[material.id] += cost_record.quantity
+        @materials_totals[material.material_id] += cost_record.quantity
       end
     end
   end
