@@ -1,26 +1,28 @@
 class ResonatorAscensionPlanner < ApplicationService
   SHELL_CREDIT_ID = Material.find_by(name: "Shell Credit").id
 
-  def initialize(resonator:, current_level:, target_level:, current_ascension_rank:, target_ascension_rank:, current_skill_levels:, target_skill_levels:, current_forte_nodes:, target_forte_nodes:)
+  def initialize(resonator:, current_level:, target_level:, current_ascension_rank:, target_ascension_rank:)
+    # current_skill_levels:, target_skill_levels:, current_forte_nodes:, target_forte_nodes:
     @resonator = resonator
     @current_level = current_level.to_i
     @target_level = target_level.to_i
     @current_ascension_rank = current_ascension_rank.to_i
     @target_ascension_rank = target_ascension_rank.to_i
-    @current_skill_levels = current_skill_levels.transform_values(&:to_i)
-    @target_skill_levels = target_skill_levels.transform_values(&:to_i)
-    @current_forte_nodes = current_forte_nodes.transform_values(&:to_i)
-    @target_forte_nodes = target_forte_nodes.transform_values(&:to_i)
+    # @current_skill_levels = current_skill_levels.transform_values(&:to_i)
+    # @target_skill_levels = target_skill_levels.transform_values(&:to_i)
+    # @current_forte_nodes = current_forte_nodes.transform_values(&:to_i)
+    # @target_forte_nodes = target_forte_nodes.transform_values(&:to_i)
 
     @materials_totals = Hash.new(0)
   end
 
   def call
-    validate_inputs!
+    # validate_inputs!
 
     calculate_leveling_costs
     calculate_ascension_costs
 
+    @materials_totals
   rescue => e
     Rails.logger.error("ResonatorAscensionPlanner Error: #{e.message}")
     raise
@@ -69,11 +71,10 @@ class ResonatorAscensionPlanner < ApplicationService
     total_exp = 0
 
     level_costs.each do |cost|
-      total_exp += cost.required_exp
-      @materials_totals[:SHELL_CREDIT_ID] += cost.credit_cost
+      total_exp += cost.exp_required
+      @materials_totals[SHELL_CREDIT_ID] += cost.credit_cost
     end
 
-    @materials_totals[:SHELL_CREDIT_ID] += total_credit
     convert_exp_to_potions(total_exp)
   end
 
@@ -86,7 +87,7 @@ class ResonatorAscensionPlanner < ApplicationService
     rover_resonators = [ "Rover-Aero", "Rover-Havoc", "Rover-Spectro" ]
     ascension_costs_model = rover_resonators.include?(@resonator.name) ? RoverAscensionCost : ResonatorAscensionCost
     required_ascension_rank = (@current_ascension_rank + 1..@target_ascension_rank)
-    ascension_costs_data = ascension_cost_model.where(ascension_rank: required_ascension_rank)
+    ascension_costs_data = ascension_costs_model.where(ascension_rank: required_ascension_rank)
     material_maps_data = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
 
     ascension_costs_data.each do |cost_record|
