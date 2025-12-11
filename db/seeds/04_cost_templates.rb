@@ -320,6 +320,7 @@ FORTE_NODE_COSTS = [
   { node: "Stat Bonus", tier: 1, type: "ForgeryDrop", rarity: 4, quantity: 3 },
 
   # Stat Bonus tier 2
+  # Note: Material rarity increases here
   { node: "Stat Bonus", tier: 2, type: "Credit", rarity: 3, quantity: 100000 },
   { node: "Stat Bonus", tier: 2, type: "EnemyDrop", rarity: 5, quantity: 3 },
   { node: "Stat Bonus", tier: 2, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
