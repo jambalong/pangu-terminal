@@ -1,6 +1,21 @@
 class ResonatorAscensionPlanner < ApplicationService
   SHELL_CREDIT_ID = Material.find_by(name: "Shell Credit").id
 
+  FORTE_NODES_MAP = {
+    "Basic Attack Node 1" => "Stat Bonus Tier 1",
+    "Basic Attack Node 2" => "Stat Bonus Tier 2",
+    "Resonance Skill Node 1" => "Stat Bonus Tier 1",
+    "Resonance Skill Node 2" => "Stat Bonus Tier 2",
+
+    "Forte Circuit Node 1" => "Inherent Skill Tier 1",
+    "Forte Circuit Node 2" => "Inherent Skill Tier 2",
+
+    "Resonance Liberation Node 1" => "Stat Bonus Tier 1",
+    "Resonance Liberation Node 2" => "Stat Bonus Tier 2",
+    "Intro Skill Node 1" => "Stat Bonus Tier 1",
+    "Intro Skill Node 2" => "Stat Bonus Tier 2"
+  }
+
   def initialize(
     resonator:, current_level:, target_level:,
     current_ascension_rank:, target_ascension_rank:,
