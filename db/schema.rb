@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_20_214420) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_11_223951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "forte_node_costs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "material_type", null: false
-    t.integer "node_tier", null: false
-    t.string "node_type", null: false
+    t.string "node_identifier", null: false
     t.integer "quantity", default: 0, null: false
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
+    t.index ["node_identifier", "material_type", "rarity"], name: "idx_on_node_identifier_material_type_rarity_358d94ea80", unique: true
   end
 
   create_table "materials", force: :cascade do |t|
