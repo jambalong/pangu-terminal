@@ -1,6 +1,10 @@
 class ResonatorAscensionPlanner < ApplicationService
   SHELL_CREDIT_ID = Material.find_by(name: "Shell Credit").id
 
+  ASCENSION_LEVEL_CAP = {
+    0 => 20, 1 => 40, 2 => 50, 3 => 60, 4 => 70, 5 => 80, 6 => 90
+  }
+
   FORTE_NODES_MAP = {
     "Basic Attack Node 1" => "Stat Bonus Tier 1",
     "Basic Attack Node 2" => "Stat Bonus Tier 2",
@@ -59,20 +63,34 @@ class ResonatorAscensionPlanner < ApplicationService
        @current_ascension_rank == @target_ascension_rank &&
        @current_skill_levels == @target_skill_levels &&
        @current_forte_nodes == @target_forte_nodes
-      errors << "Atleast one target value must be different from corresponding current value"
+      errors << "At least one target value must be different from the corresponding current value to generate a plan."
     end
 
     # this checks for impossible downgrades (level and ascension rank)
-    if @target_level < @current_level &&
-       @target_ascension_rank < @current_ascension_rank
-      errors << "Target level value must be greater than or equal to current level value"
+    if @target_level < @current_level
+      errors << "Target Level (#{@target_level}) cannot be less than Current Level (#{@current_level})."
     end
 
+    if @target_ascension_rank < @current_ascension_rank
+      errors << "Target ascension rank value must be greater than or equal to current ascension rank value."
+    end
+
+    current_max_level = ASCENSION_LEVEL_CAPS[@current_ascension_rank]
+    if current_max_level.nil? || @current_level > current_max_level
+      errors << "Current Level (#{@current_level}) is impossible with Current Ascension Rank (#{@current_ascension_rank}). Max level is #{current_max_level || 'N/A'}."
+    end
+
+    target_max_level = ASCENSION_LEVEL_CAPS[@target_ascension_rank]
+    if target_max_level.nil? || @target_level > target_max_level
+      errors << "Target Level (#{@target_level}) is impossible with Target Ascension Rank (#{@target_ascension_rank}). Max level is #{target_max_level || 'N/A'}."
+    end
+
+    # this checks for impossible downgrades (skill and forte nodes)
     @current_skill_levels.each do |skill_name, current_level|
       target_level = @target_skill_levels[skill_name]
 
       if target_level && target_level < current_level
-        errors << "Target skill level value must be greater than or equal to current skill level value"
+        errors << "Target Level for '#{skill_name}' is #{target_level}, which is less than Current Level (#{current_level}). Downgrades are not allowed."
       end
     end
 
@@ -80,7 +98,7 @@ class ResonatorAscensionPlanner < ApplicationService
       target_upgrade = @target_forte_nodes[node_name]
 
       if target_upgrade && target_upgrade < current_upgrade
-        errors << "Target forte nodes value must be greater than or equal to current forte nodes value"
+        errors << "arget state for '#{node_name}' is Locked (0), which is less than Current state (1). Downgrades are not allowed."
       end
     end
 
