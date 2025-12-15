@@ -18,6 +18,7 @@ class WeaponAscensionPlanner < ApplicationService
     validate_inputs!
 
     calculate_leveling_costs
+    calculate_ascension_costs
 
     @materials_totals
   rescue => e
@@ -64,5 +65,27 @@ class WeaponAscensionPlanner < ApplicationService
   def convert_exp_to_potions(total_exp_required)
     basic_potion = Material.find_by(name: "Basic Energy Core")
     @materials_totals[basic_potion.id] += total_exp_required / basic_potion.exp_value
+  end
+
+  def calculate_ascension_costs
+    required_ascension_ranks = (@current_ascension_rank + 1)..@target_ascension_rank
+    ascension_costs = WeaponAscensionCost.where(ascension_rank: required_ascension_ranks)
+    materials_by_weapon = WeaponMaterialMap.where(weapon_id: @weapon.id).to_a
+
+    ascension_costs.each do |ascension_cost|
+      if ascension_cost.material_type == "Credit"
+        @materials_totals[SHELL_CREDIT_ID] += ascension_cost.quantity
+        next
+      end
+
+      found_map = materials_by_weapon.find do |map_record|
+        map_record.material_type == ascension_cost.material_type &&
+        map_record.rarity == ascension_cost.rarity
+      end
+
+      if found_map
+        @materials_totals[found_map.material_id] += ascension_cost.quantity
+      end
+    end
   end
 end
