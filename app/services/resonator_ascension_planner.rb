@@ -106,7 +106,8 @@ class ResonatorAscensionPlanner < ApplicationService
   end
 
   def calculate_leveling_costs
-    level_costs = ResonatorLevelCost.where(level: @current_level..@target_level)
+    required_levels = (@current_level + 1)..@target_level
+    level_costs = ResonatorLevelCost.where(level: required_levels)
     total_exp_required = 0
 
     level_costs.each do |level_cost|
