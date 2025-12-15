@@ -262,29 +262,29 @@ SKILL_COSTS = [
 
   # Skill Level 6 -> 7
   # Note: Added `WeeklyBossDrop` material requirement
-  { level: 6, type: "Credit", rarity: 3, quantity: 30000 },
-  { level: 6, type: "EnemyDrop", rarity: 4, quantity: 3 },
-  { level: 6, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 6, type: "ForgeryDrop", rarity: 4, quantity: 5 },
+  { level: 7, type: "Credit", rarity: 3, quantity: 30000 },
+  { level: 7, type: "EnemyDrop", rarity: 4, quantity: 3 },
+  { level: 7, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { level: 7, type: "ForgeryDrop", rarity: 4, quantity: 5 },
 
   # Skill Level 7 -> 8
   # Note: Material rarity increases here
-  { level: 6, type: "Credit", rarity: 3, quantity: 50000 },
-  { level: 6, type: "EnemyDrop", rarity: 5, quantity: 2 },
-  { level: 6, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 6, type: "ForgeryDrop", rarity: 5, quantity: 2 },
+  { level: 8, type: "Credit", rarity: 3, quantity: 50000 },
+  { level: 8, type: "EnemyDrop", rarity: 5, quantity: 2 },
+  { level: 8, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { level: 8, type: "ForgeryDrop", rarity: 5, quantity: 2 },
 
   # Skill Level 8 -> 9
-  { level: 6, type: "Credit", rarity: 3, quantity: 70000 },
-  { level: 6, type: "EnemyDrop", rarity: 5, quantity: 3 },
-  { level: 6, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 6, type: "ForgeryDrop", rarity: 5, quantity: 3 },
+  { level: 9, type: "Credit", rarity: 3, quantity: 70000 },
+  { level: 9, type: "EnemyDrop", rarity: 5, quantity: 3 },
+  { level: 9, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { level: 9, type: "ForgeryDrop", rarity: 5, quantity: 3 },
 
   # Skill Level 9 -> 10
-  { level: 6, type: "Credit", rarity: 3, quantity: 100000 },
-  { level: 6, type: "EnemyDrop", rarity: 5, quantity: 4 },
-  { level: 6, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 6, type: "ForgeryDrop", rarity: 5, quantity: 6 }
+  { level: 10, type: "Credit", rarity: 3, quantity: 100000 },
+  { level: 10, type: "EnemyDrop", rarity: 5, quantity: 4 },
+  { level: 10, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { level: 10, type: "ForgeryDrop", rarity: 5, quantity: 6 }
 ].freeze
 
 def create_skill_cost(level, type, rarity, quantity)
@@ -302,41 +302,41 @@ end
 # --- Forte Node Costs ---
 FORTE_NODE_COSTS = [
   # Inherent Skill tier 1
-  { node: "Inherent Skill", tier: 1, type: "Credit", rarity: 3, quantity: 10000 },
-  { node: "Inherent Skill", tier: 1, type: "EnemyDrop", rarity: 3, quantity: 3 },
-  { node: "Inherent Skill", tier: 1, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node: "Inherent Skill", tier: 1, type: "ForgeryDrop", rarity: 3, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 1", type: "Credit", rarity: 3, quantity: 10000 },
+  { node_identifier: "Inherent Skill Tier 1", type: "EnemyDrop", rarity: 3, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 1", type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { node_identifier: "Inherent Skill Tier 1", type: "ForgeryDrop", rarity: 3, quantity: 3 },
 
   # Inherent Skill tier 2
   # Note: Material rarity increases here
-  { node: "Inherent Skill", tier: 2, type: "Credit", rarity: 3, quantity: 20000 },
-  { node: "Inherent Skill", tier: 2, type: "EnemyDrop", rarity: 4, quantity: 3 },
-  { node: "Inherent Skill", tier: 2, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node: "Inherent Skill", tier: 2, type: "ForgeryDrop", rarity: 4, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 2", type: "Credit", rarity: 3, quantity: 20000 },
+  { node_identifier: "Inherent Skill Tier 2", type: "EnemyDrop", rarity: 4, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 2", type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { node_identifier: "Inherent Skill Tier 2", type: "ForgeryDrop", rarity: 4, quantity: 3 },
 
   # Stat Bonus tier 1
-  { node: "Stat Bonus", tier: 1, type: "Credit", rarity: 3, quantity: 50000 },
-  { node: "Stat Bonus", tier: 1, type: "EnemyDrop", rarity: 4, quantity: 3 },
-  { node: "Stat Bonus", tier: 1, type: "ForgeryDrop", rarity: 4, quantity: 3 },
+  { node_identifier: "Stat Bonus Tier 1", type: "Credit", rarity: 3, quantity: 50000 },
+  { node_identifier: "Stat Bonus Tier 1", type: "EnemyDrop", rarity: 4, quantity: 3 },
+  { node_identifier: "Stat Bonus Tier 1", type: "ForgeryDrop", rarity: 4, quantity: 3 },
 
   # Stat Bonus tier 2
-  { node: "Stat Bonus", tier: 2, type: "Credit", rarity: 3, quantity: 100000 },
-  { node: "Stat Bonus", tier: 2, type: "EnemyDrop", rarity: 5, quantity: 3 },
-  { node: "Stat Bonus", tier: 2, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node: "Stat Bonus", tier: 2, type: "ForgeryDrop", rarity: 5, quantity: 3 }
+  # Note: Material rarity increases here
+  { node_identifier: "Stat Bonus Tier 2", type: "Credit", rarity: 3, quantity: 100000 },
+  { node_identifier: "Stat Bonus Tier 2", type: "EnemyDrop", rarity: 5, quantity: 3 },
+  { node_identifier: "Stat Bonus Tier 2", type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
+  { node_identifier: "Stat Bonus Tier 2", type: "ForgeryDrop", rarity: 5, quantity: 3 }
 ].freeze
 
-def create_forte_node_cost(node, tier, type, rarity, quantity)
+def create_forte_node_cost(node, type, rarity, quantity)
   ForteNodeCost.find_or_initialize_by(
-    node_type: node,
-    node_tier: tier,
+    node_identifier: node,
     material_type: type,
     rarity: rarity
   ).update!(quantity: quantity)
 end
 
 FORTE_NODE_COSTS.each do |cost|
-  create_forte_node_cost(cost[:node], cost[:tier], cost[:type], cost[:rarity], cost[:quantity])
+  create_forte_node_cost(cost[:node_identifier], cost[:type], cost[:rarity], cost[:quantity])
 end
 
 # --- Weapon Level Costs (2 -> 90)
