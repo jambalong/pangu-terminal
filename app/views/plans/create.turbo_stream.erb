@@ -1,0 +1,5 @@
+<%= turbo_stream.append "plans_list" do %>
+  <%= render partial: "plans/plan", locals: { plan: @plan } %>
+<% end %>
+
+<%= turbo_stream.update "modal", "" %>
