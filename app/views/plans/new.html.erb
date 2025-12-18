@@ -1,4 +1,12 @@
-<div>
-  <h1 class="font-bold text-4xl">Plans#new</h1>
-  <p>Find me in app/views/plans/new.html.erb</p>
-</div>
+<turbo-frame id="modal">
+  <div class="modal-backdrop">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Create New Plan</h3>
+        <% link_to "Close", plans_path, data: { turbo_frame: "modal" } %>
+      </div>
+
+      <%= render "form" %>
+    </div>
+  </div>
+</turbo-frame>
