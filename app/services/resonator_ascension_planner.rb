@@ -42,6 +42,9 @@ class ResonatorAscensionPlanner < ApplicationService
   def call
     validate_inputs!
 
+    @materials_by_resonator = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
+    @materials_by_weapon_type = WeaponTypeMaterial.where(weapon_type: @resonator.weapon_type).to_a
+
     calculate_leveling_costs
     calculate_ascension_costs
     calculate_skill_leveling_costs
@@ -145,6 +148,24 @@ class ResonatorAscensionPlanner < ApplicationService
     self.basic_potion
   end
 
+  def add_materials(cost_records)
+    cost_records.each do |cost|
+      case cost.material_type
+      when "Credit"
+        @materials_totals[shell_credit_id] += cost.quantity
+      when "ForgeryDrop"
+        material_id = @materials_by_weapon_type.find { |map| map.rarity == cost.rarity }&.material_id
+        @materials_totals[material_id] += cost.quantity if material_id
+      else
+        material_id = @materials_by_resonator.find do |map|
+          map.material_type == cost.material_type &&
+          map.rarity == cost.rarity
+        end&.material_id
+        @materials_totals[material_id] += cost.quantity if material_id
+      end
+    end
+  end
+
   def calculate_leveling_costs
     required_levels = (@current_level + 1)..@target_level
     level_costs = ResonatorLevelCost.where(level: required_levels)
@@ -159,78 +180,33 @@ class ResonatorAscensionPlanner < ApplicationService
   end
 
   def convert_exp_to_potions(total_exp_required)
-    @materials_totals[basic_potion.id] += (total_exp_required / basic_potion.exp_value).to_i
+    potion = basic_potion
+
+    return if total_exp_require <= 0
+
+    quantity = (total_exp_required / potion.exp_value)
+    @materials_totals[potion.id] += quantity
   end
 
   def calculate_ascension_costs
-    rover_resonators = [ "Rover-Aero", "Rover-Havoc", "Rover-Spectro" ]
-    ascension_cost_model = rover_resonators.include?(@resonator.name) ? RoverAscensionCost : ResonatorAscensionCost
-
+    ascension_model = @resonator.name.start_with?("Rover") ? RoerAscensionCost : ResonatorAscensionCost
     required_ascension_ranks = (@current_ascension_rank + 1)..@target_ascension_rank
-    ascension_costs = ascension_cost_model.where(ascension_rank: required_ascension_ranks)
-    materials_by_resonator = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
-
-    ascension_costs.each do |ascension_cost|
-      if ascension_cost.material_type == "Credit"
-        @materials_totals[shell_credit_id] += ascension_cost.quantity
-        next
-      end
-
-      found_map = materials_by_resonator.find do |map_record|
-        map_record.material_type == ascension_cost.material_type &&
-        map_record.rarity == ascension_cost.rarity
-      end
-
-      if found_map
-        @materials_totals[found_map.material_id] += ascension_cost.quantity
-      end
-    end
+    ascension_costs = ascension_model.where(ascension_rank: required_ascension_ranks)
+    add_materials(ascension_costs)
   end
 
   def calculate_skill_leveling_costs
-    materials_by_resonator = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
-    materials_by_weapon_type = WeaponTypeMaterial.where(weapon_type: @resonator.weapon_type).to_a
-
     @current_skill_levels.each do |skill_name, current_level|
       target_level = @target_skill_levels[skill_name]
       next unless target_level && target_level > current_level
 
       required_level_range = (current_level + 1)..target_level
       skill_costs = SkillCost.where(level: required_level_range)
-
-      skill_costs.each do |skill_cost|
-        if skill_cost.material_type == "Credit"
-          @materials_totals[shell_credit_id] += skill_cost.quantity
-          next
-        end
-
-        if skill_cost.material_type == "ForgeryDrop"
-          found_map = materials_by_weapon_type.find do |map_record|
-            map_record.rarity == skill_cost.rarity
-          end
-
-          if found_map
-            @materials_totals[found_map.material_id] += skill_cost.quantity
-          end
-          next
-        end
-
-        found_map = materials_by_resonator.find do |map_record|
-          map_record.material_type == skill_cost.material_type &&
-          map_record.rarity == skill_cost.rarity
-        end
-
-        if found_map
-          @materials_totals[found_map.material_id] += skill_cost.quantity
-        end
-      end
+      add_materials(skill_costs)
     end
   end
 
   def calculate_forte_node_costs
-    materials_by_resonator = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
-    materials_by_weapon_type = WeaponTypeMaterial.where(weapon_type: @resonator.weapon_type).to_a
-
     @current_forte_nodes.each do |node_identifier, current_state|
       target_state = @target_forte_nodes[node_identifier]
       next unless current_state == 0 && target_state == 1
@@ -239,33 +215,7 @@ class ResonatorAscensionPlanner < ApplicationService
       next unless cost_identifier.present?
 
       forte_node_costs = ForteNodeCost.where(node_identifier: cost_identifier)
-
-      forte_node_costs.each do |forte_node_cost|
-        if forte_node_cost.material_type == "Credit"
-          @materials_totals[shell_credit_id] += forte_node_cost.quantity
-          next
-        end
-
-        if forte_node_cost.material_type == "ForgeryDrop"
-          found_map = materials_by_weapon_type.find do |map_record|
-            map_record.rarity == forte_node_cost.rarity
-          end
-
-          if found_map
-            @materials_totals[found_map.material_id] += forte_node_cost.quantity
-          end
-          next
-        end
-
-        found_map = materials_by_resonator.find do |map_record|
-          map_record.material_type == forte_node_cost.material_type &&
-          map_record.rarity == forte_node_cost.rarity
-        end
-
-        if found_map
-          @materials_totals[found_map.material_id] += forte_node_cost.quantity
-        end
-      end
+      add_materials(forte_node_costs)
     end
   end
 end
