@@ -86,4 +86,14 @@ class PlansController < ApplicationController
     cookies.permanent[:planner_id] ||= SecureRandom.uuid
     @planner_id = cookies.permanent[:planner_id]
   end
+
+  def render_form_with_errors
+    respond_to do |format|
+      format.turbo_stream {
+        render turbo_stream: turbo_stream.replace("plan_form_frame",
+               partial: "plans/form",
+               locals: { errors: @errors })
+      }
+    end
+  end
 end
