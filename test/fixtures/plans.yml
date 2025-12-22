@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  planner_id: MyString
+  plan_type: MyString
+  plan_data: 
+
+two:
+  planner_id: MyString
+  plan_type: MyString
+  plan_data: 
