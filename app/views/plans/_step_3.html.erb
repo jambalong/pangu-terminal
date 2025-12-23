@@ -6,7 +6,7 @@
 
   <%= render "form", item: @item, plan_type: @plan_type %>
 
-  <%= link_to "← Back to List",
+  <%= link_to "← Back",
   new_plan_path(plan_type: @plan_type, step: 2),
   class: "mt-4 inline-block text-xs text-gray-400" %>
 </div>

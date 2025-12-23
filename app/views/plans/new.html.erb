@@ -1,16 +1,49 @@
 <%= turbo_frame_tag "modal" do %>
-  <div data-controller="modal" data-action="keydown.esc->modal#close">
-    <div>
-      <%# Close Button %>
-      <button data-action="click->modal#close">✕</button>
+  <%# Modal backdrop %>
+  <div
+    data-controller="modal"
+    class="
+      fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60
+      backdrop-blur-sm
+    "
+    data-action="keydown.esc->modal#close click->modal#closeOutside"
+  >
 
+    <%# Modal content box %>
+    <div
+      class="
+        relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden
+        animate-in fade-in zoom-in duration-200
+      "
+      data-action="click->modal#stop"
+    >
+
+      <%# Close button %>
+      <button
+        data-action="click->modal#close"
+        class="
+          absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      <%# Modal step content %>
       <div id="modal-step-content">
-        <%# This part swaps based on the step %>
-        <%= render "step_#{@step}",
-        step: @step,
-        plan_type: @plan_type,
-        item: @item,
-        items: @items %>
+        <%= render "step_#{@step}", local_assigns %>
       </div>
     </div>
   </div>
