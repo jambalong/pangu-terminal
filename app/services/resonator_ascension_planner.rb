@@ -58,6 +58,14 @@ class ResonatorAscensionPlanner < ApplicationService
     raise
   end
 
+  def self.shell_credit_id
+    @shell_credit_id ||= Material.find_by!(name: "Shell Credit").id
+  end
+
+  def self.basic_potion
+    @basic_potion ||= Material.find_by!(name: "Basic Resonance Potion").id
+  end
+
   private
 
   def validate_inputs!
@@ -132,20 +140,12 @@ class ResonatorAscensionPlanner < ApplicationService
     raise ValidationError, errors.join("|") unless errors.empty?
   end
 
-  def self.shell_credit_id
-    @shell_credit_id ||= Material.find_by!(name: "Shell Credit").id
-  end
-
-  def self.basic_potion
-    @basic_potion ||= Material.find_by!(name: "Basic Resonance Potion").id
-  end
-
   def shell_credit_id
-    self.shell_credit_id
+    self.class.shell_credit_id
   end
 
   def basic_potion
-    self.basic_potion
+    self.class.basic_potion
   end
 
   def add_materials(cost_records)
