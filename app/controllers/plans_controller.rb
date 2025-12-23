@@ -15,7 +15,7 @@ class PlansController < ApplicationController
       if plan_type == "Resonator"
         item = Resonator.find_by!(id: params[:resonator_id])
         planner = ResonatorAscensionPlanner.new(
-          resonator: resonator,
+          resonator: item,
           current_level: params[:current_level],
           target_level: params[:target_level],
           current_ascension_rank: params[:current_ascension_rank],
@@ -28,7 +28,7 @@ class PlansController < ApplicationController
       else
         item = Weapon.find_by!(id: params[:weapon_id])
         planner = WeaponAscensionPlanner.new(
-          weapon: weapon,
+          weapon: item,
           current_level: params[:current_level],
           target_level: params[:target_level],
           current_ascension_rank: params[:current_ascension_rank],
