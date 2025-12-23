@@ -90,6 +90,16 @@ class PlansController < ApplicationController
     end
   end
 
+  def destroy
+    @plan = Plan.find(params[:id])
+    @plan.destroy
+
+    respond_to do |format|
+      format.html { redirect_to plans_path, notice: "Plan deleted." }
+      format.turbo_stream # This will look for destroy.turbo_stream.erb
+    end
+  end
+
   private
 
   def set_planner_id
