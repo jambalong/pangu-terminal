@@ -44,8 +44,8 @@
       <div>
         <h2>Ascension Rank</h2>
         <%= f.number_field :current_ascension_rank,
-                       value: 1,
-                       min: 1,
+                       value: 0,
+                       min: 0,
                        max: 6,
                        data: {
                          action: "input->plan-form#clampAscensionRank",

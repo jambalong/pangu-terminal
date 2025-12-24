@@ -509,9 +509,9 @@ WEAPON_LEVEL_COSTS_R4 = [
   { level: 55, exp: 22200 },
   { level: 56, exp: 23100 },
   { level: 57, exp: 24100 },
-  { level: 58, exp: 2500 },
-  { level: 59, exp: 2600 },
-  { level: 60, exp: 2700 },
+  { level: 58, exp: 25000 },
+  { level: 59, exp: 26000 },
+  { level: 60, exp: 27000 },
 
   # Weapon R4 Level 61 -> 70
   { level: 61, exp: 28100 },
