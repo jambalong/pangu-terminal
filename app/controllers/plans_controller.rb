@@ -25,7 +25,7 @@ class PlansController < ApplicationController
 
     begin
       if plan_type == "Resonator"
-        item = Resonator.find_by!(id: params[:resonator_id])
+        item = Resonator.find_by!(id: params[:item_id])
         planner = ResonatorAscensionPlanner.new(
           resonator: item,
           current_level: params[:current_level],
@@ -38,7 +38,7 @@ class PlansController < ApplicationController
           target_forte_nodes: params[:target_forte_nodes] || {}
         )
       else
-        item = Weapon.find_by!(id: params[:weapon_id])
+        item = Weapon.find_by!(id: params[:item_id])
         planner = WeaponAscensionPlanner.new(
           weapon: item,
           current_level: params[:current_level],
@@ -115,7 +115,7 @@ class PlansController < ApplicationController
 
   def render_form_with_errors
     plan_type = params[:plan_type]
-    item_id = plan_type == "Resonator" ? params[:resonator_id] : params[:weapon_id]
+    item_id = params[:item_id]
     item = (plan_type == "Resonator" ? Resonator : Weapon).find(item_id)
 
     respond_to do |format|

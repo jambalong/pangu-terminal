@@ -1,25 +1,8 @@
 <div id="plan-form-frame">
-  <%# Error Display %>
-  <% if local_assigns[:errors].present? %>
-    <div class="error-box">
-      <strong>Fix errors:</strong>
-      <ul>
-        <% errors.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <%= form_with url: plans_path, method: :post, data: { controller: "plan-form" } do |f| %>
     <%# Hidden fields to tell the Controller what we selected in Steps 1 & 2 %>
     <%= f.hidden_field :plan_type, value: plan_type %>
-
-    <% if plan_type == "Resonator" %>
-      <%= f.hidden_field :resonator_id, value: item.id %>
-    <% else %>
-      <%= f.hidden_field :weapon_id, value: item.id %>
-    <% end %>
+    <%= f.hidden_field :item_id, value: item.id %>
 
     <div>
       <div>
