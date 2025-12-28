@@ -1,0 +1,88 @@
+<%# locals: (step:, plan_type:, items:, item: nil, errors: nil) %>
+
+<div class="p-8 flex flex-col h-[550px]">
+  <header class="mb-6">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-black text-gray-800 tracking-tight">Select
+        <%= plan_type %></h2>
+    </div>
+    <p class="text-sm text-gray-500 mt-1">Which one are you planning to upgrade?</p>
+  </header>
+
+  <%# Scrollable List Area %>
+  <div
+    class="
+      grow overflow-y-auto border border-gray-100 rounded-2xl shadow-inner
+      bg-gray-50/50 custom-scrollbar
+    "
+  >
+    <div class="divide-y divide-gray-100">
+      <% items.each do |item_record| %>
+        <%= link_to new_plan_path(plan_type: plan_type, item_id: item_record.id, step: 3), 
+            data: { turbo_frame: "modal" }, 
+            class: "flex items-center justify-between p-4 bg-white hover:bg-blue-50 transition-all group" do %>
+
+          <div class="flex items-center gap-4">
+            <div
+              class="
+                w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-xl
+                group-hover:bg-white group-hover:shadow-sm transition-all
+              "
+            >
+              <%= plan_type == "Resonator" ? "👤" : "⚔️" %>
+            </div>
+            <span class="font-bold text-gray-700 group-hover:text-blue-700"><%= item_record.name %></span>
+          </div>
+
+          <div
+            class="
+              text-gray-300 group-hover:text-blue-500 transition-transform
+              group-hover:translate-x-1
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <footer
+    class="
+      mt-6 pt-4 border-t border-gray-100 flex items-center justify-between
+    "
+  >
+    <%= link_to new_plan_path(step: 1), 
+        data: { turbo_frame: "modal" },
+        class: "text-xs font-bold text-gray-400 hover:text-blue-600 flex items-center gap-1 transition-colors" do %>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-3 w-3"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="3"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+      Back
+    <% end %>
+
+    <span class="text-[10px] text-gray-300 font-medium uppercase tracking-widest">Scroll for more</span>
+  </footer>
+</div>

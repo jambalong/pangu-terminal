@@ -321,6 +321,7 @@ end
 # The order of elements MUST match the arguments of map_resonator_materials:
 # [resonator, boss_mat, flower_mat, enemy_mat, weekly_boss_mat]
 RESONATOR_MAPPING_DATA = [
+  # 5-star Resonators
   [ RESONATORS[:augusta],       MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:luminous_calendula],    MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
   [ RESONATORS[:brant],         MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_set], MATERIALS[:the_netherworlds_stare] ],
   [ RESONATORS[:calcharo],      MATERIALS[:thundering_tacet_core],         MATERIALS[:iris],                  MATERIALS[:ring_set],           MATERIALS[:monument_bell] ],
@@ -351,7 +352,21 @@ RESONATOR_MAPPING_DATA = [
   [ RESONATORS[:xiangli_yao],   MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:violet_coral],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
   [ RESONATORS[:yinlin],        MATERIALS[:group_abomination_tacet_core],  MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
   [ RESONATORS[:zani],          MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:zhezhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ]
+  [ RESONATORS[:zhezhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
+
+  # 4-star Resonators
+  # [resonator, boss_mat, flower_mat, enemy_mat, weekly_boss_mat]
+  [ RESONATORS[:aalto],         MATERIALS[:roaring_rock_fist],             MATERIALS[:wintry_bell],           MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
+  [ RESONATORS[:baizhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
+  [ RESONATORS[:chixia],        MATERIALS[:rage_tacet_core],               MATERIALS[:belle_poppy],           MATERIALS[:whisperin_core_set], MATERIALS[:monument_bell] ],
+  [ RESONATORS[:danjin],        MATERIALS[:strife_tacet_core],             MATERIALS[:belle_poppy],           MATERIALS[:ring_set],           MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:lumi],          MATERIALS[:thundering_tacet_core],         MATERIALS[:terraspawn_fungus],     MATERIALS[:howler_core_set],    MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:mortefi],       MATERIALS[:rage_tacet_core],               MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:monument_bell] ],
+  [ RESONATORS[:sanhua],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:taoqi],         MATERIALS[:gold_dissolving_feather],       MATERIALS[:iris],                  MATERIALS[:howler_core_set],    MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:yangyang],      MATERIALS[:roaring_rock_fist],             MATERIALS[:wintry_bell],           MATERIALS[:ring_set],           MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:youhu],         MATERIALS[:topological_confinement],       MATERIALS[:violet_coral],          MATERIALS[:ring_set],           MATERIALS[:monument_bell] ],
+  [ RESONATORS[:yuanwu],        MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:terraspawn_fungus],     MATERIALS[:ring_set],           MATERIALS[:unending_destruction] ]
 ].freeze
 
 puts "  --> Mapping Resonator Materials..."

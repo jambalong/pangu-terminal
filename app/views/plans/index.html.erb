@@ -1,0 +1,18 @@
+<div class="container">
+  <h1>Ascension Planner</h1>
+
+  <%= link_to "Create New Plan",
+  new_plan_path(step: 1),
+  data: {
+    turbo_frame: "modal",
+  },
+  class: "btn btn-primary" %>
+
+  <div id="plans_list_container">
+    <h2>Your Plans</h2>
+
+    <turbo-frame id="plans_list">
+      <%= render @plans %>
+    </turbo-frame>
+  </div>
+</div>

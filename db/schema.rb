@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_11_223951) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_22_214013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,6 +33,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_11_223951) do
     t.string "name", null: false
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.jsonb "plan_data", default: {}, null: false
+    t.string "plan_type", null: false
+    t.string "planner_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["planner_id"], name: "index_plans_on_planner_id"
   end
 
   create_table "resonator_ascension_costs", force: :cascade do |t|

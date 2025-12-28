@@ -1,0 +1,166 @@
+/* 1. Remove arrows/spinners from number inputs */
+.custom-number-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+
+  width: 100%;
+  background-color: transparent;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  outline: none;
+  border: none;
+}
+
+/* 2. Input Wrapper Styling (Mantle background) */
+.level-input-wrapper {
+  flex: 1;
+  background-color: #181825; /* Mantle */
+  border-bottom: 2px solid #45475a; /* Surface 1 */
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+/* 3. Focus State (Mauve Glow) */
+.level-input-wrapper:focus-within {
+  border-bottom-color: #cba6f7;
+}
+
+/* 4. Color coding for Current (Subtext 0) vs Target (Mauve) */
+.custom-number-input.current {
+  color: #a6adc8;
+}
+
+.custom-number-input.target {
+  color: #cba6f7;
+}
+
+/* Subtle label styling */
+h2.uppercase {
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.forte-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.node-circle {
+  border-radius: 9999px; /* rounded-full */
+  border: 2px solid #374151;
+  background-color: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+/* Sizing */
+.node-2 {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+}
+.node-1 {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+}
+
+/* The Core Node (3rd Column) Scaling */
+.inherent-node .node-2 span {
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.inherent-node .node-1 span {
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+/* Connection/Checked State */
+.peer:checked + .node-circle {
+  background-color: #2563eb;
+  border-color: #60a5fa;
+  color: white;
+}
+
+.node-connector {
+  width: 2px;
+  height: 1.5rem;
+  background-color: #374151;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+}
+
+.node-diamond {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #374151;
+  border: 2px solid #4b5563;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
+}
+
+.node-diamond span {
+  transform: rotate(-45deg);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.skill-level-text {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  margin-top: 0.5rem;
+}
+
+/* Range Sliders Styling */
+.skill-slider {
+  width: 100%;
+  height: 8px;
+  background-color: #111827; /* Inactive track color */
+  border-radius: 9999px;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  /* This creates the 'fill' effect using a CSS variable */
+  background-image: linear-gradient(to right, #2563eb 0%, #2563eb var(--value, 0%), #262626 var(--value, 0%), #262626 100%);
+}
+
+/* Base thumb style (The black circle with gold border) */
+.skill-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #000;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* For Firefox support */
+.skill-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #000;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  cursor: pointer;
+}

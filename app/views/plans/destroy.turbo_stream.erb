@@ -1,0 +1,3 @@
+<%# Use dom_id to target the exact element to remove %>
+<%= turbo_stream.remove dom_id(@plan) %>
+<%= turbo_stream.replace "modal", turbo_frame_tag("modal") %>
