@@ -1,50 +1,131 @@
 <%# locals: (item:, plan_type:, errors: nil) %>
 
 <div id="plan-form-frame">
-  <%= form_with url: plans_path, method: :post, data: { controller: "plan-form" } do |f| %>
+  <%= form_with(model: Plan.new, url: plans_path, method: :post, data: { controller: "plan-form" }, id: "plan-form") do |f| %>
     <%# Hidden fields to tell the Controller what we selected in Steps 1 & 2 %>
     <%= f.hidden_field :plan_type, value: plan_type %>
     <%= f.hidden_field :item_id, value: item.id %>
 
-    <div>
-      <div>
-        <h2>Level</h2>
-        <%= f.number_field :current_level,
-                       value: 1,
-                       min: 1,
-                       max: 90,
-                       data: {
-                         action: "input->plan-form#clampLevel",
-                       } %>
-        <span>-></span>
-        <%= f.number_field :target_level,
-                       value: 90,
-                       min: 1,
-                       max: 90,
-                       data: {
-                         action: "input->plan-form#clampLevel",
-                       } %>
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <%# Level Section %>
+      <div class="bg-[#1a1b1e] p-4 rounded-2xl border border-gray-800 shadow-inner">
+        <h2 class="text-[10px] uppercase tracking-widest text-gray-500 font-black mb-3">Character Level</h2>
+        <div class="flex items-center justify-between gap-2">
+          <div class="level-input-wrapper">
+            <%= f.number_field :current_level,
+                value: 1, min: 1, max: 90,
+                class: "custom-number-input current",
+                data: { action: "input->plan-form#clampLevel" } %>
+          </div>
+          
+          <span class="text-white">→</span>
+
+          <div class="level-input-wrapper">
+            <%= f.number_field :target_level,
+                value: 90, min: 1, max: 90,
+                class: "custom-number-input target",
+                data: { action: "input->plan-form#clampLevel" } %>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <h2>Ascension Rank</h2>
-        <%= f.number_field :current_ascension_rank,
-                       value: 0,
-                       min: 0,
-                       max: 6,
-                       data: {
-                         action: "input->plan-form#clampAscensionRank",
-                       } %>
-        <span>-></span>
-        <%= f.number_field :target_ascension_rank,
-                       value: 6,
-                       min: 1,
-                       max: 6,
-                       data: {
-                         action: "input->plan-form#clampAscensionRank",
-                       } %>
+      <%# Ascension Section %>
+      <div class="bg-[#1a1b1e] p-4 rounded-2xl border border-gray-800 shadow-inner">
+        <h2 class="text-[10px] uppercase tracking-widest text-gray-500 font-black mb-3">Ascension Rank</h2>
+        <div class="flex items-center justify-between gap-2">
+          <div class="level-input-wrapper">
+            <%= f.number_field :current_ascension_rank,
+                value: 0, min: 0, max: 6,
+                class: "custom-number-input current",
+                data: { action: "input->plan-form#clampAscensionRank" } %>
+          </div>
+
+          <span class="text-white">→</span>
+
+          <div class="level-input-wrapper">
+            <%= f.number_field :target_ascension_rank,
+                value: 6, min: 0, max: 6,
+                class: "custom-number-input target",
+                data: { action: "input->plan-form#clampAscensionRank" } %>
+          </div>
+        </div>
       </div>
     </div>
+
+    <% if plan_type == "Resonator" %>
+      <%# The Forte Grid %>
+      <div class="flex justify-between items-end gap-2">
+        
+        <% [
+          { label: "Basic Attack", key: "basic_attack" },
+          { label: "Resonance Skill", key: "resonance_skill" },
+          { label: "Forte Circuit", key: "forte_circuit", inherent: true },
+          { label: "Resonance Liberation", key: "resonance_liberation" },
+          { label: "Intro Skill", key: "intro_skill" }
+        ].each do |config| %>
+          <div class="forte-column <%= 'inherent-node' if config[:inherent] %>">
+      
+            <%# Tier 2 Node %>
+            <label class="node-label cursor-pointer">
+              <%= f.check_box "#{config[:key]}_node_2", class: "peer hidden" %>
+              <div class="node-circle node-2">
+                <span>✱</span>
+              </div>
+            </label>
+
+            <div class="node-connector"></div>
+
+            <%# Tier 1 Node %>
+            <label class="node-label cursor-pointer">
+              <%= f.check_box "#{config[:key]}_node_1", class: "peer hidden" %>
+              <div class="node-circle node-1">
+                <span>✱</span>
+              </div>
+            </label>
+
+            <div class="node-connector"></div>
+
+            <%# Skill Node (Diamond) %>
+            <div class="node-diamond">
+              <span>✱</span>
+            </div>
+
+            <%# Skill Level Indicators (1 -> 1) %>
+            <div class="skill-level-text">
+              <span id="#{config[:key]}_current">1</span>
+              <span class="mx-1 text-gray-600">→</span>
+              <span id="#{config[:key]}_target">1</span>
+            </div>
+
+            <%# Sliders %>
+            <%= f.range_field "#{config[:key]}_current", 
+                min: 1, 
+                max: 10, 
+                value: 1, 
+                class: "skill-slider",
+                style: "--value: 0%;", 
+                oninput: "
+                  let percent = (this.value - this.min) / (this.max - this.min) * 100;
+                  this.style.setProperty('--value', percent + '%');
+                  document.getElementById('#{config[:key]}_current').innerText = this.value;
+                " %>
+
+            <%= f.range_field "#{config[:key]}_target", 
+                min: 1, 
+                max: 10, 
+                value: 10, 
+                class: "skill-slider",
+                style: "--value: 100%;", 
+                oninput: "
+                  let percent = (this.value - this.min) / (this.max - this.min) * 100;
+                  this.style.setProperty('--value', percent + '%');
+                  document.getElementById('#{config[:key]}_target').innerText = this.value;
+                " %>
+          </div>
+        <% end %>
+
+      </div>
+    <% end %>
 
     <div class="pt-6">
       <%= f.submit "Create Plan",
