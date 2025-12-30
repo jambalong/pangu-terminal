@@ -1,42 +1,79 @@
 <%# locals: (step:, plan_type:, items:, item: nil, errors: nil) %>
 
-<div class="p-8 flex flex-col h-[550px]">
+<div class="p-8 flex flex-col h-[550px]" data-controller="search-filter">
   <header class="mb-6">
     <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-black text-gray-800 tracking-tight">Select
+      <h2 class="text-2xl font-black text-ctp-text tracking-tight">Select
         <%= plan_type %></h2>
     </div>
-    <p class="text-sm text-gray-500 mt-1">Which one are you planning to upgrade?</p>
+
+    <%# Search Bar Interface %>
+    <div class="relative mt-4">
+      <div
+        class="
+          absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none
+        "
+      >
+        <svg
+          class="h-4 w-4 text-ctp-surface2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+      </div>
+      <input
+        type="text"
+        data-search-filter-target="input"
+        data-action="input->search-filter#filter"
+        placeholder="Search by name..."
+        class="
+          w-full pl-10 pr-4 py-2 bg-ctp-mantle border-2 border-ctp-surface2 rounded-xl
+          text-sm text-ctp-text placeholder-ctp-surface2 focus:border-ctp-mauve
+          focus:ring-0 focus:outline-0 transition-colors
+        "
+      >
+    </div>
   </header>
 
   <%# Scrollable List Area %>
   <div
     class="
-      grow overflow-y-auto border border-gray-100 rounded-2xl shadow-inner
-      bg-gray-50/50 custom-scrollbar
+      grow overflow-y-auto rounded-xl shadow-inner bg-ctp-base custom-scrollbar
     "
   >
-    <div class="divide-y divide-gray-100">
-      <% items.each do |item_record| %>
+    <% items.each do |item_record| %>
+      <div
+        data-search-filter-target="item"
+        data-search-name="<%= item_record.name %>"
+      >
         <%= link_to new_plan_path(plan_type: plan_type, item_id: item_record.id, step: 3), 
             data: { turbo_frame: "modal" }, 
-            class: "flex items-center justify-between p-4 bg-white hover:bg-blue-50 transition-all group" do %>
+            class: "flex items-center justify-between p-2 bg-ctp-base hover:bg-ctp-surface0 transition-all group" do %>
 
           <div class="flex items-center gap-4">
             <div
               class="
-                w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-xl
-                group-hover:bg-white group-hover:shadow-sm transition-all
+                w-10 h-10 rounded-xl bg-ctp-text flex items-center justify-center text-xl
+                group-hover:shadow-sm transition-all
               "
             >
               <%= plan_type == "Resonator" ? "👤" : "⚔️" %>
             </div>
-            <span class="font-bold text-gray-700 group-hover:text-blue-700"><%= item_record.name %></span>
+            <span class="font-bold <%= item_record.rarity == 5 ? 'star-5' : 'star-4' %>">
+              <%= item_record.name %>
+            </span>
           </div>
 
           <div
             class="
-              text-gray-300 group-hover:text-blue-500 transition-transform
+              text-gray-300 group-hover:text-ctp-mauve transition-transform
               group-hover:translate-x-1
             "
           >
@@ -54,18 +91,18 @@
             </svg>
           </div>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 
   <footer
     class="
-      mt-6 pt-4 border-t border-gray-100 flex items-center justify-between
+      mt-6 pt-4 border-t border-ctp-surface0 flex items-center justify-between
     "
   >
     <%= link_to new_plan_path(step: 1), 
         data: { turbo_frame: "modal" },
-        class: "text-xs font-bold text-gray-400 hover:text-blue-600 flex items-center gap-1 transition-colors" do %>
+        class: "text-xs font-bold text-ctp-subtext0 hover:text-ctp-mauve flex items-center gap-1 transition-colors" do %>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-3 w-3"
@@ -83,6 +120,10 @@
       Back
     <% end %>
 
-    <span class="text-[10px] text-gray-300 font-medium uppercase tracking-widest">Scroll for more</span>
+    <span
+      class="
+        text-[10px] text-ctp-subtext0 font-medium uppercase tracking-widest
+      "
+    >Scroll for more</span>
   </footer>
 </div>

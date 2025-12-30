@@ -3,7 +3,7 @@
   <div
     data-controller="modal"
     class="
-      fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60
+      fixed inset-0 z-50 flex items-center justify-center p-4 bg-ctp-crust-900/60
       backdrop-blur-sm
     "
     data-action="keydown.esc->modal#close click->modal#closeOutside"
@@ -12,17 +12,17 @@
     <%# Modal content box %>
     <div
       class="
-        relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden
-        animate-in fade-in zoom-in duration-200
+        relative w-full max-w-lg bg-ctp-base rounded-2xl shadow-2xl overflow-hidden
+        border-3 border-ctp-crust animate-in fade-in zoom-in duration-200
       "
-      data-action="click->modal#stop"
     >
 
       <%# Close button %>
       <button
         data-action="click->modal#close"
         class="
-          absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10
+          absolute top-4 right-4 text-ctp-red-400 hover:text-ctp-red-600 transition-colors
+          z-10
         "
       >
         <svg

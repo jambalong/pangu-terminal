@@ -1,3 +1,13 @@
 @import "tailwindcss";
-
+@import "@catppuccin/tailwindcss/mocha.css";
+@import "./ascension_planner.css";
 @import "./plan_form.css";
+
+@font-face {
+  font-family: '0xPropo';
+  src: asset-url('../fonts/0xPropo.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+

@@ -2,11 +2,14 @@
 
 <div
   id="<%= dom_id(plan) %>"
-  class="plan-card border p-4 mb-4 rounded shadow-sm bg-white relative"
+  class="
+    plan-card border-2 border-ctp-mauve p-4 mb-4 rounded shadow-sm bg-ctp-mantle
+    relative
+  "
 >
   <div class="flex justify-between items-start">
     <div>
-      <h3 class="font-bold text-lg"><%= plan.plan_data.dig("input", "name") %></h3>
+      <h3 class="font-bold text-xl text-ctp-text"><%= plan.plan_data.dig("input", "name") %></h3>
     </div>
 
     <%# Delete Button %>
@@ -15,11 +18,11 @@
     data: {
       turbo_frame: "modal",
     },
-    class: "text-red-500 hover:text-red-700 text-xs font-semibold p-1" %>
+    class: "text-ctp-red-400 hover:text-ctp-red text-xs font-semibold p-1" %>
   </div>
 
   <% plan.plan_data.dig("output").each do |material_name, quantity| %>
-    <div class="flex justify-between">
+    <div class="flex justify-between text-ctp-text">
       <span><%= material_name %></span>
       <span>x<%= quantity %></span>
     </div>

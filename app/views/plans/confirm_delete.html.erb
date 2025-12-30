@@ -9,14 +9,14 @@
   >
     <div
       class="
-        relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 animate-in zoom-in
-        duration-200
+        relative w-full max-w-sm bg-ctp-base border-3 border-ctp-crust rounded-2xl
+        shadow-2xl p-6 animate-in zoom-in duration-200
       "
     >
       <%# Warning Icon %>
       <div
         class="
-          w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center
+          w-12 h-12 bg-ctp-red text-ctp-base rounded-full flex items-center justify-center
           mx-auto mb-4
         "
       >
@@ -36,10 +36,11 @@
         </svg>
       </div>
 
-      <h3 class="text-lg font-bold text-gray-900 text-center">Delete Plan?</h3>
-      <p class="text-sm text-gray-500 text-center mt-2 mb-6">
+      <h3 class="text-lg font-bold text-ctp-text text-center">Delete Plan?</h3>
+      <p class="text-sm text-ctp-subtext0 text-center mt-2 mb-6">
         Are you sure you want to delete the plan for
-        <span class="font-semibold text-gray-700"><%= @plan.plan_data.dig("input", "name") %></span>? This cannot be undone.
+        <span class="font-semibold text-ctp-mauve"><%= @plan.plan_data.dig("input", "name") %></span>?
+        <span class="text-ctp-overlay0">This cannot be undone.</span>
       </p>
 
       <div class="flex gap-3">
@@ -47,19 +48,19 @@
         <button
           data-action="click->modal#close"
           class="
-            flex-1 px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-xl
-            hover:bg-gray-200 transition-colors
+            flex-1 px-4 py-2 bg-ctp-surface0 text-ctp-text font-bold rounded-xl
+            hover:bg-ctp-surface1 transition-colors
           "
         >
           Cancel
         </button>
 
         <%# Delete: Submits the actual DELETE request %>
-        <%= button_to "Delete",
+        <%= button_to "Confirm",
         plan_path(@plan),
         method: :delete,
         class:
-          "flex-1 px-4 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 transition-all" %>
+          "flex-1 px-4 py-2 bg-ctp-red text-ctp-base font-bold rounded-xl hover:bg-red-700 hover:text-white shadow-lg shadow-ctp-crust transition-all" %>
       </div>
     </div>
   </div>

@@ -1,0 +1,44 @@
+body {
+  font-family: '0xPropo';
+  background: var(--ctp-crust);
+}
+
+.container {
+  margin: auto;
+}
+
+.planner-container {
+  background: var(--ctp-base);
+  padding: 2rem;
+  width: 100%;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4rem;
+}
+
+.planner-header {
+  margin: auto;
+  margin-bottom: 2rem;
+}
+
+.new-plan-btn {
+  max-width: 100%;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 2rem;
+}
+
+#plans-list-container {
+}
+
+.plan-card {
+}
+
+.star-5 {
+  color: #f4c701;
+}
+
+.star-4 {
+  color: #b778d8
+}

@@ -1,17 +1,20 @@
-<div class="container">
-  <h1>Ascension Planner</h1>
+<div class="planner-container border-solid border-2 border-ctp-surface0">
+  <div class="planner-header">
+    <h1 class="text-ctp-text text-3xl text-center font-bold">Ascension Planner</h1>
+    <h2 class="text-ctp-subtext0 text-center">Your definitive shopping list for Resonator and Weapon ascension, level,
+      skill, and forte upgrade materials!</h2>
+  </div>
 
-  <%= link_to "Create New Plan",
+  <%= link_to "✚ New Plan",
   new_plan_path(step: 1),
   data: {
     turbo_frame: "modal",
   },
-  class: "btn btn-primary" %>
+  class:
+    "new-plan-btn text-lg py-4 px-5 bg-ctp-crust hover:bg-ctp-mauve hover:border-ctp-mauve text-ctp-text hover:text-ctp-mantle font-bold rounded-xl shadow-lg shadow-ctp-crust-200 transition-all cursor-pointer border-solid border-2 border-ctp-mauve" %>
 
-  <div id="plans_list_container">
-    <h2>Your Plans</h2>
-
-    <turbo-frame id="plans_list">
+  <div id="plans-list-container" class="w-full max-w-7xl mx-auto p-4">
+    <turbo-frame id="plans_list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <%= render @plans %>
     </turbo-frame>
   </div>
