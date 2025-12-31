@@ -1,5 +1,19 @@
 <%# locals: (subject:, plan_type:, errors: nil) %>
 
+<% if errors.present? %>
+  <div
+    class="
+      mb-4 p-3 bg-ctp-red/20 border border-ctp-red text-ctp-red rounded-lg
+    "
+  >
+    <ul class="list-disc ml-5">
+      <% errors.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <div id="plan-form-frame">
   <%= form_with(model: Plan.new, url: plans_path, method: :post, data: { controller: "plan-form" }, id: "plan-form") do |f| %>
     <%# Hidden fields to tell the Controller what we selected in Steps 1 & 2 %>

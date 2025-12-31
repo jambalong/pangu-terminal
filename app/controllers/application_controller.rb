@@ -14,12 +14,13 @@ class ApplicationController < ActionController::Base
   private
 
   def sync_guest_plans(user)
-    token = cookies[:guest_token]
+    token = cookies.permanent[:guest_token]
+
     if token.present?
       # Update all "Guest" plans with this cookie to belong to the new User
       Plan.where(guest_token: token, user_id: nil).update_all(user_id: user.id)
       # Optional: Clean up the cookie if you want a fresh start
-      # cookies.delete(:planner_id)
+      # cookies.delete(:guest_token)
     end
   end
 end

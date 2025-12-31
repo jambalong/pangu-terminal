@@ -40,7 +40,7 @@ class PlansController < ApplicationController
     end
 
     if existing
-      @errors = [ "You already have a plan for #{item.name}." ]
+      @errors = [ "You already have a plan for #{subject.name}." ]
       return render_form_with_errors
     end
 
@@ -67,7 +67,7 @@ class PlansController < ApplicationController
       @plan = Plan.new(
         plan_type: plan_type,
         guest_token: @guest_token,
-        user_id: current_user,
+        user: current_user,
         plan_data: {
           input: { subject_name: subject.name, subject_id: subject.id, **base_params(p) }.merge(resonator_data),
           output: final_output
@@ -79,6 +79,9 @@ class PlansController < ApplicationController
           format.turbo_stream
           format.html { redirect_to plans_path }
         end
+      else
+        @errors = @plan.errors.full_messages
+        render_form_with_errors
       end
 
     rescue ResonatorAscensionPlanner::ValidationError, WeaponAscensionPlanner::ValidationError => e
@@ -88,7 +91,7 @@ class PlansController < ApplicationController
       @errors = [ "The selected #{plan_type} could not be found." ]
       render_form_with_errors
     rescue StandardError => e
-      @errors = [ "An unexpected error occurred. Please try again." ]
+      @errors = [ "An error occurred: #{e.message}" ]
       render_form_with_errors
     end
   end
@@ -129,8 +132,8 @@ class PlansController < ApplicationController
   end
 
   def render_form_with_errors
-    plan_type = params[:plan_type]
-    subject_id = params[:subject_id]
+    plan_type = params[:plan_type] || params.dig(:plan, :plan_type)
+    subject_id = params[:subject_id] || params.dig(:plan, :subject_id)
     subject = (plan_type == "Resonator" ? Resonator : Weapon).find(subject_id)
 
     respond_to do |format|
