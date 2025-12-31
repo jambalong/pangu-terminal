@@ -1,13 +1,13 @@
 class PlansController < ApplicationController
-  before_action :set_planner_id
-  before_action :set_plan, only: [ :edit, :update, :destroy, :confirm_delete ]
-  before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :set_guest_token
+  before_action :set_plan, only: [ :destroy, :confirm_delete ]
+  before_action :authorize_owner!, only: [ :destroy, :confirm_delete ]
 
   def index
     if user_signed_in?
       @plans = current_user.plans
     else
-      @plans = Plan.where(planner_id: @planner_id, user_id: nil)
+      @plans = Plan.where(guest_token: @guest_token, user_id: nil)
     end
   end
 
@@ -32,6 +32,18 @@ class PlansController < ApplicationController
     plan_type = p[:plan_type]
     subject = (plan_type == "Resonator" ? Resonator : Weapon).find_by!(id: p[:subject_id])
 
+    existing = if user_signed_in?
+      current_user.plans.find_by("plan_data->'input'->>'subject_id' = ?", subject.id.to_s)
+    else
+      Plan.where(user_id: nil, guest_token: @guest_token)
+          .find_by("plan_data->'input'->>'subject_id' = ?", subject.id.to_s)
+    end
+
+    if existing
+      @errors = [ "You already have a plan for #{item.name}." ]
+      return render_form_with_errors
+    end
+
     begin
       resonator_data = plan_type == "Resonator" ? build_resonator_data(p) : {}
 
@@ -53,8 +65,9 @@ class PlansController < ApplicationController
       final_output = output_data.transform_keys { |id| material_names[id.to_i] || "N/A" }
 
       @plan = Plan.new(
-        planner_id: @planner_id,
         plan_type: plan_type,
+        guest_token: @guest_token,
+        user_id: current_user,
         plan_data: {
           input: { subject_name: subject.name, subject_id: subject.id, **base_params(p) }.merge(resonator_data),
           output: final_output
@@ -81,11 +94,9 @@ class PlansController < ApplicationController
   end
 
   def confirm_delete
-    @plan = Plan.find(params[:id])
   end
 
   def destroy
-    @plan = Plan.find(params[:id])
     @plan.destroy
 
     respond_to do |format|
@@ -95,9 +106,26 @@ class PlansController < ApplicationController
   end
 
   private
-  def set_planner_id
-    cookies.permanent[:planner_id] ||= SecureRandom.uuid
-    @planner_id = cookies.permanent[:planner_id]
+
+  def set_guest_token
+    if cookies.permanent[:guest_token].blank?
+      cookies.permanent[:guest_token] = SecureRandom.uuid
+    end
+
+    @guest_token = cookies.permanent[:guest_token]
+  end
+
+  def set_plan
+    @plan = Plan.find(params[:id])
+  end
+
+  def authorize_owner!
+    is_user_owner = user_signed_in? && @plan.user_id == current_user.id
+    is_guest_owner  = @plan.user_id.nil? && @plan.guest_token == @guest_token
+
+    unless is_user_owner || is_guest_owner
+      redirect_to plans_path, alert: "You don't have permission to modify this plan."
+    end
   end
 
   def render_form_with_errors
@@ -130,7 +158,7 @@ class PlansController < ApplicationController
       :intro_skill_current, :intro_skill_target
     ]
 
-    # Node fields (Booleans)
+    # Node fields (0 or 1)
     nodes = [
       :basic_attack_node_1, :basic_attack_node_2,
       :resonance_skill_node_1, :resonance_skill_node_2,
