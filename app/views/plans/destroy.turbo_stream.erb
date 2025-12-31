@@ -1,3 +1,12 @@
 <%# Use dom_id to target the exact element to remove %>
 <%= turbo_stream.remove dom_id(@plan) %>
-<%= turbo_stream.replace "modal", turbo_frame_tag("modal") %>
+
+<%= turbo_stream.update "signup-banner-container" do %>
+  <% updated_plans = Plan.where(guest_token: @guest_token, user_id: nil) %>
+  <%= render "plans/signup_banner", plans: updated_plans %>
+<% end %>
+
+<%# Close the confirm delete modal %>
+<%= turbo_stream.replace "modal" do %>
+  <turbo-frame id="modal"></turbo-frame>
+<% end %>

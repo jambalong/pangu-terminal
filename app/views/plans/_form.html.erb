@@ -105,7 +105,10 @@
 
             <%# Tier 2 Node %>
             <label class="node-label cursor-pointer">
-              <%= f.check_box "#{config[:key]}_node_2", class: "peer hidden" %>
+              <%= f.check_box "#{config[:key]}_node_2",
+                          { class: "peer hidden", checked: true },
+                          1,
+                          0 %>
               <div class="node-circle node-2">
                 <span>✱</span>
               </div>
@@ -115,7 +118,10 @@
 
             <%# Tier 1 Node %>
             <label class="node-label cursor-pointer">
-              <%= f.check_box "#{config[:key]}_node_1", class: "peer hidden" %>
+              <%= f.check_box "#{config[:key]}_node_1",
+                          { class: "peer hidden", checked: true },
+                          1,
+                          0 %>
               <div class="node-circle node-1">
                 <span>✱</span>
               </div>
