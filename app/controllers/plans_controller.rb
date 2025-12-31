@@ -32,6 +32,8 @@ class PlansController < ApplicationController
     plan_type = p[:plan_type]
     subject = (plan_type == "Resonator" ? Resonator : Weapon).find_by!(id: p[:subject_id])
 
+    @errors = []
+
     existing = if user_signed_in?
       current_user.plans.find_by("plan_data->'input'->>'subject_id' = ?", subject.id.to_s)
     else
@@ -141,7 +143,7 @@ class PlansController < ApplicationController
         render turbo_stream: turbo_stream.replace("plan-form-frame",
                partial: "plans/form",
                locals: {
-                 errors: @errors,
+                 errors: @errors&.uniq,
                  subject: subject,
                  plan_type: plan_type
                })

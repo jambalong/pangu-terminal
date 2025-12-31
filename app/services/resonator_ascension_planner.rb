@@ -73,7 +73,7 @@ class ResonatorAscensionPlanner < ApplicationService
     # this checks for a zero-change plan
     if @current_level == @target_level &&
        @current_ascension_rank == @target_ascension_rank &&
-       @current_skill_levels == @target_skill_levels &&
+       @current_skill_levels == @target_skill_levels
       errors << "At least one target value must be different from the corresponding current value to generate a plan."
     end
 
@@ -108,14 +108,31 @@ class ResonatorAscensionPlanner < ApplicationService
       errors << "Target ascension rank value must be greater than or equal to current ascension rank value."
     end
 
+    # this keeps level range within ascension rank
     current_max_level = ASCENSION_LEVEL_CAPS[@current_ascension_rank]
     if current_max_level.nil? || @current_level > current_max_level
       errors << "Current level (#{@current_level}) is impossible with current ascension rank (#{@current_ascension_rank}). Max level is #{current_max_level || 'N/A'}."
     end
 
+    if @current_ascension_rank > 0
+      min_level_required = ASCENSION_LEVEL_CAPS[@current_ascension_rank - 1]
+
+      if @current_level < min_level_required
+        errors << "Current Ascension Rank #{@current_ascension_rank} requires a minimum level of #{min_level_required}."
+      end
+    end
+
     target_max_level = ASCENSION_LEVEL_CAPS[@target_ascension_rank]
     if target_max_level.nil? || @target_level > target_max_level
       errors << "Target level (#{@target_level}) is impossible with target ascension rank (#{@target_ascension_rank}). Max level is #{target_max_level || 'N/A'}."
+    end
+
+    if @target_ascension_rank > 0
+      min_level_required = ASCENSION_LEVEL_CAPS[@target_ascension_rank - 1]
+
+      if @target_level < min_level_required
+        errors << "Target Ascension Rank #{@target_ascension_rank} requires a minimum level of #{min_level_required}."
+      end
     end
 
     # this checks for impossible downgrades (skill and forte nodes)
