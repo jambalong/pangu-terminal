@@ -5,6 +5,9 @@ body {
 
 .container {
   margin: auto;
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .planner-container {
@@ -14,7 +17,6 @@ body {
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  margin-top: 4rem;
 }
 
 .planner-header {
