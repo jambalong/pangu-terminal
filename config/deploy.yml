@@ -23,7 +23,6 @@ servers:
 proxy:
   ssl: true
   host: wuwaplanner.ambalong.dev
-  letsencrypt_email: wuwaplanner@ambalong.dev
   app_port: 3000
 
 # Where you keep your container images.
