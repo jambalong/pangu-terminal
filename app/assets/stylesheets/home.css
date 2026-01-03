@@ -1,0 +1,104 @@
+.hero-container {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  background-color: var(--ctp-base);
+  border-radius: 2rem;
+  margin-bottom: auto;
+  border: 4px solid var(--ctp-mauve);
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--ctp-text);
+  margin-bottom: 1rem;
+  letter-spacing: -2px;
+}
+
+.hero-title span {
+  color: var(--ctp-mauve);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--ctp-subtext1);
+  max-width: 600px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.btn-primary-large {
+  display: inline-block;
+  background-color: var(--ctp-mauve);
+  color: var(--ctp-base);
+  padding: 1.25rem 2.5rem;
+  border-radius: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px -10px var(--ctp-base);
+  margin-right: 1rem;
+}
+
+.btn-primary-large:hover {
+  transform: translateY(-3px);
+  background-color: var(--ctp-green);
+  box-shadow: 0 15px 25px -10px var(--ctp-green);
+}
+
+.btn-outline-large {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--ctp-subtext1);
+  padding: 1.25rem 2.5rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.1rem;
+  border: 2px solid var(--ctp-surface1);
+  transition: all 0.2s ease;
+}
+
+.btn-outline-large:hover {
+  border-color: var(--ctp-mauve);
+  color: var(--ctp-mauve);
+  background-color: rgba(203, 166, 247, 0.05); /* Slight mauve tint */
+}
+
+/* Feature Cards */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 4rem;
+}
+
+.feature-card {
+  background-color: var(--ctp-mantle);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--ctp-surface0);
+  transition: border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--ctp-mauve);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  color: var(--ctp-mauve);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.feature-card p {
+  color: var(--ctp-subtext0);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

@@ -1,0 +1,26 @@
+<header class="main-header">
+  <div class="header-inner">
+    <%# Brand Logo - Links to root/planner %>
+    <%= link_to root_path, class: "brand-logo" do %>
+      WUWA<span>PLANNER</span>
+    <% end %>
+
+    <nav class="header-nav">
+      <%# Main Utility Links %>
+      <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+      <%= link_to "Planner", plans_path, class: "nav-link #{'active' if current_page?(plans_path)}" %>
+      <%= link_to "About", about_path, class: "nav-link #{'active' if current_page?(about_path)}" %>
+
+      <div class="nav-divider"></div>
+
+      <%# Auth Links %>
+      <% if user_signed_in? %>
+        <%= link_to "#{current_user.email.split('@').first}", dashboard_path, class: "user-badge" %>
+        <%= link_to "Logout", destroy_user_session_path, data: { "turbo-method": :delete }, class: "nav-link auth-btn-secondary" %>
+      <% else %>
+        <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "nav-link auth-btn-primary" %>
+      <% end %>
+    </nav>
+  </div>
+</header>

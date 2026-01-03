@@ -1,0 +1,80 @@
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(30, 30, 46, 0.9); /* Mocha Base with opacity */
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ctp-surface0);
+  padding: 0.75rem 0;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-logo {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--ctp-text);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.brand-logo span {
+  color: var(--ctp-mauve);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.nav-link {
+  color: var(--ctp-subtext1);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--ctp-mauve);
+}
+
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--ctp-surface1);
+  margin: 0 0.5rem;
+}
+
+/* Specific Auth Button Styles */
+.auth-btn-primary {
+  background-color: var(--ctp-mauve);
+  color: var(--ctp-base) !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.75rem;
+}
+
+.auth-btn-primary:hover {
+  background-color: var(--ctp-pink);
+  transform: translateY(-1px);
+}
+
+.auth-btn-secondary {
+  border: 1px solid var(--ctp-surface1);
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.75rem;
+}
+
+.user-badge {
+  font-size: 0.75rem;
+  color: var(--ctp-mauve);
+  font-family: monospace;
+}

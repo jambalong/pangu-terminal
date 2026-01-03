@@ -1,0 +1,128 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Hero Section */
+.dashboard-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background-color: var(--ctp-mantle);
+  border-radius: 1.5rem;
+  border: 1px solid var(--ctp-surface0);
+}
+
+.user-greeting h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--ctp-text);
+}
+
+.user-greeting h1 span {
+  color: var(--ctp-mauve);
+}
+
+.user-greeting p {
+  color: var(--ctp-surface2);
+}
+
+.account-stats-row {
+  display: flex;
+  gap: 2rem;
+}
+
+.mini-stat {
+  text-align: right;
+}
+
+.mini-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--ctp-subtext0);
+}
+
+.mini-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ctp-mauve);
+}
+
+/* Grid Layout */
+.dashboard-grid-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  background-color: var(--ctp-base);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--ctp-surface0);
+}
+
+.card-title {
+  color: var(--ctp-mauve);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  color: var(--ctp-subtext0);
+  margin-bottom: 1.5rem;
+}
+
+/* Action Grid */
+.action-card {
+  max-height: 60%;
+}
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--ctp-mantle);
+  color: var(--ctp-text);
+  text-decoration: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.action-btn:hover {
+  border-color: var(--ctp-mauve);
+  background-color: var(--ctp-surface0);
+}
+
+/* News Styling */
+.news-item {
+  padding-top: 1rem;
+  border-top: 1px solid var(--ctp-surface0);
+}
+
+.news-date {
+  font-size: 0.7rem;
+  color: var(--ctp-mauve);
+  font-weight: bold;
+}
+
+.news-item p {
+  font-size: 0.85rem;
+  color: var(--ctp-subtext1);
+  margin-top: 0.25rem;
+}

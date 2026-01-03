@@ -9,8 +9,6 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-@import './authentication.css';
-
 .hidden {
   display: none !important;
 }

@@ -131,3 +131,69 @@
   color: var(--ctp-pink);
   text-decoration: underline;
 }
+
+/* Layout helpers for labels and hints */
+.label-with-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.hint-text {
+  font-size: 0.7rem;
+  color: var(--ctp-subtext0);
+  font-style: italic;
+}
+
+.status-msg {
+  background-color: var(--ctp-surface0);
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--ctp-blue);
+  margin-bottom: 1rem;
+}
+
+/* Emphasize the current password field */
+.highlight-input {
+  border-color: var(--ctp-surface2);
+}
+
+/* Danger Zone Styling */
+.danger-zone {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px dashed var(--ctp-surface0);
+}
+
+.danger-title {
+  color: var(--ctp-red);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.danger-zone p {
+  font-size: 0.85rem;
+  color: var(--ctp-subtext0);
+  margin-bottom: 1.5rem;
+}
+
+.btn-danger {
+  background-color: transparent;
+  color: var(--ctp-red);
+  border: 1px solid var(--ctp-red);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background-color: var(--ctp-red);
+  color: var(--ctp-base);
+}
