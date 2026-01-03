@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # A Devise helper that runs after successful login/signup
   def after_sign_in_path_for(resource)
     sync_guest_plans(resource)
-    plans_path # Redirect them to their newly synced dashboard
+    plans_path # Redirect them to their newly synced planner
   end
 
   private
@@ -17,10 +17,20 @@ class ApplicationController < ActionController::Base
     token = cookies.permanent[:guest_token]
 
     if token.present?
-      # Update all "Guest" plans with this cookie to belong to the new User
-      Plan.where(guest_token: token, user_id: nil).update_all(user_id: user.id)
-      # Optional: Clean up the cookie if you want a fresh start
-      # cookies.delete(:guest_token)
+      Plan.where(guest_token: token, user_id: nil).each do |guest_plan|
+        subject_id = guest_plan.plan_data.dig("input", "subject_id")
+
+        next if subject_id.blank?
+
+        existing_plan = user.plans.where("plan_data->'input'->>'subject_id' = ?", subject_id.to_s).exists?
+
+        if existing_plan
+          guest_plan.destroy
+        else
+          guest_plan.update(user_id: user.id, guest_token: nil)
+        end
+      end
+      cookies.delete(:guest_token)
     end
   end
 end
