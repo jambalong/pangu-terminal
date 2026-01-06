@@ -7,7 +7,7 @@ image: jambalong/wuwa-planner
 # Deploy to these servers.
 servers:
   web:
-    - 165.22.150.134
+    - 167.99.170.97
   # job:
   #   hosts:
   #     - 192.168.0.1
