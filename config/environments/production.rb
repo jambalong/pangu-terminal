@@ -59,7 +59,7 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {
-    host: "wuwaplanner.ambalong.dev",
+    host: "panguterminal.ambalong.dev",
     protocol: "https"
   }
 
@@ -87,7 +87,7 @@ Rails.application.configure do
   #   "example.com",     # Allow requests from example.com
   #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
   # ]
-  config.hosts << "wuwaplanner.ambalong.dev"
+  config.hosts << "panguterminal.ambalong.dev"
 
   #
   # Skip DNS rebinding protection for the default health check endpoint.

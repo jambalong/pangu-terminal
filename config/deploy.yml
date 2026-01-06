@@ -1,8 +1,8 @@
 # Name of your application. Used to uniquely configure containers.
-service: wuwa-planner
+service: pangu-terminal
 
 # Name of the container image (use your-user/app-name on external registries).
-image: jambalong/wuwa-planner
+image: jambalong/pangu-terminal
 
 # Deploy to these servers.
 servers:
@@ -22,7 +22,7 @@ servers:
 #
 proxy:
   ssl: true
-  host: wuwaplanner.ambalong.dev
+  host: panguterminal.ambalong.dev
   app_port: 3000
 
 # Where you keep your container images.
@@ -54,7 +54,7 @@ env:
     # WEB_CONCURRENCY: 2
 
     # Match this to any external database server to configure Active Record correctly
-    # Use wuwa_planner-db for a db accessory server on same machine via local kamal docker network.
+    # Use pangu_terminal-db for a db accessory server on same machine via local kamal docker network.
     # DB_HOST: 192.168.0.2
 
     # Log everything from Rails
@@ -71,7 +71,7 @@ aliases:
 # Use a persistent storage volume for sqlite database files and local Active Storage files.
 # Recommended to change this to a mounted volume path that is backed up off server.
 volumes:
-  - "wuwa_planner_storage:/rails/storage"
+  - "pangu_terminal_storage:/rails/storage"
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
@@ -127,7 +127,7 @@ accessories:
     port: 5432
     env:
       clear:
-        POSTGRES_DB: wuwa_planner_production
+        POSTGRES_DB: pangu_terminal_production
         POSTGRES_USER: rails
       secret:
         - POSTGRES_PASSWORD

@@ -2,10 +2,13 @@
   <%# Welcome and Account Overview %>
   <section class="dashboard-hero">
     <div class="user-greeting">
-      <h1>Welcome back, <span><%= current_user.email.split('@').first %></span></h1>
-      <p> Solaris-3 is waiting. Manage user settings or view the latest news here.</p>
+      <h1>Welcome back,
+        <span><%= current_user.email.split("@").first %></span></h1>
+      <p>
+        Solaris-3 is waiting. Manage user settings or view the latest news
+        here.</p>
     </div>
-    
+
     <div class="account-stats-row">
       <div class="mini-stat">
         <span class="mini-label">Member Since</span>
@@ -17,7 +20,7 @@
   <div class="dashboard-grid-main">
     <%# Global News / Updates %>
     <div class="dashboard-card news-card">
-      <h3 class="card-title">WuwaPlanner Updates</h3>
+      <h3 class="card-title">PanguTerminal Updates</h3>
       <div class="news-item">
         <span class="news-date">Nov 05</span>
         <p>Patch 0.1 - Database and initial seed data updated.</p>
@@ -49,15 +52,19 @@
       <h3 class="card-title">Quick Actions</h3>
       <div class="action-grid">
         <%= link_to plans_path, class: "action-btn" do %>
-          <span>➕</span> Go to Planner
+          <span>➕</span>
+          Go to Planner
         <% end %>
         <%= link_to about_path, class: "action-btn" do %>
-          <span>📖</span> Calculator Guide
+          <span>📖</span>
+          Calculator Guide
         <% end %>
         <%= link_to edit_user_registration_path, class: "action-btn" do %>
-          <span>⚙️</span> Account Settings
+          <span>⚙️</span>
+          Account Settings
         <% end %>
       </div>
     </div>
   </div>
 </div>
+
