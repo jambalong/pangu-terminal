@@ -64,14 +64,13 @@ To run this application locally:
     Create the databases and run the initial migrations.
 
     ```bash
-    bin/rails db:create
-    bin/rails db:migrate
+    bin/rails db:prepare
     ```
 
 5. **Run the Server:**
 
     ```bash
-    bin/rails s
+    bin/dev
     ```
 
 The application will be available at `http://localhost:3000`.
