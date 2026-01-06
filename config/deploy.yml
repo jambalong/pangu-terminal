@@ -24,7 +24,6 @@ proxy:
   ssl: true
   host: wuwaplanner.ambalong.dev
   app_port: 3000
-  letsencrypt_email: <%= ENV["LETSENCRYPT_EMAIL"] %>
 
 # Where you keep your container images.
 registry:
@@ -43,7 +42,6 @@ env:
   secret:
     - RAILS_MASTER_KEY
     - DATABASE_URL
-    - LETSENCRYPT_EMAIL
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
