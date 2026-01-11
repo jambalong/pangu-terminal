@@ -6,18 +6,18 @@ class ResonatorAscensionPlanner < ApplicationService
   }
 
   FORTE_NODES_MAP = {
-    "Basic Attack Node 1" => "Stat Bonus Tier 1",
-    "Basic Attack Node 2" => "Stat Bonus Tier 2",
-    "Resonance Skill Node 1" => "Stat Bonus Tier 1",
-    "Resonance Skill Node 2" => "Stat Bonus Tier 2",
+    "basic_attack_node_1"         => "Stat Bonus Tier 1",
+    "basic_attack_node_2"         => "Stat Bonus Tier 2",
+    "resonance_skill_node_1"      => "Stat Bonus Tier 1",
+    "resonance_skill_node_2"      => "Stat Bonus Tier 2",
 
-    "Forte Circuit Node 1" => "Inherent Skill Tier 1",
-    "Forte Circuit Node 2" => "Inherent Skill Tier 2",
+    "forte_circuit_node_1"        => "Inherent Skill Tier 1",
+    "forte_circuit_node_2"        => "Inherent Skill Tier 2",
 
-    "Resonance Liberation Node 1" => "Stat Bonus Tier 1",
-    "Resonance Liberation Node 2" => "Stat Bonus Tier 2",
-    "Intro Skill Node 1" => "Stat Bonus Tier 1",
-    "Intro Skill Node 2" => "Stat Bonus Tier 2"
+    "resonance_liberation_node_1" => "Stat Bonus Tier 1",
+    "resonance_liberation_node_2" => "Stat Bonus Tier 2",
+    "intro_skill_node_1"          => "Stat Bonus Tier 1",
+    "intro_skill_node_2"          => "Stat Bonus Tier 2"
   }
 
   def initialize(
@@ -31,9 +31,9 @@ class ResonatorAscensionPlanner < ApplicationService
     @target_level = target_level.to_i
     @current_ascension_rank = current_ascension_rank.to_i
     @target_ascension_rank = target_ascension_rank.to_i
-    @current_skill_levels = current_skill_levels.transform_values(&:to_i)
-    @target_skill_levels = target_skill_levels.transform_values(&:to_i)
-    @forte_node_upgrades = forte_node_upgrades.transform_values(&:to_i)
+    @current_skill_levels = current_skill_levels.symbolize_keys.transform_values(&:to_i)
+    @target_skill_levels = target_skill_levels.symbolize_keys.transform_values(&:to_i)
+    @forte_node_upgrades = forte_node_upgrades.symbolize_keys.transform_values(&:to_i)
 
     @materials_totals = Hash.new(0)
   end
@@ -215,10 +215,10 @@ class ResonatorAscensionPlanner < ApplicationService
   end
 
   def calculate_forte_node_costs
-    @forte_node_upgrades.each do |node, state|
+    @forte_node_upgrades.each do |node_key, state|
       next unless state == 1
 
-      cost_identifier = FORTE_NODES_MAP[node]
+      cost_identifier = FORTE_NODES_MAP[node_key.to_s]
       next unless cost_identifier.present?
 
       forte_node_costs = ForteNodeCost.where(node_identifier: cost_identifier)
