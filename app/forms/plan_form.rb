@@ -86,8 +86,7 @@ class PlanForm
       )
     end
 
-    results = planner.call
-    results
+    planner.call
   end
 
   def base_planner_params
