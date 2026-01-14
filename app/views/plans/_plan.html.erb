@@ -19,8 +19,7 @@
       <div class="material-row">
         <span><%= material_name %></span>
         <div class="quantity-wrapper">
-          <span class="quantity-x">x</span>
-          <span><%= quantity %></span>
+          <span class="quantity-number">x<%= number_with_delimiter(quantity) %></span>
         </div>
       </div>
     <% end %>

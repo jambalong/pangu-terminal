@@ -6,6 +6,10 @@
   <%= render "plans/sync_banner", plans: updated_plans %>
 <% end %>
 
+<%= turbo_stream.update "materials-summary-container" do %>
+  <%= render "plans/materials_summary", materials_summary: @materials_summary %>
+<% end %>
+
 <%# Close the confirm delete modal %>
 <%= turbo_stream.replace "modal" do %>
   <turbo-frame id="modal"></turbo-frame>

@@ -28,9 +28,14 @@
   padding: 0.25rem 0;
 }
 
-.quantity-x {
+/* .quantity-x {
   color: var(--ctp-surface2);
   margin-right: 2px;
+} */
+
+.quantity-number {
+  font-family: ui-monospace, monospace;
+  font-weight: bold;
 }
 
 .delete-link {

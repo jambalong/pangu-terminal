@@ -5,6 +5,7 @@ class PlansController < ApplicationController
 
   def index
     @plans = current_plans.includes(:subject).order(created_at: :desc)
+    @materials_summary = Plan.fetch_materials_summary(@plans)
   end
 
   def new
@@ -41,6 +42,7 @@ class PlansController < ApplicationController
       @plan = @form.save(current_user, @guest_token)
 
       if @plan
+        @materials_summary = Plan.fetch_materials_summary(current_plans)
         respond_to do |format|
           format.turbo_stream # This will look for create.turbo_stream.erb
           format.html { redirect_to plans_path }
@@ -101,6 +103,7 @@ class PlansController < ApplicationController
   def destroy
     @plan.destroy
 
+    @materials_summary = Plan.fetch_materials_summary(current_plans)
     respond_to do |format|
       format.turbo_stream # This will look for destroy.turbo_stream.erb
       format.html { redirect_to plans_path, notice: "Plan deleted." }

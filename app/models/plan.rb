@@ -16,7 +16,7 @@ class Plan < ApplicationRecord
     totals = {}
 
     plans.each do |plan|
-      materials = plan.plan_data.dig("output", "materials_totals") || {}
+      materials = plan.plan_data.dig("output") || {}
 
       materials.each do |mat_id, quantity|
         totals[mat_id] ||= 0
