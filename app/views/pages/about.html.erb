@@ -1,58 +1,60 @@
-<div class="about-container">
-  <h2 class="about-title">About PanguTerminal</h2>
+<%= turbo_frame_tag "main_content" do %>
+  <div class="about-container">
+    <h2 class="about-title">About PanguTerminal</h2>
 
-  <div class="about-content">
-    <p class="about-text">
-      PanguTerminal is a specialized tool designed for players to calculate the
-      exact materials needed to ascend Resonators and upgrade their skill
-      levels and forte upgrades. It also includes Weapon ascension planner.
-    </p>
+    <div class="about-content">
+      <p class="about-text">
+        PanguTerminal is a specialized tool designed for players to calculate the
+        exact materials needed to ascend Resonators and upgrade their skill
+        levels and forte upgrades. It also includes Weapon ascension planner.
+      </p>
 
-    <h3 class="about-subtitle">How it works</h3>
-    <ul class="about-list">
-      <li><strong>Leveling:</strong>
-        Calculates EXP required and converts it into Resonance Potions.</li>
-      <li><strong>Ascension:</strong>
-        Tracks Shell Credits and specific ascension materials based on rank.</li>
-      <li><strong>Skills:</strong>
-        Breaks down costs for every skill node and forte upgrades.</li>
-    </ul>
+      <h3 class="about-subtitle">How it works</h3>
+      <ul class="about-list">
+        <li><strong>Leveling:</strong>
+          Calculates EXP required and converts it into Resonance Potions.</li>
+        <li><strong>Ascension:</strong>
+          Tracks Shell Credits and specific ascension materials based on rank.</li>
+        <li><strong>Skills:</strong>
+          Breaks down costs for every skill node and forte upgrades.</li>
+      </ul>
 
-    <div class="about-disclaimer">
-      <p>This is a fan-made project and is not affiliated with Kuro Games.</p>
+      <div class="about-disclaimer">
+        <p>This is a fan-made project and is not affiliated with Kuro Games.</p>
+      </div>
+    </div>
+
+    <div class="auth-links">
+      <%= link_to "← Back to Home", root_path %>
     </div>
   </div>
 
-  <div class="auth-links">
-    <%= link_to "← Back to Home", root_path %>
+  <div class="about-container">
+    <h1 class="about-title">Current Progress</h1>
+    <div class="about-content">
+      <p class="about-text">I'm cooking up an app...</p>
+      <ul class="about-list">
+        <li>Database and Seed data done.</li>
+        <li>
+          <code>ResonatorAscensionPlanner</code>
+          service created.</li>
+        <li>
+          <code>WeaponAscensionPlanner</code>
+          service created.</li>
+        <li>Planner User Interface done.</li>
+        <li>Polish user interface styling.</li>
+        <li>
+          <span class="text-ctp-red">Errors</span>
+          and
+          <span class="text-ctp-green">Validations</span>
+          done.</li>
+        <li>Sync plans by signing up banner added.</li>
+        <li>Added
+          <code>User</code>
+          authentication and data merge</li>
+        <li>User dashboard with news and account settings added.</li>
+        <li class="text-ctp-yellow">Fixing several bugs and improving user experience.</li>
+      </ul>
+    </div>
   </div>
-</div>
-
-<div class="about-container">
-  <h1 class="about-title">Current Progress</h1>
-  <div class="about-content">
-    <p class="about-text">I'm cooking up an app...</p>
-    <ul class="about-list">
-      <li>Database and Seed data done.</li>
-      <li>
-        <code>ResonatorAscensionPlanner</code>
-        service created.</li>
-      <li>
-        <code>WeaponAscensionPlanner</code>
-        service created.</li>
-      <li>Planner User Interface done.</li>
-      <li>Polish user interface styling.</li>
-      <li>
-        <span class="text-ctp-red">Errors</span>
-        and
-        <span class="text-ctp-green">Validations</span>
-        done.</li>
-      <li>Sync plans by signing up banner added.</li>
-      <li>Added
-        <code>User</code>
-        authentication and data merge</li>
-      <li>User dashboard with news and account settings added.</li>
-      <li class="text-ctp-yellow">Fixing several bugs and improving user experience.</li>
-    </ul>
-  </div>
-</div>
+<% end %>

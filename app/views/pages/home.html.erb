@@ -1,32 +1,34 @@
-<div class="hero-container ">
-  <div class="hero-content">
-    <h1 class="hero-title">A Wuthering Waves <span>Companion.</span></h1>
-    <p class="hero-subtitle">
-      The ultimate resource planner for Wuthering Waves. 
-      Track levels, ascensions, skill and forte upgrades with precision.
-    </p>
-    
-    <div class="hero-actions">
-      <%= link_to "✮⋆˙ Start Planning", plans_path, class: "btn-primary-large" %>
-      <%= link_to "Learn More", about_path, class: "btn-outline-large" %>
+<%= turbo_frame_tag "main_content" do %>
+  <div class="hero-container ">
+    <div class="hero-content">
+      <h1 class="hero-title">A Wuthering Waves <span>Companion.</span></h1>
+      <p class="hero-subtitle">
+        The ultimate resource planner for Wuthering Waves. 
+        Track levels, ascensions, skill and forte upgrades with precision.
+      </p>
+      
+      <div class="hero-actions">
+        <%= link_to "✮⋆˙ Start Planning", plans_path, class: "btn-primary-large" %>
+        <%= link_to "Learn More", about_path, class: "btn-outline-large" %>
+      </div>
     </div>
-  </div>
 
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🧪</div>
-      <h3>Exact Costs</h3>
-      <p>Every Shell Credit and Ascension Materials accounted for.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚔️</div>
-      <h3>Weapon Support</h3>
-      <p>Plan for both your Resonators and their Weapons.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">☁️</div>
-      <h3>Cloud Sync</h3>
-      <p>Save plans as a guest or sign up to sync across devices.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <h3>Exact Costs</h3>
+        <p>Every Shell Credit and Ascension Materials accounted for.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚔️</div>
+        <h3>Weapon Support</h3>
+        <p>Plan for both your Resonators and their Weapons.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">☁️</div>
+        <h3>Cloud Sync</h3>
+        <p>Save plans as a guest or sign up to sync across devices.</p>
+      </div>
     </div>
   </div>
-</div>
+<% end %>

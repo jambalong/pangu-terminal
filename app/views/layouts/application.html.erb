@@ -24,10 +24,12 @@
   </head>
 
   <body>
-    <%= render "layouts/header" %>
+    <%= render "layouts/navbar" %>
     <main class="container">
-      <%= yield %>
-      <turbo-frame id="modal"></turbo-frame>
+      <%= turbo_frame_tag "main_content" do %>
+        <%= yield %>
+        <turbo-frame id="modal"></turbo-frame>
+      <% end %>
     </main>
   </body>
 </html>

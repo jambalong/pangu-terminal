@@ -21,4 +21,6 @@ Rails.application.routes.draw do
       get :confirm_delete
     end
   end
+
+  resources :inventory_items, only: [ :index, :update ]
 end

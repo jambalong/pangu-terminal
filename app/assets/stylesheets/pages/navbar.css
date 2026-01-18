@@ -1,4 +1,4 @@
-.main-header {
+.navbar-main {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -8,7 +8,7 @@
   padding: 0.75rem 0;
 }
 
-.header-inner {
+.navbar-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
@@ -29,7 +29,7 @@
   color: var(--ctp-mauve);
 }
 
-.header-nav {
+.navbar-links {
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -47,11 +47,17 @@
   color: var(--ctp-mauve);
 }
 
-.nav-divider {
+/* .nav-divider {
   width: 1px;
   height: 20px;
   background-color: var(--ctp-surface1);
   margin: 0 0.5rem;
+} */
+
+.navbar-auths {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 /* Specific Auth Button Styles */
@@ -63,8 +69,7 @@
 }
 
 .auth-btn-primary:hover {
-  background-color: var(--ctp-pink);
-  transform: translateY(-1px);
+  transform: scale(1.05);
 }
 
 .auth-btn-secondary {
@@ -76,7 +81,7 @@
 .auth-btn-secondary:hover {
   color: var(--ctp-mauve);
   background-color: var(--ctp-crust);
-  transform: translateY(-1px);
+  transform: scale(1.05);
 }
 
 .user-badge {

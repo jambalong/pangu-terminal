@@ -1,0 +1,43 @@
+<header class="navbar-main">
+  <div class="navbar-container">
+    <%= link_to root_path, class: "brand-logo" do %>
+      PANGU <span>TERMINAL</span>
+    <% end %>
+
+    <nav class="navbar-links">
+      <%= link_to "Planner",
+        plans_path,
+        data: { turbo_frame: "main_content" },
+        class: "nav-link #{"active" if current_page?(plans_path)}" %>
+      <%= link_to "Inventory",
+        inventory_items_path,
+        data: { turbo_frame: "main_content" },
+        class: "nav-link #{"active" if current_page?(inventory_items_path)}" %>
+      <%= link_to "About",
+        about_path,
+        data: { turbo_frame: "main_content" },
+        class: "nav-link #{"active" if current_page?(about_path)}" %>
+    </nav>
+
+    <div class="navbar-auths">
+      <% if user_signed_in? %>
+        <%= link_to "#{current_user.email.split("@").first}",
+        dashboard_path,
+        data: { turbo_frame: "main_content" },
+        class: "user-badge" %>
+        <%= link_to "Logout",
+        destroy_user_session_path,
+        data: {
+          "turbo-method": :delete,
+        },
+        class: "nav-link auth-btn-secondary" %>
+      <% else %>
+        <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+        <%= link_to "Sign Up",
+        new_user_registration_path,
+        class: "nav-link auth-btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</header>
+

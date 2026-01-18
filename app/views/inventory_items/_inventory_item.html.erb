@@ -1,0 +1,24 @@
+<div class="inventory-card bg-slate-900 border border-slate-700 rounded-lg p-4 flex flex-col items-center relative group">
+  
+  <div class="w-16 h-16 mb-3 rounded bg-slate-800 flex items-center justify-center border-b-2 border-<%= inventory_item.rarity %>-500">
+    <span class="text-2xl font-bold text-slate-500"><%= inventory_item.name[0..1] %></span>
+  </div>
+  
+  <h3 class="text-sm font-medium text-slate-300 mb-2 text-center"><%= inventory_item.name %></h3>
+
+  <div class="w-full h-1.5 bg-slate-800 rounded-full mb-3 overflow-hidden">
+    <% percent = [inventory_item.quantity.to_f / 100 * 100, 100].min %> <div class="h-full bg-blue-500" style="width: <%= percent %>%"></div>
+  </div>
+
+  <%= form_with model: inventory_item, class: "w-full" do |f| %>
+    <div class="flex items-center gap-2">
+      <%= f.number_field :quantity, 
+          class: "w-full bg-slate-950 border border-slate-700 rounded text-center text-white font-mono focus:border-blue-500 focus:ring-1 focus:ring-blue-500",
+          onblur: "this.form.requestSubmit()" %>
+    </div>
+  <% end %>
+  
+  <div id="<%= dom_id(inventory_item) %>_status" class="absolute top-2 right-2 opacity-0 transition-opacity text-xs text-green-400">
+    Saved
+  </div>
+</div>
