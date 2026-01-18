@@ -5,6 +5,14 @@ class InventoryItemsController < ApplicationController
     @inventory_items = current_user.inventory_items
                                    .includes(:material)
                                    .order("materials.id ASC, materials.rarity ASC")
+
+    if params[:query].present?
+      @inventory_items = @inventory_items.search_by_name(params[:query])
+    end
+
+    if params[:category].present?
+      @inventory_items = @inventory_items.by_category(params[:category])
+    end
   end
 
   def update
@@ -15,6 +23,8 @@ class InventoryItemsController < ApplicationController
         format.turbo_stream
         format.html { redirect_back fallback_location: inventory_items_path }
       end
+    else
+      head :unprocessable_entity
     end
   end
 
