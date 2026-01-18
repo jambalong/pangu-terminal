@@ -25,11 +25,13 @@
 
   <body>
     <%= render "layouts/navbar" %>
+
     <main class="container">
       <%= turbo_frame_tag "main_content" do %>
         <%= yield %>
-        <turbo-frame id="modal"></turbo-frame>
       <% end %>
     </main>
+
+    <%= turbo_frame_tag "modal" %>
   </body>
 </html>

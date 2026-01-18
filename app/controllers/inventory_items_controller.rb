@@ -4,7 +4,7 @@ class InventoryItemsController < ApplicationController
   def index
     @inventory_items = current_user.inventory_items
                                    .includes(:material)
-                                   .order("materials.material_type ASC, materials.rarity ASC")
+                                   .order("materials.id ASC, materials.rarity ASC")
   end
 
   def update

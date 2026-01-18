@@ -1,0 +1,66 @@
+/* Container & Layout */
+.inventory-container {
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.inventory-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #cdd6f4; /* Text */
+}
+
+/* Form Elements */
+.filter-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.inventory-input, .inventory-select {
+  background-color: var(--ctp-base);
+  border: 1px solid var(--ctp-surface1);
+  color: #cdd6f4; /* Text */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s;
+}
+
+.inventory-input:focus, .inventory-select:focus {
+  outline: none;
+  border-color: var(--ctp-blue);
+}
+
+.inventory-input::placeholder {
+  color: var(--ctp-overlay0);
+}
+
+/* Grid System */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .inventory-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .inventory-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--ctp-overlay0); /* Overlay0 */
+  padding: 3rem 0;
+}

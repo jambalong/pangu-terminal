@@ -21,6 +21,8 @@ class PlansController < ApplicationController
       @form = PlanForm.new(subject_type: @subject_type, subject_id: @subject.id)
     end
     # Rails automatically renders new.html.erb, which uses the @variables above
+
+    render layout: false if turbo_frame_request?
   end
 
   def create
