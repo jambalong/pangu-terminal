@@ -23,6 +23,9 @@
   color: var(--ctp-text);
   text-decoration: none;
   letter-spacing: -0.5px;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .brand-logo span {
@@ -38,7 +41,7 @@
 .nav-link {
   color: var(--ctp-subtext1);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s ease;
 }
@@ -85,8 +88,14 @@
 }
 
 .user-badge {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 1rem;
-  font-family: monospace;
+  /* Add a 'system prefix' look */
+  &::before {
+    content: "user:";
+    color: var(--ctp-overlay1);
+    margin-right: 4px;
+  }
 }
 
 .user-badge:hover {
