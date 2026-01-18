@@ -1,4 +1,4 @@
-<%# locals: (form:, subject:, subject_type:, errors: nil) %>
+<%# locals: (plan:, subject:, subject_type:, errors: nil) %>
 
 <div class="config-container">
   <header class="config-header">
@@ -16,7 +16,7 @@
   </header>
 
   <div id="plan-form-frame" class="custom-scrollbar">
-    <%= render "form", subject: subject, subject_type: subject_type, errors: errors %>
+    <%= render "form", plan: plan, subject: subject, subject_type: subject_type, errors: errors %>
   </div>
 
   <footer class="modal-footer">

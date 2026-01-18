@@ -1,4 +1,4 @@
-<%# locals: (subject:, subject_type:, errors: nil) %>
+<%# locals: (plan:, subject:, subject_type:, errors: nil) %>
 
 <% if errors.present? %>
   <div class="error-container">
@@ -10,7 +10,8 @@
   </div>
 <% end %>
 
-<%= form_with(model: Plan.new, url: plans_path, method: :post, data: { controller: "plan-form" }, id: "plan-form") do |f| %>
+<%= form_with(model: plan, data: { controller: "plan-form" }, id: "plan-form") do |f| %>
+  <%= f.hidden_field :id if plan.respond_to?(:id) %>
   <%# Hidden fields to tell the Controller what we selected in Steps 1 & 2 %>
   <%= f.hidden_field :subject_type, value: subject_type %>
   <%= f.hidden_field :subject_id, value: subject.id %>
@@ -21,15 +22,15 @@
       <h2 class=" stat-label ">Level</h2>
       <div class="stat-input-row">
         <%= f.number_field :current_level,
-                       value: 1,
                        class: "stat-input",
+                       placeholder: "1",
                        data: {
                          action: "input->plan-form#clampLevel",
                        } %>
         <span class="text-ctp-text">→</span>
         <%= f.number_field :target_level,
-                       value: 90,
                        class: "stat-input",
+                       placeholder: "90",
                        data: {
                          action: "input->plan-form#clampLevel",
                        } %>
@@ -41,18 +42,16 @@
       <h2 class=" stat-label ">Ascension Rank</h2>
       <div class="stat-input-row">
         <%= f.number_field :current_ascension_rank,
-                       value: 0,
-                       min: 0,
-                       max: 6,
+                       placeholder: "0",
+                       min: 0, max: 6,
                        class: "stat-input",
                        data: {
                          action: "input->plan-form#clampAscensionRank",
                        } %>
         <span class="text-white">→</span>
         <%= f.number_field :target_ascension_rank,
-                       value: 6,
-                       min: 0,
-                       max: 6,
+                       placeholder: "6",
+                       min: 0, max: 6,
                        class: "stat-input",
                        data: {
                          action: "input->plan-form#clampAscensionRank",
@@ -71,6 +70,7 @@
   <% end %>
 
   <div class="mt-6">
-    <%= f.submit "Create Plan", class: "form-submit-btn" %>
+    <% button_label = (defined?(plan.id) && plan.id.present?) ? "Update Plan" : "Create Plan" %>
+    <%= f.submit button_label, class: "form-submit-btn" %>
   </div>
 <% end %>

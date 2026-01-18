@@ -1,0 +1,9 @@
+<%= turbo_stream.update "modal", "" %>
+
+<%= turbo_stream.replace dom_id(@plan) do %>
+  <%= render "plans/plan", plan: @plan %>
+<% end %>
+
+<%= turbo_stream.update "materials-summary-content" do %>
+  <%= render "plans/materials_summary", materials_summary: @materials_summary %>
+<% end %>

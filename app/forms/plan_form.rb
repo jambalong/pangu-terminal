@@ -2,6 +2,7 @@ class PlanForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  attribute :id, :integer
   attribute :subject_type, :string
   attribute :subject_id, :integer
   attribute :current_level, :integer, default: 1
@@ -18,7 +19,13 @@ class PlanForm
 
   attr_reader :plan
 
+  def persisted?
+    id.present?
+  end
+
   def save(user, guest_token, existing_plan = nil)
+    apply_defaults_to_blanks
+
     plan = existing_plan || Plan.new(user: user, guest_token: guest_token)
     plan.subject_type = subject_type
     plan.subject_id = subject_id
@@ -38,11 +45,16 @@ class PlanForm
     end
   end
 
+  def self.model_name
+    ActiveModel::Name.new(self, nil, "Plan")
+  end
+
   # Transformation from JSONB -> Form Attributes
   def self.from_plan(plan)
     input = plan.plan_data["input"]
 
     attributes = {
+      id: plan.id,
       subject_type: plan.subject_type,
       subject_id: plan.subject_id,
       current_level: input["current_level"],
@@ -67,6 +79,15 @@ class PlanForm
   end
 
   private
+
+  def apply_defaults_to_blanks
+    self.attributes.each do |attr_name, value|
+      if value.blank?
+        default_value = self.class._default_attributes[attr_name]&.value
+        public_send("#{attr_name}=", default_value) unless default_value.nil?
+      end
+    end
+  end
 
   def build_input_data(subject)
     # Merges levels, ranks, skills, and forte hashes into the JSONB input key

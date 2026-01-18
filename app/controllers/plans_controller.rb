@@ -4,7 +4,7 @@ class PlansController < ApplicationController
   before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete ]
 
   def index
-    @plans = current_plans.includes(:subject).order(created_at: :desc)
+    @plans = current_plans.includes(:subject).order(created_at: :asc)
     @materials_summary = Plan.fetch_materials_summary(@plans)
 
     material_ids = @materials_summary.keys
@@ -36,18 +36,16 @@ class PlansController < ApplicationController
     @subject = @subject_type.safe_constantize&.find_by(id: @form.subject_id)
     @errors = []
 
-    handle_missing_subject if @subject.nil?
-
-    if current_plans.exists?(subject: @subject)
-      @errors = [ "You already have a plan for #{@subject.name}." ]
-      render_form_with_errors
-    end
+    return handle_missing_subject if @subject.nil?
 
     begin
       @plan = @form.save(current_user, @guest_token)
 
       if @plan
+        material_ids = @plan.plan_data.dig("output")&.keys || []
+        @materials_lookup = Material.where(id: material_ids).index_by(&:id)
         @materials_summary = Plan.fetch_materials_summary(current_plans)
+
         respond_to do |format|
           format.turbo_stream # This will look for create.turbo_stream.erb
           format.html { redirect_to plans_path }
@@ -84,7 +82,14 @@ class PlansController < ApplicationController
 
     begin
       if @form.save(current_user, @guest_token, @plan)
-        respond_to { |format| format.turbo_stream }
+        material_ids = @plan.plan_data.dig("output")&.keys || []
+        @materials_lookup = Material.where(id: material_ids).index_by(&:id)
+        @materials_summary = Plan.fetch_materials_summary(current_plans)
+
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to plans_path }
+        end
       else
         @errors = @form.errors.full_messages
         render_form_with_errors
@@ -126,7 +131,7 @@ class PlansController < ApplicationController
   end
 
   def set_plan
-    @plan = Plan.find(params[:id])
+    @plan = current_plans.find(params[:id])
   end
 
   def authorize_owner!
@@ -144,12 +149,14 @@ class PlansController < ApplicationController
   end
 
   def render_form_with_errors
+    plan_to_render = @form || PlanForm.from_plan(@plan || Plan.new)
+
     respond_to do |format|
       format.turbo_stream {
         render turbo_stream: turbo_stream.update("plan-form-frame",
           partial: "plans/form",
           locals: {
-            form: @form,
+            plan: plan_to_render,
             subject: @subject,
             subject_type: @subject_type,
             errors: @errors
@@ -167,7 +174,7 @@ class PlansController < ApplicationController
   end
 
   def plan_params
-    core = [ :subject_type, :subject_id, :current_level, :target_level, :current_ascension_rank, :target_ascension_rank ]
+    core = [ :id, :subject_type, :subject_id, :current_level, :target_level, :current_ascension_rank, :target_ascension_rank ]
 
     # Skill fields
     skills = [

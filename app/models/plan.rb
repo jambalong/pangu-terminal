@@ -7,10 +7,6 @@ class Plan < ApplicationRecord
   }
 
   validate :must_have_owner
-  validates :subject_id, uniqueness: {
-    scope: [ :subject_type, :user_id, :guest_token ],
-    message: "already has an active plan"
-  }
 
   def self.fetch_materials_summary(plans)
     totals = {}
