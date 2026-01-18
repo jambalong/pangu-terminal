@@ -27,7 +27,7 @@
     <%= render "layouts/navbar" %>
 
     <main class="container">
-      <%= turbo_frame_tag "main_content" do %>
+      <%= turbo_frame_tag "main_content", data: { controller_name: controller_name } do %>
         <%= yield %>
       <% end %>
     </main>

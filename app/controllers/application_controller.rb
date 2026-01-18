@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # A Devise helper that runs after successful login/signup
   def after_sign_in_path_for(resource)
     sync_guest_plans(resource)
-    plans_path # Redirect them to their newly synced planner
+    authenticated_root_path
   end
 
   private

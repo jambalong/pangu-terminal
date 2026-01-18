@@ -8,8 +8,10 @@
       </p>
       
       <div class="hero-actions">
-        <%= link_to "✮⋆˙ Start Planning", plans_path, class: "btn-primary-large" %>
-        <%= link_to "Learn More", about_path, class: "btn-outline-large" %>
+        <%= link_to "✮⋆˙ Start Planning",
+          plans_path,
+          data: { turbo_frame: "main_content", turbo_action: "advance" },
+          class: "btn-primary-large" %>
       </div>
     </div>
 
