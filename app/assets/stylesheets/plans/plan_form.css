@@ -97,25 +97,31 @@
 
 /* Sizing */
 .node-2 {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   font-size: 1rem;
 }
 .node-1 {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   font-size: 1rem;
+}
+
+.node-circle span {
+  color: var(--ctp-text);
+  display: flex;
 }
 
 /* The Core Node (3rd Column) Scaling */
 .inherent-node .node-2 span {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 900;
 }
 
 .inherent-node .node-1 span {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 900;
+  color: var(--ctp-text);
 }
 
 /* Connection/Checked State */
@@ -134,8 +140,8 @@
 }
 
 .node-diamond {
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   background-color: var(--ctp-mantle);
   border: 2px solid var(--ctp-mauve);
   transform: rotate(45deg);
@@ -149,7 +155,7 @@
 .node-diamond span {
   transform: rotate(-45deg);
   color: var(--ctp-text);
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 900;
 }
 
