@@ -669,3 +669,16 @@
     font-size: 2rem;
   }
 }
+
+.badge-coming-soon {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--ctp-base);
+  background: var(--ctp-peach);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+}

@@ -26,6 +26,23 @@
   gap: 20px;
 }
 
+.view-all-btn {
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-width: 100px;
+  color: var(--ctp-subtext0);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  
+  align-items: center;
+  gap: 4px;
+}
+
+.view-all-btn:hover {
+  color: var(--ctp-mauve);
+  transform: translateX(4px);
+}
+
 @media (min-width: 1024px) {
   .stats-grid { grid-template-columns: repeat(4, 1fr); }
   .dashboard-content-layout {
@@ -64,6 +81,10 @@
 .dashboard-content-layout {
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.dashboard-sidebar {
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 1023px) {
