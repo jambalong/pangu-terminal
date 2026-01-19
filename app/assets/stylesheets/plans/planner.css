@@ -1,0 +1,136 @@
+/* Container & Layout */
+.planner-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Section */
+.planner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.planner-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ctp-text);
+}
+
+.planner-subtitle {
+  font-size: 1rem;
+  color: var(--ctp-subtext0);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* New Plan Button */
+.new-plan-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: fit-content;
+  
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  background-color: var(--ctp-crust);
+  color: var(--ctp-text);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ctp-surface1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.new-plan-btn:hover {
+  background-color: var(--ctp-mantle);
+  border-color: var(--ctp-mauve);
+  color: var(--ctp-mauve);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+}
+
+.new-plan-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Plans Grid */
+#plans-list {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+/* Rarity Colors */
+.rarity-5 { color: var(--ctp-peach); }
+.rarity-4 { color: var(--ctp-mauve); }
+.rarity-3 { color: var(--ctp-blue); }
+.rarity-2 { color: var(--ctp-green); }
+.rarity-1 { color: var(--ctp-overlay2); }
+
+/* Responsive Breakpoints */
+@media (min-width: 640px) {
+  .planner-title {
+    font-size: 1.75rem;
+  }
+
+  .planner-subtitle {
+    font-size: 1.0625rem;
+  }
+
+  #plans-list {
+    gap: 1.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #plans-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  #plans-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 639px) {
+  .planner-header {
+    align-items: stretch;
+    margin-bottom: 1.5rem;
+  }
+
+  .planner-title {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+
+  .planner-subtitle {
+    font-size: 0.9375rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .new-plan-btn {
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
+  }
+
+  #plans-list {
+    gap: 1.25rem;
+  }
+}

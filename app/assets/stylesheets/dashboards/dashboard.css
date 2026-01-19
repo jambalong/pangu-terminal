@@ -49,7 +49,20 @@
 .dashboard-content-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 32px;
+}
+
+@media (max-width: 1023px) {
+  .dashboard-content-layout {
+    gap: none;
+  }
+
+  .dashboard-main {
+    order: 2;
+  }
+  
+  .dashboard-sidebar {
+    order: 1;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -57,11 +70,18 @@
     grid-template-columns: 7fr 3fr;
     align-items: start;
   }
+  
+  .dashboard-main {
+    order: 1;
+  }
+  
+  .dashboard-sidebar {
+    order: 2;
+  }
 }
 
 .dashboard-card {
   border-radius: 16px;
-  padding: 24px;
 }
 
 .section-header {

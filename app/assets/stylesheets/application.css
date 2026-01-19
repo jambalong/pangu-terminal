@@ -15,6 +15,18 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: -webkit-fill-available;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+main.no-scroll {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}
+
 .hidden {
   display: none !important;
 }

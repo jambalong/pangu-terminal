@@ -11,6 +11,7 @@
           <%= f.text_field :query, 
               placeholder: "Search materials...", 
               class: "inventory-input",
+              autocomplete: "off",
               oninput: "this.form.requestSubmit()" %>
         </div>
             
@@ -18,19 +19,23 @@
           <%= f.select :category, 
               options_for_select(Material.distinct.pluck(:category), params[:category]), 
               { include_blank: "All Categories" }, 
-              { class: "inventory-select", onchange: "this.form.requestSubmit()" } %>
+              { 
+                class: "inventory-select", 
+                onchange: "this.form.requestSubmit()",
+                "aria-label": "Filter by category"
+              } %>
         </div>
       <% end %>
     </div>
 
     <%= turbo_frame_tag "inventory-grid" do %>
-      <div class="inventory-grid">
-        <%= render @inventory_items %>
-      </div>
-      
       <% if @inventory_items.empty? %>
         <div class="empty-state">
-          No materials found in your pantry.
+          <p>No materials found in your inventory.</p>
+        </div>
+      <% else %>
+        <div class="inventory-grid">
+          <%= render @inventory_items %>
         </div>
       <% end %>
     <% end %>

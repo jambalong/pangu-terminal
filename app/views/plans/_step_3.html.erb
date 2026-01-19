@@ -18,13 +18,4 @@
   <div id="plan-form-frame" class="custom-scrollbar">
     <%= render "form", plan: plan, subject: subject, subject_type: subject_type, errors: errors %>
   </div>
-
-  <footer class="modal-footer">
-    <%= link_to new_plan_path(subject_type: subject_type, step: 2), class: "modal-back-btn" do %>
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-      </svg>
-      Back
-    <% end %>
-  </footer>
 </div>

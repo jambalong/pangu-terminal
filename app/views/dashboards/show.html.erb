@@ -1,34 +1,34 @@
 <%= turbo_frame_tag "main_content" do %>
   <div class="dashboard-content-layout">
-  <div class="dashboard-card">
-    <div class="section-header">
-      <h2 class="section-title">Recent Plans</h2>
-      <%= link_to "View All →", plans_path, class: "modal-back-btn" %>
+    <div class="dashboard-card dashboard-main">
+      <div class="section-header">
+        <h2 class="section-title">Recent Plans</h2>
+        <%= link_to "View All →", plans_path, class: "modal-back-btn" %>
+      </div>
+      
+      <div class="plans-column">
+        <%= render @recent_plans %>
+      </div>
     </div>
-    
-    <div class="plans-column">
-      <%= render @recent_plans %>
-    </div>
-  </div>
 
-  <aside class="dashboard-card">
-    <div class="section-header">
-      <h2 class="section-title">Quick Actions</h2>
-    </div>
-    
-    <div class="quick-actions-list">
-      <%= link_to plans_path, class: "action-link" do %>
-        <span class="icon">➕</span> Planner
-      <% end %>
+    <aside class="dashboard-card dashboard-sidebar">
+      <div class="section-header">
+        <h2 class="section-title">Quick Actions</h2>
+      </div>
       
-      <%= link_to inventory_items_path, class: "action-link" do %>
-        <span class="icon">📦</span> Inventory
-      <% end %>
-      
-      <%= link_to edit_user_registration_path, data: { turbo: false }, class: "action-link" do %>
-        <span class="icon">⚙️</span> Settings
-      <% end %>
-    </div>
-  </aside>
-</div>
+      <div class="quick-actions-list">
+        <%= link_to plans_path, class: "action-link" do %>
+          <span class="icon">➕</span> Planner
+        <% end %>
+        
+        <%= link_to inventory_items_path, class: "action-link" do %>
+          <span class="icon">📦</span> Inventory
+        <% end %>
+        
+        <%= link_to edit_user_registration_path, data: { turbo: false }, class: "action-link" do %>
+          <span class="icon">⚙️</span> Settings
+        <% end %>
+      </div>
+    </aside>
+  </div>
 <% end %>

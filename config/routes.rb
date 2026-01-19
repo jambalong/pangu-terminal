@@ -27,6 +27,13 @@ Rails.application.routes.draw do
   scope "/app" do
     root to: "dashboards#show", as: :authenticated_root
 
+    # If it's a direct browser hit (not a Turbo Frame request),
+    # redirect to the dashboard.
+    constraints ->(req) { req.format.html? && req.headers["Turbo-Frame"].nil? } do
+      get "planner", to: redirect("/app")
+      get "inventory", to: redirect("/app")
+    end
+
     resources :plans, path: "planner" do
       member do
         get :confirm_delete
@@ -35,8 +42,6 @@ Rails.application.routes.draw do
 
     resources :inventory_items, only: [ :index, :update ], path: "inventory"
   end
-
-  resources :inventory_items, only: [ :index, :update ]
 
   # Defines the root path route ("/")
   root "pages#home"
