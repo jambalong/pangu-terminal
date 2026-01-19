@@ -12,7 +12,7 @@
 .navbar-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,8 +33,9 @@
   text-decoration: none;
   letter-spacing: -1px;
   text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-terminal);
   white-space: nowrap;
+  margin-right: 5rem;
   z-index: 1100;
 }
 
@@ -51,7 +52,7 @@
 .nav-link {
   color: var(--ctp-subtext1);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   transition: all 0.2s ease;
   padding: 0.5rem 0.75rem;
@@ -104,7 +105,7 @@
 }
 
 .user-badge {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1rem;
   color: var(--ctp-mauve);
   text-decoration: none;
@@ -221,7 +222,7 @@ body:has(turbo-frame#main_content[src*="/inventory"]) .nav-inventory {
     width: 100%;
     padding: 1rem 1.5rem;
     border-radius: 0;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
   }
 
   .navbar-auths {

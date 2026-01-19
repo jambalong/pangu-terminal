@@ -114,12 +114,12 @@
 
 /* The Core Node (3rd Column) Scaling */
 .inherent-node .node-2 span {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 900;
 }
 
 .inherent-node .node-1 span {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: var(--ctp-text);
 }
@@ -155,7 +155,7 @@
 .node-diamond span {
   transform: rotate(-45deg);
   color: var(--ctp-text);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 900;
 }
 

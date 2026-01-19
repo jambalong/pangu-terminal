@@ -44,6 +44,13 @@
                 action: "click->mobile-menu#close"
               }, 
               class: "nav-link nav-plan" %>
+          <%= link_to "Inventory", inventory_items_path, 
+              data: { 
+                turbo_frame: "main_content", 
+                turbo: false,
+                action: "click->mobile-menu#close"
+              }, 
+              class: "nav-link nav-inventory" %>
         <% end %>
       </nav>
 

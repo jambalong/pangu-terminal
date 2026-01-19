@@ -9,6 +9,8 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -32,6 +34,10 @@ main.no-scroll {
 }
 
 :root {
+  --font-main: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-terminal: 'Space Mono', monospace;
+
   /* Base Colors */
   --ctp-rosewater: #f5e0dc;
   --ctp-flamingo: #f2cdcd;
