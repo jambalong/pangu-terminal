@@ -1,20 +1,46 @@
 .sync-banner {
+  position: relative;
   background-color: var(--ctp-mantle);
   border: 1px solid var(--ctp-surface0);
   border-left: 4px solid var(--ctp-mauve);
-  padding: 1rem 1.5rem;
+  padding: 1.75rem 2.75rem 1.25rem 1.25rem;
   border-radius: 12px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sync-banner.is-dismissing {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.sync-close-btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--ctp-subtext0);
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sync-close-btn:hover {
+  color: var(--ctp-red);
 }
 
 .sync-icon {
   font-size: 1.5rem;
-  opacity: 0.8;
+  flex-shrink: 0;
 }
 
 .sync-info {
@@ -24,7 +50,6 @@
 .sync-title {
   color: var(--ctp-text);
   font-weight: 700;
-  font-size: 1rem;
   margin-bottom: 0.25rem;
 }
 
@@ -32,44 +57,53 @@
   color: var(--ctp-subtext0);
   font-size: 0.875rem;
   margin: 0;
+  line-height: 1.4;
 }
 
 .sync-desc strong {
   color: var(--ctp-mauve);
-  font-weight: 600;
+}
+
+.sync-actions {
+  flex-shrink: 0;
 }
 
 .sync-cta {
+  display: inline-block;
   background-color: var(--ctp-mauve);
   color: var(--ctp-base);
-  padding: 0.6rem 1.25rem;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 700;
   text-decoration: none;
-  white-space: nowrap;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.2s ease;
+  margin-right: .5rem;
 }
 
 .sync-cta:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+  transform: scale(1.05);
 }
 
-.sync-close-btn {
-  background: transparent;
-  border: none;
-  color: var(--ctp-subtext0);
-  cursor: pointer;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
+@media (max-width: 768px) {
+  .sync-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    padding-top: 2.5rem;
+    gap: 1rem;
+  }
 
-.sync-close-btn:hover {
-  background-color: var(--ctp-surface0);
-  color: var(--ctp-mauve);
+  .sync-icon {
+    display: none;
+  }
+
+  .sync-actions {
+    width: 100%;
+  }
+
+  .sync-cta {
+    width: 100%;
+    text-align: center;
+  }
 }

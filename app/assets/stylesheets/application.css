@@ -178,3 +178,7 @@ main.no-scroll {
   font-weight: bold;
   flex-shrink: 0;
 }
+
+#main_content {
+  padding-bottom: 1rem;
+}

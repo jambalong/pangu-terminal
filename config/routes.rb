@@ -31,7 +31,9 @@ Rails.application.routes.draw do
     # If it's a direct browser hit (not a Turbo Frame request),
     # redirect to the dashboard.
     constraints ->(req) { req.format.html? && req.headers["Turbo-Frame"].nil? } do
-      get "planner", to: redirect("/app")
+      get "planner", to: redirect { |p, req|
+        req.env["warden"].authenticated?(:user) ? "/app" : "/"
+      }
       get "inventory", to: redirect("/app")
     end
 
