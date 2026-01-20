@@ -21,7 +21,7 @@
   position: relative;
   width: 100%;
   max-width: 36rem;
-  margin: 0 auto;
+  margin: 1rem auto;
 
   display: flex;
   flex-direction: column;
