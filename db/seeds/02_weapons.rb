@@ -135,7 +135,12 @@ WEAPON_DATA.each do | weapon_type, rarities |
       # e.g. "Lux & Umbra" => :lux_umbra
       # e.g. "Gauntlets#21D" => :gauntlets21d
       # e.g. "Loong's Pearl" => :loongs_pearl
-      lookup_key = name.downcase.gsub(/['#&]/, '').strip.gsub('-', '_').gsub(/\s+/, '_').to_sym
+      lookup_key = name.downcase
+                      .gsub(/['#&]/, '')
+                      .strip
+                      .gsub('-', '_')
+                      .gsub(/\s+/, '_')
+                      .to_sym
       $SEED_DATA[lookup_key] = weapon
     end
   end

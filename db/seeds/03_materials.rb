@@ -13,14 +13,21 @@
 # ===============================================
 puts "  --> Creating Materials..."
 
-def seed_material_set(data_array, type, category, default_exp = 0)
+def seed_material_set(data_array, type, category, default_exp: 0, grouped: false)
+  current_group_id = nil
+
   data_array.each do |data|
+    if grouped && data[:rarity] == 2
+      current_group_id = data[:name].parameterize
+    end
+
     material = Material.find_or_initialize_by(name: data[:name])
     material.update!(
       rarity: data[:rarity],
       material_type: type,
       category: category,
-      exp_value: data[:exp] || default_exp
+      exp_value: data[:exp] || default_exp,
+      item_group_id: grouped ? current_group_id : nil
     )
 
     # e.g. "Xiangli Yao" => xiangli_yao
@@ -28,7 +35,12 @@ def seed_material_set(data_array, type, category, default_exp = 0)
     # e.g. "Lux & Umbra" => :lux_umbra
     # e.g. "Gauntlets#21D" => :gauntlets21d
     # e.g. "Loong's Pearl" => :loongs_pearl
-    lookup_key = data[:name].downcase.gsub(/['#&]/, '').strip.gsub('-', '_').gsub(/\s+/, '_').to_sym
+    lookup_key = data[:name].downcase
+                        .gsub(/['#&]/, '')
+                        .strip
+                        .gsub('-', '_')
+                        .gsub(/\s+/, '_')
+                        .to_sym
     $SEED_DATA[lookup_key] = material
   end
 end
@@ -159,7 +171,7 @@ ENEMY_DROP_DATA = [
   { name: "Mask of Insanity", rarity: 5 }
 ].freeze
 
-seed_material_set(ENEMY_DROP_DATA, "EnemyDrop", "Weapon and Skill Material")
+seed_material_set(ENEMY_DROP_DATA, "EnemyDrop", "Weapon and Skill Material", grouped: true)
 
 # --- Weapon and Skill Material (ForgeryDrop) ---
 FORGERY_DROP_DATA = [
@@ -194,7 +206,7 @@ FORGERY_DROP_DATA = [
   { name: "Cadence Blossom", rarity: 5 }
 ].freeze
 
-seed_material_set(FORGERY_DROP_DATA, "ForgeryDrop", "Weapon and Skill Material")
+seed_material_set(FORGERY_DROP_DATA, "ForgeryDrop", "Weapon and Skill Material", grouped: true)
 
 # --- Skill Upgrade Materials ---
 WEEKLY_BOSS_DROP_DATA = [
