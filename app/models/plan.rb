@@ -2,11 +2,12 @@ class Plan < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :subject, polymorphic: true
 
-  scope :subject_ids_for_type, ->(type) {
-    where(subject_type: type).pluck(:subject_id)
-  }
-
+  validates :subject_type, presence: true, inclusion: { in: %w[Resonator Weapon] }
+  validates :subject_id, presence: true
+  validates :plan_data, presence: true
   validate :must_have_owner
+
+  scope :subject_ids_for_type, ->(type) { where(subject_type: type).pluck(:subject_id) }
 
   def self.fetch_materials_summary(plans)
     totals = {}
