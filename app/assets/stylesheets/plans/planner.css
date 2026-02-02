@@ -16,8 +16,8 @@
 .planner-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--ctp-text);
   font-family: var(--font-mono);
+  color: var(--ctp-mauve);
 }
 
 .planner-subtitle {
