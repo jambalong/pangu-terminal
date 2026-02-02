@@ -10,8 +10,6 @@ class InventoryItemsController < ApplicationController
     @categories = Material.ordered_categories
     apply_filters
     compute_synthesis_data
-
-    puts "DEBUG: @synthesis_result = #{@synthesis_result.inspect}"
   end
 
   def update
