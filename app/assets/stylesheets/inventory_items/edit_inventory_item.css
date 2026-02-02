@@ -1,0 +1,23 @@
+.modal-container.smaller-width {
+  max-width: 24rem;
+}
+
+.item-container {
+  padding: 1rem;
+}
+
+
+.item-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.item-info {
+  justify-content: flex-start;
+}
+
+.item-info h2 {
+  font-weight: bold;
+}

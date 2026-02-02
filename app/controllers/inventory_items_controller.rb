@@ -3,7 +3,7 @@ class InventoryItemsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_inventory_and_plans, only: [ :index ]
-  before_action :set_inventory_item, only: [ :update ]
+  before_action :set_inventory_item, only: [ :edit, :update ]
 
   def index
     @selected_plan_id = params[:plan_id]
@@ -19,16 +19,24 @@ class InventoryItemsController < ApplicationController
       .include?(i.material.material_type) }
   end
 
+  def edit
+    render layout: false
+  end
+
   def update
     if @inventory_item.update(inventory_item_params)
       load_inventory_and_plans
+      compute_synthesis_data
+
+      @related_items = current_user.inventory_items.joins(:material)
+        .where(materials: { item_group_id: @inventory_item.material.item_group_id })
 
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_back fallback_location: inventory_items_path }
+        format.html { redirect_to inventory_items_path }
       end
     else
-      head :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 

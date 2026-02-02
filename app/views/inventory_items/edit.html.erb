@@ -1,0 +1,24 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal-backdrop" data-controller="modal" data-action="keydown.esc->modal#close click->modal#closeOutside">
+    <div class="modal-container smaller-width">
+      <div id="modal-content" class="item-container">
+        <div class="item-header">
+          <div class="item-icon rarity-border-<%= @inventory_item.material.rarity %>">
+            <span class="icon-initials"><%= @inventory_item.material.name[0..1].upcase %></span>
+          </div>
+          <div class="item-info">
+            <h2><%= @inventory_item.material.name %></h2>
+            <p class="item-description"><%= @inventory_item.material.description %></p>
+          </div>
+        </div>
+
+        <%= form_with model: @inventory_item, class: "qty-form" do |f| %>
+          <%= f.number_field :quantity,
+              autofocus: true,
+              class: "qty-input",
+              onblur: "this.form.requestSubmit()" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

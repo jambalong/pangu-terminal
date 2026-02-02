@@ -82,7 +82,7 @@ main.no-scroll {
 .item-icon {
   width: 4rem;
   height: 4rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   border-radius: 0.5rem;
   background-color: var(--ctp-mantle);
   display: flex;
