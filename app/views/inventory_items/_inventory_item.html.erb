@@ -11,11 +11,31 @@
   
   <h3 class="item-name"><%= inventory_item.name %></h3>
 
-  <%# Progress Bar %>
+  <%# Synthesis Indicator %>
+  <% reconciliation = @synthesis_result&.dig(inventory_item.material_id) %>
+  <% if reconciliation&.dig(:synthesis_opportunity) %>
+    <div class="synthesis-indicator">
+      <%= image_tag("purification.webp", alt: "Can supplement", class: "synthesis-icon") %>
+    </div>
+  <% end %>
+
+  <%# Progress Info %>
   <div class="progress-container">
-    <%# Logic: (Owned / Total Required) * 100 %>
-    <% percent = 0 %> <%# Placeholder logic for calculation %>
-    <div class="progress-fill" style="width: <%= percent %>%"></div>
+    <% if reconciliation %>
+      <% needed = reconciliation[:needed] %>
+      <% owned = reconciliation[:owned] %>
+      <% percent = needed > 0 ? ((owned / needed.to_f) * 100).round : 0 %>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: <%= percent %>%"></div>
+      </div>
+      <span class="qty-display"><%= owned %> / <%= needed %></span>
+    <% else %>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 0%"></div>
+      </div>
+      <span class="qty-display">No data</span>
+    <% end %>
   </div>
 
   <%# Quantity Input Form %>

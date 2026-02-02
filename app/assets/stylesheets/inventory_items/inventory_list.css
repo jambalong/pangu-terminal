@@ -17,6 +17,7 @@
   font-weight: 700;
   width: 100%;
   font-family: var(--font-mono);
+  color: var(--ctp-mauve);
 }
 
 /* Form Elements */
