@@ -75,7 +75,6 @@ seed_material_set(WEAPON_EXP_DATA, "WeaponEXP", "Weapon EXP Material")
 
 # --- Resonator Ascension Materials ---
 BOSS_DROP_DATA = [
-  { name: "Mysterious Code", rarity: 5 },
   { name: "Abyssal Husk", rarity: 4 },
   { name: "Blazing Bone", rarity: 4 },
   { name: "Blighted Crown of Puppet King", rarity: 4 },
@@ -84,6 +83,7 @@ BOSS_DROP_DATA = [
   { name: "Gold-Dissolving Feather", rarity: 4 },
   { name: "Group Abomination Tacet Core", rarity: 4 },
   { name: "Hidden Thunder Tacet Core", rarity: 4 },
+  { name: "Mysterious Code", rarity: 5 },
   { name: "Platinum Core", rarity: 4 },
   { name: "Rage Tacet Core", rarity: 4 },
   { name: "Roaring Rock Fist", rarity: 4 },
