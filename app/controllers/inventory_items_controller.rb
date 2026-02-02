@@ -10,13 +10,7 @@ class InventoryItemsController < ApplicationController
     @categories = Material.ordered_categories
     apply_filters
     compute_synthesis_data
-
-    @shell_credit = @inventory_items.select { |i| i.material.material_type == "Credit" }
-    @resonator_exp = @inventory_items.select { |i| i.material.material_type == "ResonatorEXP" }
-    @weapon_exp = @inventory_items.select { |i| i.material.material_type == "WeaponEXP" }
-
-    @material_items = @inventory_items.select { |i| ![ "Credit", "ResonatorEXP", "WeaponEXP" ]
-      .include?(i.material.material_type) }
+    # separate_materials_by_type
   end
 
   def edit
@@ -71,6 +65,14 @@ class InventoryItemsController < ApplicationController
     end
 
     @synthesis_result = SynthesisService.new(inventory_hash, requirements_hash).reconcile_inventory
+  end
+
+  def separate_materials_by_type
+    @shell_credit = @inventory_items.select { |i| i.material.material_type == "Credit" }
+    @resonator_exp = @inventory_items.select { |i| i.material.material_type == "ResonatorEXP" }
+    @weapon_exp = @inventory_items.select { |i| i.material.material_type == "WeaponEXP" }
+
+    @material_items = @inventory_items.reject { |i| %w[Credit ResonatorEXP WeaponEXP].include?(i.material.material_type) }
   end
 
   def set_inventory_item
