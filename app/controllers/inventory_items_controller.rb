@@ -10,6 +10,13 @@ class InventoryItemsController < ApplicationController
     @categories = Material.ordered_categories
     apply_filters
     compute_synthesis_data
+
+    @shell_credit = @inventory_items.select { |i| i.material.material_type == "Credit" }
+    @resonator_exp = @inventory_items.select { |i| i.material.material_type == "ResonatorEXP" }
+    @weapon_exp = @inventory_items.select { |i| i.material.material_type == "WeaponEXP" }
+
+    @material_items = @inventory_items.select { |i| ![ "Credit", "ResonatorEXP", "WeaponEXP" ]
+      .include?(i.material.material_type) }
   end
 
   def update
