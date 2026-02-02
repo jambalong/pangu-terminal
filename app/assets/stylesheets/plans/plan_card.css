@@ -39,20 +39,14 @@
 
 .quantity-number {
   font-family: var(--font-mono);
-  font-weight: bold;
-  font-size: 0.75rem;
-  color: var(--ctp-subtext0);
+  font-size: 0.875rem;
+  color: var(--ctp-text);
 }
 
 /* .quantity-x {
   color: var(--ctp-surface2);
   margin-right: 2px;
 } */
-
-.quantity-number {
-  font-family: ui-monospace, monospace;
-  font-weight: bold;
-}
 
 .plan-menu {
   display: flex;

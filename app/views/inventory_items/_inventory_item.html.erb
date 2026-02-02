@@ -29,7 +29,7 @@
       <div class="progress-bar">
         <div class="progress-fill" style="width: <%= percent %>%"></div>
       </div>
-      <span class="qty-display"><%= owned %> / <%= needed %></span>
+      <span class="qty-display"><%= format_quantity(owned) %> / <%= format_quantity(needed) %></span>
     <% else %>
       <div class="progress-bar">
         <div class="progress-fill" style="width: 0%"></div>
