@@ -91,7 +91,8 @@
   align-items: center;
   gap: 0.5rem;
   margin: 0.75rem 0;
-  width: 100%;  /* Add this */
+  min-height: 2rem;
+  width: 100%;
 }
 
 .progress-bar {
@@ -108,8 +109,13 @@
   transition: width 0.3s ease-in-out;
 }
 
+.progress-bar.no-data {
+  background-color: rgba(24, 24, 37, 0.75);
+}
+
 .progress-fill.sufficient {
   background-color: var(--ctp-green);
+  box-shadow: 0 0 8px var(--ctp-green);
 }
 
 .progress-fill.deficit {
@@ -119,7 +125,12 @@
 .qty-display {
   font-size: 0.875rem;
   color: var(--ctp-text);
-  font-style: var(--font-mono);
+  font-family: var(--font-mono);
+}
+
+.qty-separator {
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 2px;
 }
 
 /* Input Styles */
