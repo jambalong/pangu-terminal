@@ -14,6 +14,16 @@
   min-height: 180px;
 }
 
+@keyframes pulse-border {
+  0% { border-color: rgba(148, 226, 213, 0.4); }
+  50% { border-color: rgba(148, 226, 213, 0.8); }
+  100% { border-color: rgba(148, 226, 213, 0.4); }
+}
+
+.inventory-card.can-synthesize {
+  animation: pulse-border 2s infinite ease-in-out;
+}
+
 .inventory-card:hover {
   border-color: var(--ctp-surface1);
   transform: translateY(-2px);
@@ -63,14 +73,15 @@
 
 .synthesis-indicator {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0rem;
+  right: 0rem;
+  border-radius: 0.85rem;
 }
 
 .hidden-indicator {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0rem;
+  right: 0rem;
 }
 
 /* Progress Info */
@@ -137,21 +148,6 @@
   outline: none;
   border-color: var(--ctp-blue);
   box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.1);
-}
-
-/* Status Flash */
-.status-indicator {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--ctp-green);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.status-indicator.show {
-  opacity: 1;
 }
 
 /* Mobile-specific card adjustments */

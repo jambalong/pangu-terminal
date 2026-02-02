@@ -1,23 +1,12 @@
-<div class="inventory-card group" id="<%= dom_id(inventory_item) %>">
-  <%# Status Indicator (Saved flash) %>
-  <div id="<%= dom_id(inventory_item) %>_status" class="status-indicator">
-    Saved
-  </div>
+<% reconciliation = @synthesis_result&.dig(inventory_item.material_id) %>
 
+<div class="inventory-card group <%= 'can-synthesize' if reconciliation&.dig(:synthesis_opportunity) %>" id="<%= dom_id(inventory_item) %>">
   <%# Icon Placeholder with Rarity Border %>
   <div class="item-icon rarity-border-<%= inventory_item.rarity %>">
     <span class="icon-initials"><%= inventory_item.name[0..1].upcase %></span>
   </div>
   
   <h3 class="item-name"><%= inventory_item.name %></h3>
-
-  <%# Synthesis Indicator %>
-  <% reconciliation = @synthesis_result&.dig(inventory_item.material_id) %>
-  <% if reconciliation&.dig(:synthesis_opportunity) %>
-    <div class="synthesis-indicator">
-      <%= image_tag("purification.webp", alt: "Can supplement", class: "synthesis-icon") %>
-    </div>
-  <% end %>
 
   <%# Progress Info %>
   <div class="progress-container">
