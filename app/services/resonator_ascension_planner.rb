@@ -6,18 +6,18 @@ class ResonatorAscensionPlanner < ApplicationService
   }
 
   FORTE_NODES_MAP = {
-    "basic_attack_node_1"         => "Stat Bonus Tier 1",
-    "basic_attack_node_2"         => "Stat Bonus Tier 2",
-    "resonance_skill_node_1"      => "Stat Bonus Tier 1",
-    "resonance_skill_node_2"      => "Stat Bonus Tier 2",
+    basic_attack_node_1:          "Stat Bonus Tier 1",
+    basic_attack_node_2:          "Stat Bonus Tier 2",
+    resonance_skill_node_1:       "Stat Bonus Tier 1",
+    resonance_skill_node_2:       "Stat Bonus Tier 2",
 
-    "forte_circuit_node_1"        => "Inherent Skill Tier 1",
-    "forte_circuit_node_2"        => "Inherent Skill Tier 2",
+    forte_circuit_node_1:         "Inherent Skill Tier 1",
+    forte_circuit_node_2:         "Inherent Skill Tier 2",
 
-    "resonance_liberation_node_1" => "Stat Bonus Tier 1",
-    "resonance_liberation_node_2" => "Stat Bonus Tier 2",
-    "intro_skill_node_1"          => "Stat Bonus Tier 1",
-    "intro_skill_node_2"          => "Stat Bonus Tier 2"
+    resonance_liberation_node_1:  "Stat Bonus Tier 1",
+    resonance_liberation_node_2:  "Stat Bonus Tier 2",
+    intro_skill_node_1:           "Stat Bonus Tier 1",
+    intro_skill_node_2:           "Stat Bonus Tier 2"
   }
 
   def initialize(
@@ -70,81 +70,92 @@ class ResonatorAscensionPlanner < ApplicationService
   def validate_inputs!
     errors = []
 
-    # this checks for a zero-change plan
-    if @current_level == @target_level &&
-       @current_ascension_rank == @target_ascension_rank &&
-       @current_skill_levels == @target_skill_levels
-      errors << "At least one target value must be different from the corresponding current value to generate a plan."
-    end
-
-    # this checks for proper level range
-    unless @current_level.between?(1, 90)
-      errors << "Current level (#{@current_level}) must be between (1) and (90)."
-    end
-
-    unless @target_level.between?(1, 90)
-      errors << "Target level (#{@target_level}) must be between (1) and (90)."
-    end
-
-    # this checks for proper skill level range
-    @current_skill_levels.each do |skill_name, level|
-      unless level.between?(1, 10)
-        errors << "Current '#{skill_name.to_s.titleize}' level must be between (1) and (10)."
-      end
-    end
-
-    @target_skill_levels.each do |skill_name, level|
-      unless level.between?(1, 10)
-        errors << "Target '#{skill_name.to_s.titleize}' level must be between (1) and (10)."
-      end
-    end
-
-    # this checks for impossible downgrades (level and ascension rank)
-    if @target_level < @current_level
-      errors << "Target level (#{@target_level}) cannot be less than current level (#{@current_level})."
-    end
-
-    if @target_ascension_rank < @current_ascension_rank
-      errors << "Target ascension rank value must be greater than or equal to current ascension rank value."
-    end
-
-    # this keeps level range within ascension rank
-    current_max_level = ASCENSION_LEVEL_CAPS[@current_ascension_rank]
-    if current_max_level.nil? || @current_level > current_max_level
-      errors << "Current level (#{@current_level}) exceeds max level (#{current_max_level}) for ascension rank (#{@current_ascension_rank})."
-    end
-
-    if @current_ascension_rank > 0
-      min_level_required = ASCENSION_LEVEL_CAPS[@current_ascension_rank - 1]
-
-      if @current_level < min_level_required
-        errors << "Current ascension rank (#{@current_ascension_rank}) requires a minimum level of (#{min_level_required})."
-      end
-    end
-
-    target_max_level = ASCENSION_LEVEL_CAPS[@target_ascension_rank]
-    if target_max_level.nil? || @target_level > target_max_level
-      errors << "Target level (#{@target_level}) exceeds max level (#{target_max_level}) for Ascension Rank (#{@target_ascension_rank})."
-    end
-
-    if @target_ascension_rank > 0
-      min_level_required = ASCENSION_LEVEL_CAPS[@target_ascension_rank - 1]
-
-      if @target_level < min_level_required
-        errors << "Target ascension rank (#{@target_ascension_rank}) requires a minimum level of (#{min_level_required})."
-      end
-    end
-
-    # this checks for impossible downgrades (skill and forte nodes)
-    @current_skill_levels.each do |skill_name, current_level|
-      target_level = @target_skill_levels[skill_name]
-
-      if target_level && target_level < current_level
-        errors << "Current level (#{current_level}) for [#{skill_name.to_s.titleize}] exceeds target level (#{target_level})."
-      end
-    end
+    validate_no_changes!(errors)
+    validate_level_ranges!(errors)
+    validate_skill_ranges!(errors)
+    validate_no_downgrades!(errors)
+    validate_ascension_caps!(errors)
+    validate_skill_downgrades!(errors)
+    validate_forte_nodes!(errors)
 
     raise ValidationError, errors.join("|") unless errors.empty?
+  end
+
+  def validate_no_changes!(errors)
+    return unless @current_level == @target_level &&
+                  @current_ascension_rank == @target_ascension_rank &&
+                  @current_skill_levels == @target_skill_levels
+
+    errors << "Nothing changed. Update at least one target."
+  end
+
+  def validate_level_ranges!(errors)
+    unless @current_level.between?(1, 90)
+      errors << "Current level invalid: #{@current_level}. Must be 1-90."
+    end
+    unless @target_level.between?(1, 90)
+      errors << "Target level invalid: #{@target_level}. Must be 1-90."
+    end
+  end
+
+  def validate_skill_ranges!(errors)
+    validate_skill_hash_range!("Current", @current_skill_levels, errors)
+    validate_skill_hash_range!("Target", @target_skill_levels, errors)
+  end
+
+  def validate_skill_hash_range!(label, skill_levels, errors)
+    skill_levels.each do |skill_name, level|
+      unless level.between?(1, 10)
+        errors << "#{label} #{skill_name.to_s.titleize}: #{level} invalid. Must be 1-10."
+      end
+    end
+  end
+
+  def validate_no_downgrades!(errors)
+    if @target_level < @current_level
+      errors << "Target level (#{@target_level}) can't be less than current (#{@current_level})."
+    end
+    if @target_ascension_rank < @current_ascension_rank
+      errors << "Target rank (#{@target_ascension_rank}) can't be less than current (#{@current_ascension_rank})."
+    end
+  end
+
+  def validate_ascension_caps!(errors)
+    validate_level_within_cap!("Current", @current_level, @current_ascension_rank, errors)
+    validate_level_within_cap!("Target", @target_level, @target_ascension_rank, errors)
+  end
+
+  def validate_level_within_cap!(label, level, rank, errors)
+    max = ASCENSION_LEVEL_CAPS[rank]
+    if max.nil? || level > max
+      errors << "#{label} level #{level} exceeds max for rank #{rank} (#{max})."
+    end
+    if rank > 0
+      min = ASCENSION_LEVEL_CAPS[rank - 1]
+      if level < min
+        errors << "Rank #{rank} needs at least level #{min}, got #{level}."
+      end
+    end
+  end
+
+  def validate_skill_downgrades!(errors)
+    @current_skill_levels.each do |skill_name, current_level|
+      target_level = @target_skill_levels[skill_name]
+      next unless target_level && target_level < current_level
+
+      errors << "#{skill_name.to_s.titleize}: target (#{target_level}) < current (#{current_level})."
+    end
+  end
+
+  def validate_forte_nodes!(errors)
+    @forte_node_upgrades.each do |node_key, state|
+      unless FORTE_NODES_MAP.include?(node_key)
+        errors << "Invalid forte node: #{node_key}."
+      end
+      unless [ 0, 1 ].include?(state)
+        errors << "#{node_key}: state must be 0 or 1, got #{state}."
+      end
+    end
   end
 
   def shell_credit_id
@@ -218,7 +229,7 @@ class ResonatorAscensionPlanner < ApplicationService
     @forte_node_upgrades.each do |node_key, state|
       next unless state == 1
 
-      cost_identifier = FORTE_NODES_MAP[node_key.to_s]
+      cost_identifier = FORTE_NODES_MAP[node_key]
       next unless cost_identifier.present?
 
       forte_node_costs = ForteNodeCost.where(node_identifier: cost_identifier)
