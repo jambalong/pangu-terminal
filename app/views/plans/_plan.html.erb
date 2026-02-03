@@ -20,7 +20,7 @@
   </div>
 
   <div class="plan-card-body">
-    <% plan.plan_data.dig("output").each do |mat_id, qty| %>
+    <% sorted_plan_materials(plan.plan_data.dig("output")).each do |mat_id, qty| %>
       <% material = @materials_lookup[mat_id.to_i] %>
       
       <div class="material-grid-item">
@@ -29,7 +29,7 @@
         </div>
 
         <div class="mat-details">
-          <span class="quantity-number">x<%= number_with_delimiter(qty) %></span>
+          <span class="quantity-number"><%= format_quantity(qty) %></span>
         </div>
       </div>
     <% end %>

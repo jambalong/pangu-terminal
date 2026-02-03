@@ -17,7 +17,7 @@
             
         <div class="select-wrapper">
           <%= f.select :category, 
-              options_for_select(Material.distinct.pluck(:category), params[:category]), 
+              options_for_select(@categories, params[:category]), 
               { include_blank: "All Categories" }, 
               { 
                 class: "inventory-select", 

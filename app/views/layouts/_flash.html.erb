@@ -1,0 +1,8 @@
+<% flash.each do |type, message| %>
+  <div class="flash-message <%= type %>" data-controller="flash">
+    <span class="flash-prefix">
+      <%= type == 'alert' ? '[ERROR]' : '[SYSTEM]' %>
+    </span>
+    <%= message %>
+  </div>
+<% end %>

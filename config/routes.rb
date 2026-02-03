@@ -43,7 +43,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :inventory_items, only: [ :index, :update ], path: "inventory"
+    resources :inventory_items, only: [ :index, :edit, :update ], path: "inventory"
   end
 
   # Defines the root path route ("/")

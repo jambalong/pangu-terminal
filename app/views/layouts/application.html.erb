@@ -31,14 +31,7 @@
 
     <main class="container">
       <div id="flash-container">
-        <% flash.each do |type, message| %>
-          <div class="flash-message <%= type %>" data-controller="flash">
-            <span class="flash-prefix">
-              <%= type == 'alert' ? '[ERROR]' : '[SYSTEM]' %>
-            </span>
-            <%= message %>
-          </div>
-        <% end %>
+        <%= render "layouts/flash" %>
       </div>
 
       <%= turbo_frame_tag "main_content", data: { controller_name: controller_name } do %>

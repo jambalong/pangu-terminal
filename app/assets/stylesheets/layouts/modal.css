@@ -102,7 +102,7 @@
 /* Modal Header */
 .modal-header {
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   flex-shrink: 0;
 }
 
@@ -129,10 +129,6 @@
     font-size: 1.25rem;
   }
 
-  .modal-header {
-    margin-bottom: 1.25rem;
-  }
-
   .modal-close-btn {
     top: 0.75rem;
     right: 0.75rem;
@@ -148,7 +144,7 @@
 
 @media (min-width: 640px) {
   .modal-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
   }
 }
 

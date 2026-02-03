@@ -2,7 +2,7 @@
   <%# Tier 2 Node - Diamond for inherent, Circle otherwise %>
   <label class="node-label">
     <%= f.check_box "#{config[:key]}_node_2",
-                { class: "peer hidden", checked: true },
+                { class: "peer hidden" },
                 1,
                 0 %>
     <% if config[:inherent] %>
@@ -22,7 +22,7 @@
   <%# Tier 1 Node - Diamond for inherent, Circle otherwise %>
   <label class="node-label">
     <%= f.check_box "#{config[:key]}_node_1",
-                { class: "peer hidden", checked: true },
+                { class: "peer hidden" },
                 1,
                 0 %>
     <% if config[:inherent] %>

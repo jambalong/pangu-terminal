@@ -2,11 +2,12 @@ class Plan < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :subject, polymorphic: true
 
-  scope :planned_subject_ids, ->(type) {
-    where(subject_type: type).pluck(:subject_id)
-  }
-
+  validates :subject_type, presence: true, inclusion: { in: %w[Resonator Weapon] }
+  validates :subject_id, presence: true
+  validates :plan_data, presence: true
   validate :must_have_owner
+
+  scope :subject_ids_for_type, ->(type) { where(subject_type: type).pluck(:subject_id) }
 
   def self.fetch_materials_summary(plans)
     totals = {}
@@ -14,9 +15,10 @@ class Plan < ApplicationRecord
     plans.each do |plan|
       materials = plan.plan_data.dig("output") || {}
 
-      materials.each do |mat_id, quantity|
-        totals[mat_id] ||= 0
-        totals[mat_id] += quantity
+      materials.each do |material_id, quantity|
+        key = material_id.to_i
+        totals[key] ||= 0
+        totals[key] += quantity
       end
     end
 

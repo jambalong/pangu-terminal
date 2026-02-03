@@ -100,7 +100,12 @@ RESONATOR_DATA.each do |rarity, elements|
       # e.g. "Lux & Umbra" => :lux_umbra
       # e.g. "Gauntlets#21D" => :gauntlets21d
       # e.g. "Loong's Pearl" => :loongs_pearl
-      lookup_key = data[:name].downcase.gsub(/['#&]/, '').strip.gsub('-', '_').gsub(/\s+/, '_').to_sym
+      lookup_key = data[:name].downcase
+                        .gsub(/['#&]/, '')
+                        .strip
+                        .gsub('-', '_')
+                        .gsub(/\s+/, '_')
+                        .to_sym
       $SEED_DATA[lookup_key] = resonator
     end
   end

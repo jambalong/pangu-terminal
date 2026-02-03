@@ -1,27 +1,41 @@
-<div class="inventory-card group" id="<%= dom_id(inventory_item) %>">
-  <%# Status Indicator (Saved flash) %>
-  <div id="<%= dom_id(inventory_item) %>_status" class="status-indicator">
-    Saved
-  </div>
+<% reconciliation = @synthesis_result&.dig(inventory_item.material_id) %>
 
-  <%# Icon Placeholder with Rarity Border %>
-  <div class="item-icon rarity-border-<%= inventory_item.rarity %>">
-    <span class="icon-initials"><%= inventory_item.name[0..1].upcase %></span>
-  </div>
-  
-  <h3 class="item-name"><%= inventory_item.name %></h3>
+<%= link_to edit_inventory_item_path(inventory_item), data: { turbo_frame: "modal" }, class: "item-edit-link" do %>
+  <div class="inventory-card group <%= 'can-synthesize' if reconciliation&.dig(:synthesis_opportunity) %>" id="<%= dom_id(inventory_item) %>">
+    
+    <%# Icon Placeholder with Rarity Border %>
+    <div class="item-icon rarity-border-<%= inventory_item.rarity %>">
+      <span class="icon-initials"><%= inventory_item.name[0..1].upcase %></span>
+    </div>
+    
+    <h3 class="item-name"><%= inventory_item.name %></h3>
 
-  <%# Progress Bar %>
-  <div class="progress-container">
-    <%# Logic: (Owned / Total Required) * 100 %>
-    <% percent = 0 %> <%# Placeholder logic for calculation %>
-    <div class="progress-fill" style="width: <%= percent %>%"></div>
-  </div>
 
-  <%# Quantity Input Form %>
-  <%= form_with model: inventory_item, class: "qty-form" do |f| %>
-    <%= f.number_field :quantity, 
-        class: "qty-input",
-        onblur: "this.form.requestSubmit()" %>
-  <% end %>
-</div>
+    <%# Progress Info %>
+    <div class="progress-container">
+      <% if reconciliation %>
+        <% needed = reconciliation[:needed] %>
+        <% owned = reconciliation[:owned] %>
+        <% percent = (needed > 0) ? ((owned / needed.to_f) * 100).round.clamp(0, 100) : 0 %>
+
+        <%# Determine color class based on status %>
+        <% status_class = owned >= needed ? 'sufficient' : 'deficit' %>
+        
+        <div class="progress-bar">
+          <div class="progress-fill <%= status_class %>" style="width: <%= percent %>%"></div>
+        </div>
+        <span class="qty-display"><%= format_quantity(owned) %> / <%= format_quantity(needed) %></span>
+      <% else %>
+        <%# No data state: Keep bar visible but empty/neutral to maintain layout %>
+        <div class="progress-bar no-data">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+        <span class="qty-display">
+          <%= format_quantity(inventory_item.quantity) %> 
+          <span class="qty-separator">/ -</span>
+        </span>
+      <% end %>
+    </div>
+
+  </div>
+<% end %>

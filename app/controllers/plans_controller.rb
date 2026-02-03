@@ -1,40 +1,37 @@
 class PlansController < ApplicationController
+  include PlanLoading
+
   before_action :set_guest_token
   before_action :set_plan, only: [ :edit, :update, :destroy, :confirm_delete ]
   before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete ]
 
   def index
-    @plans = current_plans.includes(:subject).order(created_at: :asc)
-    @materials_summary = Plan.fetch_materials_summary(@plans)
-
-    material_ids = @materials_summary.keys
-    @materials_lookup = Material.where(id: material_ids).index_by(&:id)
+    load_plans_and_materials
   end
 
   def new
     @step = (params[:step] || 1).to_i
-    @subject_type = params[:subject_type] || params.dig(:plan, :subject_type)
+    @subject_type = params[:subject_type]
 
     case @step
     when 2
-      already_planned_ids = current_plans.planned_subject_ids(@subject_type)
+      already_planned_ids = load_current_plans.subject_ids_for_type(@subject_type)
       @subject_list = @subject_type.constantize.where.not(id: already_planned_ids).order(:name)
     when 3
       @subject = @subject_type.constantize.find(params[:subject_id])
       @form = PlanForm.new(subject_type: @subject_type, subject_id: @subject.id)
     end
-    # Rails automatically renders new.html.erb, which uses the @variables above
 
     render layout: false if turbo_frame_request?
+  rescue NameError
+    @errors = [ "Invalid subject type" ]
+    render_form_with_errors
   end
 
   def create
     @form = PlanForm.new(plan_params)
     @subject_type = @form.subject_type
-
-    # Safe constantize to find the record
     @subject = @subject_type.safe_constantize&.find_by(id: @form.subject_id)
-    @errors = []
 
     return handle_missing_subject if @subject.nil?
 
@@ -42,52 +39,8 @@ class PlansController < ApplicationController
       @plan = @form.save(current_user, @guest_token)
 
       if @plan
-        all_plans = current_plans
-        all_material_ids = all_plans.flat_map { |p| p.plan_data.dig("output")&.keys }.compact.uniq
-        @materials_lookup = Material.where(id: all_material_ids).index_by(&:id)
-        @materials_summary = Plan.fetch_materials_summary(all_plans)
-
-        respond_to do |format|
-          format.turbo_stream # This will look for create.turbo_stream.erb
-          format.html { redirect_to plans_path }
-        end
-      else
-        @errors = @form.errors.full_messages
-        render_form_with_errors
-      end
-
-    rescue ResonatorAscensionPlanner::ValidationError, WeaponAscensionPlanner::ValidationError => e
-      @errors = e.message.split("|")
-      render_form_with_errors
-    rescue ActiveRecord::RecordNotFound
-      @errors = [ "The selected #{@subject_type} could not be found." ]
-      render_form_with_errors
-    rescue StandardError => e
-      @errors = [ "An error occurred: #{e.message}" ]
-      render_form_with_errors
-    end
-  end
-
-  def edit
-    @form = PlanForm.from_plan(@plan)
-    @subject = @plan.subject
-    @subject_type = @plan.subject_type
-
-    render :edit
-  end
-
-  def update
-    @form = PlanForm.new(plan_params)
-    @subject = @plan.subject
-    @subject_type = @plan.subject_type
-
-    begin
-      if @form.save(current_user, @guest_token, @plan)
-        all_plans = current_plans
-        all_material_ids = all_plans.flat_map { |p| p.plan_data.dig("output")&.keys }.compact.uniq
-        @materials_lookup = Material.where(id: all_material_ids).index_by(&:id)
-        @materials_summary = Plan.fetch_materials_summary(all_plans)
-
+        load_plans_and_materials
+        flash.now[:notice] = "Plan created successfully."
         respond_to do |format|
           format.turbo_stream
           format.html { redirect_to plans_path }
@@ -100,8 +53,38 @@ class PlansController < ApplicationController
     rescue ResonatorAscensionPlanner::ValidationError, WeaponAscensionPlanner::ValidationError => e
       @errors = e.message.split("|")
       render_form_with_errors
-    rescue ActiveRecord::RecordNotFound
-      @errors = [ "The selected #{@subject_type} could not be found." ]
+    rescue StandardError => e
+      @errors = [ "An error occurred: #{e.message}" ]
+      render_form_with_errors
+    end
+  end
+
+  def edit
+    @form = PlanForm.from_plan(@plan)
+    @subject = @plan.subject
+    @subject_type = @plan.subject_type
+  end
+
+  def update
+    @form = PlanForm.new(plan_params)
+    @subject = @plan.subject
+    @subject_type = @plan.subject_type
+
+    begin
+      if @form.save(current_user, @guest_token, @plan)
+        load_plans_and_materials
+        flash.now[:notice] = "Plan updated successfully."
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to plans_path }
+        end
+      else
+        @errors = @form.errors.full_messages
+        render_form_with_errors
+      end
+
+    rescue ResonatorAscensionPlanner::ValidationError, WeaponAscensionPlanner::ValidationError => e
+      @errors = e.message.split("|")
       render_form_with_errors
     rescue StandardError => e
       @errors = [ "An error occurred: #{e.message}" ]
@@ -114,14 +97,11 @@ class PlansController < ApplicationController
 
   def destroy
     @plan.destroy
-
-    remaining_plans = current_plans
-    all_material_ids = remaining_plans.flat_map { |p| p.plan_data.dig("output")&.keys }.compact.uniq
-    @materials_lookup = Material.where(id: all_material_ids).index_by(&:id)
-    @materials_summary = Plan.fetch_materials_summary(remaining_plans)
+    load_plans_and_materials
+    flash.now[:notice] = "Plan deleted successfully."
 
     respond_to do |format|
-      format.turbo_stream # This will look for destroy.turbo_stream.erb
+      format.turbo_stream
       format.html { redirect_to plans_path, notice: "Plan deleted." }
     end
   end
@@ -137,7 +117,7 @@ class PlansController < ApplicationController
   end
 
   def set_plan
-    @plan = current_plans.find(params[:id])
+    @plan = load_current_plans.find(params[:id])
   end
 
   def authorize_owner!
@@ -147,6 +127,12 @@ class PlansController < ApplicationController
     unless is_user_owner || is_guest_owner
       redirect_to plans_path, alert: "You don't have permission to modify this plan."
     end
+  end
+
+  def load_plans_and_materials
+    @plans = load_current_plans
+    @materials_summary = Plan.fetch_materials_summary(@plans)
+    @materials_lookup = Material.index_by_ids(@materials_summary.keys)
   end
 
   def handle_missing_subject
@@ -168,14 +154,6 @@ class PlansController < ApplicationController
             errors: @errors
           })
       }
-    end
-  end
-
-  def current_plans
-    if user_signed_in?
-      current_user.plans
-    else
-      Plan.where(user_id: nil, guest_token: @guest_token)
     end
   end
 
