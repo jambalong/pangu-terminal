@@ -15,16 +15,16 @@
     <div class="progress-container">
       <% if reconciliation %>
         <% needed = reconciliation[:needed] %>
-        <% owned = reconciliation[:owned] %>
-        <% percent = (needed > 0) ? ((owned / needed.to_f) * 100).round.clamp(0, 100) : 0 %>
+        <% satisfied_qty = reconciliation[:satisfied_qty] %>
+        <% percent = (needed > 0) ? ((satisfied_qty / needed.to_f) * 100).round.clamp(0, 100) : 0 %>
 
         <%# Determine color class based on status %>
-        <% status_class = owned >= needed ? 'sufficient' : 'deficit' %>
+        <% status_class = satisfied_qty >= needed ? 'sufficient' : 'deficit' %>
         
         <div class="progress-bar">
           <div class="progress-fill <%= status_class %>" style="width: <%= percent %>%"></div>
         </div>
-        <span class="qty-display"><%= format_quantity(owned) %> / <%= format_quantity(needed) %></span>
+        <span class="qty-display"><%= format_quantity(satisfied_qty) %> / <%= format_quantity(needed) %></span>
       <% else %>
         <%# No data state: Keep bar visible but empty/neutral to maintain layout %>
         <div class="progress-bar no-data">

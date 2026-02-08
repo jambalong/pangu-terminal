@@ -12,7 +12,7 @@ class SynthesisService
       owned_qty = @inventory[material_id] || 0
       material = get_material(material_id)
 
-      satisfied_qty = calculate_satisfied_qty(material, owned_qty, needed_qty)
+      satisfied_qty = calculate_satisfied_qty(material, owned_qty)
       deficit = [ needed_qty - satisfied_qty, 0 ].max
 
       synthesis_opportunity = find_synthesis_opportunity(material, owned_qty, needed_qty)
@@ -20,6 +20,7 @@ class SynthesisService
       reconciliation[material_id] = {
         needed: needed_qty,
         owned: owned_qty,
+        satisfied_qty: satisfied_qty,
         deficit: deficit,
         satisfied: deficit == 0,
         synthesis_opportunity: synthesis_opportunity
@@ -35,28 +36,28 @@ class SynthesisService
     @materials_cache[material_id] ||= Material.find_by(id: material_id)
   end
 
-  def calculate_satisfied_qty(material, owned_qty, needed_qty)
-    exp_potion?(material) ? calculate_exp_potion_satisfaction(material, needed_qty) : owned_qty
+  def calculate_satisfied_qty(material, owned_qty)
+    exp_potion?(material) ? calculate_exp_potion_satisfaction(material) : owned_qty
   end
 
-  def calculate_exp_potion_satisfaction(material, needed_qty)
-    return 0 unless material
+  def calculate_exp_potion_satisfaction(material)
+    return 0 unless material.rarity == 2
 
-    current_rarity = material.rarity || 2
+    basic_potion_rarity = 2
     satisfied_exp = 0
 
     @inventory.each do |inv_material_id, owned_qty|
       inv_material = get_material(inv_material_id)
 
       next unless same_exp_potion_type?(material, inv_material)
-      next unless inv_material&.rarity.to_i >= current_rarity.to_i
+      next unless inv_material.rarity.to_i >= basic_potion_rarity
 
       total_exp_from_this = owned_qty * (inv_material.exp_value || 0)
       satisfied_exp +=  total_exp_from_this
     end
 
-    material_exp_value = material.exp_value
-    (satisfied_exp / material_exp_value).floor
+    basic_potion_exp_value = material.exp_value
+    (satisfied_exp / basic_potion_exp_value).floor
   end
 
   def same_exp_potion_type?(material1, material2)
