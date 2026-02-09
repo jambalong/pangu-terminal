@@ -4,6 +4,7 @@
   border: 1px solid var(--ctp-surface0);
   border-radius: 0.75rem;
   padding: 0.5rem;
+  padding-top: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,6 +24,51 @@
 
 .inventory-card.can-synthesize {
   animation: pulse-border 2s infinite ease-in-out;
+}
+
+@keyframes pulse-border-higher-rarity {
+  0% { border-color: rgba(116, 199, 236, 0.4); }
+  50% { border-color: rgba(116, 199, 236, 0.8); }
+  100% { border-color: rgba(116, 199, 236, 0.4); }
+}
+
+.inventory-card.used-higher-rarity {
+  animation: pulse-border-higher-rarity 2s infinite ease-in-out;
+}
+
+.higher-rarity-badge {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--ctp-mantle);
+  padding: 4px 6px;
+  border-radius: 0.75rem 0.25rem 0.25rem 0rem;
+}
+
+.synthesis-badge {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--ctp-mantle);
+  padding: 4px 6px;
+  border-radius: 0.75rem 0.25rem 0.25rem 0rem;
+}
+
+.badge-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.badge-count {
+  font-size: 12px;
+  color: var(--ctp-text);
+  font-weight: bold;
 }
 
 .inventory-card:hover {
@@ -188,7 +234,8 @@
 /* Mobile-specific card adjustments */
 @media (max-width: 639px) {
   .inventory-card {
-    padding: 0.755rem;
+    padding: 0.75rem;
+    padding-top: 25px;
     min-height: 160px;
   }
 
@@ -230,7 +277,8 @@
 /* Desktop - larger cards */
 @media (min-width: 1024px) {
   .inventory-card {
-    padding: 1.15rem;
+    padding: 1rem;
+    padding-top: 25px;
     min-height: 200px;
   }
 

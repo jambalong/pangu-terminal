@@ -15,12 +15,14 @@ class SynthesisService
       satisfied_qty = calculate_satisfied_qty(material, owned_qty)
       deficit = [ needed_qty - satisfied_qty, 0 ].max
 
+      used_higher_rarity = exp_potion?(material) && satisfied_qty > owned_qty
       synthesis_opportunity = find_synthesis_opportunity(material, owned_qty, needed_qty)
 
       reconciliation[material_id] = {
         needed: needed_qty,
         owned: owned_qty,
         satisfied_qty: satisfied_qty,
+        used_higher_rarity: used_higher_rarity,
         deficit: deficit,
         satisfied: deficit == 0,
         synthesis_opportunity: synthesis_opportunity
