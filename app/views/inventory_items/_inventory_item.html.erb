@@ -6,7 +6,7 @@
     <%# Using Higher Rarity EXP Potion Badge %>
     <% if reconciliation&.dig(:used_higher_rarity) %>
       <div class="higher-rarity-badge">
-        <%= image_tag("anvil.svg", class: "badge-icon") %>
+        <%= image_tag("potion.svg", class: "craft-icon") %>
         <span class="badge-count">
           <%= reconciliation[:satisfied_qty] - reconciliation[:owned] %>
         </span>
@@ -16,7 +16,7 @@
     <%# Can Synthesize Quantity Badge %>
     <% if reconciliation&.dig(:synthesis_opportunity) %>
       <div class="synthesis-badge">
-        <%= image_tag("anvil.svg", class: "badge-icon") %>
+        <%= image_tag("purification.webp", class: "synthesis-icon") %>
         <span class="badge-count">
           <%= reconciliation[:synthesis_opportunity][:can_convert] %>
         </span>
