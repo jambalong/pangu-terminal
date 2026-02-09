@@ -6,6 +6,17 @@
       <%= form_with url: inventory_items_path, method: :get, 
           data: { turbo_frame: "inventory-grid" }, 
           class: "filter-form" do |f| %>
+
+        <div class="select-wrapper">
+          <%= f.select :plan_id, 
+              options_for_select(@plans.map { |p| [p.subject.name, p.id] }, params[:plan_id]), 
+              { include_blank: "All Plans" }, 
+              { 
+                class: "inventory-select", 
+                onchange: "this.form.requestSubmit()",
+                "aria-label": "Filter by plan"
+              } %>
+        </div>
         
         <div class="search-wrapper">
           <%= f.text_field :query, 
@@ -31,7 +42,7 @@
     <%= turbo_frame_tag "inventory-grid" do %>
       <% if @inventory_items.empty? %>
         <div class="empty-state">
-          <p>No materials found in your inventory.</p>
+          <p>No data available based on selected filters.</p>
         </div>
       <% else %>
         <div class="inventory-grid">

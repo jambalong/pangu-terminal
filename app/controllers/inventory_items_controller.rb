@@ -6,9 +6,10 @@ class InventoryItemsController < ApplicationController
   before_action :set_inventory_item, only: [ :edit, :update ]
 
   def index
-    @selected_plan_id = params[:plan_id]
+    @selected_plan = @plans.find_by(id: params[:plan_id]) if params[:plan_id].present?
     @categories = Material.ordered_categories
     apply_filters
+    apply_plan_filter
     compute_synthesis_data
     # separate_materials_by_type
   end
@@ -20,6 +21,8 @@ class InventoryItemsController < ApplicationController
   def update
     if @inventory_item.update(inventory_item_params)
       load_inventory_and_plans
+
+      @selected_plan = @plans.find_by(id: params[:plan_id]) if params[:plan_id].present?
       compute_synthesis_data
 
       @related_items = current_user.inventory_items.joins(:material)
@@ -54,17 +57,32 @@ class InventoryItemsController < ApplicationController
     @inventory_items = @inventory_items.sort_by { |item| material_sort_key(item.material) }
   end
 
+  def apply_plan_filter
+    return unless @selected_plan.present?
+
+    expected_exp_type = Plan::EXP_POTION_TYPE_MAP[@selected_plan.subject_type]
+    requirements_hash = (@selected_plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
+    @inventory_items = @inventory_items.select do |i|
+      # Keep if in plan requirements, OR if it's an relevant exp potion (any tier)
+      requirements_hash[i.material_id].present? || i.material.material_type == expected_exp_type
+    end
+  end
+
   def compute_synthesis_data
     inventory_hash = @inventory_items.index_by(&:material_id).transform_values(&:quantity)
 
-    if @selected_plan_id.present?
-      @selected_plan = @plans.find_by(id: @selected_plan_id)
+    if @selected_plan.present?
       requirements_hash = (@selected_plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
     else
       requirements_hash = Plan.fetch_materials_summary(@plans)
     end
 
     @synthesis_result = SynthesisService.new(inventory_hash, requirements_hash).reconcile_inventory
+  end
+
+  def exp_potion?(material)
+    return false unless material
+    material.material_type.in?(%w[ResonatorEXP WeaponEXP])
   end
 
   def separate_materials_by_type

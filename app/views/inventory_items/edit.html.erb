@@ -12,7 +12,9 @@
           </div>
         </div>
 
-        <%= form_with model: @inventory_item, class: "qty-form" do |f| %>
+        <%= form_with model: @inventory_item,
+          url: inventory_item_path(@inventory_item, plan_id: params[:plan_id]),
+          class: "qty-form" do |f| %>
           <%= f.number_field :quantity,
               autofocus: true,
               class: "qty-input",

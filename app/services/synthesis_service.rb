@@ -16,7 +16,7 @@ class SynthesisService
       deficit = [ needed_qty - satisfied_qty, 0 ].max
 
       used_higher_rarity = exp_potion?(material) && satisfied_qty > owned_qty
-      synthesis_opportunity = find_synthesis_opportunity(material, owned_qty, needed_qty)
+      synthesis_opportunity = find_synthesis_opportunity(material, owned_qty, needed_qty, deficit)
 
       reconciliation[material_id] = {
         needed: needed_qty,
@@ -75,10 +75,8 @@ class SynthesisService
     material.material_type.in?(%w[ResonatorEXP WeaponEXP])
   end
 
-  def find_synthesis_opportunity(material, owned_qty, needed_qty)
+  def find_synthesis_opportunity(material, owned_qty, needed_qty, deficit)
     return nil unless synthesizable?(material)
-
-    deficit = [ needed_qty - owned_qty, 0 ].max
     return nil if deficit == 0
 
     lower_tier = find_lower_tier(material)
