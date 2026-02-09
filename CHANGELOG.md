@@ -1,5 +1,8 @@
 # Changelog
 
+Changes to this project will be documented in this file.
+This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
 ## [0.11.2] - 2026-02-08
 
 **Time:** 5 minutes
@@ -72,7 +75,7 @@
   - Added unit tests for synthesis logic and model integrity
 
 ### Changed
-- Refactored validate_inputs! method to use concise error messages
+- Refactored validate_inputs! method to use concise error messages with assistance of AI
 
 ## [0.8.9] - 2026-02-02
 
@@ -244,6 +247,7 @@
 ### Added
 - Implemented SynthesisService to handle 3-to-1 material conversion logic
 - Created synthesis reconciliation system for inventory management
+- Used AI as a rubberduck to design the data structure for output
 
 ## [0.5.0] - 2026-01-26
 
@@ -357,10 +361,11 @@
 
 ## [0.1.1] - 2026-01-11
 
-**Time:** ~1 hour
+**Time:** 1 hour
 
 ### Added
 - Created PlanForm service to handle translation between form parameters and planner calculator arguments
+- Used AI to scaffold form object as a reference
 
 ## [0.1.0] - 2026-01-12
 
