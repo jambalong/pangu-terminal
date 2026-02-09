@@ -1,6 +1,6 @@
 <% reconciliation = @synthesis_result&.dig(inventory_item.material_id) %>
 
-<%= link_to edit_inventory_item_path(inventory_item), data: { turbo_frame: "modal" }, class: "item-edit-link" do %>
+<%= link_to edit_inventory_item_path(inventory_item, plan_id: params[:plan_id]), data: { turbo_frame: "modal" }, class: "item-edit-link" do %>
   <div class="inventory-card <%= inventory_card_classes(reconciliation) %>" id="<%= dom_id(inventory_item) %>">
     
     <%# Using Higher Rarity EXP Potion Badge %>
