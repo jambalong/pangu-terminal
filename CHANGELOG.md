@@ -40,7 +40,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [0.10.0] - 2026-02-08
 
-**Time:** 3 hours
+**Time:** 4 hours
 
 ### Added
 - Implemented EXP Potion cross-rarity satisfaction system
@@ -54,10 +54,6 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   - Pulsing teal border for materials that can be synthesized from lower tiers
   - Pulsing sapphire border for materials satisfied by higher-rarity equivalents
 - Updated progress bars to display true satisfaction (`satisfied_qty / needed`) rather than just owned count
-
-## [0.9.0] - 2026-02-02
-
-**Time:** 1-2 hours
 
 ## [0.9.0] - 2026-02-02
 
