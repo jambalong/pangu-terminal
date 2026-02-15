@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_26_092708) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_15_202438) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_092708) do
     t.datetime "created_at", null: false
     t.text "description"
     t.integer "exp_value", default: 0, null: false
+    t.string "image_url"
     t.string "item_group_id"
     t.string "material_type", null: false
     t.string "name", null: false
@@ -92,6 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_092708) do
   create_table "resonators", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "element", null: false
+    t.string "image_url"
     t.string "name", null: false
     t.integer "rarity", default: 4, null: false
     t.datetime "updated_at", null: false
@@ -312,6 +314,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_092708) do
 
   create_table "weapons", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "image_url"
     t.string "name", null: false
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
