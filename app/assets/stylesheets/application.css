@@ -79,27 +79,6 @@ main.no-scroll {
   flex-direction: column;
 }
 
-.item-icon {
-  width: 4rem;
-  height: 4rem;
-  margin-bottom: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: var(--ctp-mantle);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-initials {
-  font-family: var(--font-mono);
-}
-
-.rarity-border-1 { border-bottom: 4px solid var(--ctp-overlay2); }
-.rarity-border-2 { border-bottom: 4px solid var(--ctp-green); }
-.rarity-border-3 { border-bottom: 4px solid var(--ctp-blue); }
-.rarity-border-4 { border-bottom: 4px solid var(--ctp-mauve); }
-.rarity-border-5 { border-bottom: 4px solid var(--ctp-peach); }
-
 #flash-container {
   position: fixed;
   top: 5rem;
