@@ -21,11 +21,17 @@ def seed_material_set(data_array, type, category, default_exp: 0, grouped: false
       current_group_id = data[:name].parameterize
     end
 
+    filename = data[:name].downcase
+                        .gsub(/['"#&]/, '')
+                        .strip
+                        .gsub(/\s+/, '-')
+
     material = Material.find_or_initialize_by(name: data[:name])
     material.update!(
       rarity: data[:rarity],
       material_type: type,
       category: category,
+      image_url: "/images/materials/#{filename}.png",
       exp_value: data[:exp] || default_exp,
       item_group_id: grouped ? current_group_id : nil
     )
@@ -35,13 +41,8 @@ def seed_material_set(data_array, type, category, default_exp: 0, grouped: false
     # e.g. "Lux & Umbra" => :lux_umbra
     # e.g. "Gauntlets#21D" => :gauntlets21d
     # e.g. "Loong's Pearl" => :loongs_pearl
-    lookup_key = data[:name].downcase
-                        .gsub(/['#&]/, '')
-                        .strip
-                        .gsub('-', '_')
-                        .gsub(/\s+/, '_')
-                        .to_sym
-    $SEED_DATA[lookup_key] = material
+    lookup_key = filename.gsub('-', '_')
+    $SEED_DATA[lookup_key.to_sym] = material
   end
 end
 
@@ -50,7 +51,8 @@ shell_credit = Material.find_or_initialize_by(name: "Shell Credit")
 shell_credit.update!(
   rarity: 3,
   material_type: "Credit",
-  category: "Universal Currency"
+  category: "Universal Currency",
+  image_url: "/images/materials/shell-credit.png"
 )
 
 $SEED_DATA[:shell_credit] = shell_credit
@@ -118,7 +120,7 @@ FLOWER_DATA = [
   { name: "Summer Flower", rarity: 1 },
 
   # Rinascita
-  { name: "Afterlife", rarity: 1 },
+  { name: '"Afterlife"', rarity: 1 },
   { name: "Bamboo Iris", rarity: 1 },
   { name: "Bloodleaf Viburnum", rarity: 1 },
   { name: "Firecracker Jewelweed", rarity: 1 },
