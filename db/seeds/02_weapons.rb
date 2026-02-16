@@ -65,7 +65,7 @@ WEAPON_DATA = {
     5 => [
       "Lux & Umbra",
       "Phasic Homogenizer",
-      "Spectrum Blaser",
+      "Spectrum Blaster",
       "Static Mist",
       "The Last Dance",
       "Woodland Aria"

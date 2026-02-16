@@ -170,7 +170,7 @@ MATERIALS = {
   abyssal_husk:                   $SEED_DATA[:abyssal_husk],
   blazing_bone:                   $SEED_DATA[:blazing_bone],
   blighted_crown_of_puppet_king:  $SEED_DATA[:blighted_crown_of_puppet_king],
-  burning_judgement:              $SEED_DATA[:burning_judgement],
+  burning_judgment:               $SEED_DATA[:burning_judgment],
   cleansing_conch:                $SEED_DATA[:cleansing_conch],
   elegy_tacet_core:               $SEED_DATA[:elegy_tacet_core],
   gold_dissolving_feather:        $SEED_DATA[:gold_dissolving_feather],
@@ -414,7 +414,7 @@ RESONATOR_MAPPING_DATA = [
   [ RESONATORS[:lupa],          MATERIALS[:unfading_glory],                MATERIALS[:bloodleaf_viburnum],    MATERIALS[:howler_core_set],          MATERIALS[:the_netherworlds_stare] ],
   [ RESONATORS[:luuk_herssen],  MATERIALS[:suncoveters_reach],             MATERIALS[:edelschnee],            MATERIALS[:exoswarm_pendant_set],     MATERIALS[:gold_in_memory] ],
   [ RESONATORS[:lynae],         MATERIALS[:suncoveters_reach],             MATERIALS[:rimewisp],              MATERIALS[:exoswarm_core_set],        MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:mornye],        MATERIALS[:burning_judgement],             MATERIALS[:gemini_spore],          MATERIALS[:mech_core_set],            MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:mornye],        MATERIALS[:burning_judgment],              MATERIALS[:gemini_spore],          MATERIALS[:mech_core_set],            MATERIALS[:the_netherworlds_stare] ],
   [ RESONATORS[:phoebe],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:whisperin_core_set],       MATERIALS[:sentinels_dagger] ],
   [ RESONATORS[:phrolova],      MATERIALS[:truth_in_lies],                 MATERIALS[:afterlife],             MATERIALS[:polygon_core_set],         MATERIALS[:the_netherworlds_stare] ],
   [ RESONATORS[:qiuyuan],       MATERIALS[:truth_in_lies],                 MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set],       MATERIALS[:curse_of_the_abyss] ],
@@ -615,7 +615,7 @@ LAHAI_ROI_WEAPON_TYPE_MAPPING_DATA = {
   "Broadblade" => MATERIALS[:carved_crystal_set],
   "Pistols" => MATERIALS[:combustor_set],
   "Gauntlets" => MATERIALS[:waveworn_shard_set],
-  "Rectifier" => MATERIALS[:melodic_string]
+  "Rectifier" => MATERIALS[:string_set]
 }.freeze
 
 puts "  --> Mapping Weapon Type Materials..."
