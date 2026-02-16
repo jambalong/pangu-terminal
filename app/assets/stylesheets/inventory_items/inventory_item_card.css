@@ -4,7 +4,7 @@
   border: 1px solid var(--ctp-surface0);
   border-radius: 0.75rem;
   padding: 0.5rem;
-  padding-top: 25px;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -289,7 +289,7 @@
 @media (max-width: 639px) {
   .inventory-card {
     padding: 0.75rem;
-    padding-top: 25px;
+    padding-top: 30px;
     min-height: 160px;
   }
 
@@ -332,7 +332,7 @@
 @media (min-width: 1024px) {
   .inventory-card {
     padding: 1rem;
-    padding-top: 25px;
+    padding-top: 30px;
     min-height: 200px;
   }
 
