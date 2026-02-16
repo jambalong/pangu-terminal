@@ -20,6 +20,8 @@ WEAPON_DATA = {
       "Defier's Thorn",
       "Emerald of Genesis",
       "Emerald Sentence",
+      "Everbright Polestar",
+      "Laser Shearer",
       "Red Spring",
       "Unflickering Valor"
     ],
@@ -41,6 +43,8 @@ WEAPON_DATA = {
       "Ages of Harvest",
       "Kumokiri",
       "Lustrous Razor",
+      "Radiance Cleaver",
+      "Starfield Calibrator",
       "Thunderflare Dominion",
       "Verdant Summit",
       "Wildfire Mark"
@@ -60,6 +64,8 @@ WEAPON_DATA = {
   "Pistols" => {
     5 => [
       "Lux & Umbra",
+      "Phasic Homogenizer",
+      "Spectrum Blaser",
       "Static Mist",
       "The Last Dance",
       "Woodland Aria"
@@ -80,7 +86,9 @@ WEAPON_DATA = {
     5 => [
       "Abyss Surges",
       "Blazing Justice",
+      "Daybreaker's Spine",
       "Moongazer's Sigil",
+      "Pulsation Bracer",
       "Tragicomedy",
       "Verity's Handle"
     ],
@@ -98,6 +106,7 @@ WEAPON_DATA = {
 
   "Rectifier" => {
     5 => [
+      "Boson Astrolabe",
       "Cosmic Ripples",
       "Lethean Elegy",
       "Luminous Hymn",

@@ -31,11 +31,13 @@ RESONATOR_DATA = {
       { name: "Yinlin", weapon_type: "Rectifier" }
     ],
     "Fusion" => [
+      { name: "Aemeath", weapon_type: "Sword" },
       { name: "Brant", weapon_type: "Sword" },
       { name: "Changli", weapon_type: "Sword" },
       { name: "Encore", weapon_type: "Rectifier" },
       { name: "Galbrena", weapon_type: "Pistols" },
-      { name: "Lupa", weapon_type: "Broadblade" }
+      { name: "Lupa", weapon_type: "Broadblade" },
+      { name: "Mornye", weapon_type: "Broadblade" }
     ],
     "Glacio" => [
       { name: "Carlotta", weapon_type: "Pistols" },
@@ -52,6 +54,8 @@ RESONATOR_DATA = {
     ],
     "Spectro" => [
       { name: "Jinhsi", weapon_type: "Rectifier" },
+      { name: "Luuk Herssen", weapon_type: "Gauntlet" },
+      { name: "Lynae", weapon_type: "Pistols" },
       { name: "Phoebe", weapon_type: "Rectifier" },
       { name: "Rover-Spectro", weapon_type: "Sword" },
       { name: "Shorekeeper", weapon_type: "Rectifier" },
@@ -66,6 +70,7 @@ RESONATOR_DATA = {
       { name: "Yangyang", weapon_type: "Sword" }
     ],
     "Electro" => [
+      { name: "Buling", weapon_type: "Rectifier" },
       { name: "Lumi", weapon_type: "Broadblade" },
       { name: "Yuanwu", weapon_type: "Gauntlets" }
     ],

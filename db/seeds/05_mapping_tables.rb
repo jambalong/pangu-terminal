@@ -14,6 +14,7 @@ puts "  --> Creating Mapping Tables..."
 
 RESONATORS = {
   # 5-Star Resonators
+  aemeath:        $SEED_DATA[:aemeath],
   augusta:        $SEED_DATA[:augusta],
   brant:          $SEED_DATA[:brant],
   calcharo:       $SEED_DATA[:calcharo],
@@ -32,6 +33,9 @@ RESONATORS = {
   jiyan:          $SEED_DATA[:jiyan],
   lingyang:       $SEED_DATA[:lingyang],
   lupa:           $SEED_DATA[:lupa],
+  luuk_herssen:   $SEED_DATA[:luuk_herssen],
+  lynae:          $SEED_DATA[:lynae],
+  mornye:         $SEED_DATA[:mornye],
   phoebe:         $SEED_DATA[:phoebe],
   phrolova:       $SEED_DATA[:phrolova],
   qiuyuan:        $SEED_DATA[:qiuyuan],
@@ -49,6 +53,7 @@ RESONATORS = {
   # 4-Star Resonators
   aalto:          $SEED_DATA[:aalto],
   baizhi:         $SEED_DATA[:baizhi],
+  buling:         $SEED_DATA[:buling],
   chixia:         $SEED_DATA[:chixia],
   danjin:         $SEED_DATA[:danjin],
   lumi:           $SEED_DATA[:lumi],
@@ -67,18 +72,27 @@ WEAPONS = {
   blazing_brilliance:     $SEED_DATA[:blazing_brilliance],
   blazing_justice:        $SEED_DATA[:blazing_justice],
   bloodpacts_pledge:      $SEED_DATA[:bloodpacts_pledge],
+  boson_astrolabe:        $SEED_DATA[:boson_astrolabe],
   cosmic_ripples:         $SEED_DATA[:cosmic_ripples],
+  daybreakers_spine:      $SEED_DATA[:daybreakers_spine],
   defiers_thorn:          $SEED_DATA[:defiers_thorn],
   emerald_of_genesis:     $SEED_DATA[:emerald_of_genesis],
   emerald_sentence:       $SEED_DATA[:emerald_sentence],
+  everbright_polestar:    $SEED_DATA[:everbright_polestar],
   kumokiri:               $SEED_DATA[:kumokiri],
+  laser_shearer:          $SEED_DATA[:laser_shearer],
   lethean_elegy:          $SEED_DATA[:lethean_elegy],
   luminous_hymn:          $SEED_DATA[:luminous_hymn],
   lustrous_razor:         $SEED_DATA[:lustrous_razor],
   lux_umbra:              $SEED_DATA[:lux_umbra],
   moongazers_sigil:       $SEED_DATA[:moongazers_sigil],
+  phasic_homogenizer:     $SEED_DATA[:phasic_homogenizer],
+  pulsation_bracer:       $SEED_DATA[:pulsation_bracer],
+  radiance_cleaver:       $SEED_DATA[:radiance_cleaver],
   red_spring:             $SEED_DATA[:red_spring],
   rime_draped_sprouts:    $SEED_DATA[:rime_draped_sprouts],
+  spectrum_blaster:       $SEED_DATA[:spectrum_blaster],
+  starfield_calibrator:   $SEED_DATA[:starfield_calibrator],
   static_mist:            $SEED_DATA[:static_mist],
   stellar_symphony:       $SEED_DATA[:stellar_symphony],
   stringmaster:           $SEED_DATA[:stringmaster],
@@ -153,21 +167,23 @@ MATERIALS = {
   premium_energy_core:        $SEED_DATA[:premium_energy_core],
 
   # Boss Drops
-  mysterious_code:                $SEED_DATA[:mysterious_code],
-
   abyssal_husk:                   $SEED_DATA[:abyssal_husk],
   blazing_bone:                   $SEED_DATA[:blazing_bone],
   blighted_crown_of_puppet_king:  $SEED_DATA[:blighted_crown_of_puppet_king],
+  burning_judgement:              $SEED_DATA[:burning_judgement],
   cleansing_conch:                $SEED_DATA[:cleansing_conch],
   elegy_tacet_core:               $SEED_DATA[:elegy_tacet_core],
   gold_dissolving_feather:        $SEED_DATA[:gold_dissolving_feather],
   group_abomination_tacet_core:   $SEED_DATA[:group_abomination_tacet_core],
   hidden_thunder_tacet_core:      $SEED_DATA[:hidden_thunder_tacet_core],
+  mysterious_code:                $SEED_DATA[:mysterious_code],
+  our_choice:                     $SEED_DATA[:our_choice],
   platinum_core:                  $SEED_DATA[:platinum_core],
   rage_tacet_core:                $SEED_DATA[:rage_tacet_core],
   roaring_rock_fist:              $SEED_DATA[:roaring_rock_fist],
   sound_keeping_tacet_core:       $SEED_DATA[:sound_keeping_tacet_core],
   strife_tacet_core:              $SEED_DATA[:strife_tacet_core],
+  suncoveters_reach:              $SEED_DATA[:suncoveters_reach],
   thundering_tacet_core:          $SEED_DATA[:thundering_tacet_core],
   topological_confinement:        $SEED_DATA[:topological_confinement],
   truth_in_lies:                  $SEED_DATA[:truth_in_lies],
@@ -180,26 +196,31 @@ MATERIALS = {
   lanternberry:           $SEED_DATA[:lanternberry],
   pecok_flower:           $SEED_DATA[:pecok_flower],
   terraspawn_fungus:      $SEED_DATA[:terraspawn_fungus],
-  wintry_bell:            $SEED_DATA[:wintry_bell],
   violet_coral:           $SEED_DATA[:violet_coral],
+  wintry_bell:            $SEED_DATA[:wintry_bell],
 
-  pavo_plum:              $SEED_DATA[:pavo_plum],
   loongs_pearl:           $SEED_DATA[:loongs_pearl],
+  pavo_plum:              $SEED_DATA[:pavo_plum],
 
   nova:                   $SEED_DATA[:nova],
   summer_flower:          $SEED_DATA[:summer_flower],
 
   afterlife:              $SEED_DATA[:afterlife],
   bamboo_iris:            $SEED_DATA[:bamboo_iris],
+  bloodleaf_viburnum:     $SEED_DATA[:bloodleaf_viburnum],
   firecracker_jewelweed:  $SEED_DATA[:firecracker_jewelweed],
   golden_fleece:          $SEED_DATA[:golden_fleece],
-  seaside_cendrelis:      $SEED_DATA[:seaside_cendrelis],
-  sword_acorus:           $SEED_DATA[:sword_acorus],
-
-  bloodleaf_viburnum:     $SEED_DATA[:bloodleaf_viburnum],
   luminous_calendula:     $SEED_DATA[:luminous_calendula],
+  seaside_cendrelis:      $SEED_DATA[:seaside_cendrelis],
   sliverglow_bloom:       $SEED_DATA[:sliverglow_bloom],
   stone_rose:             $SEED_DATA[:stone_rose],
+  sword_acorus:           $SEED_DATA[:sword_acorus],
+
+  arithmetic_shell:       $SEED_DATA[:arithmetic_shell],
+  edelschnee:             $SEED_DATA[:edelschnee],
+  gemini_spore:           $SEED_DATA[:gemini_spore],
+  moss_amber:             $SEED_DATA[:moss_amber],
+  rimewisp:               $SEED_DATA[:rimewisp],
 
   # Enemy Drops
   whisperin_core_set: [
@@ -220,7 +241,7 @@ MATERIALS = {
     $SEED_DATA[:hf_polygon_core],
     $SEED_DATA[:ff_polygon_core]
   ],
-  tidal_residuum_set: [
+  tidal_residuum_core_set: [
     $SEED_DATA[:lf_tidal_residuum_core],
     $SEED_DATA[:mf_tidal_residuum_core],
     $SEED_DATA[:hf_tidal_residuum_core],
@@ -237,6 +258,24 @@ MATERIALS = {
     $SEED_DATA[:mask_of_erosion],
     $SEED_DATA[:mask_of_distortion],
     $SEED_DATA[:mask_of_insanity]
+  ],
+  exoswarm_core_set: [
+    $SEED_DATA[:lf_exoswarm_core],
+    $SEED_DATA[:mf_exoswarm_core],
+    $SEED_DATA[:hf_exoswarm_core],
+    $SEED_DATA[:ff_exoswarm_core]
+  ],
+  mech_core_set: [
+    $SEED_DATA[:lf_mech_core],
+    $SEED_DATA[:mf_mech_core],
+    $SEED_DATA[:hf_mech_core],
+    $SEED_DATA[:ff_mech_core]
+  ],
+  exoswarm_pendant_set: [
+    $SEED_DATA[:fractured_exoswarm_pendant],
+    $SEED_DATA[:worn_exoswarm_pendant],
+    $SEED_DATA[:chipped_exoswarm_pendant],
+    $SEED_DATA[:intact_exoswarm_pendant]
   ],
 
   # Forgery Drops
@@ -270,14 +309,46 @@ MATERIALS = {
     $SEED_DATA[:cadence_leaf],
     $SEED_DATA[:cadence_blossom]
   ],
+  polarizer_set: [
+    $SEED_DATA[:broken_wing_polarizer],
+    $SEED_DATA[:monowing_polarizer],
+    $SEED_DATA[:polywing_polarizer],
+    $SEED_DATA[:layered_wing_polarizer]
+  ],
+  combustor_set: [
+    $SEED_DATA[:incomplete_combustor],
+    $SEED_DATA[:aftertune_combustor],
+    $SEED_DATA[:remnant_combustor],
+    $SEED_DATA[:reverb_combustor]
+  ],
+  string_set: [
+    $SEED_DATA[:spliced_string],
+    $SEED_DATA[:broken_string],
+    $SEED_DATA[:solidified_string],
+    $SEED_DATA[:melodic_string]
+  ],
+  carved_crystal_set: [
+    $SEED_DATA[:lf_carved_crystal],
+    $SEED_DATA[:mf_carved_crystal],
+    $SEED_DATA[:hf_carved_crystal],
+    $SEED_DATA[:ff_carved_crystal]
+  ],
+  waveworn_shard_set: [
+    $SEED_DATA[:lf_waveworn_shard],
+    $SEED_DATA[:mf_waveworn_shard],
+    $SEED_DATA[:hf_waveworn_shard],
+    $SEED_DATA[:ff_waveworn_shard]
+  ],
 
   # Weekly Boss Drops
   curse_of_the_abyss:     $SEED_DATA[:curse_of_the_abyss],
   dreamless_feather:      $SEED_DATA[:dreamless_feather],
+  gold_in_memory:         $SEED_DATA[:gold_in_memory],
   monument_bell:          $SEED_DATA[:monument_bell],
   sentinels_dagger:       $SEED_DATA[:sentinels_dagger],
   the_netherworlds_stare: $SEED_DATA[:the_netherworlds_stare],
   unending_destruction:   $SEED_DATA[:unending_destruction],
+  wave_cutting_tooth:     $SEED_DATA[:wave_cutting_tooth],
   when_irises_bloom:      $SEED_DATA[:when_irises_bloom]
 }.freeze
 
@@ -322,51 +393,56 @@ end
 # [resonator, boss_mat, flower_mat, enemy_mat, weekly_boss_mat]
 RESONATOR_MAPPING_DATA = [
   # 5-star Resonators
-  [ RESONATORS[:augusta],       MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:luminous_calendula],    MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:brant],         MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_set], MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:calcharo],      MATERIALS[:thundering_tacet_core],         MATERIALS[:iris],                  MATERIALS[:ring_set],           MATERIALS[:monument_bell] ],
-  [ RESONATORS[:camellya],      MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:cantarella],    MATERIALS[:cleansing_conch],               MATERIALS[:seaside_cendrelis],     MATERIALS[:polygon_core_set],   MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:carlotta],      MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:cartethyia],    MATERIALS[:unfading_glory],                MATERIALS[:bamboo_iris],           MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:changli],       MATERIALS[:rage_tacet_core],               MATERIALS[:pavo_plum],             MATERIALS[:ring_set],           MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:chisa],         MATERIALS[:abyssal_husk],                  MATERIALS[:summer_flower],         MATERIALS[:polygon_core_set],   MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:ciaccona],      MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_set], MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:encore],        MATERIALS[:rage_tacet_core],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:galbrena],      MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:stone_rose],            MATERIALS[:tidal_residuum_set], MATERIALS[:curse_of_the_abyss] ],
-  [ RESONATORS[:iuno],          MATERIALS[:abyssal_husk],                  MATERIALS[:sliverglow_bloom],      MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:jianxin],       MATERIALS[:roaring_rock_fist],             MATERIALS[:lanternberry],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:jinhsi],        MATERIALS[:elegy_tacet_core],              MATERIALS[:loongs_pearl],          MATERIALS[:howler_core_set],    MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:jiyan],         MATERIALS[:roaring_rock_fist],             MATERIALS[:pecok_flower],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
-  [ RESONATORS[:lingyang],      MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:lupa],          MATERIALS[:unfading_glory],                MATERIALS[:bloodleaf_viburnum],    MATERIALS[:howler_core_set],    MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:phoebe],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:whisperin_core_set], MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:phrolova],      MATERIALS[:truth_in_lies],                 MATERIALS[:afterlife],             MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:qiuyuan],       MATERIALS[:truth_in_lies],                 MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set], MATERIALS[:curse_of_the_abyss] ],
-  [ RESONATORS[:roccia],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:tidal_residuum_set], MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:rover_aero],    MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:when_irises_bloom] ],
-  [ RESONATORS[:rover_havoc],   MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:rover_spectro], MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:shorekeeper],   MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_core_set], MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:verina],        MATERIALS[:elegy_tacet_core],              MATERIALS[:belle_poppy],           MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
-  [ RESONATORS[:xiangli_yao],   MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:violet_coral],          MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:yinlin],        MATERIALS[:group_abomination_tacet_core],  MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:zani],          MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],   MATERIALS[:the_netherworlds_stare] ],
-  [ RESONATORS[:zhezhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
+  [ RESONATORS[:aemeath],       MATERIALS[:our_choice],                    MATERIALS[:moss_amber],            MATERIALS[:exoswarm_core_set],        MATERIALS[:gold_in_memory] ],
+  [ RESONATORS[:augusta],       MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:luminous_calendula],    MATERIALS[:tidal_residuum_core_set],  MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:brant],         MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_core_set],  MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:calcharo],      MATERIALS[:thundering_tacet_core],         MATERIALS[:iris],                  MATERIALS[:ring_set],                 MATERIALS[:monument_bell] ],
+  [ RESONATORS[:camellya],      MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_core_set],       MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:cantarella],    MATERIALS[:cleansing_conch],               MATERIALS[:seaside_cendrelis],     MATERIALS[:polygon_core_set],         MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:carlotta],      MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],         MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:cartethyia],    MATERIALS[:unfading_glory],                MATERIALS[:bamboo_iris],           MATERIALS[:tidal_residuum_core_set],  MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:changli],       MATERIALS[:rage_tacet_core],               MATERIALS[:pavo_plum],             MATERIALS[:ring_set],                 MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:chisa],         MATERIALS[:abyssal_husk],                  MATERIALS[:summer_flower],         MATERIALS[:polygon_core_set],         MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:ciaccona],      MATERIALS[:blazing_bone],                  MATERIALS[:golden_fleece],         MATERIALS[:tidal_residuum_core_set],  MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:encore],        MATERIALS[:rage_tacet_core],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set],       MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:galbrena],      MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:stone_rose],            MATERIALS[:tidal_residuum_core_set],  MATERIALS[:curse_of_the_abyss] ],
+  [ RESONATORS[:iuno],          MATERIALS[:abyssal_husk],                  MATERIALS[:sliverglow_bloom],      MATERIALS[:polygon_core_set],         MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:jianxin],       MATERIALS[:roaring_rock_fist],             MATERIALS[:lanternberry],          MATERIALS[:whisperin_core_set],       MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:jinhsi],        MATERIALS[:elegy_tacet_core],              MATERIALS[:loongs_pearl],          MATERIALS[:howler_core_set],          MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:jiyan],         MATERIALS[:roaring_rock_fist],             MATERIALS[:pecok_flower],          MATERIALS[:howler_core_set],          MATERIALS[:monument_bell] ],
+  [ RESONATORS[:lingyang],      MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set],       MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:lupa],          MATERIALS[:unfading_glory],                MATERIALS[:bloodleaf_viburnum],    MATERIALS[:howler_core_set],          MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:luuk_herssen],  MATERIALS[:suncoveters_reach],             MATERIALS[:edelschnee],            MATERIALS[:exoswarm_pendant_set],     MATERIALS[:gold_in_memory] ],
+  [ RESONATORS[:lynae],         MATERIALS[:suncoveters_reach],             MATERIALS[:rimewisp],              MATERIALS[:exoswarm_core_set],        MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:mornye],        MATERIALS[:burning_judgement],             MATERIALS[:gemini_spore],          MATERIALS[:mech_core_set],            MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:phoebe],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:whisperin_core_set],       MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:phrolova],      MATERIALS[:truth_in_lies],                 MATERIALS[:afterlife],             MATERIALS[:polygon_core_set],         MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:qiuyuan],       MATERIALS[:truth_in_lies],                 MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set],       MATERIALS[:curse_of_the_abyss] ],
+  [ RESONATORS[:roccia],        MATERIALS[:cleansing_conch],               MATERIALS[:firecracker_jewelweed], MATERIALS[:tidal_residuum_core_set],  MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:rover_aero],    MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set],       MATERIALS[:when_irises_bloom] ],
+  [ RESONATORS[:rover_havoc],   MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set],       MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:rover_spectro], MATERIALS[:mysterious_code],               MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set],       MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:shorekeeper],   MATERIALS[:topological_confinement],       MATERIALS[:nova],                  MATERIALS[:whisperin_core_set],       MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:verina],        MATERIALS[:elegy_tacet_core],              MATERIALS[:belle_poppy],           MATERIALS[:howler_core_set],          MATERIALS[:monument_bell] ],
+  [ RESONATORS[:xiangli_yao],   MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:violet_coral],          MATERIALS[:whisperin_core_set],       MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:yinlin],        MATERIALS[:group_abomination_tacet_core],  MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set],       MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:zani],          MATERIALS[:platinum_core],                 MATERIALS[:sword_acorus],          MATERIALS[:polygon_core_set],         MATERIALS[:the_netherworlds_stare] ],
+  [ RESONATORS[:zhezhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],          MATERIALS[:monument_bell] ],
 
   # 4-star Resonators
   # [resonator, boss_mat, flower_mat, enemy_mat, weekly_boss_mat]
-  [ RESONATORS[:aalto],         MATERIALS[:roaring_rock_fist],             MATERIALS[:wintry_bell],           MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
-  [ RESONATORS[:baizhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],    MATERIALS[:monument_bell] ],
-  [ RESONATORS[:chixia],        MATERIALS[:rage_tacet_core],               MATERIALS[:belle_poppy],           MATERIALS[:whisperin_core_set], MATERIALS[:monument_bell] ],
-  [ RESONATORS[:danjin],        MATERIALS[:strife_tacet_core],             MATERIALS[:belle_poppy],           MATERIALS[:ring_set],           MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:lumi],          MATERIALS[:thundering_tacet_core],         MATERIALS[:terraspawn_fungus],     MATERIALS[:howler_core_set],    MATERIALS[:sentinels_dagger] ],
-  [ RESONATORS[:mortefi],       MATERIALS[:rage_tacet_core],               MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set], MATERIALS[:monument_bell] ],
-  [ RESONATORS[:sanhua],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set], MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:taoqi],         MATERIALS[:gold_dissolving_feather],       MATERIALS[:iris],                  MATERIALS[:howler_core_set],    MATERIALS[:dreamless_feather] ],
-  [ RESONATORS[:yangyang],      MATERIALS[:roaring_rock_fist],             MATERIALS[:wintry_bell],           MATERIALS[:ring_set],           MATERIALS[:unending_destruction] ],
-  [ RESONATORS[:youhu],         MATERIALS[:topological_confinement],       MATERIALS[:violet_coral],          MATERIALS[:ring_set],           MATERIALS[:monument_bell] ],
-  [ RESONATORS[:yuanwu],        MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:terraspawn_fungus],     MATERIALS[:ring_set],           MATERIALS[:unending_destruction] ]
+  [ RESONATORS[:aalto],         MATERIALS[:roaring_rock_fist],             MATERIALS[:wintry_bell],           MATERIALS[:howler_core_set],          MATERIALS[:monument_bell] ],
+  [ RESONATORS[:baizhi],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:lanternberry],          MATERIALS[:howler_core_set],          MATERIALS[:monument_bell] ],
+  [ RESONATORS[:buling],        MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:pecok_flower],          MATERIALS[:whisperin_core_set],       MATERIALS[:curse_of_the_abyss] ],
+  [ RESONATORS[:chixia],        MATERIALS[:rage_tacet_core],               MATERIALS[:belle_poppy],           MATERIALS[:whisperin_core_set],       MATERIALS[:monument_bell] ],
+  [ RESONATORS[:danjin],        MATERIALS[:strife_tacet_core],             MATERIALS[:belle_poppy],           MATERIALS[:ring_set],                 MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:lumi],          MATERIALS[:thundering_tacet_core],         MATERIALS[:terraspawn_fungus],     MATERIALS[:howler_core_set],          MATERIALS[:sentinels_dagger] ],
+  [ RESONATORS[:mortefi],       MATERIALS[:rage_tacet_core],               MATERIALS[:coriolus],              MATERIALS[:whisperin_core_set],       MATERIALS[:monument_bell] ],
+  [ RESONATORS[:sanhua],        MATERIALS[:sound_keeping_tacet_core],      MATERIALS[:wintry_bell],           MATERIALS[:whisperin_core_set],       MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:taoqi],         MATERIALS[:gold_dissolving_feather],       MATERIALS[:iris],                  MATERIALS[:howler_core_set],          MATERIALS[:dreamless_feather] ],
+  [ RESONATORS[:yangyang],      MATERIALS[:roaring_rock_fist],             MATERIALS[:wintry_bell],           MATERIALS[:ring_set],                 MATERIALS[:unending_destruction] ],
+  [ RESONATORS[:youhu],         MATERIALS[:topological_confinement],       MATERIALS[:violet_coral],          MATERIALS[:ring_set],                 MATERIALS[:monument_bell] ],
+  [ RESONATORS[:yuanwu],        MATERIALS[:hidden_thunder_tacet_core],     MATERIALS[:terraspawn_fungus],     MATERIALS[:ring_set],                 MATERIALS[:unending_destruction] ]
 ].freeze
 
 puts "  --> Mapping Resonator Materials..."
@@ -479,6 +555,27 @@ WEAPON_MAPPING_DATA = {
     WEAPONS[:undying_flame],
     WEAPONS[:variation],
     WEAPONS[:waltz_in_masquerade]
+  ].freeze,
+
+  MATERIALS[:exoswarm_core_set] => [
+    # 5-star
+    WEAPONS[:boson_astrolabe]
+  ].freeze,
+
+  MATERIALS[:mech_core_set] => [
+    # 5-Star
+    WEAPONS[:daybreakers_spine],
+    WEAPONS[:everbright_polestar],
+    WEAPONS[:laser_shearer],
+    WEAPONS[:pulsation_bracer]
+  ].freeze,
+
+  MATERIALS[:exoswarm_pendant_set] => [
+    # 5-Star
+    WEAPONS[:phasic_homogenizer],
+    WEAPONS[:radiance_cleaver],
+    WEAPONS[:starfield_calibrator],
+    WEAPONS[:spectrum_blaster]
   ].freeze
 }.freeze
 
@@ -492,19 +589,20 @@ puts "  --> Weapon Material Maps created."
 # --- 4. Map weapon type to their unique material requirements ---
 # This method handles all Weapon Types and Forgery Drops requirements
 # It creates records in the WeaponTypeMaterial table.
-def map_weapon_type_materials(weapon_type, material_set)
+def map_weapon_type_materials(weapon_type, material_set, region)
   material_set.each_with_index do |material, idx|
     rarity = idx + 2
 
     WeaponTypeMaterial.find_or_initialize_by(
       weapon_type: weapon_type,
       material_type: "ForgeryDrop",
-      rarity: rarity
+      rarity: rarity,
+      region: region
     ).update!(material: material)
   end
 end
 
-WEAPON_TYPE_MAPPING_DATA = {
+BASE_WEAPON_TYPE_MAPPING_DATA = {
   "Sword" => MATERIALS[:metallic_drip_set],
   "Broadblade" => MATERIALS[:waveworn_residue_set],
   "Pistols" => MATERIALS[:phlogiston_set],
@@ -512,9 +610,22 @@ WEAPON_TYPE_MAPPING_DATA = {
   "Rectifier" => MATERIALS[:helix_set]
 }.freeze
 
+LAHAI_ROI_WEAPON_TYPE_MAPPING_DATA = {
+  "Sword" => MATERIALS[:polarizer_set],
+  "Broadblade" => MATERIALS[:carved_crystal_set],
+  "Pistols" => MATERIALS[:combustor_set],
+  "Gauntlets" => MATERIALS[:waveworn_shard_set],
+  "Rectifier" => MATERIALS[:melodic_string]
+}.freeze
+
 puts "  --> Mapping Weapon Type Materials..."
-WEAPON_TYPE_MAPPING_DATA.each do |weapon_type, material_set|
-  map_weapon_type_materials(weapon_type, material_set)
+[
+  [ "base", BASE_WEAPON_TYPE_MAPPING_DATA ],
+  [ "lahai_roi", LAHAI_ROI_WEAPON_TYPE_MAPPING_DATA ]
+].each do |region, mapping_data|
+  mapping_data.each do |weapon_type, material_set|
+    map_weapon_type_materials(weapon_type, material_set, region)
+  end
 end
 
 puts "  --> Weapon Type Material Maps created."

@@ -80,17 +80,20 @@ BOSS_DROP_DATA = [
   { name: "Abyssal Husk", rarity: 4 },
   { name: "Blazing Bone", rarity: 4 },
   { name: "Blighted Crown of Puppet King", rarity: 4 },
+  { name: "Burning Judgment", rarity: 4 },
   { name: "Cleansing Conch", rarity: 4 },
   { name: "Elegy Tacet Core", rarity: 4 },
   { name: "Gold-Dissolving Feather", rarity: 4 },
   { name: "Group Abomination Tacet Core", rarity: 4 },
   { name: "Hidden Thunder Tacet Core", rarity: 4 },
   { name: "Mysterious Code", rarity: 5 },
+  { name: "Our Choice", rarity: 4 },
   { name: "Platinum Core", rarity: 4 },
   { name: "Rage Tacet Core", rarity: 4 },
   { name: "Roaring Rock Fist", rarity: 4 },
   { name: "Sound-Keeping Tacet Core", rarity: 4 },
   { name: "Strife Tacet Core", rarity: 4 },
+  { name: "Suncoveter's Reach", rarity: 4 },
   { name: "Thundering Tacet Core", rarity: 4 },
   { name: "Topological Confinement", rarity: 4 },
   { name: "Truth in Lies", rarity: 4 },
@@ -129,7 +132,14 @@ FLOWER_DATA = [
   { name: "Seaside Cendrelis", rarity: 1 },
   { name: "Sliverglow Bloom", rarity: 1 },
   { name: "Stone Rose", rarity: 1 },
-  { name: "Sword Acorus", rarity: 1 }
+  { name: "Sword Acorus", rarity: 1 },
+
+  # Lahai-Roi
+  { name: "Arithmetic Shell", rarity: 1 },
+  { name: "Edelschnee", rarity: 1 },
+  { name: "Gemini Spore", rarity: 1 },
+  { name: "Moss Amber", rarity: 1 },
+  { name: "Rimewisp", rarity: 1 }
 ].freeze
 
 seed_material_set(FLOWER_DATA, "Flower", "Ascension Material")
@@ -154,7 +164,7 @@ ENEMY_DROP_DATA = [
   { name: "HF Polygon Core", rarity: 4 },
   { name: "FF Polygon Core", rarity: 5 },
 
-  # Tidal Residuum Set
+  # Tidal Residuum Core Set
   { name: "LF Tidal Residuum Core", rarity: 2 },
   { name: "MF Tidal Residuum Core", rarity: 3 },
   { name: "HF Tidal Residuum Core", rarity: 4 },
@@ -170,7 +180,25 @@ ENEMY_DROP_DATA = [
   { name: "Mask of Constraint", rarity: 2 },
   { name: "Mask of Erosion", rarity: 3 },
   { name: "Mask of Distortion", rarity: 4 },
-  { name: "Mask of Insanity", rarity: 5 }
+  { name: "Mask of Insanity", rarity: 5 },
+
+  # Exoswarm Core Set
+  { name: "LF Exoswarm Core", rarity: 2 },
+  { name: "MF Exoswarm Core", rarity: 3 },
+  { name: "HF Exoswarm Core", rarity: 4 },
+  { name: "FF Exoswarm Core", rarity: 5 },
+
+  # Mech Core Set
+  { name: "LF Mech Core", rarity: 2 },
+  { name: "MF Mech Core", rarity: 3 },
+  { name: "HF Mech Core", rarity: 4 },
+  { name: "FF Mech Core", rarity: 5 },
+
+  # Exoswarm Pendant Set
+  { name: "Fractured Exoswarm Pendant", rarity: 2 },
+  { name: "Worn Exoswarm Pendant", rarity: 3 },
+  { name: "Chipped Exoswarm Pendant", rarity: 4 },
+  { name: "Intact Exoswarm Pendant", rarity: 5 }
 ].freeze
 
 seed_material_set(ENEMY_DROP_DATA, "EnemyDrop", "Weapon and Skill Material", grouped: true)
@@ -205,7 +233,37 @@ FORGERY_DROP_DATA = [
   { name: "Cadence Seed", rarity: 2 },
   { name: "Cadence Bud", rarity: 3 },
   { name: "Cadence Leaf", rarity: 4 },
-  { name: "Cadence Blossom", rarity: 5 }
+  { name: "Cadence Blossom", rarity: 5 },
+
+  # Polarizer Set
+  { name: "Broken Wing Polarizer", rarity: 2 },
+  { name: "Monowing Polarizer", rarity: 3 },
+  { name: "Polywing Polarizer", rarity: 4 },
+  { name: "Layered Wing Polarizer", rarity: 5 },
+
+  # Combustor Set
+  { name: "Incomplete Combustor", rarity: 2 },
+  { name: "Aftertune Combustor", rarity: 3 },
+  { name: "Remnant Combustor", rarity: 4 },
+  { name: "Reverb Combustor", rarity: 5 },
+
+  # String Set
+  { name: "Spliced String", rarity: 2 },
+  { name: "Broken String", rarity: 3 },
+  { name: "Solidified String", rarity: 4 },
+  { name: "Melodic String", rarity: 5 },
+
+  # Carved Crystal Set
+  { name: "LF Carved Crystal", rarity: 2 },
+  { name: "MF Carved Crystal", rarity: 3 },
+  { name: "HF Carved Crystal", rarity: 4 },
+  { name: "FF Carved Crystal", rarity: 5 },
+
+  # Waveworn Shard Set
+  { name: "LF Waveworn Shard", rarity: 2 },
+  { name: "MF Waveworn Shard", rarity: 3 },
+  { name: "HF Waveworn Shard", rarity: 4 },
+  { name: "FF Waveworn Shard", rarity: 5 }
 ].freeze
 
 seed_material_set(FORGERY_DROP_DATA, "ForgeryDrop", "Weapon and Skill Material", grouped: true)
@@ -214,10 +272,12 @@ seed_material_set(FORGERY_DROP_DATA, "ForgeryDrop", "Weapon and Skill Material",
 WEEKLY_BOSS_DROP_DATA = [
   { name: "Curse of the Abyss", rarity: 4 },
   { name: "Dreamless Feather", rarity: 4 },
+  { name: "Gold in Memory", rarity: 4 },
   { name: "Monument Bell", rarity: 4 },
   { name: "Sentinel's Dagger", rarity: 4 },
   { name: "The Netherworld's Stare", rarity: 4 },
   { name: "Unending Destruction", rarity: 4 },
+  { name: "Wave-Cutting Tooth", rarity: 4 },
   { name: "When Irises Bloom", rarity: 4 }
 ].freeze
 
