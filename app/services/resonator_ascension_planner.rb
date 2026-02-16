@@ -20,6 +20,13 @@ class ResonatorAscensionPlanner < ApplicationService
     intro_skill_node_2:           "Stat Bonus Tier 2"
   }
 
+  LAHAI_ROI_RESONATORS = [
+    "Aemeath",
+    "Luuk Herssen",
+    "Lynae",
+    "Mornye"
+  ].freeze
+
   def initialize(
     resonator:, current_level:, target_level:,
     current_ascension_rank:, target_ascension_rank:,
@@ -42,7 +49,12 @@ class ResonatorAscensionPlanner < ApplicationService
     validate_inputs!
 
     @materials_by_resonator = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
-    @materials_by_weapon_type = WeaponTypeMaterial.where(weapon_type: @resonator.weapon_type).to_a
+
+    region = LAHAI_ROI_RESONATORS.include?(@resonator.name) ? "lahai_roi" : "base"
+    @materials_by_weapon_type = WeaponTypeMaterial.where(
+      weapon_type: @resonator.weapon_type,
+      region: region
+    ).to_a
 
     calculate_leveling_costs
     calculate_ascension_costs

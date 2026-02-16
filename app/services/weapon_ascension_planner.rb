@@ -5,6 +5,18 @@ class WeaponAscensionPlanner < ApplicationService
     0 => 20, 1 => 40, 2 => 50, 3 => 60, 4 => 70, 5 => 80, 6 => 90
   }
 
+  LAHAI_ROI_WEAPONS = [
+    "Boson Astrolabe",
+    "Daybreaker's Spine",
+    "Everbright Polestar",
+    "Laser Shearer",
+    "Phasic Homogenizer",
+    "Pulsation Bracer",
+    "Radiance Cleaver",
+    "Spectrum Blaster",
+    "Starfield Calibrator"
+  ].freeze
+
   def initialize(
     weapon:, current_level:, target_level:,
     current_ascension_rank:, target_ascension_rank:
@@ -22,7 +34,12 @@ class WeaponAscensionPlanner < ApplicationService
     validate_inputs!
 
     @materials_by_weapon = WeaponMaterialMap.where(weapon_id: @weapon.id).to_a
-    @materials_by_weapon_type = WeaponTypeMaterial.where(weapon_type: @weapon.weapon_type).to_a
+
+    region = LAHAI_ROI_WEAPONS.include?(@weapon.name) ? "lahai_roi" : "base"
+    @materials_by_weapon_type = WeaponTypeMaterial.where(
+      weapon_type: @weapon.weapon_type,
+      region: region
+    ).to_a
 
     calculate_leveling_costs
     calculate_ascension_costs
