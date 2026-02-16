@@ -75,7 +75,7 @@
 }
 
 /* Rarity Colors */
-.rarity-5 { color: var(--ctp-peach); }
+.rarity-5 { color: var(--ctp-yellow); }
 .rarity-4 { color: var(--ctp-mauve); }
 .rarity-3 { color: var(--ctp-blue); }
 .rarity-2 { color: var(--ctp-green); }

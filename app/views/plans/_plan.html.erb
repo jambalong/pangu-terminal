@@ -2,9 +2,19 @@
 
 <div id="<%= dom_id(plan) %>" class="plan-card">
   <div class="plan-card-header">
-    <h3 class="plan-card-title">
-      <%= plan.plan_data.dig("input", "subject_name") %>
-    </h3>
+    <div class="plan-card-subject">
+      <div class="plan-card-portrait">
+        <% if plan.subject.image_url.present? %>
+          <%= image_tag(plan.subject.image_url, alt: plan.subject.name) %>
+        <% else %>
+          <span class="portrait-initials"><%= plan.subject.name[0..1].upcase %></span>
+        <% end %>
+      </div>
+
+      <h3 class="plan-card-title">
+        <%= plan.plan_data.dig("input", "subject_name") %>
+      </h3>
+    </div>
 
     <div class="plan-actions">
       <%= link_to "Edit",

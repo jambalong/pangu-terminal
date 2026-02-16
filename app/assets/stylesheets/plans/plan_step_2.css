@@ -89,7 +89,7 @@
   background-color: var(--ctp-surface0);
 }
 
-.subject-icon {
+/* .subject-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,7 +99,7 @@
   background-color: var(--ctp-mantle);
   font-size: 1.25rem;
   transition: all 0.2s ease;
-}
+} */
 
 .subject-info {
   display: flex;

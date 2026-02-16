@@ -31,7 +31,7 @@
 .selection-icon {
   width: 4rem;
   height: 4rem;
-  background-color: var(--accent-color);
+  /* background-color: var(--accent-color); */
   border-radius: 9999px; /* rounded-full */
   display: flex;
   align-items: center;

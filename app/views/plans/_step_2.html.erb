@@ -39,8 +39,12 @@
             class: "subject-item" do %>
 
           <div class="subject-info">
-            <div class="subject-icon">
-              <%= subject_type == "Resonator" ? "👤" : "⚔️" %>
+            <div class="plan-card-portrait">
+              <% if subject.image_url.present? %>
+                <%= image_tag(subject.image_url, alt: subject.name) %>
+              <% else %>
+                <span class="portrait-initials"><%= subject.name[0..1].upcase %></span>
+              <% end %>
             </div>
             <span
               class="subject-name <%= subject.rarity == 5 ? 'rarity-5' : 'rarity-4' %>"

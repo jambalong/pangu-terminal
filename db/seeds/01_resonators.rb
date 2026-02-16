@@ -88,11 +88,17 @@ RESONATOR_DATA = {
 RESONATOR_DATA.each do |rarity, elements|
   elements.each do |element, resonators|
     resonators.each do |data|
+      filename = data[:name].downcase
+                        .gsub(/['"#&]/, '')
+                        .strip
+                        .gsub(/\s+/, '-')
+
       resonator = Resonator.find_or_initialize_by(name: data[:name])
       resonator.update!(
         rarity: rarity,
         element: element,
-        weapon_type: data[:weapon_type]
+        weapon_type: data[:weapon_type],
+        image_url: "/images/resonators/#{filename}.png"
       )
 
       # e.g. "Xiangli Yao" => xiangli_yao
@@ -100,13 +106,8 @@ RESONATOR_DATA.each do |rarity, elements|
       # e.g. "Lux & Umbra" => :lux_umbra
       # e.g. "Gauntlets#21D" => :gauntlets21d
       # e.g. "Loong's Pearl" => :loongs_pearl
-      lookup_key = data[:name].downcase
-                        .gsub(/['#&]/, '')
-                        .strip
-                        .gsub('-', '_')
-                        .gsub(/\s+/, '_')
-                        .to_sym
-      $SEED_DATA[lookup_key] = resonator
+      lookup_key = filename.gsub('-', '_')
+      $SEED_DATA[lookup_key.to_sym] = resonator
     end
   end
 end

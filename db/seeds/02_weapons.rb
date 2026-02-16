@@ -124,10 +124,16 @@ WEAPON_DATA = {
 WEAPON_DATA.each do | weapon_type, rarities |
   rarities.each do | rarity, names |
     names.each do | name |
+      filename = name.downcase
+                    .gsub(/['"#&]/, '')
+                    .strip
+                    .gsub(/\s+/, '-')
+
       weapon = Weapon.find_or_initialize_by(name: name)
       weapon.update!(
         weapon_type: weapon_type,
-        rarity: rarity
+        rarity: rarity,
+        image_url: "/images/weapons/#{filename}.png"
       )
 
       # e.g. "Xiangli Yao" => xiangli_yao
@@ -135,13 +141,8 @@ WEAPON_DATA.each do | weapon_type, rarities |
       # e.g. "Lux & Umbra" => :lux_umbra
       # e.g. "Gauntlets#21D" => :gauntlets21d
       # e.g. "Loong's Pearl" => :loongs_pearl
-      lookup_key = name.downcase
-                      .gsub(/['#&]/, '')
-                      .strip
-                      .gsub('-', '_')
-                      .gsub(/\s+/, '_')
-                      .to_sym
-      $SEED_DATA[lookup_key] = weapon
+      lookup_key = filename.gsub('-', '_')
+      $SEED_DATA[lookup_key.to_sym] = weapon
     end
   end
 end

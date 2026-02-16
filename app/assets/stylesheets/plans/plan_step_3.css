@@ -6,8 +6,11 @@
 }
 
 .config-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-shrink: 0;
-  margin: 1rem 1rem 0rem;
+  margin: 1rem 1rem 0.25rem;
 }
 
 .config-title {
@@ -18,6 +21,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.25rem;
+  gap: 1rem;
 }
 
 .config-subtitle {
@@ -25,4 +29,5 @@
   color: var(--ctp-overlay1);
   letter-spacing: 0.1em;
   font-weight: 600;
+  padding: 0rem 1rem;
 }
