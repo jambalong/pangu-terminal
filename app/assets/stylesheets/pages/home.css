@@ -11,7 +11,7 @@
   grid-template-columns: 1fr;
   gap: 3rem;
   align-items: center;
-  padding: 3rem 0 4rem 0;
+  padding: 2rem 0 4rem 0;
   margin-bottom: 4rem;
 }
 
@@ -535,7 +535,7 @@
   }
 
   .hero-section {
-    padding: 4rem 0 5rem 0;
+    padding: 3rem 0 5rem 0;
     gap: 4rem;
   }
 
@@ -563,7 +563,7 @@
   .hero-section {
     grid-template-columns: 1fr 1fr;
     gap: 5rem;
-    padding: 5rem 0 6rem 0;
+    padding: 4rem 0 6rem 0;
   }
 
   .hero-content {
