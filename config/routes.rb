@@ -46,6 +46,8 @@ Rails.application.routes.draw do
     resources :inventory_items, only: [ :index, :edit, :update ], path: "inventory"
   end
 
+  resources :api_keys, only: [ :index, :create, :destroy ]
+
   # Defines the root path route ("/")
   root "pages#home"
 end
