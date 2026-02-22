@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_22_085449) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_22_190350) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "name", null: false
     t.string "token", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
@@ -331,6 +332,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_085449) do
     t.string "weapon_type", null: false
   end
 
+  add_foreign_key "api_keys", "users"
   add_foreign_key "inventory_items", "materials"
   add_foreign_key "inventory_items", "users"
   add_foreign_key "plans", "users"
