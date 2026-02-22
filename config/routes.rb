@@ -48,6 +48,13 @@ Rails.application.routes.draw do
 
   resources :api_keys, only: [ :index, :create, :destroy ]
 
+  # API routes
+  namespace :api do
+    namespace :v1 do
+      resources :plans, only: [ :index ]
+    end
+  end
+
   # Defines the root path route ("/")
   root "pages#home"
 end
