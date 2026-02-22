@@ -1,6 +1,6 @@
 .materials-accordion {
-  background-color: var(--ctp-base);
-  border: 1px solid var(--ctp-surface0);
+  background-color: var(--ctp-mantle);
+  /* border: 1px solid var(--ctp-surface0); */
   border-radius: 0.5rem;
   overflow: hidden;
   margin-bottom: 1.5rem;
@@ -34,7 +34,7 @@
 
 #materials-summary-content {
   padding: 1rem;
-  border-top: 1px solid var(--ctp-surface0);
+  border-top: 1px solid var(--ctp-base);
 }
 
 .material-list {

@@ -3,7 +3,7 @@
   top: 0;
   width: 100%;
   z-index: 1100;
-  background-color: rgba(30, 30, 46, 0.95);
+  background-color: var(--ctp-base);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--ctp-surface0);
