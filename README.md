@@ -2,7 +2,7 @@
 
 ## A Resource Planner for Wuthering Waves
 
-**Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next—accounting for synthesis chains so you don't waste time grinding materials you can craft.
+**Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next accounting for synthesis chains so you don't waste time grinding materials you can craft.
 
 **Status:** MVP complete with planning, inventory tracking, and synthesis detection. Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 
@@ -30,7 +30,7 @@ Players manually calculate material costs across multiple upgrade paths (levels,
 
 Implemented a Service-based planner that:
 - Validates upgrade ranges against game mechanics (e.g., can't reach level 50 at ascension rank 0)
-- Queries cost tables for the delta range (current → target)
+- Queries cost tables for the delta range (current --> target)
 - Resolves material types to material IDs via mapping tables
 - Returns a structured material requirement hash cached in JSONB
 
@@ -58,7 +58,7 @@ By separating game rules (stored in cost tables) from business logic (planner se
 ---
 
 ### 2. Inventory Management & Synthesis
-Players own materials across 5 rarity tiers. Lower tiers can be synthesized (3:1) into higher tiers, but players can't easily see if they have "enough" when accounting for conversions.
+Players own materials across 5 rarity tiers. Synthesizeable lower tiers can be synthesized (3:1) into higher tiers, but players can't easily see if they have "enough" when accounting for conversions.
 
 It features a Synthesis Service that:
 - Reconciles owned inventory against plan requirements
@@ -213,7 +213,7 @@ end
 <% end %>
 ```
 
-This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so synthesis opportunities reflect the new inventory state. All without a page reload—fast, Rails-native reactivity.
+This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so synthesis opportunities reflect the new inventory state. All without a page reload.
 
 ---
 
