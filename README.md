@@ -1,6 +1,4 @@
-# A Resource Optimization Platform for Wuthering Waves
-
-## A Resource Planner for Wuthering Waves
+# Wuthering Waves Resource Optimization Platform
 
 **Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next accounting for synthesis chains so you don't waste time grinding materials you can craft.
 
