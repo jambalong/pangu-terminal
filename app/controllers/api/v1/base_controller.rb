@@ -1,6 +1,8 @@
 module Api
   module V1
     class BaseController < ActionController::API
+      include ActionController::HttpAuthentication::Token::ControllerMethods
+
       before_action :authenticate_api_key!
 
       rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
