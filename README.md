@@ -101,17 +101,11 @@ Two views are supported:
 
 **Technical Highlights:**
 ```ruby
-# Aggregation method
-def self.fetch_materials_summary(plans)
-  totals = {}
-  plans.each do |plan|
-    materials = plan.plan_data.dig("output") || {}
-    materials.each do |material_id, quantity|
-      totals[material_id.to_i] ||= 0
-      totals[material_id.to_i] += quantity
-    end
+# Accumulate requirements across all plans
+plans.each_with_object({}) do |plan, totals|
+  plan.plan_data.dig("output").each do |material_id, qty|
+    totals[material_id.to_i] = (totals[material_id.to_i] || 0) + qty
   end
-  totals
 end
 
 # Plan filtering in controller
@@ -226,12 +220,6 @@ Characters and weapons have different upgrade paths but share identical plan CRU
 ### Guest User System
 Unauthenticated users can try the planner via secure UUID tokens stored in cookies:
 ```ruby
-def set_guest_token
-  if cookies.permanent[:guest_token].blank?
-    cookies.permanent[:guest_token] = SecureRandom.uuid
-  end
-end
-
 # Plan validation
 validate :must_have_owner
 def must_have_owner
@@ -248,21 +236,9 @@ Inventory edits trigger Turbo Stream responses that update the edited item plus 
 
 **Controller:**
 ```ruby
-def update
-  if @inventory_item.update(inventory_item_params)
-    load_inventory_and_plans
-    @selected_plan = @plans.find_by(id: params[:plan_id]) if params[:plan_id].present?
-    compute_synthesis_data
-    @related_items = current_user.inventory_items.joins(:material)
-      .where(materials: { item_group_id: @inventory_item.material.item_group_id })
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to inventory_items_path }
-    end
-  else
-    render :edit, status: :unprocessable_entity
-  end
-end
+# Fetch entire synthesis family for re-render
+@related_items = current_user.inventory_items.joins(:material)
+  .where(materials: { item_group_id: @inventory_item.material.item_group_id })
 ```
 
 **View (update.turbo_stream.erb):**
