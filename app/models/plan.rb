@@ -15,19 +15,11 @@ class Plan < ApplicationRecord
   scope :subject_ids_for_type, ->(type) { where(subject_type: type).pluck(:subject_id) }
 
   def self.fetch_materials_summary(plans)
-    totals = {}
-
-    plans.each do |plan|
-      materials = plan.plan_data.dig("output") || {}
-
-      materials.each do |material_id, quantity|
-        key = material_id.to_i
-        totals[key] ||= 0
-        totals[key] += quantity
+    plans.each_with_object({}) do |plan, totals|
+      plan.plan_data.dig("output").each do |material_id, qty|
+        totals[material_id.to_i] = (totals[material_id.to_i] || 0) + qty
       end
     end
-
-    totals
   end
 
   private
