@@ -4,7 +4,9 @@
 
 **Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next accounting for synthesis chains so you don't waste time grinding materials you can craft.
 
-**Status:** MVP complete with planning, inventory tracking, and synthesis detection. Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
+**Status:** MVP complete with planning, inventory tracking, synthesis detection, and a REST API.
+
+Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 
 ## What This Project Showcases
 
@@ -13,7 +15,12 @@
 - Service objects extracting complex business logic (ResonatorAscensionPlanner, SynthesisService)
 - JSONB caching for flexible plan data storage and query optimization
 - Guest authentication system via secure tokens (no Devise required for trials)
-- Turbo Streams for real-time inventory updates without full-page reloads
+- Turbo Streams for real-time inventory updates without full page reloads
+
+### REST API
+- Token-based authentication via Bearer header
+- RESTful endpoints exposing core business logic as JSON
+- Integration tests verifying authentication, authorization, and response contracts
 
 ### Production-Ready Deployment
 - Kamal 2 containerized deployment to DigitalOcean
@@ -21,14 +28,12 @@
 - Docker-compose local development environment
 - Automated database migrations and seeding
 
----
-
 ## Feature Overview
 
-### 1. Ascension Planner
-Players manually calculate material costs across multiple upgrade paths (levels, ascension ranks, skills, Forte Nodes).
+### Ascension Planner
+Players manually calculate material costs across multiple upgrade paths (levels, ascension ranks, skills, forte nodes).
 
-Implemented a Service-based planner that:
+Implemented a service-based planner that:
 - Validates upgrade ranges against game mechanics (e.g., can't reach level 50 at ascension rank 0)
 - Queries cost tables for the delta range (current --> target)
 - Resolves material types to material IDs via mapping tables
@@ -42,7 +47,7 @@ Plan
   ├── plan_data (JSONB)
   │   ├── input: { current_level, target_level, ... }
   │   └── output: { material_id => quantity }
-  └── guest_token (for unauthenticated users)
+  └── guest_token # (for unauthenticated users)
 
 # Service layer handles complexity
 ResonatorAscensionPlanner.new(
@@ -57,13 +62,13 @@ By separating game rules (stored in cost tables) from business logic (planner se
 
 ---
 
-### 2. Inventory Management & Synthesis
-Players own materials across 5 rarity tiers. Synthesizeable lower tiers can be synthesized (3:1) into higher tiers, but players can't easily see if they have "enough" when accounting for conversions.
+### Inventory Management & Synthesis
+Players own materials across 5 rarity tiers. Lower tiers can be synthesized (3:1) into higher tiers, but players can't easily see if they have "enough" when accounting for conversions.
 
 It features a Synthesis Service that:
 - Reconciles owned inventory against plan requirements
-- Detects **EXP potion equivalence** (e.g., 20 Basic potions = 2 Premium potions via exp_value)
-- Identifies **synthesis opportunities** (e.g., "You have 18 surplus Cadence Seed -> can craft 6 Cadence Bud")
+- Detects EXP potion equivalence (e.g., 20 Basic potions = 2 Premium potions via exp_value)
+- Identifies synthesis opportunities (e.g., "You have 18 surplus Cadence Seed -> can craft 6 Cadence Bud")
 - Returns detailed satisfaction data with visual indicators
 
 **Technical Highlights:**
@@ -88,13 +93,13 @@ This solves the core "resource paradox" where players have data but can't act on
 
 ---
 
-### 3. Multi-Plan Aggregation & Filtering
+### Plan Aggregation & Filtering
 Users create multiple plans (Jinhsi + Jiyan + Yinlin), and need to see material requirements both aggregated (total across all plans) and filtered (single plan focus).
 
-It allows aggregation logic + plan filtering with two views:
+Two views are supported:
 
 - **Planner Dashboard:** Shows total materials needed across all active plans
-- **Inventory Page:** Filtered view (single plan) or aggregated view (all plans), with plan dropdown selector
+- **Inventory Page:** Filtered view (single plan) or aggregated view (all plans), with  a plan dropdown selector
 
 **Technical Highlights:**
 ```ruby
@@ -112,14 +117,76 @@ def self.fetch_materials_summary(plans)
 end
 
 # Plan filtering in controller
-@requirements = params[:plan_id].present? 
-  ? Plan.find(params[:plan_id]).plan_data["output"]
-  : Plan.fetch_materials_summary(user_plans)
+if @selected_plan.present?
+  requirements_hash = (@selected_plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
+else
+  requirements_hash = Plan.fetch_materials_summary(@plans)
+end
 ```
 
-Flexibility for both "big picture" planning and focused farming sessions.
+## API
 
----
+Pangu Terminal exposes a versioned REST API for developer access to plans and inventory data.
+
+### Authentication
+
+All endpoints require a bearer token in the Authorization header.
+
+```
+Authorization: Bearer <your_api_token>
+```
+
+Tokens are issued per user via API keys tied to a user account. (Frontend UI work in progress)
+
+### Endpoint
+
+#### GET /api/v1/plans
+
+Returns all plans belonging to the authenticated user.
+
+
+```bash
+curl https://panguterminal.ambalong.dev/api/v1/plans \
+  -H "Authorization: Bearer <token>"
+```
+
+**Response 200**
+```json
+[
+  {
+    "id": 1,
+    "subject_name": "Kumokiri",
+    "subject_type": "Weapon",
+    "configuration": {
+      "current_level": 1,
+      "target_level": 20,
+      "current_ascension_rank": 0,
+      "target_ascension_rank": 1
+    },
+    "requirements": {
+      "shell_credit": 25480,
+      "basic_resonance_potion": 38,
+      "lf_howler_core": 6
+    },
+    "created_at": "2026-02-16T06:41:08.000Z",
+    "updated_at": "2026-02-16T06:41:08.000Z"
+  }
+]
+```
+
+### Error Responses
+
+| Status | Meaning | Response |
+| --- | --- | --- |
+| 401 | Missing, invalid, or revoked token | `{ "error": "Unauthorized" }` |
+| 400 | Malformed request | `{ "error": "<param message>" }` |
+| 404 | Record not found | `{ "error": "Record not found" }` |
+
+### Notes
+
+- Material IDs in `plan_data` are resolved to snake_case material names before responding.
+- `subject_id` and `user_id` are intentionally omitted (internal implementation details).
+- `guest_token` is intentionally omitted (sensitive internal field).
 
 ## Architecture & Design Decisions
 
@@ -140,7 +207,9 @@ plan_data: {
 }
 ```
 
-**Trade-off:** Harder to query individual plan attributes, but plans are write-once-read-many, so caching is ideal. Avoids normalization overhead.
+Trade-off: a normalized plan_materials table would make individual materials queryable, 
+but since requirements are computed once and read as a whole, JSONB caching avoids 
+unnecessary schema complexity.
 
 ### Polymorphic Associations
 Plans can belong to either a Resonator or Weapon via polymorphic association:
@@ -154,7 +223,7 @@ class Resonator < ApplicationRecord
 end
 ```
 
-**Why?** Characters and weapons have different upgrade paths, but share identical plan CRUD operations.
+Characters and weapons have different upgrade paths but share identical plan CRUD operations.
 
 ### Guest User System
 Unauthenticated users can try the planner via secure UUID tokens stored in cookies:
@@ -174,7 +243,7 @@ def must_have_owner
 end
 ```
 
-It lowers friction for guest users; future migration path to registered accounts.
+It lowers friction for guest users with a future migration path to registered accounts.
 
 ### Turbo Streams for Real-Time Updates
 Inventory edits trigger Turbo Stream responses that update the edited item plus all related items in the synthesis family, reflecting the recalculated synthesis opportunities instantly:
@@ -213,9 +282,7 @@ end
 <% end %>
 ```
 
-This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so synthesis opportunities reflect the new inventory state. All without a page reload.
-
----
+This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so synthesis opportunities reflect the new inventory state, all without a page reload.
 
 ## Technology Stack
 
@@ -226,8 +293,6 @@ This updates the edited item immediately, then recomputes synthesis for the enti
 | Frontend | Hotwire (Turbo + Stimulus) |
 | Deployment | Docker + Kamal 2 |
 | Testing | Minitest |
-
----
 
 ## Getting Started
 
@@ -266,6 +331,12 @@ This updates the edited item immediately, then recomputes synthesis for the enti
 
    The app will be available at `http://localhost:3000`.
 
+### Running Tests
+
+```bash
+bin/rails test
+```
+
 ### Project Structure
 ```
 app/
@@ -277,11 +348,15 @@ app/
 │   ├── weapon.rb            # Weapon model
 │   └── user.rb              # User authentication (Devise)
 ├── controllers/
+│   ├── api/
+│   │   └── v1/
+│   │       ├── base_controller.rb   # Auth + error handling
+│   │       └── plans_controller.rb  # Plans API endpoint
 │   ├── plans_controller.rb
 │   ├── inventory_controller.rb
 │   └── ...
 ├── services/
-│   ├── resonator_ascension_planner.rb  # Char cost calculation
+│   ├── resonator_ascension_planner.rb  # Resonator cost calculation
 │   ├── weapon_ascension_planner.rb     # Weapon cost calculation
 │   └── synthesis_service.rb            # Inventory reconciliation
 ├── views/
@@ -297,7 +372,11 @@ db/
 
 test/
 ├── models/
-└── services/
+├── services/
+└── controllers/
+    └── api/
+        └── v1/
+            └── plans_controller_test.rb
 
 docker-compose.yml
 Kamal configuration files
@@ -310,7 +389,7 @@ Kamal configuration files
 The production version of this application is currently deployed via **Kamal 2** to a **DigitalOcean** droplet.
 
 * **Public IP Address:** `http://panguterminal.ambalong.dev`
-* **Deployment Tooling:** The infrastructure is fully managed by **Kamal 2**, demonstrating automated Docker image building, secure environment variable injection (`.kamal/secrets`), and container orchestration.
+* **Deployment Tooling:** The infrastructure is fully managed by **Kamal 2**, with automated Docker image building, secure environment variable injection (`.kamal/secrets`), and container orchestration.
 
 ---
 
