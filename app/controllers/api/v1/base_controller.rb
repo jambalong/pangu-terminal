@@ -14,7 +14,9 @@ module Api
         authenticate_with_http_token do |token, _options|
           api_key = ApiKey.find_by(token: token)
           @current_user = api_key&.user
-        end || handle_unauthorized
+        end
+
+        handle_unauthorized unless @current_user
       end
 
       def handle_unauthorized
