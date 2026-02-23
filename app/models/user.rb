@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :api_key, dependent: :destroy
+  has_many :api_keys, dependent: :destroy
   has_many :plans, dependent: :destroy
   has_many :inventory_items, dependent: :destroy
   has_many :materials, through: :inventory_items
