@@ -80,9 +80,6 @@ SynthesisService.new(inventory, requirements).reconcile_inventory
 
 # Synthesis opportunity in output
 synthesis_opportunity: {
-  source_material_id: 22,
-  source_name: "Cadence Seed",
-  surplus_available: 18,
   can_convert: 6  # (18 / 3).floor
 }
 ```

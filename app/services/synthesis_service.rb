@@ -90,10 +90,6 @@ class SynthesisService
     return nil if can_convert == 0
 
     {
-      can_supplement: true,
-      source_material_id: lower_tier.id,
-      source_name: lower_tier.name,
-      surplus_available: lower_tier_surplus,
       can_convert: can_convert
     }
   end

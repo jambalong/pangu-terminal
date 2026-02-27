@@ -45,7 +45,7 @@
         <% percent = (needed > 0) ? ((satisfied_qty / needed.to_f) * 100).round.clamp(0, 100) : 0 %>
 
         <%# Determine color class based on status %>
-        <% status_class = satisfied_qty >= needed ? 'sufficient' : 'deficit' %>
+        <% status_class = reconciliation[:satisfied] ? 'sufficient' : 'deficit' %>
         
         <div class="progress-bar">
           <div class="progress-fill <%= status_class %>" style="width: <%= percent %>%"></div>
