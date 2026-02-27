@@ -101,7 +101,7 @@ class SynthesisService
   def synthesizable?(material)
     return false unless material
 
-    material.category.in?("Weapon and Skill Material") &&
+    material.category == "Weapon and Skill Material" &&
       material.material_type.in?(%w[EnemyDrop ForgeryDrop])
   end
 
