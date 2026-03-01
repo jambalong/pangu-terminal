@@ -1,4 +1,4 @@
-<header class="navbar-main" data-controller="mobile-menu">
+<header class="navbar-main" data-controller="navbar">
   <div class="navbar-container">
     <% if user_signed_in? %>
       <%= link_to authenticated_root_path, data: { turbo: false }, class: "brand-logo" do %>
@@ -11,47 +11,33 @@
     <% end %>
 
     <button class="hamburger-btn" 
-            data-action="click->mobile-menu#toggle" 
-            data-mobile-menu-target="icon"
+            data-action="click->navbar#toggle" 
+            data-navbar-target="icon"
             aria-label="Toggle menu">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
-    <div class="navbar-content" data-mobile-menu-target="menu">
+    <div class="navbar-content" data-navbar-target="menu">
       <nav class="navbar-links">
-        <% if user_signed_in? %>
-          <%= link_to "Planner", plans_path, 
-              data: { 
-                turbo_frame: "main_content", 
-                turbo_action: "advance",
-                action: "click->mobile-menu#close"
-              }, 
-              class: "nav-link nav-plan" %>
-          <%= link_to "Inventory", inventory_items_path, 
-              data: { 
-                turbo_frame: "main_content", 
-                turbo_action: "advance",
-                action: "click->mobile-menu#close"
-              }, 
-              class: "nav-link nav-inventory" %>
-        <% else %>
-          <%= link_to "Planner", plans_path, 
-              data: { 
-                turbo_frame: "main_content", 
-                turbo_action: "advance",
-                action: "click->mobile-menu#close"
-              }, 
-              class: "nav-link nav-plan" %>
-          <%= link_to "Inventory", inventory_items_path, 
-              data: { 
-                turbo_frame: "main_content", 
-                turbo: false,
-                action: "click->mobile-menu#close"
-              }, 
-              class: "nav-link nav-inventory" %>
-        <% end %>
+        <%= link_to "Planner", plans_path, 
+            data: { 
+              turbo_frame: "main_content", 
+              turbo_action: "advance",
+              action: "click->navbar#close",
+              navbar_target: "planner"
+            }, 
+            class: "nav-link nav-plan" %>
+        <%= link_to "Inventory", inventory_items_path, 
+            data: { 
+              turbo_frame: "main_content", 
+              turbo_action: "advance",
+              turbo: (false unless user_signed_in?),
+              action: "click->navbar#close",
+              navbar_target: "inventory"
+            }, 
+            class: "nav-link nav-inventory" %>
       </nav>
 
       <div class="navbar-auths">
@@ -61,7 +47,8 @@
               data: { 
                 turbo_frame: "main_content", 
                 turbo_action: "replace",
-                action: "click->mobile-menu#close"
+                action: "click->navbar#close",
+                navbar_target: "dashboard"
               },
               class: "user-badge nav-dashboard" %>
           <%= link_to "Sign Out",

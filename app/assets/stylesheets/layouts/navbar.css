@@ -108,10 +108,11 @@
 .user-badge {
   font-family: var(--font-mono);
   font-size: 1rem;
-  color: var(--ctp-mauve);
+  color: var(--ctp-subtext0);
   text-decoration: none;
   padding: 0.5rem 0.75rem;
   transition: all 0.2s ease;
+  border-radius: 0.5rem;
 }
 
 .user-badge::before {
@@ -125,25 +126,13 @@
 }
 
 /* Active states */
-.nav-link.active-state, 
+.nav-link.active-state {
+  color: var(--ctp-mauve);
+  background-color: var(--ctp-mantle);
+}
+
 .user-badge.active-state {
   color: var(--ctp-mauve);
-  background-color: var(--ctp-mantle);
-}
-
-/* body:has(turbo-frame#main_content[src$="/app"]) .nav-dashboard,
-body:has(turbo-frame#main_content[src$="/app/"]) .nav-dashboard {
-  color: var(--ctp-mauve);
-} */
-
-body:has(turbo-frame#main_content[src*="/plan"]) .nav-plan {
-  color: var(--ctp-mauve);
-  background-color: var(--ctp-mantle);
-}
-
-body:has(turbo-frame#main_content[src*="/inventory"]) .nav-inventory {
-  color: var(--ctp-mauve);
-  background-color: var(--ctp-mantle);
 }
 
 /* Hamburger button - hidden by default */
@@ -252,23 +241,6 @@ body:has(turbo-frame#main_content[src*="/inventory"]) .nav-inventory {
     width: calc(100% - 3rem);
     margin: 0 1.5rem;
     text-align: center;
-  }
-
-  /* Mobile active states */
-  /* body:has(turbo-frame#main_content[src$="/app"]) .nav-dashboard,
-  body:has(turbo-frame#main_content[src$="/app/"]) .nav-dashboard {
-    color: var(--ctp-mauve);
-    background-color: var(--ctp-surface0);
-  } */
-
-  body:has(turbo-frame#main_content[src*="/plan"]) .nav-plan {
-    color: var(--ctp-mauve);
-    background-color: var(--ctp-surface0);
-  }
-
-  body:has(turbo-frame#main_content[src*="/inventory"]) .nav-inventory {
-    color: var(--ctp-mauve);
-    background-color: var(--ctp-surface0);
   }
 }
 
