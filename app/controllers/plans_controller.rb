@@ -109,10 +109,7 @@ class PlansController < ApplicationController
   private
 
   def set_guest_token
-    if cookies.permanent[:guest_token].blank?
-      cookies.permanent[:guest_token] = SecureRandom.uuid
-    end
-
+    cookies.permanent[:guest_token] ||= SecureRandom.uuid
     @guest_token = cookies.permanent[:guest_token]
   end
 
