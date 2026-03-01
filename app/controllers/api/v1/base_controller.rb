@@ -13,6 +13,7 @@ module Api
       def authenticate_api_key!
         authenticate_with_http_token do |token, _options|
           api_key = ApiKey.find_by(token: Digest::SHA256.digest(token))
+          api_key&.touch(:last_used_at)
           @current_user = api_key&.user
         end
 
