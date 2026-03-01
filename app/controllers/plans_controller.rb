@@ -118,10 +118,7 @@ class PlansController < ApplicationController
   end
 
   def authorize_owner!
-    is_user_owner = user_signed_in? && @plan.user_id == current_user.id
-    is_guest_owner  = @plan.user_id.nil? && @plan.guest_token == @guest_token
-
-    unless is_user_owner || is_guest_owner
+    unless @plan.owned_by?(user_id: current_user, guest_token: @guest_token)
       redirect_to plans_path, alert: "You don't have permission to modify this plan."
     end
   end
