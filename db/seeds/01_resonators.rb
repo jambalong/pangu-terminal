@@ -54,7 +54,7 @@ RESONATOR_DATA = {
     ],
     "Spectro" => [
       { name: "Jinhsi", weapon_type: "Rectifier" },
-      { name: "Luuk Herssen", weapon_type: "Gauntlet" },
+      { name: "Luuk Herssen", weapon_type: "Gauntlets" },
       { name: "Lynae", weapon_type: "Pistols" },
       { name: "Phoebe", weapon_type: "Rectifier" },
       { name: "Rover-Spectro", weapon_type: "Sword" },
