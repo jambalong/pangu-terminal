@@ -103,13 +103,13 @@
   background-color: var(--ctp-surface1);
 }
 
-.btn-danger {
+.btn-delete {
   background-color: var(--ctp-red);
   color: var(--ctp-base);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.btn-danger:hover {
+.btn-delete:hover {
   background-color: var(--ctp-darkred);
   color: #ffffff;
 }
