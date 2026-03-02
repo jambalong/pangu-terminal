@@ -13,13 +13,18 @@ class MaterialTest < ActiveSupport::TestCase
   end
 
   test "snake_case_name strips special characters" do
-    material = Material.new(name: "Lenny's Choice")
-    assert_equal "lennys_choice", material.snake_case_name
+    material = Material.new(name: "The Netherworld's Stare")
+    assert_equal "the_netherworlds_stare", material.snake_case_name
+  end
+
+  test "snake_case_name replaces hyphens with underscores" do
+    material = Material.new(name: "Golden-Dissolving Feather")
+    assert_equal "golden_dissolving_feather", material.snake_case_name
   end
 
   test "snake_case_name handles multiple spaces" do
-    material = Material.new(name: "Some  Material")
-    assert_equal "some_material", material.snake_case_name
+    material = Material.new(name: "Cadence  Seed")
+    assert_equal "cadence_seed", material.snake_case_name
   end
 
   test "snake_case_name strips leading and trailing whitespace" do

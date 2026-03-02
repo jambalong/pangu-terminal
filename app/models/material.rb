@@ -32,6 +32,6 @@ class Material < ApplicationRecord
   }
 
   def snake_case_name
-    name.downcase.gsub(/['"#&]/, "").strip.gsub(/\s+/, "_")
+    name.downcase.gsub(/['"#&]/, "").strip.gsub(/[-\s]+/, "_")
   end
 end
