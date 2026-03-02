@@ -34,9 +34,8 @@ Rails.application.routes.draw do
     end
 
     resources :inventory_items, only: [ :index, :edit, :update ], path: "inventory"
+    resources :api_keys, only: [ :index, :create, :destroy ]
   end
-
-  resources :api_keys, only: [ :index, :create, :destroy ]
 
   # API routes
   namespace :api do
