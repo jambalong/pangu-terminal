@@ -21,7 +21,7 @@ module Api
           materials_lookup = Material.index_by_ids(plan.plan_data.dig("output").keys.map(&:to_i))
           render json: PlanSerializer.new(plan, materials_lookup).to_h, status: :created
         else
-          render json: { errors: form.errors.full_messages }, status: unprocessable_entity
+          render json: { errors: form.errors.full_messages }, status: :unprocessable_entity
         end
 
       rescue ResonatorAscensionPlanner::ValidationError,
