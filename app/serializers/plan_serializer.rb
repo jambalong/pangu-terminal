@@ -87,9 +87,7 @@ class PlanSerializer
       material = @materials_lookup[material_id.to_i]
       next unless material
 
-      key = material.name.downcase.gsub(/['"#&]/, "").strip.gsub(/\s+/, "_").to_sym
-
-      result[key] = quantity
+      result[material.snake_case_name] = quantity
     end
   end
 end
