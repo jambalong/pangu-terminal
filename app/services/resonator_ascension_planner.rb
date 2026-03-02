@@ -69,14 +69,6 @@ class ResonatorAscensionPlanner < ApplicationService
     raise
   end
 
-  def self.shell_credit_id
-    @shell_credit_id ||= Material.find_by!(name: "Shell Credit").id
-  end
-
-  def self.basic_potion
-    @basic_potion ||= Material.find_by!(name: "Basic Resonance Potion")
-  end
-
   private
 
   def validate_inputs!
@@ -139,9 +131,15 @@ class ResonatorAscensionPlanner < ApplicationService
 
   def validate_level_within_cap!(label, level, rank, errors)
     max = ASCENSION_LEVEL_CAPS[rank]
-    if max.nil? || level > max
+    if max.nil?
+      errors << "#{label} level #{level} exceeds max for rank #{rank} (#{max})."
+      return
+    end
+
+    if level > max
       errors << "#{label} level #{level} exceeds max for rank #{rank} (#{max})."
     end
+
     if rank > 0
       min = ASCENSION_LEVEL_CAPS[rank - 1]
       if level < min
@@ -171,11 +169,11 @@ class ResonatorAscensionPlanner < ApplicationService
   end
 
   def shell_credit_id
-    self.class.shell_credit_id
+    @shell_credit_id ||= Material.find_by!(name: "Shell Credit").id
   end
 
   def basic_potion
-    self.class.basic_potion
+    @basic_potion ||= Material.find_by!(name: "Basic Resonance Potion")
   end
 
   def add_materials(cost_records)

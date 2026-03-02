@@ -52,79 +52,75 @@ class WeaponAscensionPlanner < ApplicationService
     raise
   end
 
-  def self.shell_credit_id
-    @shell_credit_id ||= Material.find_by(name: "Shell Credit").id
-  end
-
-  def self.basic_core
-    @basic_core ||= Material.find_by(name: "Basic Energy Core")
-  end
-
   private
 
   def validate_inputs!
     errors = []
 
-    # this checks for a zero-change plan
-    if @current_level == @target_level &&
-       @current_ascension_rank == @target_ascension_rank
-      errors << "At least one target value must be different from the corresponding current value to generate a plan."
-    end
-
-    # this checks for proper level range
-    unless @current_level.between?(1, 90)
-      errors << "Current level (#{@current_level}) must be between (1) and (90)."
-    end
-
-    unless @target_level.between?(1, 90)
-      errors << "Target level (#{@target_level}) must be between (1) and (90)."
-    end
-
-    # this checks for impossible downgrades (level and ascension rank)
-    if @target_level < @current_level
-      errors << "Target level (#{@target_level}) cannot be less than current level (#{@current_level})."
-    end
-
-    if @target_ascension_rank < @current_ascension_rank
-      errors << "Target ascension rank value must be greater than or equal to current ascension rank value."
-    end
-
-    # this keeps level range within ascension rank
-    current_max_level = ASCENSION_LEVEL_CAPS[@current_ascension_rank]
-    if current_max_level.nil? || @current_level > current_max_level
-      errors << "Current level (#{@current_level}) exceeds max level (#{current_max_level}) for ascension rank (#{@current_ascension_rank})."
-    end
-
-    if @current_ascension_rank > 0
-      min_level_required = ASCENSION_LEVEL_CAPS[@current_ascension_rank - 1]
-
-      if @current_level < min_level_required
-        errors << "Current ascension rank (#{@current_ascension_rank}) requires a minimum level of (#{min_level_required})."
-      end
-    end
-
-    target_max_level = ASCENSION_LEVEL_CAPS[@target_ascension_rank]
-    if target_max_level.nil? || @target_level > target_max_level
-      errors << "Target level (#{@target_level}) exceeds max level (#{target_max_level}) for Ascension Rank (#{@target_ascension_rank})."
-    end
-
-    if @target_ascension_rank > 0
-      min_level_required = ASCENSION_LEVEL_CAPS[@target_ascension_rank - 1]
-
-      if @target_level < min_level_required
-        errors << "Target ascension rank (#{@target_ascension_rank}) requires a minimum level of (#{min_level_required})."
-      end
-    end
+    validate_no_changes!(errors)
+    validate_level_ranges!(errors)
+    validate_no_downgrades!(errors)
+    validate_ascension_caps!(errors)
 
     raise ValidationError, errors.join("|") unless errors.empty?
   end
 
+  def validate_no_changes!(errors)
+    return unless @current_level == @target_level &&
+                  @current_ascension_rank == @target_ascension_rank
+
+    errors << "At least one target value must be different from the corresponding current value to generate a plan."
+  end
+
+  def validate_level_ranges!(errors)
+    unless @current_level.between?(1, 90)
+      errors << "Current level (#{@current_level}) must be between (1) and (90)."
+    end
+    unless @target_level.between?(1, 90)
+      errors << "Target level (#{@target_level}) must be between (1) and (90)."
+    end
+  end
+
+  def validate_no_downgrades!(errors)
+    if @target_level < @current_level
+      errors << "Target level (#{@target_level}) cannot be less than current level (#{@current_level})."
+    end
+    if @target_ascension_rank < @current_ascension_rank
+      errors << "Target ascension rank value must be greater than or equal to current ascension rank value."
+    end
+  end
+
+  def validate_ascension_caps!(errors)
+    validate_level_within_cap!("Current", @current_level, @current_ascension_rank, errors)
+    validate_level_within_cap!("Target", @target_level, @target_ascension_rank, errors)
+  end
+
+  def validate_level_within_cap!(label, level, rank, errors)
+    max = ASCENSION_LEVEL_CAPS[rank]
+
+    if max.nil?
+      errors << "#{label} ascension rank (#{rank}) is invalid."
+      return
+    end
+
+    if level > max
+      errors << "#{label} level (#{level}) exceeds max level (#{max}) for ascension rank (#{rank})."
+    end
+
+    if rank > 0
+      min = ASCENSION_LEVEL_CAPS[rank - 1]
+      if level < min
+        errors << "#{label} ascension rank (#{rank}) requires a minimum level of (#{min})."
+      end
+    end
+  end
+
   def shell_credit_id
-    self.class.shell_credit_id
+    @shell_credit_id ||= Material.find_by!(name: "Shell Credit").id
   end
 
   def basic_core
-    self.class.basic_core
+    @basic_core ||= Material.find_by!(name: "Basic Energy Core")
   end
 
   def add_materials(cost_records)
