@@ -220,7 +220,7 @@ class ResonatorAscensionPlanner < ApplicationService
   end
 
   def calculate_ascension_costs
-    ascension_model = @resonator.name.start_with?("Rover") ? RoerAscensionCost : ResonatorAscensionCost
+    ascension_model = @resonator.name.start_with?("Rover") ? RoverAscensionCost : ResonatorAscensionCost
     required_ascension_ranks = (@current_ascension_rank + 1)..@target_ascension_rank
     ascension_costs = ascension_model.where(ascension_rank: required_ascension_ranks)
     add_materials(ascension_costs)
