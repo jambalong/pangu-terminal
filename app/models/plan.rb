@@ -9,6 +9,7 @@ class Plan < ApplicationRecord
 
   validates :subject_type, presence: true, inclusion: { in: %w[Resonator Weapon] }
   validates :subject_id, presence: true
+  validates :subject_id, uniqueness: { scope: [ :user_id, :subject_type ], message: "already has a plan" }
   validates :plan_data, presence: true
   validate :must_have_owner
 
