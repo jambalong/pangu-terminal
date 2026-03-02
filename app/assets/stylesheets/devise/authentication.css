@@ -45,7 +45,7 @@
 .auth-input:focus {
   outline: none;
   border-color: var(--ctp-mauve);
-  box-shadow: 0 0 0 2px rgba(203, 166, 247, 0.2);
+  box-shadow: 0 0 0 1px var(--ctp-mauve);
 }
 
 .auth-submit {
@@ -54,7 +54,7 @@
   background-color: var(--ctp-mantle);
   color: var(--ctp-text);
   font-weight: 900;
-  border: 2px solid var(--ctp-mauve);
+  border: 1px solid var(--ctp-mauve);
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -162,9 +162,10 @@
 
 /* Danger Zone Styling */
 .danger-zone {
-  margin-top: 3rem;
-  padding-top: 2rem;
+  margin: 2.5rem 0 2.5rem;
+  padding: 2rem 0.5rem 2rem;
   border-top: 2px dashed var(--ctp-surface0);
+  border-bottom: 2px dashed var(--ctp-surface0);
 }
 
 .danger-title {
@@ -195,5 +196,133 @@
 
 .btn-danger:hover {
   background-color: var(--ctp-red);
+  color: var(--ctp-base);
+}
+
+/* API Keys Section */
+.api-keys-section {
+  margin: 1rem 0 1rem;
+  padding: 1rem 0.75rem 1rem;
+  background-color: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 0.5rem;
+}
+
+.api-keys-section h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ctp-mauve);
+  margin-bottom: 1.25rem;
+}
+
+/* Token reveal */
+.api-token-reveal {
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-teal);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.api-token-reveal p {
+  font-size: 0.7rem;
+  color: var(--ctp-teal);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.api-token-reveal code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ctp-text);
+  word-break: break-all;
+}
+
+/* Key rows */
+.api-key-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--ctp-surface0);
+}
+
+.api-key-name {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--ctp-text);
+  font-weight: 700;
+  min-width: 80px;
+}
+
+.api-key-meta {
+  font-size: 0.75rem;
+  color: var(--ctp-subtext0);
+  flex: 1;
+}
+
+.btn-revoke {
+  background-color: transparent;
+  color: var(--ctp-red);
+  border: 1px solid var(--ctp-red);
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-revoke:hover {
+  background-color: var(--ctp-red);
+  color: var(--ctp-base);
+}
+
+/* Generate form */
+.api-key-form {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.api-key-form input[type="text"] {
+  flex: 1;
+  background-color: var(--ctp-crust);
+  border: 1px solid var(--ctp-surface1);
+  color: var(--ctp-text);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.api-key-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ctp-mauve);
+  box-shadow: 0 0 0 2px rgba(203, 166, 247, 0.2);
+}
+
+.api-key-form input[type="submit"] {
+  background-color: var(--ctp-mantle);
+  color: var(--ctp-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid var(--ctp-mauve);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.api-key-form input[type="submit"]:hover {
+  background-color: var(--ctp-mauve);
   color: var(--ctp-base);
 }
