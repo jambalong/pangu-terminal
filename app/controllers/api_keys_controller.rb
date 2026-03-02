@@ -2,7 +2,7 @@ class ApiKeysController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @api_key = current_user.api_keys.build(name: params[:name])
+    @api_key = current_user.api_keys.build(name: params.require[:name])
     if @api_key.save
       flash[:api_token] = @api_key.raw_token
       flash[:notice] = "API Key \"#{@api_key.name}\" generated successfully."
