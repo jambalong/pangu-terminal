@@ -117,3 +117,119 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     { "Authorization" => "Bearer #{@raw_token}" }
   end
 end
+
+class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email: "test@example.com", password: "password123")
+    @api_key = @user.api_keys.create!(name: "Test Key")
+    @raw_token = @api_key.raw_token
+
+    @weapon = Weapon.find_by!(name: "Kumokiri")
+    @resonator = Resonator.find_by!(name: "Rover-Spectro")
+  end
+
+  test "creates a plan with valid weapon params and returns 201" do
+    post api_v1_plans_path, params: weapon_params, headers: auth_headers, as: :json
+    assert_response :created
+  end
+
+  test "creates a plan with valid resonator params and returns 201" do
+    post api_v1_plans_path, params: resonator_params, headers: auth_headers, as: :json
+    assert_response :created
+  end
+
+  test "returns serialized plan with correct shape" do
+    post api_v1_plans_path, params: weapon_params, headers: auth_headers, as: :json
+    assert_response :created
+
+    plan_json = JSON.parse(response.body)
+
+    assert plan_json.key?("id")
+    assert_equal "Kumokiri", plan_json["subject_name"]
+    assert_equal "Weapon", plan_json["subject_type"]
+    assert plan_json.key?("configuration")
+    assert plan_json.key?("requirements")
+  end
+
+  test "returns 401 without auth token" do
+    post api_v1_plans_path,
+      params: weapon_params,
+      headers: { "Content-Type" => "application/json" },
+      as: :json
+
+    assert_response :unauthorized
+  end
+
+  test "returns 404 when subject not found" do
+    post api_v1_plans_path,
+      params: weapon_params.merge(subject_id: 0),
+      headers: auth_headers,
+      as: :json
+
+    assert_response :not_found
+    body = JSON.parse(response.body)
+    assert_equal "Subject not found", body["error"]
+  end
+
+  test "returns 422 on planner validation error for invalid params combo" do
+    post api_v1_plans_path,
+      params: weapon_params.merge(current_level: 90, target_level: 1),
+      headers: auth_headers,
+      as: :json
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+    assert body["errors"].is_a?(Array)
+    assert body["errors"].any?
+  end
+
+  test "returns 422 on duplicate plan" do
+    post api_v1_plans_path, params: weapon_params, headers: auth_headers, as: :json
+    assert_response :created
+
+    post api_v1_plans_path, params: weapon_params, headers: auth_headers, as: :json
+    assert_response :unprocessable_entity
+
+    body = JSON.parse(response.body)
+    assert body["errors"].is_a?(Array)
+    assert body["errors"].any?
+  end
+
+  private
+
+  def auth_headers
+    { "Authorization" => "Bearer #{@raw_token}" }
+  end
+
+  def weapon_params
+    {
+      subject_type: "Weapon",
+      subject_id: @weapon.id,
+      current_level: 1,
+      target_level: 20,
+      current_ascension_rank: 0,
+      target_ascension_rank: 1
+    }
+  end
+
+  def resonator_params
+    {
+      subject_type: "Resonator",
+      subject_id: @resonator.id,
+      current_level: 1,
+      target_level: 20,
+      current_ascension_rank: 0,
+      target_ascension_rank: 1,
+      basic_attack_current: 1, basic_attack_target: 2,
+      resonance_skill_current: 1, resonance_skill_target: 2,
+      forte_circuit_current: 1, forte_circuit_target: 2,
+      resonance_liberation_current: 1, resonance_liberation_target: 2,
+      intro_skill_current: 1, intro_skill_target: 2,
+      basic_attack_node_1: 0, basic_attack_node_2: 0,
+      resonance_skill_node_1: 0, resonance_skill_node_2: 0,
+      forte_circuit_node_1: 0, forte_circuit_node_2: 0,
+      resonance_liberation_node_1: 0, resonance_liberation_node_2: 0,
+      intro_skill_node_1: 0, intro_skill_node_2: 0
+    }
+  end
+end
