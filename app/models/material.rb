@@ -30,4 +30,8 @@ class Material < ApplicationRecord
   scope :ordered_categories, -> {
     distinct.pluck(:category).sort_by { |category| CATEGORY_ORDER.index(category) || CATEGORY_ORDER.length }
   }
+
+  def snake_case_name
+    name.downcase.gsub(/['"#&]/, "").strip.gsub(/\s+/, "_")
+  end
 end
