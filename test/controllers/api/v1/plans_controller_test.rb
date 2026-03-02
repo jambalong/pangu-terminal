@@ -6,6 +6,7 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     @other_user = User.create!(email: "other@example.com", password: "password123")
 
     @api_key = @user.api_keys.create!(name: "Test Key")
+    @raw_token = @api_key.raw_token
 
     @shell_credit = Material.create!(
       name: "Shell Credit",
@@ -97,7 +98,7 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     empty_user = User.create!(email: "empty@example.com", password: "password123")
     empty_key = empty_user.api_keys.create!(name: "Empty Key")
 
-    get api_v1_plans_path, headers: { "Authorization" => "Bearer #{empty_key.token}" }
+    get api_v1_plans_path, headers: { "Authorization" => "Bearer #{empty_key.raw_token}" }
 
     assert_response :ok
     assert_equal [], JSON.parse(response.body)
@@ -136,6 +137,6 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
   private
 
   def auth_headers
-    { "Authorization" => "Bearer #{@api_key.token}" }
+    { "Authorization" => "Bearer #{@raw_token}" }
   end
 end
