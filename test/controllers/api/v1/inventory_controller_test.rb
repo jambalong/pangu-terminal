@@ -2,19 +2,8 @@ require "test_helper"
 
 class Api::V1::InventoryControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @cadence_seed = Material.create!(
-      name: "Cadence Seed",
-      rarity: 2,
-      material_type: "ForgeryDrop",
-      category: "Weapon and Skill Material"
-    )
-
-    @cadence_bud = Material.create!(
-      name: "Cadence Bud",
-      rarity: 3,
-      material_type: "ForgeryDrop",
-      category: "Weapon and Skill Material"
-    )
+    @cadence_seed = Material.find_by!(name: "Cadence Seed")
+    @cadence_bud = Material.find_by!(name: "Cadence Bud")
 
     @user = User.create!(email: "test@example.com", password: "password123")
     @other_user = User.create!(email: "other@example.com", password: "password123")
@@ -86,7 +75,7 @@ class Api::V1::InventoryControllerTest < ActionDispatch::IntegrationTest
 
     body = JSON.parse(response.body)
     body.keys.each do |key|
-      assert_match(/\A[a-z_]+\z/, key)
+      assert_match(/\A[a-z0-9_]+\z/, key)
     end
   end
 

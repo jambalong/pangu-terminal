@@ -8,33 +8,10 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     @api_key = @user.api_keys.create!(name: "Test Key")
     @raw_token = @api_key.raw_token
 
-    @shell_credit = Material.create!(
-      name: "Shell Credit",
-      rarity: 3,
-      material_type: "Credit",
-      category: "Universal Currency"
-    )
-
-    @basic_exp_potion = Material.create!(
-      name: "Basic Resonance Potion",
-      rarity: 2,
-      material_type: "ResonatorEXP",
-      category: "Resonator EXP Material",
-      exp_value: 1000
-    )
-
-    @lf_howler_core = Material.create!(
-      name: "LF Howler Core",
-      rarity: 2,
-      material_type: "EnemyDrop",
-      category: "Weapon and Skill Material"
-    )
-
-    @weapon = Weapon.create!(
-      name: "Kumokiri",
-      weapon_type: "Weapon",
-      rarity: 5
-    )
+    @shell_credit = Material.find_by!(name: "Shell Credit")
+    @basic_exp_potion = Material.find_by!(name: "Basic Resonance Potion")
+    @lf_howler_core = Material.find_by!(name: "LF Howler Core")
+    @weapon = Weapon.find_by!(name: "Kumokiri")
 
     @plan = Plan.create!(
       user: @user,
