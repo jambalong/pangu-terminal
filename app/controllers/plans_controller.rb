@@ -53,9 +53,6 @@ class PlansController < ApplicationController
     rescue ResonatorAscensionPlanner::ValidationError, WeaponAscensionPlanner::ValidationError => e
       @errors = e.message.split("|")
       render_form_with_errors
-    rescue StandardError => e
-      @errors = [ "An error occurred: #{e.message}" ]
-      render_form_with_errors
     end
   end
 
@@ -85,9 +82,6 @@ class PlansController < ApplicationController
 
     rescue ResonatorAscensionPlanner::ValidationError, WeaponAscensionPlanner::ValidationError => e
       @errors = e.message.split("|")
-      render_form_with_errors
-    rescue StandardError => e
-      @errors = [ "An error occurred: #{e.message}" ]
       render_form_with_errors
     end
   end
