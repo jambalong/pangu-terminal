@@ -73,18 +73,23 @@
 }
 
 .sign-in {
-  color: var(--ctp-subtext1);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  border: 1px solid var(--ctp-surface1);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
+  background-color: var(--ctp-mantle);
+  color: var(--ctp-text);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: 92px;
+  text-align: center;
 }
 
 .sign-in:hover {
   color: var(--ctp-mauve);
   background-color: var(--ctp-surface0);
+  border-color: var(--ctp-mauve);
+  transform: scale(1.05);
 }
 
 .auth-btn-secondary {
@@ -96,6 +101,8 @@
   color: var(--ctp-text);
   text-decoration: none;
   transition: all 0.2s ease;
+  width: 92px;
+  text-align: center;
 }
 
 .auth-btn-secondary:hover {
@@ -224,9 +231,9 @@
   }
 
   .sign-in {
-    width: 100%;
-    padding: 1rem 1.5rem;
-    text-align: left;
+    width: calc(100% - 3rem);
+    margin: 0 1.5rem;
+    text-align: center;
   }
 
   .user-badge {

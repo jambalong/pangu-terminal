@@ -1,10 +1,10 @@
 .auth-container {
   max-width: 400px;
   width: 100%;
-  margin: 2rem auto;
+  margin: 1rem auto;
   background-color: var(--ctp-base);
-  padding: 2rem;
-  border-radius: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
   border: 1px solid var(--ctp-surface2);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
@@ -13,8 +13,12 @@
   font-size: 1.875rem;
   font-weight: 900;
   color: var(--ctp-mauve);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.025em;
+}
+
+#edit_user {
+  padding: 1rem 0.5rem;
 }
 
 .auth-form-group {
@@ -36,7 +40,7 @@
   background-color: var(--ctp-crust);
   border: 1px solid var(--ctp-surface1);
   color: var(--ctp-text);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 0.75rem 1rem;
   box-sizing: border-box;
   transition: all 0.2s ease;
@@ -55,7 +59,7 @@
   color: var(--ctp-text);
   font-weight: 900;
   border: 1px solid var(--ctp-mauve);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -163,9 +167,9 @@
 /* Danger Zone Styling */
 .danger-zone {
   margin: 2.5rem 0 2.5rem;
-  padding: 2rem 0.5rem 2rem;
-  border-top: 2px dashed var(--ctp-surface0);
-  border-bottom: 2px dashed var(--ctp-surface0);
+  padding: 2rem 1rem 2rem;
+  background-color: var(--ctp-mantle);
+  border-radius: 0.5rem;
 }
 
 .danger-title {
@@ -187,8 +191,9 @@
   background-color: transparent;
   color: var(--ctp-red);
   border: 1px solid var(--ctp-red);
+  background-color: var(--ctp-crust);
   padding: 0.75rem 1.25rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -201,11 +206,8 @@
 
 /* API Keys Section */
 .api-keys-section {
-  margin: 1rem 0 1rem;
-  padding: 1rem 0.75rem 1rem;
-  background-color: var(--ctp-mantle);
-  border: 1px solid var(--ctp-surface0);
-  border-radius: 0.5rem;
+  padding: 0.5rem;
+  overflow: hidden;
 }
 
 .api-keys-section h3 {
@@ -219,9 +221,9 @@
 
 /* Token reveal */
 .api-token-reveal {
-  background-color: var(--ctp-crust);
+  background-color: var(--ctp-mantle);
   border: 1px solid var(--ctp-teal);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1.25rem;
 }
@@ -247,9 +249,10 @@
 .api-key-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--ctp-surface0);
+  flex-wrap: wrap;
 }
 
 .api-key-name {
@@ -257,20 +260,22 @@
   font-size: 0.875rem;
   color: var(--ctp-text);
   font-weight: 700;
-  min-width: 80px;
+  width: 100%;
+  word-break: break-all;
 }
 
 .api-key-meta {
   font-size: 0.75rem;
   color: var(--ctp-subtext0);
   flex: 1;
+  margin-left: 1rem;
 }
 
 .btn-revoke {
   background-color: transparent;
   color: var(--ctp-red);
-  border: 1px solid var(--ctp-red);
-  padding: 0.35rem 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid transparent;
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-weight: 700;
@@ -280,23 +285,29 @@
 }
 
 .btn-revoke:hover {
-  background-color: var(--ctp-red);
-  color: var(--ctp-base);
+  background-color: var(--ctp-base);
+  border: 1px solid var(--ctp-red);
+  /* color: var(--ctp-base); */
 }
 
 /* Generate form */
 .api-key-form {
   margin-top: 1.25rem;
   display: flex;
-  gap: 0.75rem;
+}
+
+.api-key-form form {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .api-key-form input[type="text"] {
   flex: 1;
-  background-color: var(--ctp-crust);
+  background-color: var(--ctp-mantle);
   border: 1px solid var(--ctp-surface1);
   color: var(--ctp-text);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 0.625rem 1rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -306,17 +317,18 @@
 .api-key-form input[type="text"]:focus {
   outline: none;
   border-color: var(--ctp-mauve);
-  box-shadow: 0 0 0 2px rgba(203, 166, 247, 0.2);
+  box-shadow: 0 0 0 1px var(--ctp-mauve);
 }
 
 .api-key-form input[type="submit"] {
+  flex-shrink: 0;
   background-color: var(--ctp-mantle);
   color: var(--ctp-text);
   font-size: 0.8rem;
   font-weight: 700;
   border: 1px solid var(--ctp-mauve);
-  border-radius: 0.75rem;
-  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -325,4 +337,14 @@
 .api-key-form input[type="submit"]:hover {
   background-color: var(--ctp-mauve);
   color: var(--ctp-base);
+}
+
+@media (max-width: 480px) {
+  .api-key-form form {
+    flex-direction: column;
+  }
+
+  .api-key-form input[type="submit"] {
+    width: 100%;
+  }
 }
