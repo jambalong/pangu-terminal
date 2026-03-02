@@ -14,7 +14,9 @@ class ApiKeysController < ApplicationController
   end
 
   def destroy
-    current_user.api_keys.find(params[:id]).destroy
+    @api_key = current_user.api_keys.find(params[:id])
+    @api_key.destroy
+    flash[:notice] = "API Key \"#{@api_key.name}\" revoked successfully."
     redirect_to "#{edit_user_registration_path}#api-keys"
   end
 end
