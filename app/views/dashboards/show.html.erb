@@ -21,11 +21,21 @@
       </div>
       
       <div class="quick-actions-list">
-        <%= link_to plans_path, class: "action-link" do %>
+        <%= link_to plans_path,
+          data: { 
+            turbo_frame: "main_content", 
+            turbo_action: "advance" 
+          }, 
+          class: "action-link" do %>
           <span class="icon">➕</span> Planner
         <% end %>
         
-        <%= link_to inventory_items_path, class: "action-link" do %>
+        <%= link_to inventory_items_path,
+          data: { 
+            turbo_frame: "main_content", 
+            turbo_action: "advance" 
+          },
+          class: "action-link" do %>
           <span class="icon">📦</span> Inventory
         <% end %>
         
