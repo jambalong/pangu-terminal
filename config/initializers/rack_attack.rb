@@ -28,7 +28,7 @@ class Rack::Attack
   # Scoped to /api/ routes only. Keyed by token so each API consumer
   # gets their own bucket, so one abusive client can't affect others.
   throttle("api/token", limit: 60, period: 1.minute) do |req|
-    if req.start_with?("/api")
+    if req.path.start_with?("/api")
       req.get_header("HTTP_AUTHORIZATION")&.delete_prefix("Bearer ")
     end
   end
