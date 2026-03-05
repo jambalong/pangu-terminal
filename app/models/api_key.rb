@@ -16,8 +16,8 @@ class ApiKey < ApplicationRecord
   private
 
   def api_key_limit
-    if user.api_keys.count >= 5
-      errors.add(:base, "Maximum of 5 API Keys allowed")
+    if user.api_keys.count >= 3
+      errors.add(:base, "Maximum of 3 API Keys allowed")
     end
   end
 end
