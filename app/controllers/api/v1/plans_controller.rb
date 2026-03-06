@@ -31,6 +31,16 @@ module Api
         render json: { error: e.message }, status: :internal_server_error
       end
 
+      def reconciliation
+        plan = @current_user.plans.find(params[:id])
+        requirements = (plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
+        inventory = @current_user.inventory_items.index_by(&:material_id).transform_values(&:quantity)
+        reconciliation = SynthesisService.new(inventory, requirements).reconcile_inventory
+        materials_lookup = Material.index_by_ids(reconciliation.keys)
+
+        render json: ReconciliationSerializer.new(reconciliation, materials_lookup).to_h
+      end
+
       private
 
       def plan_params
