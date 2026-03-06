@@ -40,7 +40,12 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      resources :plans, only: [ :index, :create ]
+      resources :plans, only: [ :index, :create ] do
+        member do
+          get :reconciliation
+        end
+      end
+
       resources :inventory, only: [ :index ]
     end
   end
