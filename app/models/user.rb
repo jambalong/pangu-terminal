@@ -11,6 +11,12 @@ class User < ApplicationRecord
 
   after_create :initialize_inventory
 
+  def inventory_item_for(material)
+    inventory_items.find_or_create_by!(material: material) do |item|
+      item.quantity = 0
+    end
+  end
+
   private
 
   def initialize_inventory

@@ -3,9 +3,13 @@ module Api
   module V1
     class InventoryController < BaseController
       def index
-        items = @current_user.inventory_items.includes(:material).order("materials.name ASC")
+        inventory_map = current_user.inventory_items.index_by(&:material_id)
 
-        render json: items.each_with_object({}) { |item, hash| hash[item.material.snake_case_name] = item.quantity }
+        result = Material.all.each_with_object({}) do |material, hash|
+          hash[material.snake_case_name] = inventory_map[material.id]&.quantity || 0
+        end
+
+        render json: result
       end
     end
   end

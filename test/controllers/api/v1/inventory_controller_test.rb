@@ -11,7 +11,7 @@ class Api::V1::InventoryControllerTest < ActionDispatch::IntegrationTest
     @api_key = @user.api_keys.create!(name: "Test Key")
     @raw_token = @api_key.raw_token
 
-    @user.inventory_items.find_by!(material: @cadence_seed).update!(quantity: 47)
+    @user.inventory_item_for(@cadence_seed).update!(quantity: 47)
   end
 
   test "returns 200 with valid token" do
@@ -53,7 +53,7 @@ class Api::V1::InventoryControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "returns only inventory belonging to authenticated user" do
-    @other_user.inventory_items.find_by!(material: @cadence_seed).update!(quantity: 100)
+    @other_user.inventory_item_for(@cadence_seed).update!(quantity: 100)
 
     get api_v1_inventory_index_path, headers: auth_headers
 

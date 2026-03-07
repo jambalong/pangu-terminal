@@ -436,6 +436,6 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
   end
 
   def set_quantity(material, quantity)
-    @user.inventory_items.find_by!(material: material).update!(quantity: quantity)
+    @user.inventory_item_for(material).update!(quantity: quantity)
   end
 end
