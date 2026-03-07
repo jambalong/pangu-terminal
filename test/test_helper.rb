@@ -7,6 +7,11 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    Rails.application.load_seed
+    parallelize_setup do |worker|
+      original = $stdout
+      $stdout = File.open(File::NULL, "w")
+      Rails.application.load_seed
+      $stdout = original
+    end
   end
 end
