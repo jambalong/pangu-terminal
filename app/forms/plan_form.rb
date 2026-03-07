@@ -5,6 +5,7 @@ class PlanForm
   attribute :id, :integer
   attribute :subject_type, :string
   attribute :subject_id, :integer
+  attribute :subject_name, :string
   attribute :current_level, :integer, default: 1
   attribute :target_level, :integer, default: 90
   attribute :current_ascension_rank, :integer, default: 0

@@ -11,10 +11,11 @@ module Api
 
       def create
         form = PlanForm.new(plan_params)
-        subject = form.subject_type&.safe_constantize&.find_by(id: form.subject_id)
+        subject = form.subject_type&.safe_constantize&.find_by(name: form.subject_name)
 
         return render json: { error: "Subject not found" }, status: :not_found if subject.nil?
 
+        form.subject_id = subject.id
         plan = form.save(@current_user, nil)
 
         if plan
@@ -45,7 +46,7 @@ module Api
 
       def plan_params
         params.permit(
-          :subject_type, :subject_id,
+          :subject_type, :subject_name,
           :current_level, :target_level,
           :current_ascension_rank, :target_ascension_rank,
           :basic_attack_current, :basic_attack_target,

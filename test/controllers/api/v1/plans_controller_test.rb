@@ -163,7 +163,7 @@ class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
 
   test "returns 404 when subject not found" do
     post api_v1_plans_path,
-      params: weapon_params.merge(subject_id: 0),
+      params: weapon_params.merge(subject_name: "Nonexistent Weapon"),
       headers: auth_headers,
       as: :json
 
@@ -205,7 +205,7 @@ class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
   def weapon_params
     {
       subject_type: "Weapon",
-      subject_id: @weapon.id,
+      subject_name: "Kumokiri",
       current_level: 1,
       target_level: 20,
       current_ascension_rank: 0,
@@ -216,7 +216,7 @@ class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
   def resonator_params
     {
       subject_type: "Resonator",
-      subject_id: @resonator.id,
+      subject_name: "Chisa",
       current_level: 1,
       target_level: 20,
       current_ascension_rank: 0,
