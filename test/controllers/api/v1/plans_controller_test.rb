@@ -9,8 +9,8 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     @raw_token = @api_key.raw_token
 
     @shell_credit = Material.find_by!(name: "Shell Credit")
-    @basic_exp_potion = Material.find_by!(name: "Basic Resonance Potion")
-    @lf_howler_core = Material.find_by!(name: "LF Howler Core")
+    @basic_energy_core = Material.find_by!(name: "Basic Energy Core")
+    @lf_whisperin_core = Material.find_by!(name: "LF Whisperin Core")
     @weapon = Weapon.find_by!(name: "Kumokiri")
 
     @plan = Plan.create!(
@@ -26,8 +26,8 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
         },
         "output" => {
           @shell_credit.id => 25480,
-          @basic_exp_potion.id => 38,
-          @lf_howler_core.id => 6
+          @basic_energy_core.id => 38,
+          @lf_whisperin_core.id => 6
         }
       }
     )
@@ -107,8 +107,8 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1,  plan_json["configuration"]["target_ascension_rank"]
 
     assert_equal 25480, plan_json["requirements"]["shell_credit"]
-    assert_equal 38,    plan_json["requirements"]["basic_resonance_potion"]
-    assert_equal 6,     plan_json["requirements"]["lf_howler_core"]
+    assert_equal 38,    plan_json["requirements"]["basic_energy_core"]
+    assert_equal 6,     plan_json["requirements"]["lf_whisperin_core"]
   end
 
   private
@@ -125,7 +125,7 @@ class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
     @raw_token = @api_key.raw_token
 
     @weapon = Weapon.find_by!(name: "Kumokiri")
-    @resonator = Resonator.find_by!(name: "Rover-Spectro")
+    @resonator = Resonator.find_by!(name: "Chisa")
   end
 
   test "creates a plan with valid weapon params and returns 201" do
