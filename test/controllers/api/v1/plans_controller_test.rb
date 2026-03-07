@@ -2,8 +2,8 @@ require "test_helper"
 
 class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create!(email: "test@example.com", password: "password123")
-    @other_user = User.create!(email: "other@example.com", password: "password123")
+    @user = User.create!(email: "plans@example.com", password: "password123")
+    @other_user = User.create!(email: "plans_other@example.com", password: "password123")
 
     @api_key = @user.api_keys.create!(name: "Test Key")
     @raw_token = @api_key.raw_token
@@ -11,6 +11,7 @@ class Api::V1::PlansControllerTest < ActionDispatch::IntegrationTest
     @shell_credit = Material.find_by!(name: "Shell Credit")
     @basic_energy_core = Material.find_by!(name: "Basic Energy Core")
     @lf_whisperin_core = Material.find_by!(name: "LF Whisperin Core")
+    @mf_whisperin_core = Material.find_by!(name: "MF Whisperin Core")
     @weapon = Weapon.find_by!(name: "Kumokiri")
 
     @plan = Plan.create!(
@@ -120,7 +121,7 @@ end
 
 class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create!(email: "test@example.com", password: "password123")
+    @user = User.create!(email: "create@example.com", password: "password123")
     @api_key = @user.api_keys.create!(name: "Test Key")
     @raw_token = @api_key.raw_token
 
@@ -231,5 +232,210 @@ class Api::V1::PlansControllerCreateTest < ActionDispatch::IntegrationTest
       resonance_liberation_node_1: 0, resonance_liberation_node_2: 0,
       intro_skill_node_1: 0, intro_skill_node_2: 0
     }
+  end
+end
+
+class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email: "reconciliation@example.com", password: "password123")
+    @other_user = User.create!(email: "reconciliation_other@example.com", password: "password123")
+
+    @api_key = @user.api_keys.create!(name: "Test Key")
+    @raw_token = @api_key.raw_token
+
+    @shell_credit     = Material.find_by!(name: "Shell Credit")
+    @basic_energy_core = Material.find_by!(name: "Basic Energy Core")
+    @lf_whisperin_core = Material.find_by!(name: "LF Whisperin Core")
+    @mf_whisperin_core = Material.find_by!(name: "MF Whisperin Core")
+    @waveworn_residue_210 = Material.find_by!(name: "Waveworn Residue 210")
+    @weapon = Weapon.find_by!(name: "Kumokiri")
+
+    @plan = Plan.create!(
+      user: @user,
+      subject: @weapon,
+      subject_type: "Weapon",
+      plan_data: {
+        "input" => {
+          "current_level" => 1,
+          "target_level" => 20,
+          "current_ascension_rank" => 0,
+          "target_ascension_rank" => 1
+        },
+        "output" => {
+          @shell_credit.id     => 25480,
+          @basic_energy_core.id => 38,
+          @lf_whisperin_core.id   => 6
+        }
+      }
+    )
+
+    @other_plan = Plan.create!(
+      user: @other_user,
+      subject: @weapon,
+      subject_type: "Weapon",
+      plan_data: { "input" => {}, "output" => {} }
+    )
+  end
+
+  test "returns 401 with no token" do
+    get reconciliation_api_v1_plan_path(@plan), headers: {}
+    assert_response :unauthorized
+  end
+
+  test "returns 401 with invalid token" do
+    get reconciliation_api_v1_plan_path(@plan),
+      headers: { "Authorization" => "Bearer #{SecureRandom.hex(16)}" }
+
+    assert_response :unauthorized
+  end
+
+  test "returns 404 for a plan belonging to another user" do
+    get reconciliation_api_v1_plan_path(@other_plan), headers: auth_headers
+    assert_response :not_found
+  end
+
+  test "returns 404 for a non-existent plan id" do
+    get reconciliation_api_v1_plan_path(id: 0), headers: auth_headers
+    assert_response :not_found
+  end
+
+  test "returns 200 for own plan" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+    assert_response :ok
+  end
+
+  test "returns json content type" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+    assert_includes response.content_type, "application/json"
+  end
+
+  test "response keys are material snake_case names" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    body = JSON.parse(response.body)
+    assert_includes body.keys, "shell_credit"
+    assert_includes body.keys, "basic_energy_core"
+    assert_includes body.keys, "lf_whisperin_core"
+  end
+
+  test "each entry has the expected fields" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    entry = JSON.parse(response.body)["shell_credit"]
+    assert_includes entry.keys, "needed"
+    assert_includes entry.keys, "owned"
+    assert_includes entry.keys, "deficit"
+    assert_includes entry.keys, "satisfied"
+    assert_includes entry.keys, "satisfied_by_higher_rarity"
+    assert_includes entry.keys, "can_synthesize"
+  end
+
+  test "does not expose internal fields" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    entry = JSON.parse(response.body)["shell_credit"]
+
+    assert_not_includes entry.keys, "satisfied_qty"
+    assert_not_includes entry.keys, "used_higher_rarity"
+  end
+
+  test "needed reflects plan output quantities" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    body = JSON.parse(response.body)
+
+    assert_equal 25480, body["shell_credit"]["needed"]
+    assert_equal 38, body["basic_energy_core"]["needed"]
+    assert_equal 6, body["lf_whisperin_core"]["needed"]
+  end
+
+  test "owned reflects user inventory" do
+    set_quantity(@shell_credit, 1000)
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    assert_equal 1000, JSON.parse(response.body)["shell_credit"]["owned"]
+  end
+
+  test "owned is 0 when user has no quantity for material" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+    assert_equal 0, JSON.parse(response.body)["shell_credit"]["owned"]
+  end
+
+  test "satisfied is true when inventory fully covers requirement" do
+    set_quantity(@lf_whisperin_core, 10)
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    assert_equal true, JSON.parse(response.body)["lf_whisperin_core"]["satisfied"]
+  end
+
+  test "satisfied is false when inventory does not cover requirement" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+    assert_equal false, JSON.parse(response.body)["lf_whisperin_core"]["satisfied"]
+  end
+
+  test "deficit is 0 when fully satisfied" do
+    set_quantity(@lf_whisperin_core, 10)
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    assert_equal 0, JSON.parse(response.body)["lf_whisperin_core"]["deficit"]
+  end
+
+  test "deficit equals shortfall when not satisfied" do
+    set_quantity(@lf_whisperin_core, 2)
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    assert_equal 4, JSON.parse(response.body)["lf_whisperin_core"]["deficit"]
+  end
+
+  test "can_synthesize is 0 when no synthesis opportunity exists" do
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    # Shell Credit is a currency therefore not synthesizable from anything
+    assert_equal 0, JSON.parse(response.body)["shell_credit"]["can_synthesize"]
+  end
+
+  test "can_synthesize reflects surplus of lower tier material" do
+    weapon_other = Weapon.find_by!(name: "Ages of Harvest")
+    synthesis_plan = Plan.create!(
+      user: @user,
+      subject: weapon_other,
+      subject_type: "Weapon",
+      plan_data: {
+        "input" => {},
+        "output" => {
+          @lf_whisperin_core.id => 3,
+          @mf_whisperin_core.id  => 1
+        }
+      }
+    )
+
+    # 6 owned, 3 needed -> surplus of 3 -> can convert 1 MF Whisperin Core
+    set_quantity(@lf_whisperin_core, 6)
+    get reconciliation_api_v1_plan_path(synthesis_plan), headers: auth_headers
+
+    assert_equal 1, JSON.parse(response.body)["mf_whisperin_core"]["can_synthesize"]
+  end
+
+  test "satisfied_by_higher_rarity is true when higher rarity exp item covers the requirement" do
+    medium_energy_core = Material.find_by!(name: "Medium Energy Core")
+
+    # 13 Medium Energy Core covers 38 Basic Energy Core requirement via EXP equivalence
+    set_quantity(medium_energy_core, 13)
+    get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
+
+    entry = JSON.parse(response.body)["basic_energy_core"]
+    assert_equal 0, entry["owned"]
+    assert_equal true, entry["satisfied"]
+    assert_equal true, entry["satisfied_by_higher_rarity"]
+  end
+
+  private
+
+  def auth_headers
+    { "Authorization" => "Bearer #{@raw_token}" }
+  end
+
+  def set_quantity(material, quantity)
+    @user.inventory_items.find_by!(material: material).update!(quantity: quantity)
   end
 end
