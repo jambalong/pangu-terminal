@@ -125,7 +125,17 @@ All endpoints require a bearer token in the Authorization header.
 Authorization: Bearer <your_api_token>
 ```
 
-Tokens are issued per user via API keys tied to a user account. (Frontend UI work in progress)
+Tokens are issued per user via API keys tied to a user account. Each user can hold up to 3 active keys. Keys can be revoked at any time.
+
+### Rate Limiting
+
+Requests are rate limited to 60 requests per minute per API key. Exceeding this returns:
+
+
+**Response 429 Too Many Requests**
+```json
+{ "error": "Rate limit exceeded. Try again later." }
+```
 
 ### Endpoint
 
@@ -139,43 +149,166 @@ curl https://panguterminal.ambalong.dev/api/v1/plans \
   -H "Authorization: Bearer <token>"
 ```
 
-**Response 200**
+**Response 200 OK**
 ```json
 [
   {
-    "id": 1,
-    "subject_name": "Kumokiri",
-    "subject_type": "Weapon",
+    "id": 28,
+    "subject_name": "Aemeath",
+    "subject_type": "Resonator",
     "configuration": {
       "current_level": 1,
-      "target_level": 20,
+      "target_level": 90,
       "current_ascension_rank": 0,
-      "target_ascension_rank": 1
+      "target_ascension_rank": 6,
+      "current_skill_levels": { "basic_attack": 1, "...": "..." },
+      "target_skill_levels": { "basic_attack": 10, "...": "..." },
+      "forte_node_upgrades": {
+        "basic_attack": { "stat_bonus_tier_1": true, "stat_bonus_tier_2": true },
+        "...": "..."
+      }
     },
     "requirements": {
-      "shell_credit": 25480,
-      "basic_resonance_potion": 38,
-      "lf_howler_core": 6
+      "shell_credit": 3053282,
+      "basic_resonance_potion": 2438,
+      "...": "..."
     },
-    "created_at": "2026-02-16T06:41:08.000Z",
-    "updated_at": "2026-02-16T06:41:08.000Z"
+    "created_at": "2026-03-07T07:54:16.368Z",
+    "updated_at": "2026-03-07T07:54:24.368Z"
   }
 ]
 ```
+
+---
+
+#### POST /api/v1/plans
+
+Creates a new plan for the authenticated user.
+```bash
+curl -X POST https://panguterminal.ambalong.dev/api/v1/plans \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "subject_type": "Weapon",
+    "subject_name": "Kumokiri",
+    "current_level": 1,
+    "target_level": 90,
+    "current_ascension_rank": 0,
+    "target_ascension_rank": 6
+  }'
+```
+
+**Response 201 Created**
+```json
+{
+  "id": 29,
+  "subject_name": "Kumokiri",
+  "subject_type": "Weapon",
+  "configuration": {
+    "current_level": 1,
+    "target_level": 90,
+    "current_ascension_rank": 0,
+    "target_ascension_rank": 6
+  },
+  "requirements": {
+    "shell_credit": 1406960,
+    "basic_energy_core": 2692,
+    "lf_whisperin_core": 6,
+    "...": "..."
+  },
+  "created_at": "2026-03-07T08:31:21.402Z",
+  "updated_at": "2026-03-07T08:31:21.402Z"
+}
+```
+
+---
+
+#### GET /api/v1/inventory
+
+Returns the authenticated user's full inventory as a flat hash of material keys to quantities. Materials with no recorded quantity return `0`.
+```bash
+curl https://panguterminal.ambalong.dev/api/v1/inventory \
+  -H "Authorization: Bearer <token>"
+```
+
+**Response 200 OK**
+```json
+{
+  "shell_credit": 120000,
+  "basic_resonance_potion": 47,
+  "cadence_seed": 0,
+  "cadence_bud": 12,
+  "...": "..."
+}
+```
+
+---
+
+#### GET /api/v1/plans/:id/reconciliation
+
+Returns each material's reconciliation for a specific plan. What you need, what you own, and what you can cover through synthesis.
+```bash
+curl https://panguterminal.ambalong.dev/api/v1/plans/1/reconciliation \
+  -H "Authorization: Bearer <token>"
+```
+
+**Response 200 OK**
+```json
+{
+  "shell_credit": {
+    "needed": 25480,
+    "owned": 30000,
+    "deficit": 0,
+    "satisfied": true,
+    "satisfied_by_higher_rarity": false,
+    "can_synthesize": 0
+  },
+  "basic_energy_core": {
+    "needed": 38,
+    "owned": 0,
+    "deficit": 0,
+    "satisfied": true,
+    "satisfied_by_higher_rarity": true,
+    "can_synthesize": 0
+  },
+  "lf_whisperin_core": {
+    "needed": 6,
+    "owned": 2,
+    "deficit": 4,
+    "satisfied": false,
+    "satisfied_by_higher_rarity": false,
+    "can_synthesize": 3
+  },
+  "...": "..."
+}
+```
+
+| Field | Description |
+| --- | --- |
+| `needed` | Total quantity required by the plan |
+| `owned` | Current inventory quantity |
+| `deficit` | Remaining shortfall after owned and synthesis are accounted for |
+| `satisfied` | `true` if owned quantity fully covers the requirement |
+| `satisfied_by_higher_rarity` | `true` if a higher rarity equivalent (e.g. EXP potions) covers the gap |
+| `can_synthesize` | Additional units craftable from surplus lower-tier materials via 3:1 synthesis |
+
+---
 
 ### Error Responses
 
 | Status | Meaning | Response |
 | --- | --- | --- |
-| 401 | Missing, invalid, or revoked token | `{ "error": "Unauthorized" }` |
 | 400 | Malformed request | `{ "error": "<param message>" }` |
+| 401 | Missing, invalid, or revoked token | `{ "error": "Unauthorized" }` |
 | 404 | Record not found | `{ "error": "Record not found" }` |
+| 429 | Rate limit exceeded | `{ "error": "Rate limit exceeded. Try again later." }` |
 
 ### Notes
 
-- Material IDs in `plan_data` are resolved to snake_case material names before responding.
+- All material keys are `snake_case` names resolved from internal material IDs.
 - `subject_id` and `user_id` are intentionally omitted (internal implementation details).
 - `guest_token` is intentionally omitted (sensitive internal field).
+- Forte node upgrade values are booleans representing on/off toggles, not quantities.
 
 ## Architecture & Design Decisions
 
@@ -322,6 +455,7 @@ app/
 │   ├── api/
 │   │   └── v1/
 │   │       ├── base_controller.rb   # Auth + error handling
+│   │       ├── inventory_controller.rb   # Inventory API endpoint
 │   │       └── plans_controller.rb  # Plans API endpoint
 │   ├── plans_controller.rb
 │   ├── inventory_controller.rb
@@ -364,5 +498,5 @@ The production version of this application is currently deployed via **Kamal 2**
 
 ---
 
-**Last Updated:** February 2026  
+**Last Updated:** March 2026
 **Version:** 0.11.2
