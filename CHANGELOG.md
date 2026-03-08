@@ -3,6 +3,214 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [0.15.3] - 2026-03-07
+
+### Fixed
+- Account settings form now correctly submits to PATCH /settings
+- Updating account details no longer redirects to landing page
+
+## [0.15.2] - 2026-03-07
+
+**Estimated Time:** 1 hour
+
+### Added
+- Updated README with full endpoint documentation and curl examples
+
+### Changed
+- Accepted `subject_name` as input for `POST /api/v1/plans` instead of requiring `subject_id`
+
+## [0.15.1] - 2026-03-07
+
+**Estimated Time:** 1-2 hours
+
+### Added
+- Added integration tests for `GET /api/v1/plans/:id/reconciliation` endpoint
+
+## [0.15.0] - 2026-03-06
+
+**Estimated Time:** 1-2 hours
+
+### Added
+- Added `GET /api/v1/plans/:id/reconciliation` endpoint
+- Added `ReconciliationSerializer` to convert material IDs to snake_case names and omit internal fields from the response
+
+## [0.14.1] - 2026-03-04
+
+**Estimated Time:** 25 minutes
+
+### Fixed
+- Fixed rate limiter crashing on request objects instead of path strings
+
+## [0.14.0] - 2026-03-04
+
+**Estimated Time:** 1-2 hours
+
+### Added
+- Added Rack::Attack rate limiting for API and login routes
+- Added integration tests verifying 429 status and proper error JSON response
+
+### Changed
+- Lowered API key count limit from 5 to 3 per user
+
+## [0.13.7] - 2026-03-01
+
+**Estimated Time:** 30-45 minutes
+
+### Changed
+- Added turbo frame attributes to dashboard nav links
+- Replaced CSS active nav states with a Stimulus navbar controller
+
+## [0.13.6] - 2026-03-01
+
+**Estimated Time:** 10-15 minutes
+
+### Changed
+- Moved plan ownership check into the Plan model
+- Refactored `#set_guest_token` to use `||=` assignment
+
+## [0.13.5] - 2026-03-01
+
+**Estimated Time:** 5-10 minutes
+
+### Fixed
+- Fixed typo on `:weapon_type` for Luuk Herssen resonator seed data
+
+## [0.13.4] - 2026-03-01
+
+**Estimated Time:** 2-3 hours
+
+### Added
+- Added integration tests for `POST /api/v1/plans` endpoint
+
+### Fixed
+- Fixed params parsing error on plan creation
+- Fixed typo on unprocessable entity status code
+- Fixed typo in `RoverAscensionCost` class name
+
+## [0.13.3] - 2026-03-01
+
+**Estimated Time:** 30-45 minutes
+
+### Added
+- Added uniqueness constraint on plans scoped to user, subject type, and subject ID
+
+### Fixed
+- Fixed ascension rank nil crash in planner service
+
+### Changed
+- Refactored planner service validation, and memoized common material lookups
+
+## [0.13.2] - 2026-03-01
+
+**Estimated Time:** 1-2 hours
+
+### Added
+- Added `GET /api/v1/inventory` endpoint returning a flat hashmap of inventory as JSON
+- Added integration tests for the inventory endpoint
+
+## [0.13.1] - 2026-03-01
+
+**Estimated Time:** 30 minutes
+
+### Added
+- Added `Material#snake_case_name` method with tests covering multiple cases
+
+### Changed
+- Updated `#requirements` to use the new `#snake_case_name` method
+
+## [0.13.0] - 2026-03-01
+
+**Estimated Time:** 1-2 hours
+
+### Added
+- Added `POST /api/v1/plans` endpoint
+- Added `last_used_at` column to ApiKeys, updated on every successful authentication
+- Added flash notice on API key deletion
+
+### Changed
+- Refactored API key token storage to use SHA-256 hexdigest instead of plain text token
+
+## [0.12.5] - 2026-02-22
+
+**Estimated Time:** 45 minutes - 1 hour
+
+### Added
+- Added integration tests for `GET /api/v1/plans` covering auth, status codes, and serialized response
+
+## [0.12.4] - 2026-02-22
+
+**Estimated Time:** 30-45 minutes
+
+### Added
+- Added API key management UI for creating and deleting keys
+- Added a limit of 5 API keys per user
+
+### Fixed
+- Fixed incorrect keyword argument passed when creating API keys
+
+## [0.12.3] - 2026-02-22
+
+**Estimated Time:** 2-3 hours
+
+### Added
+- Added `GET /api/v1/plans` endpoint scoped to authenticated user
+- Added `PlanSerializer` to resolve plan data into a proper JSON response shape
+
+### Fixed
+- Fixed token authentication not being available in the API base controller
+- Fixed misspelled association name on User preventing API key lookups
+
+### Changed
+- Refactored PlanSerializer to use the polymorphic subject name instead of digging through `plan_data`
+- Used eager loading on plans query to prevent N+1 queries
+
+## [0.12.2] - 2026-02-22
+
+**Estimated Time:** 10-15 minutes
+
+### Added
+- Added routes for ApiKey resources (create and destroy only, scoped under `/app`)
+- Added `GET /api/v1/plans` route
+
+## [0.12.1] - 2026-02-22
+
+**Estimated Time:** 1 hour
+
+### Added
+- Added `ApiKey` model with token generation, name validation, and dependent delete on user model
+- Added database migration for ApiKeys with `user_id` and `token` columns
+
+## [0.12.0] - 2026-02-22
+
+**Estimated Time:** 1-2 hours
+
+### Added
+- Built `Api::V1::BaseController` with token authentication and standardized 400/401/404 error responses
+
+### Changed
+- Updated Rails from 8.1.1 to 8.1.2
+
+## [0.11.3] - 2026-02-17
+
+**Estimated Time:** 6-8 hours
+
+### Added
+- Added Resonator and Weapon image icons
+- Updated game data seeds to include new Lahai Roi resonators, weapons, and materials (current as of 2026-02-15)
+- Added `region` column to the `WeaponTypeMaterial` mapping table to support Lahai Roi weapon materials
+- Added MIT License
+
+### Fixed
+- Fixed typo in Luuk Herssen image filename
+- Fixed Everbright Polestar weapon icon filename (underscore to hyphen)
+- Fixed nil seed data from miscellaneous typos
+- Fixed database preparation not using bundler when starting the server
+
+### Changed
+- Changed Rover icons to show both gender variants
+- Resonator and weapon seeds now include image URLs and render in their respective views
+- Material seeds now include image URLs and render in all relevant views
+
 ## [0.11.2] - 2026-02-08
 
 **Estimated Time:** 5 minutes
