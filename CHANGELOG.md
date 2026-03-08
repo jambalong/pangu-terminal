@@ -3,7 +3,17 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [0.16.4] - 2026-03-07
+
+**Estimated Time:** 10 minutes
+
+### Changed
+- Replaced Gacha Calculator feature card with REST API feature card
+- Updated sync banner to reflect current and upcoming features
+
 ## [0.16.3] - 2026-03-07
+
+**Estimated Time:** 30 minutes
 
 ### Fixed
 - Account settings form now correctly submits to PATCH /settings

@@ -505,4 +505,4 @@ The production version of this application is currently deployed via **Kamal 2**
 ---
 
 **Last Updated:** March 2026
-**Version:** 0.16.3
+**Version:** 0.16.4
