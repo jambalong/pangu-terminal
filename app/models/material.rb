@@ -20,6 +20,9 @@ class Material < ApplicationRecord
     "WeeklyBossDrop"
   ].freeze
 
+  has_many :material_sources
+  has_many :sources, through: :material_sources
+
   validates :name, presence: true, uniqueness: true
   validates :material_type, presence: true
   validates :category, presence: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_02_064036) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_08_072344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_064036) do
     t.index ["material_id"], name: "index_inventory_items_on_material_id"
     t.index ["user_id", "material_id"], name: "index_inventory_items_on_user_id_and_material_id", unique: true
     t.index ["user_id"], name: "index_inventory_items_on_user_id"
+  end
+
+  create_table "material_sources", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "material_id", null: false
+    t.bigint "source_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["material_id", "source_id"], name: "index_material_sources_on_material_id_and_source_id", unique: true
+    t.index ["material_id"], name: "index_material_sources_on_material_id"
+    t.index ["source_id"], name: "index_material_sources_on_source_id"
   end
 
   create_table "materials", force: :cascade do |t|
@@ -272,6 +282,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_064036) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "sources", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "location", null: false
+    t.string "name", null: false
+    t.string "region", null: false
+    t.string "source_type", null: false
+    t.datetime "updated_at", null: false
+    t.integer "waveplate_cost", null: false
+    t.index ["name"], name: "index_sources_on_name", unique: true
+    t.index ["region"], name: "index_sources_on_region"
+    t.index ["source_type"], name: "index_sources_on_source_type"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -337,6 +360,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_064036) do
   add_foreign_key "api_keys", "users"
   add_foreign_key "inventory_items", "materials"
   add_foreign_key "inventory_items", "users"
+  add_foreign_key "material_sources", "materials"
+  add_foreign_key "material_sources", "sources"
   add_foreign_key "plans", "users"
   add_foreign_key "resonator_material_maps", "materials"
   add_foreign_key "resonator_material_maps", "resonators"
