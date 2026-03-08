@@ -1,7 +1,12 @@
 <div class="auth-container" style="max-width: 500px;">
   <h2 class="auth-title">Account Settings</h2>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= form_for(
+    resource,
+    as: resource_name,
+    url: update_user_registration_path,
+    html: { method: :patch, data: { turbo: false } }
+    ) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div class="auth-form-group">

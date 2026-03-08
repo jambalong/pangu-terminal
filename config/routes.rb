@@ -19,9 +19,9 @@ Rails.application.routes.draw do
     post "signup", to: "devise/registrations#create", as: :user_registration
     delete "signup", to: "devise/registrations#destroy"
 
-    get "settings", to: "devise/registrations#edit", as: :edit_user_registration
-    patch "settings", to: "devise/registrations#update"
-    put "settings", to: "devise/registrations#update"
+    get "settings", to: "users/registrations#edit", as: :edit_user_registration
+    patch "settings", to: "users/registrations#update", as: :update_user_registration
+    put "settings", to: "users/registrations#update"
   end
 
   scope "/app" do
