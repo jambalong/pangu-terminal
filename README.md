@@ -499,4 +499,4 @@ The production version of this application is currently deployed via **Kamal 2**
 ---
 
 **Last Updated:** March 2026
-**Version:** 0.11.2
+**Version:** 0.15.3
