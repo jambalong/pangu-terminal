@@ -401,7 +401,7 @@ This updates the edited item immediately, then recomputes synthesis for the enti
 ## Getting Started
 
 ### Prerequisites
-- Ruby 3.4+ (via `rbenv`, `asdf`, or system)
+- Ruby 3.4+ (via `rbenv`, `asdf`, `mise`, or system)
 - Docker & Docker Compose
 - Git
 
