@@ -418,17 +418,23 @@ This updates the edited item immediately, then recomputes synthesis for the enti
    bundle install
    ```
 
-3. **Start the database container:**
+3. **Set up environment variables:**
+   ```bash
+    cp .env.example .env
+   ```
+   Fill in your Postgres credentials in `.env` before starting the database container.
+
+4. **Start the database container:**
    ```bash
    docker-compose up -d
    ```
 
-4. **Prepare the database:**
+5. **Prepare the database:**
    ```bash
    bin/rails db:prepare
    ```
 
-5. **Run the server:**
+6. **Run the server:**
    ```bash
    bin/dev
    ```
