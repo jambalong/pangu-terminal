@@ -25,7 +25,7 @@ class Plan < ApplicationRecord
 
   def owned_by?(user:, guest_token:)
     return user_id == user.id if user.present?
-    user.id.nil? && self.guest_token == guest_token
+    self.guest_token == guest_token
   end
 
   private
