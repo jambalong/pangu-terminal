@@ -4,9 +4,14 @@ module Api
       include ActionController::HttpAuthentication::Token::ControllerMethods
 
       before_action :authenticate_api_key!
+      skip_before_action :authenticate_api_key!, only: :handle_not_found
 
       rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
       rescue_from ActionController::ParameterMissing, with: :handle_bad_request
+
+      def handle_not_found
+        render json: { error: "Record not found" }, status: :not_found
+      end
 
       private
 
@@ -22,10 +27,6 @@ module Api
 
       def handle_unauthorized
         render json: { error: "Unauthorized" }, status: :unauthorized
-      end
-
-      def handle_not_found
-        render json: { error: "Record not found" }, status: :not_found
       end
 
       def handle_bad_request(e)

@@ -48,6 +48,8 @@ Rails.application.routes.draw do
 
       resources :inventory, only: [ :index ]
       resources :materials, only: [ :index ]
+
+      match "*path", to: "base#handle_not_found", via: :all
     end
   end
 
