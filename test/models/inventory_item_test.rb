@@ -5,7 +5,7 @@ class InventoryItemTest < ActiveSupport::TestCase
     @user = User.create!(email: "test@example.com", password: "password123")
     @material = Material.create!(
       name: "Test Material",
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       category: "Weapon and Skill Material",
       rarity: 2
     )

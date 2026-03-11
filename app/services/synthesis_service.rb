@@ -72,7 +72,7 @@ class SynthesisService
 
   def exp_potion?(material)
     return false unless material
-    material.material_type.in?(%w[ResonatorEXP WeaponEXP])
+    material.material_type.in?(%w[resonator_exp weapon_exp])
   end
 
   def find_synthesis_opportunity(material, owned_qty, needed_qty, deficit)
@@ -98,7 +98,7 @@ class SynthesisService
     return false unless material
 
     material.category == "Weapon and Skill Material" &&
-      material.material_type.in?(%w[EnemyDrop ForgeryDrop])
+      material.material_type.in?(%w[enemy_drop forgery_drop])
   end
 
   def find_lower_tier(material)

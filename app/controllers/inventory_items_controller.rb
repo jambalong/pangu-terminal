@@ -81,7 +81,7 @@ class InventoryItemsController < ApplicationController
 
   def exp_potion?(material)
     return false unless material
-    material.material_type.in?(%w[ResonatorEXP WeaponEXP])
+    material.material_type.in?(%w[resonator_exp weapon_exp])
   end
 
   def set_inventory_item

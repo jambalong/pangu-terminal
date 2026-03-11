@@ -1,7 +1,7 @@
 class Plan < ApplicationRecord
   EXP_POTION_TYPE_MAP = {
-    "Resonator" => "ResonatorEXP",
-    "Weapon" => "WeaponEXP"
+    "Resonator" => "resonator_exp",
+    "Weapon" => "weapon_exp"
   }.freeze
 
   belongs_to :user, optional: true

@@ -4,7 +4,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
   setup do
     @forgery_material = Material.create!(
       name: "Test Material",
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       category: "Weapon and Skill Material",
       rarity: 2,
       exp_value: 0
@@ -36,7 +36,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
   test "EXP potion: higher tier satisfies lower tier need" do
     potion_rarity2 = Material.create!(
       name: "EXP Potion Rarity 2",
-      material_type: "ResonatorEXP",
+      material_type: "resonator_exp",
       category: "Resonator EXP Material",
       rarity: 2,
       exp_value: 1000
@@ -44,7 +44,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
 
     potion_rarity3 = Material.create!(
       name: "EXP Potion Rarity 3",
-      material_type: "ResonatorEXP",
+      material_type: "resonator_exp",
       category: "Resonator EXP Material",
       rarity: 3,
       exp_value: 3000
@@ -63,7 +63,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
   test "EXP potion: mixed tiers satisfy need" do
     potion_rarity2 = Material.create!(
       name: "EXP Potion Rarity 2",
-      material_type: "ResonatorEXP",
+      material_type: "resonator_exp",
       category: "Resonator EXP Material",
       rarity: 2,
       exp_value: 1000
@@ -71,7 +71,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
 
     potion_rarity3 = Material.create!(
       name: "EXP Potion Rarity 3",
-      material_type: "ResonatorEXP",
+      material_type: "resonator_exp",
       category: "Resonator EXP Material",
       rarity: 3,
       exp_value: 3000
@@ -79,7 +79,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
 
     potion_tier4 = Material.create!(
       name: "EXP Potion",
-      material_type: "ResonatorEXP",
+      material_type: "resonator_exp",
       category: "Resonator EXP Material",
       rarity: 4,
       exp_value: 8000
@@ -99,7 +99,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
   test "synthesis opportunity: detects when surplus can convert" do
     material_rarity2 = Material.create!(
       name: "Test Material Rarity 2",
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       category: "Weapon and Skill Material",
       rarity: 2,
       item_group_id: 1
@@ -107,7 +107,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
 
     material_rarity3 = Material.create!(
       name: "Test Material Rarity 3",
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       category: "Weapon and Skill Material",
       rarity: 3,
       item_group_id: 1
@@ -127,7 +127,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
   test "no synthesis opportunity when no surplus" do
     material_rarity2 = Material.create!(
       name: "Test Material Rarity 2",
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       category: "Weapon and Skill Material",
       rarity: 2,
       item_group_id: 1
@@ -135,7 +135,7 @@ class SynthesisServiceTest < ActiveSupport::TestCase
 
     material_rarity3 = Material.create!(
       name: "Test Material Rarity 3",
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       category: "Weapon and Skill Material",
       rarity: 3,
       item_group_id: 1

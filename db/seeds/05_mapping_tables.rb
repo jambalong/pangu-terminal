@@ -359,14 +359,14 @@ def map_resonator_materials(resonator, boss_mat, flower_mat, enemy_mat, weekly_b
   # Boss Drops
   ResonatorMaterialMap.find_or_initialize_by(
     resonator: resonator,
-    material_type: "BossDrop",
+    material_type: "boss_drop",
     rarity: 4
   ).update!(material: boss_mat)
 
   # Flowers
   ResonatorMaterialMap.find_or_initialize_by(
     resonator: resonator,
-    material_type: "Flower",
+    material_type: "flower",
     rarity: 1
   ).update!(material: flower_mat)
 
@@ -376,7 +376,7 @@ def map_resonator_materials(resonator, boss_mat, flower_mat, enemy_mat, weekly_b
 
     ResonatorMaterialMap.find_or_initialize_by(
       resonator: resonator,
-      material_type: "EnemyDrop",
+      material_type: "enemy_drop",
       rarity: rarity
     ).update!(material: material)
   end
@@ -384,7 +384,7 @@ def map_resonator_materials(resonator, boss_mat, flower_mat, enemy_mat, weekly_b
   # Weekly Boss Drops
   ResonatorMaterialMap.find_or_initialize_by(
     resonator: resonator,
-    material_type: "WeeklyBossDrop",
+    material_type: "weekly_boss_drop",
     rarity: 4
   ).update!(material: weekly_boss_mat)
 end
@@ -462,7 +462,7 @@ def map_weapon_materials(material_set, weapon_array)
     weapon_array.each do |weapon|
       WeaponMaterialMap.find_or_initialize_by(
         weapon: weapon,
-        material_type: "EnemyDrop",
+        material_type: "enemy_drop",
         rarity: rarity
       ).update!(material: material)
     end
@@ -595,7 +595,7 @@ def map_weapon_type_materials(weapon_type, material_set, region)
 
     WeaponTypeMaterial.find_or_initialize_by(
       weapon_type: weapon_type,
-      material_type: "ForgeryDrop",
+      material_type: "forgery_drop",
       rarity: rarity,
       region: region
     ).update!(material: material)

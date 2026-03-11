@@ -136,38 +136,38 @@ end
 # --- Rover Ascension Costs ---
 ROVER_ASCENSION_COSTS = [
   # Ascension Rank 1 (Unlocks Level 20)
-  { rank: 1, type: "Credit", rarity: 3, quantity: 5000 },
-  { rank: 1, type: "EnemyDrop", rarity: 2, quantity: 4 },
+  { rank: 1, type: "credit", rarity: 3, quantity: 5000 },
+  { rank: 1, type: "enemy_drop", rarity: 2, quantity: 4 },
 
   # Ascension Rank 2 (Unlocks Level 40)
-  { rank: 2, type: "Credit", rarity: 3, quantity: 10000 },
-  { rank: 2, type: "EnemyDrop", rarity: 3, quantity: 4 },
-  { rank: 2, type: "BossDrop", rarity: 5, quantity: 1 },
-  { rank: 2, type: "Flower", rarity: 1, quantity: 4 },
+  { rank: 2, type: "credit", rarity: 3, quantity: 10000 },
+  { rank: 2, type: "enemy_drop", rarity: 3, quantity: 4 },
+  { rank: 2, type: "boss_drop", rarity: 5, quantity: 1 },
+  { rank: 2, type: "flower", rarity: 1, quantity: 4 },
 
   # Ascension Rank 3 (Unlocks Level 50)
-  { rank: 3, type: "Credit", rarity: 3, quantity: 15000 },
-  { rank: 3, type: "EnemyDrop", rarity: 3, quantity: 8 },
-  { rank: 3, type: "BossDrop", rarity: 5, quantity: 1 },
-  { rank: 3, type: "Flower", rarity: 1, quantity: 8 },
+  { rank: 3, type: "credit", rarity: 3, quantity: 15000 },
+  { rank: 3, type: "enemy_drop", rarity: 3, quantity: 8 },
+  { rank: 3, type: "boss_drop", rarity: 5, quantity: 1 },
+  { rank: 3, type: "flower", rarity: 1, quantity: 8 },
 
   # Ascension Rank 4 (Unlocks Level 60)
-  { rank: 4, type: "Credit", rarity: 3, quantity: 20000 },
-  { rank: 4, type: "EnemyDrop", rarity: 4, quantity: 4 },
-  { rank: 4, type: "BossDrop", rarity: 5, quantity: 1 },
-  { rank: 4, type: "Flower", rarity: 1, quantity: 12 },
+  { rank: 4, type: "credit", rarity: 3, quantity: 20000 },
+  { rank: 4, type: "enemy_drop", rarity: 4, quantity: 4 },
+  { rank: 4, type: "boss_drop", rarity: 5, quantity: 1 },
+  { rank: 4, type: "flower", rarity: 1, quantity: 12 },
 
   # Ascension Rank 5 (Unlocks Level 70)
-  { rank: 5, type: "Credit", rarity: 3, quantity: 40000 },
-  { rank: 5, type: "EnemyDrop", rarity: 4, quantity: 8 },
-  { rank: 5, type: "BossDrop", rarity: 5, quantity: 1 },
-  { rank: 5, type: "Flower", rarity: 1, quantity: 16 },
+  { rank: 5, type: "credit", rarity: 3, quantity: 40000 },
+  { rank: 5, type: "enemy_drop", rarity: 4, quantity: 8 },
+  { rank: 5, type: "boss_drop", rarity: 5, quantity: 1 },
+  { rank: 5, type: "flower", rarity: 1, quantity: 16 },
 
   # Ascension Rank 6 (Unlocks Level 80)
-  { rank: 6, type: "Credit", rarity: 3, quantity: 80000 },
-  { rank: 6, type: "EnemyDrop", rarity: 5, quantity: 4 },
-  { rank: 6, type: "BossDrop", rarity: 5, quantity: 1 },
-  { rank: 6, type: "Flower", rarity: 1, quantity: 20 }
+  { rank: 6, type: "credit", rarity: 3, quantity: 80000 },
+  { rank: 6, type: "enemy_drop", rarity: 5, quantity: 4 },
+  { rank: 6, type: "boss_drop", rarity: 5, quantity: 1 },
+  { rank: 6, type: "flower", rarity: 1, quantity: 20 }
 ].freeze
 
 def create_rover_ascension_cost(rank, type, rarity, quantity)
@@ -185,38 +185,38 @@ end
 # --- Resonator Ascension Costs ---
 RESONATOR_ASCENSION_COSTS = [
   # Ascension Rank 1 (Unlocks Level 20)
-  { rank: 1, type: "Credit", rarity: 3, quantity: 5000 },
-  { rank: 1, type: "EnemyDrop", rarity: 2, quantity: 4 },
+  { rank: 1, type: "credit", rarity: 3, quantity: 5000 },
+  { rank: 1, type: "enemy_drop", rarity: 2, quantity: 4 },
 
   # Ascension Rank 2 (Unlocks Level 40)
-  { rank: 2, type: "Credit", rarity: 3, quantity: 10000 },
-  { rank: 2, type: "EnemyDrop", rarity: 3, quantity: 4 },
-  { rank: 2, type: "BossDrop", rarity: 4, quantity: 3 },
-  { rank: 2, type: "Flower", rarity: 1, quantity: 4 },
+  { rank: 2, type: "credit", rarity: 3, quantity: 10000 },
+  { rank: 2, type: "enemy_drop", rarity: 3, quantity: 4 },
+  { rank: 2, type: "boss_drop", rarity: 4, quantity: 3 },
+  { rank: 2, type: "flower", rarity: 1, quantity: 4 },
 
   # Ascension Rank 3 (Unlocks Level 50)
-  { rank: 3, type: "Credit", rarity: 3, quantity: 15000 },
-  { rank: 3, type: "EnemyDrop", rarity: 3, quantity: 8 },
-  { rank: 3, type: "BossDrop", rarity: 4, quantity: 6 },
-  { rank: 3, type: "Flower", rarity: 1, quantity: 8 },
+  { rank: 3, type: "credit", rarity: 3, quantity: 15000 },
+  { rank: 3, type: "enemy_drop", rarity: 3, quantity: 8 },
+  { rank: 3, type: "boss_drop", rarity: 4, quantity: 6 },
+  { rank: 3, type: "flower", rarity: 1, quantity: 8 },
 
   # Ascension Rank 4 (Unlocks Level 60)
-  { rank: 4, type: "Credit", rarity: 3, quantity: 20000 },
-  { rank: 4, type: "EnemyDrop", rarity: 4, quantity: 4 },
-  { rank: 4, type: "BossDrop", rarity: 4, quantity: 9 },
-  { rank: 4, type: "Flower", rarity: 1, quantity: 12 },
+  { rank: 4, type: "credit", rarity: 3, quantity: 20000 },
+  { rank: 4, type: "enemy_drop", rarity: 4, quantity: 4 },
+  { rank: 4, type: "boss_drop", rarity: 4, quantity: 9 },
+  { rank: 4, type: "flower", rarity: 1, quantity: 12 },
 
   # Ascension Rank 5 (Unlocks Level 70)
-  { rank: 5, type: "Credit", rarity: 3, quantity: 40000 },
-  { rank: 5, type: "EnemyDrop", rarity: 4, quantity: 8 },
-  { rank: 5, type: "BossDrop", rarity: 4, quantity: 12 },
-  { rank: 5, type: "Flower", rarity: 1, quantity: 16 },
+  { rank: 5, type: "credit", rarity: 3, quantity: 40000 },
+  { rank: 5, type: "enemy_drop", rarity: 4, quantity: 8 },
+  { rank: 5, type: "boss_drop", rarity: 4, quantity: 12 },
+  { rank: 5, type: "flower", rarity: 1, quantity: 16 },
 
   # Ascension Rank 6 (Unlocks Level 80)
-  { rank: 6, type: "Credit", rarity: 3, quantity: 80000 },
-  { rank: 6, type: "EnemyDrop", rarity: 5, quantity: 4 },
-  { rank: 6, type: "BossDrop", rarity: 4, quantity: 16 },
-  { rank: 6, type: "Flower", rarity: 1, quantity: 20 }
+  { rank: 6, type: "credit", rarity: 3, quantity: 80000 },
+  { rank: 6, type: "enemy_drop", rarity: 5, quantity: 4 },
+  { rank: 6, type: "boss_drop", rarity: 4, quantity: 16 },
+  { rank: 6, type: "flower", rarity: 1, quantity: 20 }
 ].freeze
 
 def create_resonator_ascension_cost(rank, type, rarity, quantity)
@@ -234,57 +234,57 @@ end
 # --- Skill Costs ---
 SKILL_COSTS = [
   # Skill Level 1 -> 2
-  { level: 2, type: "Credit", rarity: 3, quantity: 1500 },
-  { level: 2, type: "EnemyDrop", rarity: 2, quantity: 2 },
-  { level: 2, type: "ForgeryDrop", rarity: 2, quantity: 2 },
+  { level: 2, type: "credit", rarity: 3, quantity: 1500 },
+  { level: 2, type: "enemy_drop", rarity: 2, quantity: 2 },
+  { level: 2, type: "forgery_drop", rarity: 2, quantity: 2 },
 
   # Skill Level 2 -> 3
-  { level: 3, type: "Credit", rarity: 3, quantity: 2000 },
-  { level: 3, type: "EnemyDrop", rarity: 2, quantity: 3 },
-  { level: 3, type: "ForgeryDrop", rarity: 2, quantity: 3 },
+  { level: 3, type: "credit", rarity: 3, quantity: 2000 },
+  { level: 3, type: "enemy_drop", rarity: 2, quantity: 3 },
+  { level: 3, type: "forgery_drop", rarity: 2, quantity: 3 },
 
   # Skill Level 3 -> 4
   # Note: Material rarity increases here
-  { level: 4, type: "Credit", rarity: 3, quantity: 4500 },
-  { level: 4, type: "EnemyDrop", rarity: 3, quantity: 2 },
-  { level: 4, type: "ForgeryDrop", rarity: 3, quantity: 2 },
+  { level: 4, type: "credit", rarity: 3, quantity: 4500 },
+  { level: 4, type: "enemy_drop", rarity: 3, quantity: 2 },
+  { level: 4, type: "forgery_drop", rarity: 3, quantity: 2 },
 
   # Skill Level 4 -> 5
-  { level: 5, type: "Credit", rarity: 3, quantity: 6000 },
-  { level: 5, type: "EnemyDrop", rarity: 3, quantity: 3 },
-  { level: 5, type: "ForgeryDrop", rarity: 3, quantity: 3 },
+  { level: 5, type: "credit", rarity: 3, quantity: 6000 },
+  { level: 5, type: "enemy_drop", rarity: 3, quantity: 3 },
+  { level: 5, type: "forgery_drop", rarity: 3, quantity: 3 },
 
   # Skill Level 5 -> 6
   # Note: Material rarity increases here
-  { level: 6, type: "Credit", rarity: 3, quantity: 16000 },
-  { level: 6, type: "EnemyDrop", rarity: 4, quantity: 2 },
-  { level: 6, type: "ForgeryDrop", rarity: 4, quantity: 3 },
+  { level: 6, type: "credit", rarity: 3, quantity: 16000 },
+  { level: 6, type: "enemy_drop", rarity: 4, quantity: 2 },
+  { level: 6, type: "forgery_drop", rarity: 4, quantity: 3 },
 
   # Skill Level 6 -> 7
-  # Note: Added `WeeklyBossDrop` material requirement
-  { level: 7, type: "Credit", rarity: 3, quantity: 30000 },
-  { level: 7, type: "EnemyDrop", rarity: 4, quantity: 3 },
-  { level: 7, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 7, type: "ForgeryDrop", rarity: 4, quantity: 5 },
+  # Note: Added `weekly_boss_drop` material requirement
+  { level: 7, type: "credit", rarity: 3, quantity: 30000 },
+  { level: 7, type: "enemy_drop", rarity: 4, quantity: 3 },
+  { level: 7, type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { level: 7, type: "forgery_drop", rarity: 4, quantity: 5 },
 
   # Skill Level 7 -> 8
   # Note: Material rarity increases here
-  { level: 8, type: "Credit", rarity: 3, quantity: 50000 },
-  { level: 8, type: "EnemyDrop", rarity: 5, quantity: 2 },
-  { level: 8, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 8, type: "ForgeryDrop", rarity: 5, quantity: 2 },
+  { level: 8, type: "credit", rarity: 3, quantity: 50000 },
+  { level: 8, type: "enemy_drop", rarity: 5, quantity: 2 },
+  { level: 8, type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { level: 8, type: "forgery_drop", rarity: 5, quantity: 2 },
 
   # Skill Level 8 -> 9
-  { level: 9, type: "Credit", rarity: 3, quantity: 70000 },
-  { level: 9, type: "EnemyDrop", rarity: 5, quantity: 3 },
-  { level: 9, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 9, type: "ForgeryDrop", rarity: 5, quantity: 3 },
+  { level: 9, type: "credit", rarity: 3, quantity: 70000 },
+  { level: 9, type: "enemy_drop", rarity: 5, quantity: 3 },
+  { level: 9, type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { level: 9, type: "forgery_drop", rarity: 5, quantity: 3 },
 
   # Skill Level 9 -> 10
-  { level: 10, type: "Credit", rarity: 3, quantity: 100000 },
-  { level: 10, type: "EnemyDrop", rarity: 5, quantity: 4 },
-  { level: 10, type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { level: 10, type: "ForgeryDrop", rarity: 5, quantity: 6 }
+  { level: 10, type: "credit", rarity: 3, quantity: 100000 },
+  { level: 10, type: "enemy_drop", rarity: 5, quantity: 4 },
+  { level: 10, type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { level: 10, type: "forgery_drop", rarity: 5, quantity: 6 }
 ].freeze
 
 def create_skill_cost(level, type, rarity, quantity)
@@ -302,29 +302,29 @@ end
 # --- Forte Node Costs ---
 FORTE_NODE_COSTS = [
   # Inherent Skill tier 1
-  { node_identifier: "Inherent Skill Tier 1", type: "Credit", rarity: 3, quantity: 10000 },
-  { node_identifier: "Inherent Skill Tier 1", type: "EnemyDrop", rarity: 3, quantity: 3 },
-  { node_identifier: "Inherent Skill Tier 1", type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node_identifier: "Inherent Skill Tier 1", type: "ForgeryDrop", rarity: 3, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 1", type: "credit", rarity: 3, quantity: 10000 },
+  { node_identifier: "Inherent Skill Tier 1", type: "enemy_drop", rarity: 3, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 1", type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { node_identifier: "Inherent Skill Tier 1", type: "forgery_drop", rarity: 3, quantity: 3 },
 
   # Inherent Skill tier 2
   # Note: Material rarity increases here
-  { node_identifier: "Inherent Skill Tier 2", type: "Credit", rarity: 3, quantity: 20000 },
-  { node_identifier: "Inherent Skill Tier 2", type: "EnemyDrop", rarity: 4, quantity: 3 },
-  { node_identifier: "Inherent Skill Tier 2", type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node_identifier: "Inherent Skill Tier 2", type: "ForgeryDrop", rarity: 4, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 2", type: "credit", rarity: 3, quantity: 20000 },
+  { node_identifier: "Inherent Skill Tier 2", type: "enemy_drop", rarity: 4, quantity: 3 },
+  { node_identifier: "Inherent Skill Tier 2", type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { node_identifier: "Inherent Skill Tier 2", type: "forgery_drop", rarity: 4, quantity: 3 },
 
   # Stat Bonus tier 1
-  { node_identifier: "Stat Bonus Tier 1", type: "Credit", rarity: 3, quantity: 50000 },
-  { node_identifier: "Stat Bonus Tier 1", type: "EnemyDrop", rarity: 4, quantity: 3 },
-  { node_identifier: "Stat Bonus Tier 1", type: "ForgeryDrop", rarity: 4, quantity: 3 },
+  { node_identifier: "Stat Bonus Tier 1", type: "credit", rarity: 3, quantity: 50000 },
+  { node_identifier: "Stat Bonus Tier 1", type: "enemy_drop", rarity: 4, quantity: 3 },
+  { node_identifier: "Stat Bonus Tier 1", type: "forgery_drop", rarity: 4, quantity: 3 },
 
   # Stat Bonus tier 2
   # Note: Material rarity increases here
-  { node_identifier: "Stat Bonus Tier 2", type: "Credit", rarity: 3, quantity: 100000 },
-  { node_identifier: "Stat Bonus Tier 2", type: "EnemyDrop", rarity: 5, quantity: 3 },
-  { node_identifier: "Stat Bonus Tier 2", type: "WeeklyBossDrop", rarity: 4, quantity: 1 },
-  { node_identifier: "Stat Bonus Tier 2", type: "ForgeryDrop", rarity: 5, quantity: 3 }
+  { node_identifier: "Stat Bonus Tier 2", type: "credit", rarity: 3, quantity: 100000 },
+  { node_identifier: "Stat Bonus Tier 2", type: "enemy_drop", rarity: 5, quantity: 3 },
+  { node_identifier: "Stat Bonus Tier 2", type: "weekly_boss_drop", rarity: 4, quantity: 1 },
+  { node_identifier: "Stat Bonus Tier 2", type: "forgery_drop", rarity: 5, quantity: 3 }
 ].freeze
 
 def create_forte_node_cost(node, type, rarity, quantity)
@@ -587,72 +587,72 @@ end
 # --- Weapon Ascension Costs ---
 WEAPON_ASCENSION_COSTS = [
   # 5-stars Ascension Rank 1
-  { stars: 5, rank: 1, type: "Credit", rarity: 3, quantity: 10000 },
-  { stars: 5, rank: 1, type: "EnemyDrop", rarity: 2, quantity: 6 },
+  { stars: 5, rank: 1, type: "credit", rarity: 3, quantity: 10000 },
+  { stars: 5, rank: 1, type: "enemy_drop", rarity: 2, quantity: 6 },
 
   # 5-stars Ascension Rank 2
   # Note: Material rarity increases here
-  # Note: Add `ForgeryDrop` material requirement
-  { stars: 5, rank: 2, type: "Credit", rarity: 3, quantity: 20000 },
-  { stars: 5, rank: 2, type: "EnemyDrop", rarity: 3, quantity: 6 },
-  { stars: 5, rank: 2, type: "ForgeryDrop", rarity: 2, quantity: 6 },
+  # Note: Add `forgery_drop` material requirement
+  { stars: 5, rank: 2, type: "credit", rarity: 3, quantity: 20000 },
+  { stars: 5, rank: 2, type: "enemy_drop", rarity: 3, quantity: 6 },
+  { stars: 5, rank: 2, type: "forgery_drop", rarity: 2, quantity: 6 },
 
   # 5-stars Ascension Rank 3
   # Note: Material rarity increases here
-  { stars: 5, rank: 3, type: "Credit", rarity: 3, quantity: 40000 },
-  { stars: 5, rank: 3, type: "EnemyDrop", rarity: 4, quantity: 4 },
-  { stars: 5, rank: 3, type: "ForgeryDrop", rarity: 3, quantity: 8 },
+  { stars: 5, rank: 3, type: "credit", rarity: 3, quantity: 40000 },
+  { stars: 5, rank: 3, type: "enemy_drop", rarity: 4, quantity: 4 },
+  { stars: 5, rank: 3, type: "forgery_drop", rarity: 3, quantity: 8 },
 
   # 5-stars Ascension Rank 4
   # Note: Material rarity increases here
-  { stars: 5, rank: 4, type: "Credit", rarity: 3, quantity: 60000 },
-  { stars: 5, rank: 4, type: "EnemyDrop", rarity: 4, quantity: 6 },
-  { stars: 5, rank: 4, type: "ForgeryDrop", rarity: 4, quantity: 6 },
+  { stars: 5, rank: 4, type: "credit", rarity: 3, quantity: 60000 },
+  { stars: 5, rank: 4, type: "enemy_drop", rarity: 4, quantity: 6 },
+  { stars: 5, rank: 4, type: "forgery_drop", rarity: 4, quantity: 6 },
 
   # 5-stars Ascension Rank 5
   # Note: Material rarity increases here
-  { stars: 5, rank: 5, type: "Credit", rarity: 3, quantity: 80000 },
-  { stars: 5, rank: 5, type: "EnemyDrop", rarity: 5, quantity: 4 },
-  { stars: 5, rank: 5, type: "ForgeryDrop", rarity: 5, quantity: 8 },
+  { stars: 5, rank: 5, type: "credit", rarity: 3, quantity: 80000 },
+  { stars: 5, rank: 5, type: "enemy_drop", rarity: 5, quantity: 4 },
+  { stars: 5, rank: 5, type: "forgery_drop", rarity: 5, quantity: 8 },
 
   # 5-stars Ascension Rank 6
-  { stars: 5, rank: 6, type: "Credit", rarity: 3, quantity: 120000 },
-  { stars: 5, rank: 6, type: "EnemyDrop", rarity: 5, quantity: 8 },
-  { stars: 5, rank: 6, type: "ForgeryDrop", rarity: 5, quantity: 12 },
+  { stars: 5, rank: 6, type: "credit", rarity: 3, quantity: 120000 },
+  { stars: 5, rank: 6, type: "enemy_drop", rarity: 5, quantity: 8 },
+  { stars: 5, rank: 6, type: "forgery_drop", rarity: 5, quantity: 12 },
 
   # 4-stars Ascension Rank 1
-  { stars: 4, rank: 1, type: "Credit", rarity: 3, quantity: 8000 },
-  { stars: 4, rank: 1, type: "EnemyDrop", rarity: 2, quantity: 5 },
+  { stars: 4, rank: 1, type: "credit", rarity: 3, quantity: 8000 },
+  { stars: 4, rank: 1, type: "enemy_drop", rarity: 2, quantity: 5 },
 
   # 4-stars Ascension Rank 2
   # Note: Material rarity increases here
-  # Note: Add `ForgeryDrop` material requirement
-  { stars: 4, rank: 2, type: "Credit", rarity: 3, quantity: 16000 },
-  { stars: 4, rank: 2, type: "EnemyDrop", rarity: 3, quantity: 5 },
-  { stars: 4, rank: 2, type: "ForgeryDrop", rarity: 2, quantity: 5 },
+  # Note: Add `forgery_drop` material requirement
+  { stars: 4, rank: 2, type: "credit", rarity: 3, quantity: 16000 },
+  { stars: 4, rank: 2, type: "enemy_drop", rarity: 3, quantity: 5 },
+  { stars: 4, rank: 2, type: "forgery_drop", rarity: 2, quantity: 5 },
 
   # 4-stars Ascension Rank 3
   # Note: Material rarity increases here
-  { stars: 4, rank: 3, type: "Credit", rarity: 3, quantity: 32000 },
-  { stars: 4, rank: 3, type: "EnemyDrop", rarity: 4, quantity: 4 },
-  { stars: 4, rank: 3, type: "ForgeryDrop", rarity: 3, quantity: 7 },
+  { stars: 4, rank: 3, type: "credit", rarity: 3, quantity: 32000 },
+  { stars: 4, rank: 3, type: "enemy_drop", rarity: 4, quantity: 4 },
+  { stars: 4, rank: 3, type: "forgery_drop", rarity: 3, quantity: 7 },
 
   # 4-stars Ascension Rank 4
   # Note: Material rarity increases here
-  { stars: 4, rank: 4, type: "Credit", rarity: 3, quantity: 48000 },
-  { stars: 4, rank: 4, type: "EnemyDrop", rarity: 4, quantity: 5 },
-  { stars: 4, rank: 4, type: "ForgeryDrop", rarity: 4, quantity: 5 },
+  { stars: 4, rank: 4, type: "credit", rarity: 3, quantity: 48000 },
+  { stars: 4, rank: 4, type: "enemy_drop", rarity: 4, quantity: 5 },
+  { stars: 4, rank: 4, type: "forgery_drop", rarity: 4, quantity: 5 },
 
   # 4-stars Ascension Rank 5
   # Note: Material rarity increases here
-  { stars: 4, rank: 5, type: "Credit", rarity: 3, quantity: 64000 },
-  { stars: 4, rank: 5, type: "EnemyDrop", rarity: 5, quantity: 4 },
-  { stars: 4, rank: 5, type: "ForgeryDrop", rarity: 5, quantity: 7 },
+  { stars: 4, rank: 5, type: "credit", rarity: 3, quantity: 64000 },
+  { stars: 4, rank: 5, type: "enemy_drop", rarity: 5, quantity: 4 },
+  { stars: 4, rank: 5, type: "forgery_drop", rarity: 5, quantity: 7 },
 
   # 4-stars Ascension Rank 6
-  { stars: 4, rank: 6, type: "Credit", rarity: 3, quantity: 96000 },
-  { stars: 4, rank: 6, type: "EnemyDrop", rarity: 5, quantity: 7 },
-  { stars: 4, rank: 6, type: "ForgeryDrop", rarity: 5, quantity: 10 }
+  { stars: 4, rank: 6, type: "credit", rarity: 3, quantity: 96000 },
+  { stars: 4, rank: 6, type: "enemy_drop", rarity: 5, quantity: 7 },
+  { stars: 4, rank: 6, type: "forgery_drop", rarity: 5, quantity: 10 }
 ].freeze
 
 def create_weapon_ascension_cost(stars, rank, type, rarity, quantity)

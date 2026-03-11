@@ -10,14 +10,14 @@ class Material < ApplicationRecord
   ].freeze
 
   MATERIAL_TYPE_ORDER = [
-    "Credit",
-    "ResonatorEXP",
-    "WeaponEXP",
-    "BossDrop",
-    "Flower",
-    "EnemyDrop",
-    "ForgeryDrop",
-    "WeeklyBossDrop"
+    "credit",
+    "resonator_exp",
+    "weapon_exp",
+    "boss_drop",
+    "flower",
+    "enemy_drop",
+    "forgery_drop",
+    "weekly_boss_drop"
   ].freeze
 
   has_many :material_sources

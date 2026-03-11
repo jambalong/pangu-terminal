@@ -1,12 +1,12 @@
 # Order:
-# - Credit
-# - ResonatorEXP
-# - WeaponEXP
-# - BossDrop
-# - Flower
-# - EnemyDrop
-# - ForgeryDrop
-# - WeeklyBossDrop
+# - credit
+# - resonator_exp
+# - weapon_exp
+# - boss_drop
+# - flower
+# - enemy_drop
+# - forgery_drop
+# - weekly_boss_drop
 
 # ===============================================
 # 03. MATERIALS
@@ -50,7 +50,7 @@ end
 shell_credit = Material.find_or_initialize_by(name: "Shell Credit")
 shell_credit.update!(
   rarity: 3,
-  material_type: "Credit",
+  material_type: "credit",
   category: "Universal Currency",
   image_url: "/images/materials/shell-credit.png"
 )
@@ -72,8 +72,8 @@ WEAPON_EXP_DATA = [
   { name: "Premium Energy Core", rarity: 5, exp: 20000 }
 ].freeze
 
-seed_material_set(RESONATOR_EXP_DATA, "ResonatorEXP", "Resonator EXP Material")
-seed_material_set(WEAPON_EXP_DATA, "WeaponEXP", "Weapon EXP Material")
+seed_material_set(RESONATOR_EXP_DATA, "resonator_exp", "Resonator EXP Material")
+seed_material_set(WEAPON_EXP_DATA, "weapon_exp", "Weapon EXP Material")
 
 # --- Resonator Ascension Materials ---
 BOSS_DROP_DATA = [
@@ -100,7 +100,7 @@ BOSS_DROP_DATA = [
   { name: "Unfading Glory", rarity: 4 }
 ].freeze
 
-seed_material_set(BOSS_DROP_DATA, "BossDrop", "Resonator Ascension Material")
+seed_material_set(BOSS_DROP_DATA, "boss_drop", "Resonator Ascension Material")
 
 # --- Ascension Materials ---
 FLOWER_DATA = [
@@ -142,9 +142,9 @@ FLOWER_DATA = [
   { name: "Rimewisp", rarity: 1 }
 ].freeze
 
-seed_material_set(FLOWER_DATA, "Flower", "Ascension Material")
+seed_material_set(FLOWER_DATA, "flower", "Ascension Material")
 
-# --- Weapon and Skill Material (EnemyDrop) ---
+# --- Weapon and Skill Material (enemy_drop) ---
 ENEMY_DROP_DATA = [
   # Whisperin Core Set
   { name: "LF Whisperin Core", rarity: 2 },
@@ -201,9 +201,9 @@ ENEMY_DROP_DATA = [
   { name: "Intact Exoswarm Pendant", rarity: 5 }
 ].freeze
 
-seed_material_set(ENEMY_DROP_DATA, "EnemyDrop", "Weapon and Skill Material", grouped: true)
+seed_material_set(ENEMY_DROP_DATA, "enemy_drop", "Weapon and Skill Material", grouped: true)
 
-# --- Weapon and Skill Material (ForgeryDrop) ---
+# --- Weapon and Skill Material (forgery_drop) ---
 FORGERY_DROP_DATA = [
   # Metallic Drip Set
   { name: "Inert Metallic Drip", rarity: 2 },
@@ -266,7 +266,7 @@ FORGERY_DROP_DATA = [
   { name: "FF Waveworn Shard", rarity: 5 }
 ].freeze
 
-seed_material_set(FORGERY_DROP_DATA, "ForgeryDrop", "Weapon and Skill Material", grouped: true)
+seed_material_set(FORGERY_DROP_DATA, "forgery_drop", "Weapon and Skill Material", grouped: true)
 
 # --- Skill Upgrade Materials ---
 WEEKLY_BOSS_DROP_DATA = [
@@ -280,6 +280,6 @@ WEEKLY_BOSS_DROP_DATA = [
   { name: "When Irises Bloom", rarity: 4 }
 ].freeze
 
-seed_material_set(WEEKLY_BOSS_DROP_DATA, "WeeklyBossDrop", "Skill Upgrade Material")
+seed_material_set(WEEKLY_BOSS_DROP_DATA, "weekly_boss_drop", "Skill Upgrade Material")
 
 puts "  --> Materials created succesfully."

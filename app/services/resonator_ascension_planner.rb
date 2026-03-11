@@ -179,9 +179,9 @@ class ResonatorAscensionPlanner < ApplicationService
   def add_materials(cost_records)
     cost_records.each do |cost|
       case cost.material_type
-      when "Credit"
+      when "credit"
         @materials_totals[shell_credit_id] += cost.quantity
-      when "ForgeryDrop"
+      when "forgery_drop"
         material_id = @materials_by_weapon_type.find { |map| map.rarity == cost.rarity }&.material_id
         @materials_totals[material_id] += cost.quantity if material_id
       else
