@@ -27,11 +27,11 @@ class ApplicationController < ActionController::Base
 
     if token.present?
       Plan.where(guest_token: token, user_id: nil).each do |guest_plan|
-        subject_id = guest_plan.plan_data.dig("input", "subject_id")
+        subject_id = guest_plan.subject_id
 
         next if subject_id.blank?
 
-        existing_plan = user.plans.where("plan_data->'input'->>'subject_id' = ?", subject_id.to_s).exists?
+        existing_plan = user.plans.exists?(subject_type: guest_plan.subject_type, subject_id: guest_plan.subject_id)
 
         if existing_plan
           guest_plan.destroy
