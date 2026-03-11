@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       end
 
       resources :inventory, only: [ :index ]
+      resources :materials, only: [ :index ]
     end
   end
 
