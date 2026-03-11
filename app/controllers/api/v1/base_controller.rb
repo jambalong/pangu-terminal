@@ -6,6 +6,7 @@ module Api
       before_action :authenticate_api_key!
       skip_before_action :authenticate_api_key!, only: :handle_not_found
 
+      rescue_from StandardError, with: :handle_server_error
       rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
       rescue_from ActionController::ParameterMissing, with: :handle_bad_request
 
@@ -31,6 +32,11 @@ module Api
 
       def handle_bad_request(e)
         render json: { error: e.message }, status: :bad_request
+      end
+
+      def handle_server_error(e)
+        Rails.logger.error(e.message)
+        render json: { error: "Internal Server Error" }, status: :internal_server_error
       end
     end
   end

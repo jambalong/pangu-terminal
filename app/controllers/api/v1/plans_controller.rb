@@ -28,8 +28,6 @@ module Api
       rescue ResonatorAscensionPlanner::ValidationError,
           WeaponAscensionPlanner::ValidationError => e
         render json: { errors: e.message.split("|") }, status: :unprocessable_entity
-      rescue StandardError => e
-        render json: { error: e.message }, status: :internal_server_error
       end
 
       def reconciliation
