@@ -277,7 +277,6 @@ WEEKLY_BOSS_DROP_DATA = [
   { name: "Sentinel's Dagger", rarity: 4 },
   { name: "The Netherworld's Stare", rarity: 4 },
   { name: "Unending Destruction", rarity: 4 },
-  { name: "Wave-Cutting Tooth", rarity: 4 },
   { name: "When Irises Bloom", rarity: 4 }
 ].freeze
 
