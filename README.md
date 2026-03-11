@@ -175,7 +175,8 @@ curl https://panguterminal.ambalong.dev/api/v1/plans \
     },
     "created_at": "2026-03-07T07:54:16.368Z",
     "updated_at": "2026-03-07T07:54:24.368Z"
-  }
+  },
+  "..."
 ]
 ```
 
@@ -291,6 +292,41 @@ curl https://panguterminal.ambalong.dev/api/v1/plans/1/reconciliation \
 | `satisfied` | `true` if owned quantity fully covers the requirement |
 | `satisfied_by_higher_rarity` | `true` if a higher rarity equivalent (e.g. EXP potions) covers the gap |
 | `can_synthesize` | Additional units craftable from surplus lower-tier materials via 3:1 synthesis |
+
+---
+
+#### GET /api/v1/materials
+
+Returns all materials with their farming source info. Materials with no waveplate source (e.g. ascension materials) return `"sources": []`
+```bash
+curl https://panguterminal.ambalong.dev/api/v1/materials \
+  -H "Authorization: Bearer <token>"
+```
+
+**Response 200 OK**
+```json
+[
+  {
+    "material_key": "shell_credit",
+    "display_name": "Shell Credit",
+    "rarity": 3,
+    "material_type": "credit",
+    "sources": [
+      {
+        "name": "Simulation Training",
+        "source_type": "simulation_challenge",
+        "waveplate_cost": 40,
+        "location": "Jinzhou, Huanglong",
+        "region": "Huanglong"
+      },
+      "..."
+    ]
+  },
+  "..."
+]
+
+```
+
 
 ---
 
