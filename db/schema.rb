@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_12_052626) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_053534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,6 +108,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_052626) do
     t.integer "rarity", default: 1, null: false
     t.bigint "resonator_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["material_id", "material_type", "resonator_id"], name: "idx_on_material_id_material_type_resonator_id_362cbda0a3", unique: true
     t.index ["material_id"], name: "index_resonator_material_maps_on_material_id"
     t.index ["resonator_id"], name: "index_resonator_material_maps_on_resonator_id"
   end
@@ -334,6 +335,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_052626) do
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
     t.bigint "weapon_id", null: false
+    t.index ["material_id", "material_type", "weapon_id"], name: "idx_on_material_id_material_type_weapon_id_1a012c095f", unique: true
     t.index ["material_id"], name: "index_weapon_material_maps_on_material_id"
     t.index ["weapon_id"], name: "index_weapon_material_maps_on_weapon_id"
   end
