@@ -58,7 +58,7 @@
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   white-space: nowrap;
-  font-family: var(--font-mono);
+  font-family: var(--font-main);
 }
 
 .nav-link:hover {

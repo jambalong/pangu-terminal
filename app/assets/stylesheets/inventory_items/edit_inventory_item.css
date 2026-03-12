@@ -6,6 +6,9 @@
   padding: 1rem;
 }
 
+.item-description {
+  color: var(--ctp-overlay2);
+}
 
 .item-header {
   display: flex;
