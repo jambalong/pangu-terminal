@@ -344,7 +344,7 @@ curl https://panguterminal.ambalong.dev/api/v1/materials \
 | 401 | Missing, invalid, or revoked token | `{ "error": "Unauthorized" }` |
 | 403 | Forbidden — resource belongs to another user | `{ "error": "Forbidden" }` |
 | 404 | Record not found | `{ "error": "Record not found" }` |
-| 422 | Unprocessable entity — validation failed | `{ "error": "<validation message>" }` |
+| 422 | Unprocessable entity | `{ "error": "<validation message>" }` |
 | 429 | Rate limit exceeded | `{ "error": "Rate limit exceeded. Try again later." }` |
 | 500 | Internal server error | `{ "error": "Internal server error" }` |
 
