@@ -56,6 +56,8 @@ ResonatorAscensionPlanner.new(
 ).call
 ```
 
+![Ascension Planner](app/assets/screenshots/planner.png)
+
 By separating game rules (stored in cost tables) from business logic (planner service), it makes the system maintainable and testable.
 
 ---
@@ -83,6 +85,8 @@ synthesis_opportunity: {
   can_convert: 6  # (18 / 3).floor
 }
 ```
+
+![Inventory Management & Synthesis](app/assets/screenshots/reconciliation.png)
 
 This solves the core "resource paradox" where players have data but can't act on it without manual spreadsheet recalculation.
 
@@ -112,6 +116,8 @@ else
   requirements_hash = Plan.fetch_materials_summary(@plans)
 end
 ```
+
+![Inventory](app/assets/screenshots/inventory.png)
 
 ## API
 
