@@ -34,7 +34,7 @@ module Api
         plan = @current_user.plans.find(params[:id])
         requirements = (plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
         inventory = @current_user.inventory_items.index_by(&:material_id).transform_values(&:quantity)
-        reconciliation = SynthesisService.new(inventory, requirements).reconcile_inventory
+        reconciliation = SynthesisService.new(inventory, requirements).reconcile
         materials_lookup = Material.index_by_ids(reconciliation.keys)
 
         render json: ReconciliationSerializer.new(reconciliation, materials_lookup).to_h

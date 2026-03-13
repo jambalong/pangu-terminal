@@ -1,113 +1,83 @@
 class SynthesisService
-  def initialize(inventory_hash, requirements_hash)
-    @inventory = inventory_hash
-    @requirements = requirements_hash
-    @materials_cache = {}
+  def initialize(owned, required)
+    @owned = owned
+    @required = required
+    @materials = Material.where(id: @owned.keys).index_by(&:id)
   end
 
-  def reconcile_inventory
-    reconciliation = {}
+  def reconcile
+    result = {}
 
-    @requirements.each do |material_id, needed_qty|
-      owned_qty = @inventory[material_id] || 0
-      material = get_material(material_id)
+    @required.each do |material_id, needed|
+      owned = @owned[material_id] || 0
+      material = fetch_material(material_id)
 
-      satisfied_qty = calculate_satisfied_qty(material, owned_qty)
-      deficit = [ needed_qty - satisfied_qty, 0 ].max
+      satisfied = exp_potion?(material) ? calculate_exp_satisfaction(material) : owned
+      deficit = [ needed - satisfied, 0 ].max
+      used_higher_rarity = satisfied > owned
+      craftable_count = find_craftable_count(material, deficit)
 
-      used_higher_rarity = exp_potion?(material) && satisfied_qty > owned_qty
-      synthesis_opportunity = find_synthesis_opportunity(material, owned_qty, needed_qty, deficit)
-
-      reconciliation[material_id] = {
-        needed: needed_qty,
-        owned: owned_qty,
-        satisfied_qty: satisfied_qty,
+      result[material_id] = {
+        needed: needed,
+        owned: owned,
+        satisfied: satisfied,
         used_higher_rarity: used_higher_rarity,
         deficit: deficit,
-        satisfied: deficit == 0,
-        synthesis_opportunity: synthesis_opportunity
+        fulfilled: deficit == 0,
+        craftable_count: craftable_count
       }
     end
 
-    reconciliation
+    result
   end
 
   private
 
-  def get_material(material_id)
-    @materials_cache[material_id] ||= Material.find_by(id: material_id)
-  end
-
-  def calculate_satisfied_qty(material, owned_qty)
-    exp_potion?(material) ? calculate_exp_potion_satisfaction(material) : owned_qty
-  end
-
-  def calculate_exp_potion_satisfaction(material)
-    return 0 unless material.rarity == 2
-
-    basic_potion_rarity = 2
-    satisfied_exp = 0
-
-    @inventory.each do |inv_material_id, owned_qty|
-      inv_material = get_material(inv_material_id)
-
-      next unless same_exp_potion_type?(material, inv_material)
-      next unless inv_material.rarity.to_i >= basic_potion_rarity
-
-      total_exp_from_this = owned_qty * (inv_material.exp_value || 0)
-      satisfied_exp +=  total_exp_from_this
-    end
-
-    basic_potion_exp_value = material.exp_value
-    (satisfied_exp / basic_potion_exp_value).floor
-  end
-
-  def same_exp_potion_type?(material1, material2)
-    return false unless material1 && material2
-
-    exp_potion?(material1) &&
-      exp_potion?(material2) &&
-      material1.material_type == material2.material_type
+  def fetch_material(material_id)
+    @materials[material_id]
   end
 
   def exp_potion?(material)
-    return false unless material
     material.material_type.in?(%w[resonator_exp weapon_exp])
   end
 
-  def find_synthesis_opportunity(material, owned_qty, needed_qty, deficit)
+  def calculate_exp_satisfaction(material)
+    # Plans always express EXP requirements in rarity-2 terms
+    return 0 unless material.rarity == 2
+
+    exp_group = @materials.values.select { |m| same_exp_type?(material, m) }
+    satisfied_exp = exp_group.sum { |m| (@owned[m.id] || 0) * (m.exp_value || 0) }
+    (satisfied_exp / material.exp_value).floor
+  end
+
+  def same_exp_type?(material, other)
+    material.material_type == other.material_type
+  end
+
+  def find_craftable_count(material, deficit)
     return nil unless synthesizable?(material)
     return nil if deficit == 0
 
-    lower_tier = find_lower_tier(material)
-    return nil unless lower_tier
+    lower_tier_material = find_lower_tier(material)
+    return nil unless lower_tier_material
 
-    lower_tier_owned = @inventory[lower_tier.id] || 0
-    lower_tier_needed = @requirements[lower_tier.id] || 0
-    lower_tier_surplus = [ lower_tier_owned - lower_tier_needed, 0 ].max
+    owned = @owned[lower_tier_material.id] || 0
+    needed = @required[lower_tier_material.id] || 0
+    surplus = [ owned - needed, 0 ].max
 
-    can_convert = (lower_tier_surplus / 3).floor
-    return nil if can_convert == 0
+    craftable_count = surplus / 3
+    return nil if craftable_count == 0
 
-    {
-      can_convert: can_convert
-    }
+    craftable_count
   end
 
   def synthesizable?(material)
-    return false unless material
-
-    material.category == "Weapon and Skill Material" &&
-      material.material_type.in?(%w[enemy_drop forgery_drop])
+    material.item_group_id.present?
   end
 
   def find_lower_tier(material)
-    return nil unless material
-    return nil if material.rarity <= 2
-
-    Material.find_by(
-      item_group_id: material.item_group_id,
-      rarity: material.rarity - 1
-    )
+    @materials.values.find do |m|
+      m.item_group_id == material.item_group_id && m.rarity == material.rarity - 1
+    end
   end
 end

@@ -13,11 +13,11 @@ class ReconciliationSerializer
         needed: data[:needed],
         owned: data[:owned],
         deficit: data[:deficit],
-        satisfied: data[:satisfied],
-        satisfied_by_higher_rarity: data[:used_higher_rarity]
+        fulfilled: data[:fulfilled],
+        fulfilled_by_higher_rarity: data[:used_higher_rarity]
       }
 
-      result[material.snake_case_name][:can_synthesize] = data.dig(:synthesis_opportunity, :can_convert) || 0
+      result[material.snake_case_name][:can_synthesize] = data[:craftable_count] || 0
     end
   end
 end

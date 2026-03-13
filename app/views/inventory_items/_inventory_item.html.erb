@@ -8,17 +8,17 @@
       <div class="higher-rarity-badge">
         <%= image_tag("potion.svg", class: "craft-icon") %>
         <span class="badge-count">
-          <%= reconciliation[:satisfied_qty] - reconciliation[:owned] %>
+          <%= reconciliation[:satisfied] - reconciliation[:owned] %>
         </span>
       </div>
     <% end %>
 
     <%# Can Synthesize Quantity Badge %>
-    <% if reconciliation&.dig(:synthesis_opportunity) %>
+    <% if reconciliation&.dig(:craftable_count) %>
       <div class="synthesis-badge">
         <%= image_tag("purification.webp", class: "synthesis-icon") %>
         <span class="badge-count">
-          <%= reconciliation[:synthesis_opportunity][:can_convert] %>
+          <%= reconciliation[:craftable_count] %>
         </span>
       </div>
     <% end %>
@@ -41,16 +41,16 @@
     <div class="progress-container">
       <% if reconciliation %>
         <% needed = reconciliation[:needed] %>
-        <% satisfied_qty = reconciliation[:satisfied_qty] %>
-        <% percent = (needed > 0) ? ((satisfied_qty / needed.to_f) * 100).round.clamp(0, 100) : 0 %>
+        <% satisfied = reconciliation[:satisfied] %>
+        <% percent = (needed > 0) ? ((satisfied / needed.to_f) * 100).round.clamp(0, 100) : 0 %>
 
         <%# Determine color class based on status %>
-        <% status_class = reconciliation[:satisfied] ? 'sufficient' : 'deficit' %>
+        <% status_class = reconciliation[:fulfilled] ? 'sufficient' : 'deficit' %>
         
         <div class="progress-bar">
           <div class="progress-fill <%= status_class %>" style="width: <%= percent %>%"></div>
         </div>
-        <span class="qty-display"><%= format_quantity(satisfied_qty) %> / <%= format_quantity(needed) %></span>
+        <span class="qty-display"><%= format_quantity(satisfied) %> / <%= format_quantity(needed) %></span>
       <% else %>
         <%# No data state: Keep bar visible but empty/neutral to maintain layout %>
         <div class="progress-bar no-data">

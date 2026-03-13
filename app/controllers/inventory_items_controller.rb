@@ -76,7 +76,7 @@ class InventoryItemsController < ApplicationController
       requirements_hash = Plan.fetch_materials_summary(@plans)
     end
 
-    @synthesis_result = SynthesisService.new(inventory_hash, requirements_hash).reconcile_inventory
+    @synthesis_result = SynthesisService.new(inventory_hash, requirements_hash).reconcile
   end
 
   def exp_potion?(material)
