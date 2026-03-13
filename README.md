@@ -68,7 +68,7 @@ Players own materials across 5 rarity tiers. Lower tiers can be synthesized (3:1
 It features a Synthesis Service that:
 - Reconciles owned inventory against plan requirements
 - Detects EXP potion equivalence (e.g., 20 Basic potions = 2 Premium potions via exp_value)
-- Identifies synthesis opportunities (e.g., "You have 18 surplus Cadence Seed -> can craft 6 Cadence Bud")
+- Identifies synthesis opportunity (e.g., "You have 18 surplus Cadence Seed -> can craft 6 Cadence Bud")
 - Returns detailed satisfaction data with visual indicators
 
 **Technical Highlights:**
@@ -77,13 +77,11 @@ It features a Synthesis Service that:
 inventory = { premium_potion_id => 3 }  # 60k exp
 requirements = { basic_potion_id => 40 }  # 40k exp needed
 
-SynthesisService.new(inventory, requirements).reconcile_inventory
+SynthesisService.new(inventory, requirements).reconcile
 # => { basic_potion_id => { satisfied: true, ... } }
 
 # Synthesis opportunity in output
-synthesis_opportunity: {
-  can_convert: 6  # (18 / 3).floor
-}
+craftable_count: 2  # surplus / 3, nil if no surplus or not synthesizable
 ```
 
 ![Inventory Management & Synthesis](app/assets/screenshots/reconciliation.png)
@@ -406,7 +404,7 @@ end
 It lowers friction for guest users with a future migration path to registered accounts.
 
 ### Turbo Streams for Real-Time Updates
-Inventory edits trigger Turbo Stream responses that update the edited item plus all related items in the synthesis family, reflecting the recalculated synthesis opportunities instantly:
+Inventory edits trigger Turbo Stream responses that update the edited item plus all related items in the synthesis family, reflecting the recalculated craftable counts instantly:
 
 **Controller:**
 ```ruby
@@ -430,7 +428,7 @@ Inventory edits trigger Turbo Stream responses that update the edited item plus 
 <% end %>
 ```
 
-This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so synthesis opportunities reflect the new inventory state, all without a page reload.
+This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so craftable counts reflect the new inventory state, all without a page reload.
 
 ## Technology Stack
 

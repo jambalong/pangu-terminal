@@ -261,7 +261,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 - Implemented EXP Potion cross-rarity satisfaction system
-- Extended `SynthesisService.reconcile_inventory` to return enhanced reconciliation data:
+- Extended `SynthesisService.reconcile` to return enhanced reconciliation data:
   - `satisfied_qty`: accounts for cross-rarity EXP potion satisfaction
   - `used_higher_rarity`: boolean flag indicating when higher rarities filled the gap
 - Added visual indicators for material satisfaction:
