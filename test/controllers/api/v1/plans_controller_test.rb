@@ -238,12 +238,13 @@ end
 class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email: "reconciliation@example.com", password: "password123")
+    @user.send(:initialize_inventory)
     @other_user = User.create!(email: "reconciliation_other@example.com", password: "password123")
 
     @api_key = @user.api_keys.create!(name: "Test Key")
     @raw_token = @api_key.raw_token
 
-    @shell_credit     = Material.find_by!(name: "Shell Credit")
+    @shell_credit = Material.find_by!(name: "Shell Credit")
     @basic_energy_core = Material.find_by!(name: "Basic Energy Core")
     @lf_whisperin_core = Material.find_by!(name: "LF Whisperin Core")
     @mf_whisperin_core = Material.find_by!(name: "MF Whisperin Core")
@@ -325,8 +326,8 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
     assert_includes entry.keys, "needed"
     assert_includes entry.keys, "owned"
     assert_includes entry.keys, "deficit"
-    assert_includes entry.keys, "satisfied"
-    assert_includes entry.keys, "satisfied_by_higher_rarity"
+    assert_includes entry.keys, "fulfilled"
+    assert_includes entry.keys, "fulfilled_by_higher_rarity"
     assert_includes entry.keys, "can_synthesize"
   end
 
@@ -361,16 +362,16 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
     assert_equal 0, JSON.parse(response.body)["shell_credit"]["owned"]
   end
 
-  test "satisfied is true when inventory fully covers requirement" do
+  test "fulfilled is true when inventory fully covers requirement" do
     set_quantity(@lf_whisperin_core, 10)
     get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
 
-    assert_equal true, JSON.parse(response.body)["lf_whisperin_core"]["satisfied"]
+    assert_equal true, JSON.parse(response.body)["lf_whisperin_core"]["fulfilled"]
   end
 
-  test "satisfied is false when inventory does not cover requirement" do
+  test "fulfilled is false when inventory does not cover requirement" do
     get reconciliation_api_v1_plan_path(@plan), headers: auth_headers
-    assert_equal false, JSON.parse(response.body)["lf_whisperin_core"]["satisfied"]
+    assert_equal false, JSON.parse(response.body)["lf_whisperin_core"]["fulfilled"]
   end
 
   test "deficit is 0 when fully satisfied" do
@@ -416,7 +417,7 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
     assert_equal 1, JSON.parse(response.body)["mf_whisperin_core"]["can_synthesize"]
   end
 
-  test "satisfied_by_higher_rarity is true when higher rarity exp item covers the requirement" do
+  test "fulfilled_by_higher_rarity is true when higher rarity exp item covers the requirement" do
     medium_energy_core = Material.find_by!(name: "Medium Energy Core")
 
     # 13 Medium Energy Core covers 38 Basic Energy Core requirement via EXP equivalence
@@ -425,8 +426,8 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
 
     entry = JSON.parse(response.body)["basic_energy_core"]
     assert_equal 0, entry["owned"]
-    assert_equal true, entry["satisfied"]
-    assert_equal true, entry["satisfied_by_higher_rarity"]
+    assert_equal true, entry["fulfilled"]
+    assert_equal true, entry["fulfilled_by_higher_rarity"]
   end
 
   private

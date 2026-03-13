@@ -13,12 +13,12 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { forgery_material.id => 60 }
     requirements = { forgery_material.id => 100 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 100, result[forgery_material.id][:needed]
     assert_equal 60, result[forgery_material.id][:owned]
     assert_equal 40, result[forgery_material.id][:deficit]
-    assert_equal false, result[forgery_material.id][:satisfied]
+    assert_equal false, result[forgery_material.id][:fulfilled]
   end
 
   test "returns satisfied when owned >= needed" do
@@ -33,10 +33,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { forgery_material.id => 100 }
     requirements = { forgery_material.id => 100 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 0, result[forgery_material.id][:deficit]
-    assert_equal true, result[forgery_material.id][:satisfied]
+    assert_equal true, result[forgery_material.id][:fulfilled]
   end
 
   test "returns satisfied when 0 owned and 0 needed" do
@@ -51,10 +51,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { forgery_material.id => 0 }
     requirements = { forgery_material.id => 0 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 0, result[forgery_material.id][:deficit]
-    assert_equal true, result[forgery_material.id][:satisfied]
+    assert_equal true, result[forgery_material.id][:fulfilled]
   end
 
   test "exp potion of higher tier satisfies lower tier need" do
@@ -78,10 +78,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { potion_rarity2.id => 0, potion_rarity3.id => 1 }
     requirements = { potion_rarity2.id => 1 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 0, result[potion_rarity2.id][:deficit]
-    assert_equal true, result[potion_rarity2.id][:satisfied]
+    assert_equal true, result[potion_rarity2.id][:fulfilled]
   end
 
   test "exp potion of mixed tiers satisfy need" do
@@ -114,10 +114,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { potion_rarity2.id => 2, potion_rarity3.id => 1, potion_rarity4.id => 0 }
     requirements = { potion_rarity2.id => 5 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 0, result[potion_rarity2.id][:deficit]
-    assert_equal true, result[potion_rarity2.id][:satisfied]
+    assert_equal true, result[potion_rarity2.id][:fulfilled]
   end
 
   test "exp potion insufficient across all tiers" do
@@ -133,10 +133,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { potion_rarity2.id => 1 }
     requirements = { potion_rarity2.id => 5 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 4, result[potion_rarity2.id][:deficit]
-    assert_equal false, result[potion_rarity2.id][:satisfied]
+    assert_equal false, result[potion_rarity2.id][:fulfilled]
   end
 
   test "weapon exp does not satisfy resonator exp requirement" do
@@ -161,10 +161,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { resonator_potion_rarity2.id => 0, weapon_potion_rarity3.id => 1 }
     requirements = { resonator_potion_rarity2.id => 1 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
     assert_equal 1, result[resonator_potion_rarity2.id][:deficit]
-    assert_equal false, result[resonator_potion_rarity2.id][:satisfied]
+    assert_equal false, result[resonator_potion_rarity2.id][:fulfilled]
   end
 
   test "synthesis opportunity detects when surplus can convert" do
@@ -188,10 +188,10 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { material_rarity2.id => 6, material_rarity3.id => 0 }
     requirements = { material_rarity2.id => 3, material_rarity3.id => 1 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
-    assert_not_nil result[material_rarity3.id][:synthesis_opportunity]
-    assert_equal 1, result[material_rarity3.id][:synthesis_opportunity][:can_convert]
+    assert_not_nil result[material_rarity3.id][:craftable_count]
+    assert_equal 1, result[material_rarity3.id][:craftable_count]
   end
 
   test "no synthesis opportunity when no surplus" do
@@ -215,9 +215,9 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { material_rarity2.id => 3, material_rarity3.id => 0 }
     requirements = { material_rarity2.id => 3, material_rarity3.id => 1 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
-    assert_nil result[material_rarity3.id][:synthesis_opportunity]
+    assert_nil result[material_rarity3.id][:craftable_count]
   end
 
   test "no synthesis opportunity for lowest tier material" do
@@ -232,8 +232,8 @@ class SynthesisServiceTest < ActiveSupport::TestCase
     inventory = { material_rarity2.id => 1 }
     requirements = { material_rarity2.id => 3 }
 
-    result = SynthesisService.new(inventory, requirements).reconcile_inventory
+    result = SynthesisService.new(inventory, requirements).reconcile
 
-    assert_nil result[material_rarity2.id][:synthesis_opportunity]
+    assert_nil result[material_rarity2.id][:craftable_count]
   end
 end
