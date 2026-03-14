@@ -237,6 +237,26 @@ class ResonatorAscensionPlannerTest < ActiveSupport::TestCase
     assert_equal 0, result[waveworn_residue_235_id]
   end
 
+  test "calculates correct ascension materials for a Lahai Roi resonator" do
+    aemeath = Resonator.find_by!(name: "Aemeath")
+    result = ResonatorAscensionPlanner.new(
+      resonator: aemeath,
+      current_level: 20, target_level: 20,
+      current_ascension_rank: 0, target_ascension_rank: 1,
+      current_skill_levels: { basic_attack: 1 },
+      target_skill_levels: { basic_attack: 2 },
+      forte_node_upgrades: {}
+    ).call
+
+    shell_credit_id = Material.find_by!(name: "Shell Credit").id
+    lf_exoswarm_core_id = Material.find_by!(name: "LF Exoswarm Core").id
+    broken_wing_polarizer_id = Material.find_by!(name: "Broken Wing Polarizer").id
+
+    assert_equal 6500, result[shell_credit_id]
+    assert_equal 6, result[lf_exoswarm_core_id]
+    assert_equal 2, result[broken_wing_polarizer_id]
+  end
+
   test "calculates full material costs for Chisa 1 to 90 all skills and forte nodes" do
     result = call_planner({
       current_level: 1, target_level: 90,
