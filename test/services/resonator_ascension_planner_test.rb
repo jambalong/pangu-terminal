@@ -119,7 +119,7 @@ class ResonatorAscensionPlannerTest < ActiveSupport::TestCase
     assert_equal 33, result[basic_potion_id]
   end
 
-  test "returns no potion or credit cost when level does not change" do
+  test "returns no exp potion when level does not change" do
     result = call_planner({ current_level: 20, target_level: 20, target_ascension_rank: 1 })
 
     shell_credit_id = Material.find_by!(name: "Shell Credit").id
