@@ -88,7 +88,8 @@ class ResonatorAscensionPlanner < ApplicationService
   def validate_no_changes!(errors)
     return unless @current_level == @target_level &&
                   @current_ascension_rank == @target_ascension_rank &&
-                  @current_skill_levels == @target_skill_levels
+                  @current_skill_levels == @target_skill_levels &&
+                  @forte_node_upgrades.values.none? { |v| v  == 1 }
 
     errors << "Nothing changed. Update at least one target."
   end
