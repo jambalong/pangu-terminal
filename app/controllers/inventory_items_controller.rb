@@ -39,9 +39,10 @@ class InventoryItemsController < ApplicationController
   private
 
   def load_inventory_and_plans
-    @inventory_items = current_user.inventory_items.includes(:material)
+    @all_inventory_items = current_user.inventory_items.includes(:material)
+    @inventory_items = @all_inventory_items
     @plans = load_current_plans
-    @material_lookup = Material.index_by_ids(@inventory_items.pluck(:material_id))
+      @material_lookup = Material.index_by_ids(@all_inventory_items.pluck(:material_id))
   end
 
   def apply_filters
@@ -68,7 +69,7 @@ class InventoryItemsController < ApplicationController
   end
 
   def compute_synthesis_data
-    inventory_hash = @inventory_items.index_by(&:material_id).transform_values(&:quantity)
+    inventory_hash = @all_inventory_items.index_by(&:material_id).transform_values(&:quantity)
 
     if @selected_plan.present?
       requirements_hash = (@selected_plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
