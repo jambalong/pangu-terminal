@@ -1,3 +1,10 @@
+require "simplecov"
+SimpleCov.start "rails" do
+  enable_coverage :branch
+  add_filter "/test/"
+  SimpleCov.use_merging true
+end
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
@@ -11,10 +18,16 @@ module ActiveSupport
     # Each worker runs in a forked process with its own database, so seeding must
     # happen here rather than in a one-time setup.
     parallelize_setup do |worker|
+      SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
+
       original = $stdout
       $stdout = File.open(File::NULL, "w")
       Rails.application.load_seed
       $stdout = original
+    end
+
+    parallelize_teardown do |worker|
+      SimpleCov.result
     end
 
     # Skip eager inventory seeding in tests. In production, initialize_inventory
