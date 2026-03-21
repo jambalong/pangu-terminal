@@ -325,9 +325,10 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
     entry = JSON.parse(response.body)["shell_credit"]
     assert_includes entry.keys, "needed"
     assert_includes entry.keys, "owned"
+    assert_includes entry.keys, "satisfied"
     assert_includes entry.keys, "deficit"
     assert_includes entry.keys, "fulfilled"
-    assert_includes entry.keys, "fulfilled_by_higher_rarity"
+    assert_includes entry.keys, "higher_rarity_contributed"
     assert_includes entry.keys, "can_synthesize"
   end
 
@@ -417,7 +418,7 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
     assert_equal 1, JSON.parse(response.body)["mf_whisperin_core"]["can_synthesize"]
   end
 
-  test "fulfilled_by_higher_rarity is true when higher rarity exp item covers the requirement" do
+  test "higher_rarity_contributed is true when higher rarity exp item covers the requirement" do
     medium_energy_core = Material.find_by!(name: "Medium Energy Core")
 
     # 13 Medium Energy Core covers 38 Basic Energy Core requirement via EXP equivalence
@@ -427,7 +428,7 @@ class Api::V1::PlansControllerReconciliationTest < ActionDispatch::IntegrationTe
     entry = JSON.parse(response.body)["basic_energy_core"]
     assert_equal 0, entry["owned"]
     assert_equal true, entry["fulfilled"]
-    assert_equal true, entry["fulfilled_by_higher_rarity"]
+    assert_equal true, entry["higher_rarity_contributed"]
   end
 
   private
