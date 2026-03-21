@@ -26,7 +26,7 @@ class Material < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :material_type, presence: true
   validates :category, presence: true
-  validates :rarity, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :rarity, presence: true, numericality: { only_integer: true, in: 1..5 }
   validates :exp_value, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   scope :index_by_ids, ->(ids) { where(id: ids).index_by(&:id) }
