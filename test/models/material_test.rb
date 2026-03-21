@@ -1,4 +1,3 @@
-# test/models/material_test.rb
 require "test_helper"
 
 class MaterialTest < ActiveSupport::TestCase
