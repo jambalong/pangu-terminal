@@ -4,13 +4,17 @@ class Plan < ApplicationRecord
     "Weapon" => "weapon_exp"
   }.freeze
 
-  belongs_to :user, optional: true
-  belongs_to :subject, polymorphic: true
+  VALID_SUBJECT_TYPES = %w[Resonator Weapon].freeze
 
-  validates :subject_type, presence: true, inclusion: { in: %w[Resonator Weapon] }
+  belongs_to :user, optional: true
+  belongs_to :subject, polymorphic: true, optional: true
+
+  validates :subject_type, presence: true, inclusion: { in: VALID_SUBJECT_TYPES }
   validates :subject_id, presence: true
-  validates :subject_id, uniqueness: { scope: [ :user_id, :subject_type ], message: "already has a plan" }
+  validates :subject_id, uniqueness: { scope: [ :user_id, :subject_type ], message: "already has a plan" },
+    if: -> { VALID_SUBJECT_TYPES.include?(subject_type) }
   validates :plan_data, presence: true
+  validate :subject_must_exist, if: -> { VALID_SUBJECT_TYPES.include?(subject_type) && subject_id.present? }
   validate :must_have_owner
 
   scope :subject_ids_for_type, ->(type) { where(subject_type: type).pluck(:subject_id) }
@@ -34,5 +38,10 @@ class Plan < ApplicationRecord
     if user_id.blank? && guest_token.blank?
       errors.add(:base, "Plan must belong to a user or a guest session")
     end
+  end
+
+  def subject_must_exist
+    exists = subject_type.constantize.exists?(subject_id)
+    errors.add(:subject, "must exist") unless exists
   end
 end
