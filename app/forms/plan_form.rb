@@ -52,7 +52,7 @@ class PlanForm
 
   # Transformation from JSONB -> Form Attributes
   def self.from_plan(plan)
-    input = plan.plan_data["input"]
+    input = plan.plan_data&.dig("input") || {}
 
     attributes = {
       id: plan.id,
