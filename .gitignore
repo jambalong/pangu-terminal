@@ -18,9 +18,6 @@
 !/log/.keep
 !/tmp/.keep
 
-# Ignore SimpleCov coverage report
-/coverage
-
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
@@ -42,3 +39,6 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 /.mise/
+
+/coverage
+.zed/
