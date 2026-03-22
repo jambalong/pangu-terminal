@@ -14,7 +14,7 @@
   <%= f.hidden_field :id if plan.respond_to?(:id) %>
   <%# Hidden fields to tell the Controller what we selected in Steps 1 & 2 %>
   <%= f.hidden_field :subject_type, value: subject_type %>
-  <%= f.hidden_field :subject_id, value: subject.id %>
+  <%= f.hidden_field :subject_id, value: subject&.id %>
 
   <div class="stat-grid">
     <%# Level Section %>
