@@ -78,7 +78,7 @@ inventory = { premium_potion_id => 3 }  # 60k exp
 requirements = { basic_potion_id => 40 }  # 40k exp needed
 
 SynthesisService.new(inventory, requirements).reconcile
-# => { basic_potion_id => { satisfied: true, ... } }
+# => { basic_potion_id => { fulfilled: true, ... } }
 
 # Synthesis opportunity in output
 craftable_count: 2  # surplus / 3, nil if no surplus or not synthesizable
@@ -263,25 +263,28 @@ curl https://panguterminal.ambalong.dev/api/v1/plans/1/reconciliation \
   "shell_credit": {
     "needed": 25480,
     "owned": 30000,
+    "satisfied": 30000,
     "deficit": 0,
-    "satisfied": true,
-    "satisfied_by_higher_rarity": false,
+    "fulfilled": true,
+    "higher_rarity_contributed": false,
     "can_synthesize": 0
   },
   "basic_energy_core": {
     "needed": 38,
     "owned": 0,
+    "satisfied": 39,
     "deficit": 0,
-    "satisfied": true,
-    "satisfied_by_higher_rarity": true,
+    "fulfilled": true,
+    "higher_rarity_contributed": true,
     "can_synthesize": 0
   },
   "lf_whisperin_core": {
     "needed": 6,
     "owned": 2,
+    "satisfied": 2,
     "deficit": 4,
-    "satisfied": false,
-    "satisfied_by_higher_rarity": false,
+    "fulfilled": false,
+    "higher_rarity_contributed": false,
     "can_synthesize": 3
   },
   "...": "..."
@@ -292,9 +295,10 @@ curl https://panguterminal.ambalong.dev/api/v1/plans/1/reconciliation \
 | --- | --- |
 | `needed` | Total quantity required by the plan |
 | `owned` | Current inventory quantity |
-| `deficit` | Remaining shortfall after owned and synthesis are accounted for |
-| `satisfied` | `true` if owned quantity fully covers the requirement |
-| `satisfied_by_higher_rarity` | `true` if a higher rarity equivalent (e.g. EXP potions) covers the gap |
+| `satisfied` | Effective quantity after EXP cross-rarity equivalence is applied |
+| `deficit` | Remaining shortfall after satisfaction is accounted for |
+| `fulfilled` | `true` if the requirement is fully covered |
+| `higher_rarity_contributed` | `true` if a higher rarity EXP equivalent contributed toward this requirement |
 | `can_synthesize` | Additional units craftable from surplus lower-tier materials via 3:1 synthesis |
 
 ---
