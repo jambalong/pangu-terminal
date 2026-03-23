@@ -2,7 +2,13 @@ class ApiKeysController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @api_key = current_user.api_keys.build(name: params.require(:name))
+    name = params[:name].presence
+    unless name
+      flash[:alert] = "Name can't be blank"
+      return redirect_to "#{edit_user_registration_path}#api-keys"
+    end
+
+    @api_key = current_user.api_keys.build(name: name)
     if @api_key.save
       flash[:api_token] = @api_key.raw_token
       flash[:notice] = "API Key \"#{@api_key.name}\" generated successfully."
