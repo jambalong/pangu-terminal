@@ -10,7 +10,6 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
   teardown do
     Rack::Attack.cache.store = Rails.cache
-    Rack::Attack.reset!
   end
 
   test "returns 429 after exceeding API rate limit" do
