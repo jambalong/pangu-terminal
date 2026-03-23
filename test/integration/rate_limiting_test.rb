@@ -3,7 +3,7 @@ require "test_helper"
 class RateLimitingTest < ActionDispatch::IntegrationTest
   setup do
     Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
-    @user = User.create!(email: "ratelimit@example.com", password: "password123")
+    @user = User.create!(email: "ratelimit_#{SecureRandom.hex(4)}@example.com", password: "password123")
     @api_key = @user.api_keys.create!(name: "test key")
     @raw_token = @api_key.raw_token
   end
