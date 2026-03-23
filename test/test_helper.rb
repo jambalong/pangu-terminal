@@ -5,6 +5,8 @@ SimpleCov.start "rails" do
   SimpleCov.use_merging true
 end
 
+SimpleCov.root Dir.pwd
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
