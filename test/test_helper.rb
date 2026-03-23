@@ -1,11 +1,15 @@
 require "simplecov"
+require "simplecov-cobertura"
+
 SimpleCov.start "rails" do
   enable_coverage :branch
   add_filter "/test/"
   SimpleCov.use_merging true
+  formatter SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::CoberturaFormatter
+  ])
 end
-
-SimpleCov.root Dir.pwd
 
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
