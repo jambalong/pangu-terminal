@@ -28,6 +28,18 @@ class InventoryItemsControllerIndexTest < ActionDispatch::IntegrationTest
     get inventory_items_path(plan_id: plan.id)
     assert_response :ok
   end
+
+  test "filters inventory by search query" do
+    sign_in @user
+    get inventory_items_path(query: "Cadence")
+    assert_response :ok
+  end
+
+  test "filters inventory by category" do
+    sign_in @user
+    get inventory_items_path(category: "Weapon and Skill Material")
+    assert_response :ok
+  end
 end
 
 class InventoryItemsControllerEditTest < ActionDispatch::IntegrationTest
@@ -95,5 +107,21 @@ class InventoryItemsControllerUpdateTest < ActionDispatch::IntegrationTest
       params: { inventory_item: { quantity: 99 } }
 
     assert_response :not_found
+  end
+
+  test "updates inventory item quantity with plan filter active" do
+    weapon = Weapon.find_by!(name: "Kumokiri")
+    plan = Plan.create!(
+      user: @user,
+      subject: weapon,
+      plan_data: { "input" => {}, "output" => {} }
+    )
+
+    sign_in @user
+    patch inventory_item_path(@inventory_item, plan_id: plan.id),
+      params: { inventory_item: { quantity: 42 } },
+      headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_equal 42, @inventory_item.reload.quantity
   end
 end
