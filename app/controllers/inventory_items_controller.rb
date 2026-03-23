@@ -32,7 +32,14 @@ class InventoryItemsController < ApplicationController
         format.html { redirect_to inventory_items_path }
       end
     else
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream {
+          render turbo_stream: turbo_stream.replace(
+            "modal",
+            template: "inventory_items/edit"
+          )
+        }
+      end
     end
   end
 
