@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_12_053534) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_04_184417) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_053534) do
     t.integer "user_id", null: false
     t.index ["token"], name: "index_api_keys_on_token", unique: true
     t.index ["user_id"], name: "index_api_keys_on_user_id"
+  end
+
+  create_table "drop_rates", force: :cascade do |t|
+    t.decimal "avg_quantity", precision: 8, scale: 3, null: false
+    t.datetime "created_at", null: false
+    t.bigint "material_id", null: false
+    t.integer "sol3_phase", null: false
+    t.bigint "source_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["material_id", "source_id", "sol3_phase"], name: "index_drop_rates_on_material_id_and_source_id_and_sol3_phase", unique: true
+    t.index ["material_id"], name: "index_drop_rates_on_material_id"
+    t.index ["source_id"], name: "index_drop_rates_on_source_id"
   end
 
   create_table "forte_node_costs", force: :cascade do |t|
@@ -362,6 +374,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_053534) do
   end
 
   add_foreign_key "api_keys", "users"
+  add_foreign_key "drop_rates", "materials"
+  add_foreign_key "drop_rates", "sources"
   add_foreign_key "inventory_items", "materials"
   add_foreign_key "inventory_items", "users"
   add_foreign_key "material_sources", "materials"
