@@ -22,7 +22,6 @@ class Material < ApplicationRecord
 
   has_many :material_sources
   has_many :sources, through: :material_sources
-  has_many :drop_rates
 
   validates :name, presence: true, uniqueness: true
   validates :material_type, presence: true
