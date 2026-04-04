@@ -1,6 +1,7 @@
 class Source < ApplicationRecord
   has_many :material_sources
   has_many :materials, through: :material_sources
+  has_many :drop_rates
 
   validates :name, presence: true, uniqueness: true
   validates :source_type, presence: true
