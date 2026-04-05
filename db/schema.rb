@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_04_201737) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_05_031254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -28,11 +28,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_04_201737) do
   create_table "drop_rates", force: :cascade do |t|
     t.decimal "avg_quantity", precision: 8, scale: 3, null: false
     t.datetime "created_at", null: false
+    t.string "material_type", null: false
     t.integer "rarity", null: false
     t.integer "sol3_phase", null: false
     t.bigint "source_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["source_id", "sol3_phase", "rarity"], name: "index_drop_rates_on_source_id_and_sol3_phase_and_rarity", unique: true
+    t.index ["source_id", "sol3_phase", "rarity", "material_type"], name: "index_drop_rates_uniqueness", unique: true
     t.index ["source_id"], name: "index_drop_rates_on_source_id"
   end
 
