@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   # A Devise helper that runs after successful login/signup
   def after_sign_in_path_for(resource)
     sync_guest_plans(resource)
@@ -18,6 +20,10 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource)
     root_path
+  end
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permite(:account_update, keys: [ :sol3_phase ])
   end
 
   private
