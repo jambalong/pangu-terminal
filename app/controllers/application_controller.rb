@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permite(:account_update, keys: [ :sol3_phase ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :sol3_phase ])
   end
 
   private
