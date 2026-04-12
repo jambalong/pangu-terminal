@@ -1,4 +1,6 @@
 class OptimizersController < ApplicationController
+  include PlanLoading
+
   before_action :authenticate_user!
 
   def index
