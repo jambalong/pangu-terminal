@@ -1,18 +1,18 @@
 <%= turbo_frame_tag "main_content" do %>
   <div class="landing-wrapper">
-    
+
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
         <div class="system-status">
           <span class="status-dot"></span>
-          SYSTEM ONLINE :: v0.16.4
+          SYSTEM ONLINE :: v0.17.1
         </div>
-        
+
         <h1 class="hero-title">
           PANGU<span class="text-mauve">TERMINAL</span>
         </h1>
-        
+
         <p class="hero-subtitle">
           The tactical resource planner for Wuthering Waves.
           <br>
@@ -21,19 +21,21 @@
           <br>
           <span class="feature-tick">></span> Track materials in inventory.
           <br>
+          <span class="feature-tick">></span> Optimize Waveplate farming runs.
+          <br>
           <span class="feature-tick">></span> Sync across your devices.
           <br>
           <span class="feature-tick">></span> <strong>And more upcoming features!</strong>
         </p>
 
         <div class="hero-actions">
-          <%= link_to plans_path, 
+          <%= link_to plans_path,
               data: { turbo_frame: "main_content", turbo_action: "advance" },
               class: "btn-terminal-primary" do %>
             <span>></span> INITIALIZE_PLANNER
           <% end %>
 
-          <%= link_to inventory_items_path, 
+          <%= link_to inventory_items_path,
               data: { turbo_frame: "main_content", turbo: false },
               class: "btn-terminal-outline" do %>
             <span>$</span> CHECK_INVENTORY
@@ -51,7 +53,7 @@
           </div>
           <div class="window-title">ascension_planner.app</div>
         </div>
-        
+
         <div class="window-body">
           <!-- Mock Plan Header -->
           <div class="mock-header">
@@ -169,16 +171,15 @@
         </div>
 
         <div class="feature-card">
+          <div class="card-icon">⚡</div>
+          <h3>Optimizer</h3>
+          <p>Calculate estimated farming runs and Waveplate costs per material deficit. Know exactly how many runs you need before you start.</p>
+        </div>
+
+        <div class="feature-card">
           <div class="card-icon">🔗</div>
           <h3>REST API</h3>
           <p>Access your plans, inventory, and synthesis results. Authenticate with an API key and integrate your data into any external tool or script.</p>
-        </div>
-        
-        <div class="feature-card">
-          <div class="card-icon">⚡</div>
-          <h3>Optimizer</h3>
-          <p><span class="badge-coming-soon">COMING SOON</span><br>
-          Calculate optimal farming routes using drop rates. Know exactly how many runs you need before you start.</p>
         </div>
       </div>
     </section>
@@ -190,7 +191,7 @@
           <h2>Ready to optimize your progression?</h2>
           <p>Sign up to save your plans, sync your inventory, and access advanced features.</p>
           <div class="cta-actions">
-            <%= link_to "Create Free Account", new_user_registration_path, 
+            <%= link_to "Create Free Account", new_user_registration_path,
                 data: { turbo: false },
                 class: "btn-terminal-primary" %>
             <%= link_to "Continue as Guest", plans_path,
