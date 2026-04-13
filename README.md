@@ -5,7 +5,7 @@
 [![CI](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/jambalong/pangu-terminal/graph/badge.svg?token=TJPEEN49A6)](https://codecov.io/github/jambalong/pangu-terminal)
 
-**Status:** MVP complete with planning, inventory tracking, synthesis detection, and a REST API.
+**Status:** MVP complete with planning, inventory tracking, synthesis detection, Waveplate optimizer, and a REST API.
 
 Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 
@@ -13,10 +13,15 @@ Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 
 ### Full-Stack Rails Architecture
 - Polymorphic associations for heterogeneous plan types (character vs. weapon upgrades)
-- Service objects extracting complex business logic (ResonatorAscensionPlanner, SynthesisService)
 - JSONB caching for flexible plan data storage and query optimization
 - Guest authentication system via secure tokens (no Devise required for trials)
 - Turbo Streams for real-time inventory updates without full page reloads
+
+### Service Objects
+- **ResonatorAscensionPlanner:** Character upgrade cost calculation
+- **WeaponAscensionPlanner:** Weapon upgrade cost calculation
+- **SynthesisService:** Inventory reconciliation and synthesis detection
+- **DropRateService:** Waveplate cost and run estimation per farming source, with EXP cross-rarity conversion and phase fallback
 
 ### REST API
 - Token-based authentication via Bearer header
@@ -119,6 +124,36 @@ end
 ```
 
 ![Inventory](app/assets/screenshots/inventory.png)
+
+---
+
+### Waveplate Optimizer
+Players need to know how many runs of a specific farming source it will take to cover their material deficits before they start spending Waveplates.
+
+The Waveplate Optimizer:
+- Runs reconciliation against the player's current inventory to find active deficits
+- Estimates runs and Waveplate cost per deficit material, broken down by farming source
+- Converts EXP potion deficits (always expressed in rarity-2 terms) to equivalent higher-rarity drop quantities based on exp_value
+- Falls back to the highest available phase data when no drop rate row exists for the user's current SOL3 phase
+- Includes a toggle to show or hide materials with no farmable Waveplate source
+
+**Technical Highlights:**
+```ruby
+# DropRateService handles both standard and EXP materials
+DropRateService.call(material, deficit, sol3_phase)
+# => {
+#   "Moonlit Groves" => { estimated_runs: 3, waveplate_cost: 120 },
+#   "Abyss of Sacrifice" => { estimated_runs: 3, waveplate_cost: 120 }
+# }
+
+# EXP conversion where rarity-2 deficit is covered by higher-rarity drops
+# e.g. one Premium Energy Core (exp_value: 20000) = 20 Basic Energy Cores (exp_value: 1000)
+total_rarity_2_equivalent = drop_rates.sum do |drop_rate|
+  drop_rate.avg_quantity * (exp_material.exp_value / rarity_2_exp_value.to_f)
+end
+```
+
+Drop rate data is sourced from community spreadsheets and covers forgery, simulation, boss, and weekly challenge source types across all SOL3 phases.
 
 ## API
 
@@ -511,17 +546,22 @@ app/
 │   │   └── v1/
 │   │       ├── base_controller.rb   # Auth + error handling
 │   │       ├── inventory_controller.rb   # Inventory API endpoint
+│   │       ├── materials_controller.rb   # Materials API endpoint
 │   │       └── plans_controller.rb  # Plans API endpoint
 │   ├── plans_controller.rb
 │   ├── inventory_controller.rb
+│   ├── optimizers_controller.rb
 │   └── ...
 ├── services/
 │   ├── resonator_ascension_planner.rb  # Resonator cost calculation
 │   ├── weapon_ascension_planner.rb     # Weapon cost calculation
-│   └── synthesis_service.rb            # Inventory reconciliation
+│   ├── synthesis_service.rb            # Inventory reconciliation
+│   └── drop_rate_service.rb            # Waveplate run estimation
 ├── views/
+│   ├── layouts/
 │   ├── plans/
 │   ├── inventory/
+│   ├── optimizer/
 │   └── ...
 └── helpers/
 
@@ -553,5 +593,5 @@ The production version of this application is currently deployed via **Kamal 2**
 
 ---
 
-**Last Updated:** March 2026
-**Version:** 0.16.4
+**Last Updated:** April 2026
+**Version:** 0.17.1

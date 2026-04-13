@@ -3,6 +3,99 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [0.17.1] - 2026-04-12
+
+**Estimated Time:** 30 minutes
+
+### Added
+- Added waveplate icon in place of WP in the Optimizer page
+
+### Changed
+- Updated hero subtitle to feature Waveplate optimizer
+- Removed the coming soon badge for Optimizer feature card
+
+## [0.17.0] - 2026-04-12
+
+**Estimated Time:** 14-16 hours
+
+### Added
+- Waveplate Optimizer at `/app/optimizer`, select a plan and see how many runs and Waveplates it will take to cover each material deficit, broken down by farming source
+- SOL3 phase selector on the Dashboard, set your current phase to get accurate drop rate estimates in the optimizer
+- Toggle to show or hide materials with no farmable Waveplate source in optimizer results
+- Optimizer link in the navbar
+- `DropRateService` calculates estimated runs and Waveplate cost per source for a material deficit and SOL3 phase, with EXP cross-rarity conversion and phase fallback when data is unavailable for a given phase
+- `drop_rates` table seeded with 617 rows covering forgery, simulation, boss, and weekly challenge sources
+- `DropRate` model with validations and uniqueness constraint
+
+### Changed
+- Revised drop rates schema to track rarity and material type as discriminators instead of a direct material association
+
+### Fixed
+- Optimizer gate now links to the Dashboard instead of account settings
+- Optimizer nav link now highlights correctly when on the optimizer page
+
+## [0.16.9] - 2026-04-11
+
+**Estimated Time:** 30 minutes
+
+### Changed
+- Updated Rails, ruby-lsp, and Kamal to resolve security advisories
+
+## [0.16.8] - 2026-03-30
+
+**Estimated Time:** 6-8 hours
+
+### Added
+- GitHub Actions CI pipeline. Runs tests, linting, and security scans on every pull request
+- Code coverage reporting via SimpleCov and Codecov
+- CI and coverage badges added to README
+
+### Fixed
+- Rate limiting tests now run correctly in parallel without interfering with each other
+- Security vulnerabilities in Trix and Devise addressed
+
+## [0.16.7] - 2026-03-20
+
+**Estimated Time:** 8-10 hours
+
+### Added
+- Integration tests for all five API endpoints
+- Controller tests for Plans, Inventory, API Keys, and Dashboard
+- Model validation tests for Plan, Material, and InventoryItem
+- Service layer tests for ResonatorAscensionPlanner, WeaponAscensionPlanner, and SynthesisService
+
+### Fixed
+- Inventory edit modal now re-renders with errors instead of silently failing on invalid input
+- Plan form no longer crashes when subject or plan data is missing
+- API key creation now shows a proper error instead of raising an exception on blank name
+- Synthesis calculation now uses the full inventory to avoid nil material lookups
+- Forte node upgrades now included in the no-change validation check
+
+### Changed
+- Refactored SynthesisService for readability
+- Reconciliation response now exposes satisfied quantity and renames the higher rarity field for clarity
+
+## [0.16.6] - 2026-03-15
+
+**Estimated Time:** 6-8 hours
+
+### Added
+- Source and MaterialSource models and seed data covering all farming locations
+- `GET /api/v1/materials` endpoint returning each material with its farming source info
+- Model validations for Resonator and Weapon
+- Descriptions added to all material seed entries
+
+### Fixed
+- Guest plan sync now uses subject_id instead of digging through plan data
+- Material types normalized to snake_case across the board
+- API now returns 404 for unknown endpoints and 500 for unexpected errors
+
+### Changed
+- Updated README with GET /api/v1/materials documentation and curl examples
+- Reconciliation response shape updated to match current serializer output
+- Font changed from Inter to Oxanium
+- Removed Wave-Cutting Tooth material as it has no confirmed in-game source
+
 ## [0.16.4] - 2026-03-07
 
 **Estimated Time:** 10 minutes
@@ -573,7 +666,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Created PlanForm service to handle translation between form parameters and planner calculator arguments
 - Used AI to scaffold form object as a reference
 
-## [0.1.0] - 2026-01-12
+## [0.1.0] - 2026-01-11
 
 ### Added
 - Added "sync" feature to migrate existing guest data to permanent User account upon registration/sign-up
