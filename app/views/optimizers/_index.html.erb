@@ -6,8 +6,10 @@
   <% if current_user.sol3_phase.nil? %>
     <div class="optimizer-gate">
       <p class="optimizer-gate-message">
-        Set your SOL3 phase in
-        <%= link_to "account settings", edit_user_registration_path, class: "optimizer-gate-link" %>
+        Set your SOL3 phase from the
+        <%= link_to "Dashboard", authenticated_root_path,
+          class: "optimizer-gate-link",
+          data: { turbo_frame: "main_content", turbo_action: "advance" } %>
         to use the Waveplate Optimizer.
       </p>
     </div>
