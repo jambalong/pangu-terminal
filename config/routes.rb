@@ -35,6 +35,10 @@ Rails.application.routes.draw do
 
     resources :inventory_items, only: [ :index, :edit, :update ], path: "inventory"
     resources :api_keys, only: [ :create, :destroy ]
+
+    get "optimizer", to: "optimizers#index"
+    get "optimizer/plans_modal", to: "optimizers#plans_modal"
+    post "optimizer/select_plan", to: "optimizers#select_plan"
   end
 
   # API routes

@@ -35,6 +35,26 @@ class DropRateServiceTest < ActiveSupport::TestCase
     assert_empty results
   end
 
+  test "returns estimated runs for EXP material using cross-rarity conversion" do
+    material = Material.find_by!(name: "Basic Energy Core")
+    results = DropRateService.call(material, 10, 5)
+
+    assert results.key?("B.1.N.G.O.")
+    assert results.key?("Gladiator's Portrait")
+    assert results.key?("Simulation Training")
+    assert results["Simulation Training"][:estimated_runs] > 0
+    assert results["Simulation Training"][:waveplate_cost] > 0
+  end
+
+  test "falls back to highest available phase for forgery material at phase 8" do
+    material = Material.find_by!(name: "Cadence Bud")
+    results_phase_7 = DropRateService.call(material, 10, 7)
+    results_phase_8 = DropRateService.call(material, 10, 8)
+
+    assert_equal results_phase_7["Moonlit Groves"][:estimated_runs],
+                 results_phase_8["Moonlit Groves"][:estimated_runs]
+  end
+
   test "raises ArgumentError when material is nil" do
     assert_raises(ArgumentError) { DropRateService.call(nil, @deficit, @sol3_phase) }
   end
