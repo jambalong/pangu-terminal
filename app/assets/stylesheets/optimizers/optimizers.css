@@ -1,0 +1,303 @@
+.optimizer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.optimizer-header {
+  margin-bottom: 0.5rem;
+}
+
+.optimizer-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ctp-mauve);
+}
+
+/* --- Gate --- */
+.optimizer-gate {
+  padding: 2rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.optimizer-gate-message {
+  color: var(--ctp-subtext0);
+  font-size: 0.95rem;
+}
+
+.optimizer-gate-link {
+  color: var(--ctp-mauve);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.optimizer-gate-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Plan Card --- */
+.optimizer-plan-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ctp-text);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+  cursor: pointer;
+}
+
+.optimizer-plan-card:hover {
+  border-color: var(--ctp-mauve);
+  background: var(--ctp-surface0);
+}
+
+.optimizer-plan-card--empty {
+  justify-content: center;
+  border-style: dashed;
+}
+
+.optimizer-plan-placeholder {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.95rem;
+  color: var(--ctp-subtext0);
+  letter-spacing: 0.05em;
+}
+
+.optimizer-plan-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ctp-surface1);
+}
+
+.optimizer-plan-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.optimizer-plan-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ctp-text);
+}
+
+.optimizer-plan-type {
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ctp-subtext0);
+  letter-spacing: 0.05em;
+}
+
+/* --- Run Button --- */
+.optimizer-run-form {
+  display: flex;
+}
+
+.optimizer-run-button {
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--ctp-mauve);
+  color: var(--ctp-base);
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.optimizer-run-button:hover {
+  opacity: 0.85;
+}
+
+/* --- Results --- */
+.optimizer-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.optimizer-results-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.optimizer-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--ctp-subtext0);
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.optimizer-toggle-input {
+  accent-color: var(--ctp-mauve);
+  cursor: pointer;
+}
+
+.optimizer-results-title {
+  font-size: 0.85rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ctp-mauve);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.optimizer-material-card {
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.optimizer-material-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: var(--ctp-base);
+}
+
+.optimizer-material-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.optimizer-material-name {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ctp-text);
+}
+
+.optimizer-material-deficit {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ctp-red);
+}
+
+.optimizer-source-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 1rem;
+  border-top: 1px solid var(--ctp-surface0);
+}
+
+.optimizer-source-name {
+  font-size: 0.85rem;
+  color: var(--ctp-subtext1);
+}
+
+.optimizer-source-runs {
+  font-size: 0.85rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ctp-subtext0);
+}
+
+/* --- Summary --- */
+.optimizer-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--ctp-base);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.optimizer-summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.optimizer-summary-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ctp-mauve);
+}
+
+.optimizer-summary-label {
+  font-size: 0.7rem;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--ctp-subtext0);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --- Plan Selector Modal Grid --- */
+.optimizer-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.optimizer-plan-select-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ctp-text);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.optimizer-plan-select-card:hover {
+  border-color: var(--ctp-mauve);
+  background: var(--ctp-surface0);
+}
+
+.optimizer-plan-select-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ctp-surface1);
+}
+
+.optimizer-plan-select-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.optimizer-plan-select-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ctp-text);
+}
+
+.optimizer-plan-select-type {
+  font-size: 0.75rem;
+  color: var(--ctp-subtext0);
+  text-transform: capitalize;
+}
