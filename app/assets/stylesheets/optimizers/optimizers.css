@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-height: calc(100vh - var(--navbar-height, 60px));
 }
 
 .optimizer-header {
@@ -97,6 +98,10 @@
   font-family: "JetBrains Mono", monospace;
   color: var(--ctp-subtext0);
   letter-spacing: 0.05em;
+}
+
+.optimizer-plan-select-container {
+  padding: 1rem;
 }
 
 /* --- Run Button --- */
@@ -247,11 +252,15 @@
 }
 
 /* --- Plan Selector Modal Grid --- */
+.optimizer-plan-select-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
 .optimizer-plan-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-  padding: 1rem;
   max-height: 60vh;
   overflow-y: auto;
 }
@@ -259,8 +268,9 @@
 .optimizer-plan-select-card {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  width: 100%;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
   background: var(--ctp-mantle);
   border: 1px solid var(--ctp-surface0);
   border-radius: 10px;
@@ -277,8 +287,8 @@
 }
 
 .optimizer-plan-select-icon {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--ctp-surface1);
@@ -287,17 +297,29 @@
 .optimizer-plan-select-info {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.2rem;
 }
 
 .optimizer-plan-select-name {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--ctp-text);
 }
 
 .optimizer-plan-select-type {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--ctp-subtext0);
   text-transform: capitalize;
+}
+
+@media (max-width: 640px) {
+  .optimizer-results-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .optimizer-toggle-label {
+    margin-bottom: 0;
+  }
 }
