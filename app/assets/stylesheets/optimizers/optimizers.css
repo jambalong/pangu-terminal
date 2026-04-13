@@ -25,8 +25,8 @@
 }
 
 .optimizer-gate-message {
-  color: var(--ctp-subtext0);
-  font-size: 0.95rem;
+  color: var(--ctp-text);
+  font-size: 0.925rem;
 }
 
 .optimizer-gate-link {
@@ -279,6 +279,7 @@
   transition:
     border-color 0.2s ease,
     background 0.2s ease;
+  cursor: pointer;
 }
 
 .optimizer-plan-select-card:hover {
