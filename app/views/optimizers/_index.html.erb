@@ -18,7 +18,7 @@
       <%= link_to optimizer_plans_modal_path,
           data: { turbo_frame: "modal" },
           class: "optimizer-plan-card" do %>
-        <%= image_tag @selected_plan.subject.image_url, class: "optimizer-plan-icon" if @selected_plan.subject.image_url.present? %>
+        <%= image_tag @selected_plan.subject.image_url, class: "optimizer-plan-icon", alt: "Subject Icon" if @selected_plan.subject.image_url.present? %>
         <div class="optimizer-plan-info">
           <span class="optimizer-plan-name"><%= @selected_plan.subject.name %></span>
           <span class="optimizer-plan-type"><%= @selected_plan.subject_type.upcase %> PLAN LOADED</span>
@@ -61,16 +61,16 @@
                         data: (data[:sources].empty? ? { toggle_target: "item" } : {}) do %>
               <div class="optimizer-material-header">
                 <% if data[:material].image_url.present? %>
-                  <%= image_tag data[:material].image_url, class: "optimizer-material-icon" %>
+                  <%= image_tag data[:material].image_url, class: "optimizer-material-icon", alt: "Material Icon" %>
                 <% end %>
                 <span class="optimizer-material-name"><%= data[:material].name %></span>
-                <span class="optimizer-material-deficit">&times;<%= data[:deficit] %></span>
+                <span class="optimizer-material-deficit">-<%= data[:deficit] %></span>
               </div>
 
               <% data[:sources].each do |source_name, source_data| %>
                 <div class="optimizer-source-row">
                   <span class="optimizer-source-name"><%= source_name %></span>
-                  <span class="optimizer-source-runs"><%= source_data[:estimated_runs] %> runs &middot; <%= source_data[:waveplate_cost] %> WP</span>
+                  <span class="optimizer-source-runs"><%= source_data[:estimated_runs] %> runs &middot; <%= source_data[:waveplate_cost] %> <%= image_tag "/images/textures/waveplate.png", class: "optimizer-waveplate-icon", alt: "Waveplate Icon" %></span>
                 </div>
               <% end %>
             <% end %>
@@ -86,7 +86,7 @@
               <span class="optimizer-summary-label">TOTAL RUNS</span>
             </div>
             <div class="optimizer-summary-stat">
-              <span class="optimizer-summary-value"><%= total_wp %></span>
+              <span class="optimizer-summary-value"><%= total_wp %> <%= image_tag "/images/textures/waveplate.png", class: "optimizer-waveplate-icon", alt: "Waveplate Icon" %> </span>
               <span class="optimizer-summary-label">WAVEPLATE COST</span>
             </div>
             <div class="optimizer-summary-stat">
