@@ -153,6 +153,8 @@ total_rarity_2_equivalent = drop_rates.sum do |drop_rate|
 end
 ```
 
+![Waveplate Optimizer](app/assets/screenshots/optimizer.png)
+
 Drop rate data is sourced from community spreadsheets and covers forgery, simulation, boss, and weekly challenge source types across all SOL3 phases.
 
 ## API
