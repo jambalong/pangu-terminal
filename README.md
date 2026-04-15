@@ -64,7 +64,7 @@ ResonatorAscensionPlanner.new(
 ).call
 ```
 
-![Ascension Planner](app/assets/screenshots/planner.png)
+![Ascension Planner](screenshots/planner.png)
 
 By separating game rules (stored in cost tables) from business logic (planner service), it makes the system maintainable and testable.
 
@@ -92,7 +92,7 @@ SynthesisService.new(inventory, requirements).reconcile
 craftable_count: 2  # surplus / 3, nil if no surplus or not synthesizable
 ```
 
-![Inventory Management & Synthesis](app/assets/screenshots/reconciliation.png)
+![Inventory Management & Synthesis](screenshots/reconciliation.png)
 
 This solves the core "resource paradox" where players have data but can't act on it without manual spreadsheet recalculation.
 
@@ -123,7 +123,7 @@ else
 end
 ```
 
-![Inventory](app/assets/screenshots/inventory.png)
+![Inventory](screenshots/inventory.png)
 
 ---
 
@@ -153,7 +153,7 @@ total_rarity_2_equivalent = drop_rates.sum do |drop_rate|
 end
 ```
 
-![Waveplate Optimizer](app/assets/screenshots/optimizer.png)
+![Waveplate Optimizer](screenshots/optimizer.png)
 
 Drop rate data is sourced from community spreadsheets and covers forgery, simulation, boss, and weekly challenge source types across all SOL3 phases.
 
