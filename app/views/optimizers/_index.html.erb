@@ -104,9 +104,17 @@
                         data: (data[:sources].empty? ? { toggle_target: "item" } : {}) do %>
               <div class="optimizer-material-header">
                 <div class="optimizer-material-info">
-                  <% if data[:material].image_url.present? %>
-                    <%= image_tag data[:material].image_url, class: "optimizer-material-icon", alt: "Material Icon" %>
-                  <% end %>
+
+                  <%# Icon with Rarity Border %>
+                  <div class="item-icon rarity-border-<%= data[:material].rarity %> optimizer-material-icon">
+                    <div class="rarity-bg-<%= data[:material].rarity %>">
+                      <% if data[:material].image_url.present? %>
+                        <%= image_tag(data[:material].image_url, alt: data[:material].name) %>
+                      <% else %>
+                        <span class="icon-initials"><%= data[:material].name[0..1].upcase %></span>
+                      <% end %>
+                    </div>
+                  </div>
                   <div class="optimizer-material-details">
                     <div class="optimizer-material-header-row">
                       <span class="optimizer-material-name"><%= data[:material].name %></span>
