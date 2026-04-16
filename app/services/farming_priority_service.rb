@@ -1,4 +1,4 @@
-class FarmingPriorityService
+class FarmingPriorityService < ApplicationService
   SOURCE_TYPE_LABELS = {
     "boss_challenge" => "Boss Challenge",
     "forgery_challenge" => "Forgery Challenge",
@@ -31,7 +31,7 @@ class FarmingPriorityService
     result[:sources]
       .values
       .uniq { |s| s[:source_type] }
-      .to_h { |s| [ s[:source_type], s[:waveplate_cost] ] }
+      .to_h { |s| [ s[:source_type], s[:waveplate_cost_per_run] ] }
   end
 
   def build_entry(source_type, data)
