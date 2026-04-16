@@ -30,7 +30,8 @@ class DropRateService < ApplicationService
 
       results[source.name] = {
         estimated_runs: estimated_runs,
-        waveplate_cost: waveplate_cost
+        waveplate_cost: waveplate_cost,
+        source_type: source.source_type
       }
     end
 
