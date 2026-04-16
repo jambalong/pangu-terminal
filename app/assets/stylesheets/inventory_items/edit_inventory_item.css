@@ -25,3 +25,20 @@
 .item-info h2 {
   font-weight: bold;
 }
+
+.item-sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.item-source-name {
+  background: var(--ctp-mantle);
+  color: var(--ctp-subtext0);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.785rem;
+}
