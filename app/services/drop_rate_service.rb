@@ -27,10 +27,12 @@ class DropRateService < ApplicationService
 
       estimated_runs = (@deficit / avg_quantity).ceil.to_i
       waveplate_cost = estimated_runs * source.waveplate_cost
+      waveplate_cost_per_run = source.waveplate_cost
 
       results[source.name] = {
         estimated_runs: estimated_runs,
         waveplate_cost: waveplate_cost,
+        waveplate_cost_per_run: waveplate_cost_per_run,
         source_type: source.source_type
       }
     end
