@@ -11,7 +11,9 @@ class OptimizersController < ApplicationController
     elsif session[:optimizer_plan_id].present?
       @plans.find_by(id: session[:optimizer_plan_id])
     end
+
     compute_optimizer_results if @selected_plan && params[:run]
+    @farming_priority = FarmingPriorityService.call(@results) if @results
   end
 
   def plans_modal
