@@ -44,17 +44,6 @@
 
     <%= turbo_frame_tag "optimizer-results" do %>
       <% if @results.present? %>
-        <div class="optimizer-results" data-controller="toggle">
-          <div class="optimizer-results-header">
-            <h2 class="optimizer-results-title">&gt; MATERIAL_BREAKDOWN</h2>
-
-            <label class="optimizer-toggle-label">
-              <input type="checkbox"
-                      data-action="change->toggle#toggle"
-                      class="optimizer-toggle-input">
-              Show materials with no farmable source
-            </label>
-          </div>
 
           <!-- Summary metrics -->
           <% total_runs = @results.values.sum { |d| d[:sources].values.first&.dig(:estimated_runs) || 0 } %>
@@ -76,6 +65,39 @@
             </div>
           </div>
 
+          <!-- Farming priority list -->
+          <% if @farming_priority.any? %>
+            <div class="optimizer-priority">
+              <h2 class="optimizer-results-title">&gt; FARMING_PRIORITY</h2>
+              <ol class="optimizer-priority-list">
+                <% @farming_priority.each_with_index do |entry, index| %>
+                  <li class="optimizer-priority-item">
+                    <span class="optimizer-priority-rank"><%= index + 1 %>.</span>
+                    <span class="optimizer-priority-label"><%= entry[:source_label] %></span>
+                    <span class="optimizer-priority-meta">
+                      <%= entry[:material_count] %> <%= "material".pluralize(entry[:material_count]) %>
+                      &middot;
+                      <%= entry[:waveplate_cost] %>
+                      <%= image_tag "/images/textures/waveplate.png", class: "optimizer-waveplate-icon", alt: "Waveplate" %>
+                      /run
+                    </span>
+                  </li>
+                <% end %>
+              </ol>
+            </div>
+          <% end %>
+
+        <div class="optimizer-results" data-controller="toggle">
+          <div class="optimizer-results-header">
+            <h2 class="optimizer-results-title">&gt; MATERIAL_BREAKDOWN</h2>
+
+            <label class="optimizer-toggle-label">
+              <input type="checkbox"
+                      data-action="change->toggle#toggle"
+                      class="optimizer-toggle-input">
+              Show materials with no farmable source
+            </label>
+          </div>
           <!-- Material breakdown list -->
           <% @results.each do |material_id, data| %>
             <%= tag.div class: "optimizer-material-card #{'hidden' if data[:sources].empty?}",
