@@ -12,16 +12,11 @@ Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 ## What This Project Showcases
 
 ### Full-Stack Rails Architecture
-- Polymorphic associations for heterogeneous plan types (character vs. weapon upgrades)
-- JSONB caching for flexible plan data storage and query optimization
-- Guest authentication system via secure tokens (no Devise required for trials)
+- Service objects extracting complex business logic (planners, synthesis, drop rate, farming priority)
+- Polymorphic associations so character and weapon plans share identical CRUD operations
+- JSONB caching for plan output — computed once, stored as a hash, read without joins
+- Guest authentication via secure UUID tokens stored in cookies (no Devise required for trials)
 - Turbo Streams for real-time inventory updates without full page reloads
-
-### Service Objects
-- **ResonatorAscensionPlanner:** Character upgrade cost calculation
-- **WeaponAscensionPlanner:** Weapon upgrade cost calculation
-- **SynthesisService:** Inventory reconciliation and synthesis detection
-- **DropRateService:** Waveplate cost and run estimation per farming source, with EXP cross-rarity conversion and phase fallback
 
 ### REST API
 - Token-based authentication via Bearer header
@@ -104,7 +99,7 @@ Users create multiple plans (Jinhsi + Jiyan + Yinlin), and need to see material 
 Two views are supported:
 
 - **Planner Dashboard:** Shows total materials needed across all active plans
-- **Inventory Page:** Filtered view (single plan) or aggregated view (all plans), with  a plan dropdown selector
+- **Inventory Page:** Filtered view (single plan) or aggregated view (all plans), with a plan dropdown selector
 
 **Technical Highlights:**
 ```ruby
@@ -135,6 +130,7 @@ The Waveplate Optimizer:
 - Estimates runs and Waveplate cost per deficit material, broken down by farming source
 - Converts EXP potion deficits (always expressed in rarity-2 terms) to equivalent higher-rarity drop quantities based on exp_value
 - Falls back to the highest available phase data when no drop rate row exists for the user's current SOL3 phase
+- Ranks farming source types by how many deficit materials each covers (Farming Priority)
 - Includes a toggle to show or hide materials with no farmable Waveplate source
 
 **Technical Highlights:**
@@ -142,15 +138,16 @@ The Waveplate Optimizer:
 # DropRateService handles both standard and EXP materials
 DropRateService.call(material, deficit, sol3_phase)
 # => {
-#   "Moonlit Groves" => { estimated_runs: 3, waveplate_cost: 120 },
-#   "Abyss of Sacrifice" => { estimated_runs: 3, waveplate_cost: 120 }
+#   "Moonlit Groves" => { estimated_runs: 3, waveplate_cost: 120, source_type: "forgery_challenge", waveplate_cost_per_run: 40 },
+#   "Abyss of Sacrifice" => { estimated_runs: 3, waveplate_cost: 120, source_type: "forgery_challenge", waveplate_cost_per_run: 40 }
 # }
 
-# EXP conversion where rarity-2 deficit is covered by higher-rarity drops
-# e.g. one Premium Energy Core (exp_value: 20000) = 20 Basic Energy Cores (exp_value: 1000)
-total_rarity_2_equivalent = drop_rates.sum do |drop_rate|
-  drop_rate.avg_quantity * (exp_material.exp_value / rarity_2_exp_value.to_f)
-end
+# FarmingPriorityService deduplicates by source type per material
+FarmingPriorityService.call(results)
+# => [
+#   { source_type: "forgery_challenge", source_label: "Forgery Challenge", material_count: 3, waveplate_cost: 40 },
+#   { source_type: "simulation_challenge", source_label: "Simulation Challenge", material_count: 2, waveplate_cost: 40 }
+# ]
 ```
 
 ![Waveplate Optimizer](screenshots/optimizer.png)
@@ -175,18 +172,16 @@ Tokens are issued per user via API keys tied to a user account. Each user can ho
 
 Requests are rate limited to 60 requests per minute per API key. Exceeding this returns:
 
-
 **Response 429 Too Many Requests**
 ```json
 { "error": "Rate limit exceeded. Try again later." }
 ```
 
-### Endpoint
+### Endpoints
 
 #### GET /api/v1/plans
 
 Returns all plans belonging to the authenticated user.
-
 
 ```bash
 curl https://panguterminal.ambalong.dev/api/v1/plans \
@@ -372,9 +367,7 @@ curl https://panguterminal.ambalong.dev/api/v1/materials \
   },
   "..."
 ]
-
 ```
-
 
 ---
 
@@ -403,6 +396,8 @@ Complex calculations live in services, not controllers or models:
 - **ResonatorAscensionPlanner:** Character upgrade cost calculation
 - **WeaponAscensionPlanner:** Weapon upgrade cost calculation
 - **SynthesisService:** Inventory reconciliation and synthesis detection
+- **DropRateService:** Waveplate cost and run estimation per farming source
+- **FarmingPriorityService:** Ranks farming source types by deficit material coverage
 
 This keeps controllers thin and logic testable.
 
@@ -415,8 +410,8 @@ plan_data: {
 }
 ```
 
-Trade-off: a normalized plan_materials table would make individual materials queryable, 
-but since requirements are computed once and read as a whole, JSONB caching avoids 
+Trade-off: a normalized plan_materials table would make individual materials queryable,
+but since requirements are computed once and read as a whole, JSONB caching avoids
 unnecessary schema complexity.
 
 ### Polymorphic Associations
@@ -459,11 +454,9 @@ Inventory edits trigger Turbo Stream responses that update the edited item plus 
 
 **View (update.turbo_stream.erb):**
 ```erb
-
 <%= turbo_stream.replace dom_id(@inventory_item) do %>
   <%= render partial: "inventory_items/inventory_item", locals: { inventory_item: @inventory_item } %>
 <% end %>
-
 
 <% @related_items.each do |item| %>
   <%= turbo_stream.replace dom_id(item) do %>
@@ -506,7 +499,7 @@ This updates the edited item immediately, then recomputes synthesis for the enti
 
 3. **Set up environment variables:**
    ```bash
-    cp .env.example .env
+   cp .env.example .env
    ```
    Fill in your Postgres credentials in `.env` before starting the database container.
 
@@ -546,19 +539,20 @@ app/
 ├── controllers/
 │   ├── api/
 │   │   └── v1/
-│   │       ├── base_controller.rb   # Auth + error handling
+│   │       ├── base_controller.rb        # Auth + error handling
 │   │       ├── inventory_controller.rb   # Inventory API endpoint
 │   │       ├── materials_controller.rb   # Materials API endpoint
-│   │       └── plans_controller.rb  # Plans API endpoint
+│   │       └── plans_controller.rb       # Plans API endpoint
 │   ├── plans_controller.rb
 │   ├── inventory_controller.rb
 │   ├── optimizers_controller.rb
 │   └── ...
 ├── services/
-│   ├── resonator_ascension_planner.rb  # Resonator cost calculation
-│   ├── weapon_ascension_planner.rb     # Weapon cost calculation
-│   ├── synthesis_service.rb            # Inventory reconciliation
-│   └── drop_rate_service.rb            # Waveplate run estimation
+│   ├── resonator_ascension_planner.rb   # Resonator cost calculation
+│   ├── weapon_ascension_planner.rb      # Weapon cost calculation
+│   ├── synthesis_service.rb             # Inventory reconciliation
+│   ├── drop_rate_service.rb             # Waveplate run estimation
+│   └── farming_priority_service.rb      # Farming source ranking
 ├── views/
 │   ├── layouts/
 │   ├── plans/
@@ -590,8 +584,8 @@ Kamal configuration files
 
 The production version of this application is currently deployed via **Kamal 2** to a **DigitalOcean** droplet.
 
-* **Public IP Address:** `http://panguterminal.ambalong.dev`
-* **Deployment Tooling:** The infrastructure is fully managed by **Kamal 2**, with automated Docker image building, secure environment variable injection (`.kamal/secrets`), and container orchestration.
+* **Public URL:** `http://panguterminal.ambalong.dev`
+* **Deployment Tooling:** Infrastructure managed by **Kamal 2** with automated Docker image building, secure environment variable injection (`.kamal/secrets`), and container orchestration.
 
 ---
 
