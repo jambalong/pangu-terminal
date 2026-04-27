@@ -563,7 +563,8 @@ This updates the edited item immediately, then recomputes synthesis for the enti
 ### Running Tests
 
 ```bash
-bin/rails test
+bin/rails test        # unit + integration
+bin/rails test:system # system tests
 ```
 
 ### Project Structure
@@ -607,12 +608,13 @@ db/
 └── schema.rb
 
 test/
+├── controllers/    # Web + API controller integration tests
 ├── models/
-├── services/
-└── controllers/
-    └── api/
-        └── v1/
-            └── plans_controller_test.rb
+├── services/       # Planner, synthesis, drop rate, farming priority
+├── forms/
+├── helpers/
+├── integration/
+└── system/         # End-to-end user journey (Cuprite + Capybara)
 
 docker-compose.yml
 Kamal configuration files
