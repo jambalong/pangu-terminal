@@ -27,7 +27,8 @@ class UserJourneyTest < ApplicationSystemTestCase
     assert_text "Select Plan Type"
     click_link "Weapon"
     assert_text "Select Weapon"
-    click_link "Kumokiri"
+    fill_in "Search by name...", with: "Kumokiri"
+    click_link "Kumokiri", wait: 10
     assert_text "CONFIGURE WEAPON PLAN"
     click_button "Create Plan"
     assert_text "Plan created successfully."
