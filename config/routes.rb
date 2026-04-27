@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       resources :plans, only: [ :index, :create ] do
         member do
           get :reconciliation
+          get :waveplate_summary, path: "waveplate-summary"
         end
       end
 

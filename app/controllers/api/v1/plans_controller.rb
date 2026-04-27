@@ -40,6 +40,17 @@ module Api
         render json: ReconciliationSerializer.new(reconciliation, materials_lookup).to_h
       end
 
+      def waveplate_summary
+        plan = @current_user.plans.find(params[:id])
+
+        if @current_user.sol3_phase.nil?
+          return render json: { error: "SOL3 Phase not set. Use PATCH /api/v1/profile to set it." }, status: :unprocessable_entity
+        end
+
+        result = WaveplateSummaryService.call(plan, @current_user.sol3_phase)
+        render json: result
+      end
+
       private
 
       def plan_params
