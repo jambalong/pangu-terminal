@@ -14,9 +14,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :cuprite
 
   setup do
-      original = $stdout
-      $stdout = File.open(File::NULL, "w")
-      Rails.application.load_seed
-      $stdout = original
-    end
+    original = $stdout
+    $stdout = File.open(File::NULL, "w")
+    Rails.application.load_seed
+    $stdout = original
+  end
 end
