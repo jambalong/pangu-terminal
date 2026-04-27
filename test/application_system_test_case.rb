@@ -1,7 +1,6 @@
 require "test_helper"
+require "capybara/cuprite"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ], options: {
-      options: Selenium::WebDriver::Chrome::Options.new(binary: "/usr/bin/google-chrome-stable")
-  }
+  driven_by :cuprite, using: :chrome, screen_size: [ 1400, 1400 ]
 end
