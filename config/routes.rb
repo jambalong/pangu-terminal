@@ -53,6 +53,8 @@ Rails.application.routes.draw do
       resources :inventory, only: [ :index ]
       resources :materials, only: [ :index ]
 
+      patch "profile", to: "profile#update"
+
       match "*path", to: "base#handle_not_found", via: :all
     end
   end
