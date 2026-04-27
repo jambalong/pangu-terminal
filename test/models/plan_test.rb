@@ -105,4 +105,28 @@ class PlanTest < ActiveSupport::TestCase
     )
     assert other_plan.valid?
   end
+
+  test "owned_by? returns false when user is nil and guest token does not match" do
+    plan = Plan.create!(
+      guest_token: "abc123",
+      subject: Weapon.find_by!(name: "Kumokiri"),
+      subject_type: "Weapon",
+      plan_data: { "input" => {}, "output" => {} }
+    )
+
+    assert_not plan.owned_by?(user: nil, guest_token: "wrong_token")
+  end
+
+  test "is invalid when subject does not exist" do
+    user = User.create!(email: "plan_test@example.com", password: "password123")
+    plan = Plan.new(
+      user: user,
+      subject_type: "Weapon",
+      subject_id: 0,
+      plan_data: { "input" => {}, "output" => {} }
+    )
+
+    assert_not plan.valid?
+    assert_includes plan.errors[:subject], "must exist"
+  end
 end
