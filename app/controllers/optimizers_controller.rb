@@ -17,7 +17,7 @@ class OptimizersController < ApplicationController
   end
 
   def plans_modal
-    render layour: false
+    render layout: false
   end
 
   def select_plan
