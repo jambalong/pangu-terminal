@@ -2,7 +2,7 @@ class SynthesisService
   def initialize(owned, required)
     @owned = owned
     @required = required
-    @materials = Material.where(id: @owned.keys).index_by(&:id)
+    @materials = Material.where(id: @owned.keys | @required.keys).index_by(&:id)
   end
 
   def reconcile
