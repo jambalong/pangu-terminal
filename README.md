@@ -370,6 +370,46 @@ curl https://panguterminal.ambalong.dev/api/v1/materials \
 ```
 
 ---
+#### PATCH /api/v1/profile
+Sets the authenticated user's SOL3 phase. Required before using the `waveplate-summary` endpoint.
+
+```bash
+curl -X PATCH https://panguterminal.ambalong.dev/api/v1/profile \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{ "sol3_phase": 3 }'
+```
+
+**Response 200 OK**
+```json
+{ "sol3_phase": 3 }
+```
+
+---
+
+#### GET /api/v1/plans/:id/waveplate-summary
+
+Returns materials with an active deficit that have at least one farmable waveplate source. Requires SOL3 phase to be set via `PATCH /api/v1/profile`.
+
+```bash
+curl https://panguterminal.ambalong.dev/api/v1/plans/1/waveplate-summary \
+  -H "Authorization: Bearer <token>"
+```
+
+**Response 200 OK**
+```json
+{
+  "shell_credit": {
+    "deficit": 25480,
+    "source_type": "simulation_challenge",
+    "sources": ["B.1.N.G.O.", "Gladiator's Portrait", "Simulation Training"],
+    "estimated_runs": 1,
+    "waveplate_cost": 40
+  }
+}
+```
+
+---
 
 ### Error Responses
 
