@@ -2,9 +2,7 @@ require "test_helper"
 
 class Api::V1::WaveplateSummaryTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create!(email: "waveplate_summary@example.com", password: "password123")
-    @user.sol3_phase = 3
-    @user.save!
+    @user = User.create!(email: "waveplate_summary@example.com", password: "password123", sol3_phase: 3)
     @user.send(:initialize_inventory)
 
     @other_user = User.create!(email: "waveplate_summary_other@example.com", password: "password123")
