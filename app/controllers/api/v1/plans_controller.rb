@@ -47,7 +47,9 @@ module Api
           return render json: { error: "SOL3 Phase not set. Use PATCH /api/v1/profile to set it." }, status: :unprocessable_entity
         end
 
-        result = WaveplateSummaryService.call(plan, @current_user.sol3_phase)
+        inventory = @current_user.inventory_items.index_by(&:material_id).transform_values(&:quantity)
+        result = WaveplateSummaryService.call(plan, @current_user.sol3_phase, inventory)
+
         render json: result
       end
 

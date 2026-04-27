@@ -1,13 +1,13 @@
 class WaveplateSummaryService < ApplicationService
-  def initialize(plan, sol3_phase)
+  def initialize(plan, sol3_phase, inventory)
     @plan = plan
     @sol3_phase = sol3_phase
+    @inventory = inventory
   end
 
   def call
     needed = (@plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
-    owned = @plan.user.inventory_items.index_by(&:material_id).transform_values(&:quantity)
-    reconciled = SynthesisService.new(owned, needed).reconcile
+    reconciled = SynthesisService.new(@inventory, needed).reconcile
     deficits = reconciled.select { |material_id, data| data[:deficit] > 0 }
 
     return {} if deficits.empty?
