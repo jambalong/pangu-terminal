@@ -541,7 +541,6 @@ This updates the edited item immediately, then recomputes synthesis for the enti
    ```bash
    cp .env.example .env
    ```
-   Fill in your Postgres credentials in `.env` before starting the database container.
 
 4. **Start the database container:**
    ```bash
@@ -552,6 +551,8 @@ This updates the edited item immediately, then recomputes synthesis for the enti
    ```bash
    bin/rails db:prepare
    ```
+
+   Note: If this fails with a password authentication error, the Docker volume may already exist from a previous run with different credentials. Run docker-compose down -v then docker-compose up -d and retry.
 
 6. **Run the server:**
    ```bash
