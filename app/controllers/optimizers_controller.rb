@@ -12,8 +12,10 @@ class OptimizersController < ApplicationController
       @plans.find_by(id: session[:optimizer_plan_id])
     end
 
-    compute_optimizer_results if @selected_plan && params[:run]
-    @farming_priority = FarmingPriorityService.call(@results) if @results
+    if @selected_plan
+      compute_optimizer_results
+      @farming_priority = FarmingPriorityService.call(@results)
+    end
   end
 
   def plans_modal
@@ -23,6 +25,11 @@ class OptimizersController < ApplicationController
   def select_plan
     session[:optimizer_plan_id] = params[:plan_id]
     @selected_plan = @plans.find_by(id: params[:plan_id])
+
+    if @selected_plan
+      compute_optimizer_results
+      @farming_priority = FarmingPriorityService.call(@results)
+    end
   end
 
   private

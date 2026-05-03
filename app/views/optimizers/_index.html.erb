@@ -32,16 +32,6 @@
       <% end %>
     <% end %>
 
-    <% if @selected_plan %>
-      <%= form_with url: optimizer_path, method: :get,
-        class: "optimizer-run-form",
-        data: { turbo_frame: "optimizer-results" } do |f| %>
-        <%= f.hidden_field :plan_id, value: @selected_plan.id %>
-        <%= f.hidden_field :run, value: true %>
-        <%= f.submit "▶ RUN OPTIMIZER", class: "optimizer-run-button" %>
-      <% end %>
-    <% end %>
-
     <%= turbo_frame_tag "optimizer-results" do %>
       <% if @results.present? %>
 
