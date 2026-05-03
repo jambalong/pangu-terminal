@@ -58,7 +58,7 @@ class DropRateService < ApplicationService
       source: source,
       sol3_phase: @sol3_phase,
       material_type: @material.material_type
-    )
+    ).to_a
 
     return nil if drop_rates.empty?
 
