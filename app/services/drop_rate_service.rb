@@ -46,6 +46,10 @@ class DropRateService < ApplicationService
     EXP_MATERIAL_TYPES.include?(@material.material_type)
   end
 
+  def exp_materials
+    @exp_materials ||= Material.where(material_type: @material.material_type).index_by(&:rarity)
+  end
+
   def calculate_exp_avg_quantity(source)
     rarity_2_exp_value = @material.exp_value
     return nil if rarity_2_exp_value.nil? || rarity_2_exp_value == 0
@@ -57,8 +61,6 @@ class DropRateService < ApplicationService
     )
 
     return nil if drop_rates.empty?
-
-    exp_materials = Material.where(material_type: @material.material_type).index_by(&:rarity)
 
     total_rarity_2_equivalent = drop_rates.sum do |drop_rate|
       exp_material = exp_materials[drop_rate.rarity]
