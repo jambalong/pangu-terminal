@@ -37,7 +37,7 @@ class OptimizersController < ApplicationController
     owned = inventory_items.index_by(&:material_id).transform_values(&:quantity)
     reconciled = SynthesisService.new(owned, needed).reconcile
     deficits = reconciled.select { |material_id, data| data[:deficit] > 0 }
-    materials = Material.where(id: deficits.keys).index_by(&:id)
+    materials = Material.includes(:sources).where(id: deficits.keys).index_by(&:id)
 
     @results = {}
     materials.each do |material_id, material|
