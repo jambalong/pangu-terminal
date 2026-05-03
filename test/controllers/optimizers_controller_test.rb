@@ -52,9 +52,9 @@ class OptimizersControllerIndexTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test "computes optimizer results when plan and run param present" do
+  test "computes optimizer results when plan is selected" do
     sign_in @user
-    get optimizer_path, params: { plan_id: @plan.id, run: true }
+    get optimizer_path, params: { plan_id: @plan.id }
 
     assert_response :ok
   end
