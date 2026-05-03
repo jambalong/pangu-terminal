@@ -13,7 +13,7 @@ class OptimizersController < ApplicationController
     end
 
     if @selected_plan
-      compute_optimizer_results
+      @results = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
     end
   end
@@ -27,7 +27,7 @@ class OptimizersController < ApplicationController
     @selected_plan = @plans.find_by(id: params[:plan_id])
 
     if @selected_plan
-      compute_optimizer_results
+      @results = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
     end
   end
@@ -46,14 +46,13 @@ class OptimizersController < ApplicationController
     deficits = reconciled.select { |material_id, data| data[:deficit] > 0 }
     materials = Material.includes(:sources).where(id: deficits.keys).index_by(&:id)
 
-    @results = {}
-    materials.each do |material_id, material|
-      deficit = deficits[material_id][:deficit]
-      @results[material_id] = {
-        material: material,
-        deficit: deficit,
-        sources: DropRateService.call(material, deficit, current_user.sol3_phase)
-      }
-    end
+    materials.each_with_object({}) do |(material_id, material), results|
+        deficit = deficits[material_id][:deficit]
+        results[material_id] = {
+          material: material,
+          deficit: deficit,
+          sources: DropRateService.call(material, deficit, current_user.sol3_phase)
+        }
+      end
   end
 end
