@@ -86,11 +86,26 @@ end
 
 class OptimizersControllerSelectPlanTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create!(email: "optimizer_select@example.com", password: "password123")
+    @user = User.create!(email: "optimizer_select@example.com", password: "password123", sol3_phase: 3)
     @weapon = Weapon.find_by!(name: "Kumokiri")
-    @plan = Plan.create!(
+    @other_weapon = Weapon.find_by!(name: "Ages of Harvest")
+    @shell_credit = Material.find_by!(name: "Shell Credit")
+
+    @plan_with_deficits = Plan.create!(
       user: @user,
       subject: @weapon,
+      plan_data: {
+        "input" => {
+          "current_level" => 1, "target_level" => 20,
+          "current_ascension_rank" => 0, "target_ascension_rank" => 1
+        },
+        "output" => { @shell_credit.id => 25480 }
+      }
+    )
+
+    @plan = Plan.create!(
+      user: @user,
+      subject: @other_weapon,
       plan_data: { "input" => {}, "output" => {} }
     )
   end
@@ -108,5 +123,15 @@ class OptimizersControllerSelectPlanTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_equal @plan.id.to_s, session[:optimizer_plan_id].to_s
+  end
+
+  test "farming advice is generated when plan has deficits" do
+    sign_in @user
+    post optimizer_select_plan_path,
+      params: { plan_id: @plan_with_deficits.id },
+      headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_response :ok
+    assert_equal "Stub farming advice.", @controller.instance_variable_get(:@farming_advice)
   end
 end
