@@ -6,29 +6,44 @@ class SynthesisService
   end
 
   def reconcile
-    result = {}
+    @reconcile ||= begin
+      result = {}
 
-    @required.each do |material_id, needed|
-      owned = @owned[material_id] || 0
-      material = fetch_material(material_id)
+      @required.each do |material_id, needed|
+        owned = @owned[material_id] || 0
+        material = fetch_material(material_id)
 
-      satisfied = exp_potion?(material) ? calculate_exp_satisfaction(material) : owned
-      deficit = [ needed - satisfied, 0 ].max
-      used_higher_rarity = satisfied > owned
-      craftable_count = find_craftable_count(material, deficit)
+        satisfied = exp_potion?(material) ? calculate_exp_satisfaction(material) : owned
+        deficit = [ needed - satisfied, 0 ].max
+        used_higher_rarity = satisfied > owned
+        craftable_count = find_craftable_count(material, deficit)
 
-      result[material_id] = {
-        needed: needed,
-        owned: owned,
-        satisfied: satisfied,
-        used_higher_rarity: used_higher_rarity,
-        deficit: deficit,
-        fulfilled: deficit == 0,
-        craftable_count: craftable_count
-      }
+        result[material_id] = {
+          needed: needed,
+          owned: owned,
+          satisfied: satisfied,
+          used_higher_rarity: used_higher_rarity,
+          deficit: deficit,
+          fulfilled: deficit == 0,
+          craftable_count: craftable_count
+        }
+      end
+
+      result
     end
+  end
 
-    result
+  def chain_coverage
+    memoized_reconcile = reconcile
+
+    @required.each_with_object({}) do |(material_id, _), result|
+      material = fetch_material(material_id)
+      next unless synthesizable?(material)
+
+      deficit = memoized_reconcile[material_id][:deficit]
+      chain = find_chain_craftable_count(material, deficit)
+      result[material_id] = chain if chain
+    end
   end
 
   private
@@ -79,5 +94,30 @@ class SynthesisService
     @materials.values.find do |m|
       m.item_group_id == material.item_group_id && m.rarity == material.rarity - 1
     end
+  end
+
+  def find_chain_craftable_count(material, deficit)
+    return nil unless synthesizable?(material)
+    return nil if deficit == 0
+
+    # Build chain downward, excluding the target material itself
+    chain = []
+    current = material
+    while (lower = find_lower_tier(current))
+      chain << lower
+      current = lower
+    end
+    return nil if chain.empty?
+
+    # Walk bottom-up: pool represents units available at each tier
+    pool = 0
+    chain.reverse_each do |mat|
+      owned = @owned[mat.id] || 0
+      needed = @required[mat.id] || 0
+      surplus = [ owned - needed, 0 ].max
+      pool = (pool + surplus) / 3
+    end
+
+    pool == 0 ? nil : [ pool, deficit ].min
   end
 end
