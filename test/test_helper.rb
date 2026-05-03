@@ -15,6 +15,13 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
+# Prevent real LLM API calls in tests
+LlmClient.instance_eval do
+  def ask(prompt)
+    "Stub farming advice."
+  end
+end
+
 module ActiveSupport
   class TestCase
     include Devise::Test::IntegrationHelpers
