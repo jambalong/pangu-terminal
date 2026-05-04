@@ -23,9 +23,8 @@ class FarmingAdvisorService < ApplicationService
       Material deficits, farming estimates, and synthesis opportunities:
       #{format_deficits}
 
-      Note: materials with type enemy_drop have no Waveplate farming source and must be hunted from open-world enemies.
-      Materials with type flower have no Waveplate farming source and must be gathered from fixed open-world locations.
-      Neither enemy_drop nor flower materials can be covered through synthesis.
+      Note: materials with type enemy_drop have no Waveplate farming source. They must be hunted from open-world enemies. They CAN be partially or fully covered through synthesis if lower tier surplus exists.
+      Materials with type flower have no Waveplate farming source and cannot be synthesized. They must be gathered from fixed open-world locations.
 
       Farming priority ranked by efficiency:
       #{format_priority}
@@ -70,6 +69,6 @@ class FarmingAdvisorService < ApplicationService
   end
 
   def no_waveplate_source?(material)
-    material.material_type.in?(%w[flower enemy_drop])
+    material.material_type == "flower"
   end
 end
