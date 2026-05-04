@@ -43,8 +43,8 @@
       <% if @results.present? %>
 
           <!-- Summary metrics -->
-          <% total_runs = @results.values.sum { |d| d[:sources].values.first&.dig(:estimated_runs) || 0 } %>
-          <% total_wp = @results.values.sum { |d| d[:sources].values.first&.dig(:waveplate_cost) || 0 } %>
+          <% total_runs = @totals[:total_runs] %>
+          <% total_wp = @totals[:total_wp] %>
           <% days = total_wp > 0 ? (total_wp / 240.0).ceil : 0 %>
 
           <div class="optimizer-metrics">

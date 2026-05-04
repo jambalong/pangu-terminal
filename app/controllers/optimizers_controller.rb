@@ -13,7 +13,7 @@ class OptimizersController < ApplicationController
     end
 
     if @selected_plan && params[:run]
-      @results, @chain_coverage = compute_optimizer_results
+      @results, @chain_coverage, @totals = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
     end
   end
@@ -31,7 +31,7 @@ class OptimizersController < ApplicationController
     @selected_plan = @plans.find_by(id: session[:optimizer_plan_id])
     return head :no_content unless @selected_plan
 
-    @results, @chain_coverage = compute_optimizer_results
+    @results, @chain_coverage, @totals = compute_optimizer_results
     @farming_priority = FarmingPriorityService.call(@results)
     @farming_advice = FarmingAdvisorService.call(
       results: @results,
@@ -67,6 +67,26 @@ class OptimizersController < ApplicationController
       }
     end
 
-    [ results, synthesis.chain_coverage ]
+    [ results, synthesis.chain_coverage, compute_source_totals(results) ]
+  end
+
+  def compute_source_totals(results)
+    by_source = Hash.new { |hash, source_name| hash[source_name] = { estimated_runs: 0, waveplate_cost_per_run: 0 } }
+
+    results.each do |_material_id, data|
+      data[:sources].each do |source_name, source_data|
+        if source_data[:estimated_runs] > by_source[source_name][:estimated_runs]
+          by_source[source_name] = {
+            estimated_runs: source_data[:estimated_runs],
+            waveplate_cost_per_run: source_data[:waveplate_cost_per_run]
+          }
+        end
+      end
+    end
+
+    total_runs = by_source.values.sum { |source| source[:estimated_runs] }
+    total_wp = by_source.values.sum { |source| source[:estimated_runs] * source[:waveplate_cost_per_run] }
+
+    { total_runs: total_runs, total_wp: total_wp }
   end
 end
