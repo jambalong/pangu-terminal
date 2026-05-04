@@ -107,14 +107,14 @@
               Show materials with no farmable source
             </label>
           </div>
-          <!-- Material breakdown list -->
-          <% @results.each do |material_id, data| %>
-            <%= tag.div class: "optimizer-material-card #{'hidden' if data[:sources].empty?}",
-                        data: (data[:sources].empty? ? { toggle_target: "item" } : {}) do %>
-              <div class="optimizer-material-header">
-                <div class="optimizer-material-info">
 
-                  <%# Icon with Rarity Border %>
+          <!-- Material breakdown list -->
+          <div class="optimizer-results-grid">
+            <% @results.each do |material_id, data| %>
+              <%= tag.div class: "optimizer-material-card #{'hidden' if data[:sources].empty?}",
+                          data: (data[:sources].empty? ? { toggle_target: "item" } : {}) do %>
+
+                <div class="optimizer-material-header">
                   <div class="item-icon rarity-border-<%= data[:material].rarity %> optimizer-material-icon">
                     <div class="rarity-bg-<%= data[:material].rarity %>">
                       <% if data[:material].image_url.present? %>
@@ -124,11 +124,13 @@
                       <% end %>
                     </div>
                   </div>
+
                   <div class="optimizer-material-details">
                     <div class="optimizer-material-header-row">
                       <span class="optimizer-material-name"><%= data[:material].name %></span>
                       <span class="optimizer-material-deficit">-<%= number_with_delimiter(data[:deficit]) %></span>
                     </div>
+
                     <% first_source = data[:sources].values.first %>
                     <% if first_source %>
                       <span class="optimizer-material-cost">
@@ -136,19 +138,24 @@
                         <%= number_with_delimiter(first_source[:waveplate_cost]) %>
                         <%= image_tag "/images/textures/waveplate.png", class: "optimizer-waveplate-icon", alt: "Waveplate" %>
                       </span>
+                    <% else %>
+                      <span class="optimizer-material-cost" style="visibility: hidden;">0 runs &middot; 0</span>
                     <% end %>
                   </div>
                 </div>
-              </div>
 
-              <% data[:sources].each do |source_name, source_data| %>
-                <div class="optimizer-source-row">
-                  <span class="optimizer-source-name"><%= source_name %></span>
+                <div class="optimizer-material-sources-chips">
+                  <% if data[:sources].any? %>
+                    <% data[:sources].each do |source_name, _| %>
+                      <span class="optimizer-source-chip"><%= source_name %></span>
+                    <% end %>
+                  <% else %>
+                    <span class="optimizer-source-chip optimizer-source-chip--empty">No farmable source</span>
+                  <% end %>
                 </div>
               <% end %>
             <% end %>
-          <% end %>
-
+          </div>
         </div>
       <% end %>
     <% end %>

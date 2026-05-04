@@ -245,6 +245,18 @@
   gap: 1rem;
 }
 
+.optimizer-results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .optimizer-results-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .optimizer-results-header {
   display: flex;
   justify-content: space-between;
@@ -278,6 +290,8 @@
   border: 1px solid var(--ctp-surface0);
   border-radius: 0.5rem;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .optimizer-material-header {
@@ -355,17 +369,64 @@
 }
 
 /* --- Sources list --- */
-.optimizer-source-row {
+.optimizer-material-card {
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 0.5rem;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.625rem 1rem;
-  border-top: 1px solid var(--ctp-surface0);
+  flex-direction: column;
 }
 
-.optimizer-source-name {
-  font-size: 0.85rem;
-  color: var(--ctp-subtext1);
+.optimizer-material-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  margin-top: 0.35rem;
+  flex: 1;
+}
+
+.optimizer-material-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--ctp-base);
+}
+
+.optimizer-material-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.optimizer-material-sources-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 1rem 1rem;
+  border-top: 1px solid var(--ctp-surface0);
+  background: var(--ctp-mantle);
+}
+
+.optimizer-source-chip {
+  font-size: 0.75rem;
+  color: var(--ctp-subtext0);
+  background: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  white-space: nowrap;
+}
+
+.optimizer-source-chip--empty {
+  font-style: italic;
+  color: var(--ctp-overlay0);
+  background: transparent;
+  border-color: transparent;
+  padding-left: 0;
 }
 
 /* --- Plan Selector Modal Grid --- */
