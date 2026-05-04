@@ -54,6 +54,32 @@
   align-items: center;
 }
 
+.plan-card-body .material-grid-item {
+  position: relative;
+}
+
+.material-list .material-grid-item {
+  position: relative;
+}
+
+.plan-card-body .material-grid-item[data-tooltip]:hover::after,
+.material-list .material-grid-item[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ctp-crust);
+  color: var(--ctp-text);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--ctp-surface1);
+  pointer-events: none;
+  z-index: 10;
+}
+
 .mat-details {
   text-align: center;
 }
