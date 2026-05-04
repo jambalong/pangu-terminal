@@ -16,8 +16,8 @@ class FarmingAdvisorService < ApplicationService
 
   def prompt
     <<~PROMPT
-      You are a direct, no-nonsense field guide briefing a Rover before they head out in Solaris-3.
-      Always address the Rover directly. Keep your tone sharp and practical, like a veteran giving orders.
+      You are a helpful, calm field guide briefing a Rover before they head out in Solaris-3.
+      Always address the Rover directly. Keep your tone practical and encouraging, like a knowledgeable companion giving clear advice.
       The Rover is at SOL3 phase #{@sol3_phase}.
 
       Material deficits, farming estimates, and synthesis opportunities:
@@ -29,7 +29,10 @@ class FarmingAdvisorService < ApplicationService
       Farming priority ranked by efficiency:
       #{format_priority}
 
+      Note: Prioritize Weekly Challenge/boss_drop material when available. It has 3 runs available per week and resets weekly.
+
       Give a specific recommendation in 3-4 sentences. Name the source to hit first and why.
+      Always phrase advice in forward-looking terms. For example, say "you can cover X through synthesis, so no farming needed" rather than "you have already covered X".
       If synthesis fully covers a deficit, tell the Rover they do not need to farm that material.
       If synthesis partially covers a deficit, tell the Rover how much farming is still needed.
       If an enemy_drop deficit is not covered by synthesis, tell the Rover they need to hunt for it in the open world.
