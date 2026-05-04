@@ -30,7 +30,6 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     result = FarmingAdvisorService.call(
       results: @results,
       farming_priority: @farming_priority,
-      sol3_phase: 3,
       chain_coverage: @chain_coverage
     )
 
@@ -41,7 +40,6 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     result = FarmingAdvisorService.call(
       results: {},
       farming_priority: @farming_priority,
-      sol3_phase: 3,
       chain_coverage: @chain_coverage
     )
 
@@ -52,7 +50,6 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     result = FarmingAdvisorService.call(
       results: @results,
       farming_priority: [],
-      sol3_phase: 3,
       chain_coverage: @chain_coverage
     )
 
@@ -63,7 +60,6 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     service = FarmingAdvisorService.new(
       results: @results,
       farming_priority: @farming_priority,
-      sol3_phase: 3,
       chain_coverage: @chain_coverage
     )
 
@@ -85,23 +81,10 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     service = FarmingAdvisorService.new(
       results: results_with_synth,
       farming_priority: @farming_priority,
-      sol3_phase: 3,
       chain_coverage: chain_coverage
     )
 
     prompt = service.send(:prompt)
     assert_match "synthesis fully covers this deficit -- no farming needed", prompt
-  end
-
-  test "includes sol3 phase in prompt" do
-    service = FarmingAdvisorService.new(
-      results: @results,
-      farming_priority: @farming_priority,
-      sol3_phase: 5,
-      chain_coverage: @chain_coverage
-    )
-
-    prompt = service.send(:prompt)
-    assert_match "SOL3 phase 5", prompt
   end
 end
