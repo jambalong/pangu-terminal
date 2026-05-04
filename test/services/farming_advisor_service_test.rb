@@ -48,7 +48,7 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     assert_nil result
   end
 
-  test "returns nil when farming priority is blank" do
+  test "still runs when farming priority is blank" do
     result = FarmingAdvisorService.call(
       results: @results,
       farming_priority: [],
@@ -56,7 +56,7 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
       chain_coverage: @chain_coverage
     )
 
-    assert_nil result
+    assert_equal "Stub farming advice.", result
   end
 
   test "includes material type in formatted deficits" do
@@ -72,17 +72,25 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
   end
 
   test "includes chain coverage in formatted deficits when present" do
-    chain_coverage = { @lf_whisperin_core.id => 4 }
+    cadence_blossom = Material.find_by!(name: "Cadence Blossom")
+    results_with_synth = {
+      cadence_blossom.id => {
+        material: cadence_blossom,
+        deficit: 3,
+        sources: { "Forgery Challenge" => { estimated_runs: 2, waveplate_cost: 80 } }
+      }
+    }
+    chain_coverage = { cadence_blossom.id => 3 }
 
     service = FarmingAdvisorService.new(
-      results: @results,
+      results: results_with_synth,
       farming_priority: @farming_priority,
       sol3_phase: 3,
       chain_coverage: chain_coverage
     )
 
     prompt = service.send(:prompt)
-    assert_match "synthesis from lower tiers can cover 4 units", prompt
+    assert_match "synthesis fully covers this deficit -- no farming needed", prompt
   end
 
   test "includes sol3 phase in prompt" do
