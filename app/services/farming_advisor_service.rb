@@ -47,15 +47,24 @@ class FarmingAdvisorService < ApplicationService
       chain = @chain_coverage[material_id]
 
       line = "- #{material.name} (rarity #{material.rarity}, type: #{material.material_type}): deficit #{deficit}"
-      line += " [no Waveplate source, open-world gather only]" if material.material_type == "flower"
-      line += " [no Waveplate source, open-world hunt only]" if material.material_type == "enemy_drop"
-      line += ", estimated #{first_source[:estimated_runs]} runs at #{data[:sources].keys.first}" if first_source
 
-      if chain && !no_waveplate_source?(material)
-        if chain >= deficit
-          line += ", synthesis fully covers this deficit -- no farming needed"
+      if material.material_type == "flower"
+        line += " [no Waveplate source, open-world gather only]"
+      elsif material.material_type == "enemy_drop"
+        if chain
+          line += " [no Waveplate source, open-world hunt only, synthesis can cover #{chain} units]"
         else
-          line += ", synthesis from lower tiers can cover #{chain} units, #{deficit - chain} still needed"
+          line += " [no Waveplate source, open-world hunt only, no synthesis coverage available]"
+        end
+      else
+        line += ", estimated #{first_source[:estimated_runs]} runs at #{data[:sources].keys.first}" if first_source
+
+        if chain
+          if chain >= deficit
+            line += ", synthesis fully covers this deficit -- no farming needed"
+          else
+            line += ", synthesis from lower tiers can cover #{chain} units, #{deficit - chain} still needed"
+          end
         end
       end
 
@@ -70,6 +79,6 @@ class FarmingAdvisorService < ApplicationService
   end
 
   def no_waveplate_source?(material)
-    material.material_type == "flower"
+    material.material_type.in?(%w[flower enemy_drop])
   end
 end
