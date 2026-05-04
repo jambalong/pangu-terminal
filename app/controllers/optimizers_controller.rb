@@ -12,16 +12,9 @@ class OptimizersController < ApplicationController
       @plans.find_by(id: session[:optimizer_plan_id])
     end
 
-    if @selected_plan
+    if @selected_plan && params[:run]
       @results, @chain_coverage = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
-
-      @farming_advice = FarmingAdvisorService.call(
-        results: @results,
-        farming_priority: @farming_priority,
-        sol3_phase: current_user.sol3_phase,
-        chain_coverage: @chain_coverage
-      )
     end
   end
 
@@ -32,18 +25,22 @@ class OptimizersController < ApplicationController
   def select_plan
     session[:optimizer_plan_id] = params[:plan_id]
     @selected_plan = @plans.find_by(id: params[:plan_id])
+  end
 
-    if @selected_plan
-      @results, @chain_coverage = compute_optimizer_results
-      @farming_priority = FarmingPriorityService.call(@results)
+  def advise
+    @selected_plan = @plans.find_by(id: session[:optimizer_plan_id])
+    return head :no_content unless @selected_plan
 
-      @farming_advice = FarmingAdvisorService.call(
-        results: @results,
-        farming_priority: @farming_priority,
-        sol3_phase: current_user.sol3_phase,
-        chain_coverage: @chain_coverage
-      )
-    end
+    @results, @chain_coverage = compute_optimizer_results
+    @farming_priority = FarmingPriorityService.call(@results)
+    @farming_advice = FarmingAdvisorService.call(
+      results: @results,
+      farming_priority: @farming_priority,
+      sol3_phase: current_user.sol3_phase,
+      chain_coverage: @chain_coverage
+    )
+
+    render partial: "farming_advice"
   end
 
   private

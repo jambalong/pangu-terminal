@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     get "optimizer", to: "optimizers#index"
     get "optimizer/plans_modal", to: "optimizers#plans_modal"
     post "optimizer/select_plan", to: "optimizers#select_plan"
+    get "optimizer/advise", to: "optimizers#advise"
   end
 
   # API routes
