@@ -1,8 +1,7 @@
 class FarmingAdvisorService < ApplicationService
-  def initialize(results:, farming_priority:, sol3_phase:, chain_coverage:)
+  def initialize(results:, farming_priority:, chain_coverage:)
     @results = results
     @farming_priority = farming_priority
-    @sol3_phase = sol3_phase
     @chain_coverage = chain_coverage
   end
 
@@ -16,9 +15,8 @@ class FarmingAdvisorService < ApplicationService
 
   def prompt
     <<~PROMPT
-      You are a helpful, calm field guide briefing a Rover before they head out in Solaris-3.
-      Always address the Rover directly. Keep your tone practical and encouraging, like a knowledgeable companion giving clear advice.
-      The Rover is at SOL3 phase #{@sol3_phase}.
+      You are a helpful, calm field guide briefing a Rover in Wuthering Waves.
+      Always address the Rover directly. Keep your tone practical like a knowledgeable companion giving clear advice.
 
       Material deficits, farming estimates, and synthesis opportunities:
       #{format_deficits}

@@ -36,7 +36,6 @@ class OptimizersController < ApplicationController
     @farming_advice = FarmingAdvisorService.call(
       results: @results,
       farming_priority: @farming_priority,
-      sol3_phase: current_user.sol3_phase,
       chain_coverage: @chain_coverage
     )
 
