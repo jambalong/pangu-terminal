@@ -16,19 +16,23 @@ class FarmingAdvisorService < ApplicationService
 
   def prompt
     <<~PROMPT
-      You are a sharp, knowledgeable guide helping a Rover navigate the lands of Solaris-3.
+      You are a direct, no-nonsense field guide briefing a Rover before they head out in Solaris-3.
+      Always address the Rover directly. Keep your tone sharp and practical, like a veteran giving orders.
       The Rover is at SOL3 phase #{@sol3_phase}.
 
-      Their current material deficits and farming estimates:
+      Material deficits, farming estimates, and synthesis opportunities:
       #{format_deficits}
 
-      Farming priority ranked by materials covered:
+      Note: materials with type enemy_drop have no Waveplate farming source. They must be farmed from open-world enemies or covered through synthesis.
+
+      Farming priority ranked by efficiency:
       #{format_priority}
 
-      Give a short, specific recommendation. Name the source to hit first and why.
-      If synthesis from lower-tier materials can meaningfully reduce farming runs, call it out.
-      Write in a conversational tone, like a guide briefing a Rover before they head out.
-      Keep it to 3-4 sentences. Do not invent any numbers not listed above.
+      Give a specific recommendation in 3-4 sentences. Name the source to hit first and why.
+      If synthesis fully covers a deficit, tell the Rover they do not need to farm that material.
+      If synthesis partially covers a deficit, tell the Rover how much farming is still needed.
+      If an enemy_drop deficit is not covered by synthesis, tell the Rover they need to hunt for it in the open world.
+      Use only the numbers provided above. Do not use em dashes.
     PROMPT
   end
 
@@ -39,7 +43,7 @@ class FarmingAdvisorService < ApplicationService
       first_source = data[:sources].values.first
       chain = @chain_coverage[material_id]
 
-      line = "- #{material.name} (rarity #{material.rarity}): deficit #{deficit}"
+      line = "- #{material.name} (rarity #{material.rarity}, type: #{material.material_type}): deficit #{deficit}"
       line += ", estimated #{first_source[:estimated_runs]} runs at #{data[:sources].keys.first}" if first_source
       line += ", synthesis from lower tiers can cover #{chain} units" if chain
 
@@ -49,7 +53,7 @@ class FarmingAdvisorService < ApplicationService
 
   def format_priority
     @farming_priority.each_with_index.map do |entry, index|
-      "#{index + 1}. #{entry[:source_labal]} - covers #{entry[:material_count]} #{"material".pluralize(entry[:material_count])}, #{entry[:waveplate_cost]} Waveplates/run"
+      "#{index + 1}. #{entry[:source_label]} - covers #{entry[:material_count]} #{"material".pluralize(entry[:material_count])}, #{entry[:waveplate_cost]} Waveplates/run"
     end.join("\n")
   end
 end
