@@ -190,6 +190,8 @@ FarmingAdvisorService.call(
 )
 ```
 
+![Farming Advisor](screenshots/advisor.png)
+
 ## API
 
 Pangu Terminal exposes a versioned REST API for developer access to plans and inventory data.
