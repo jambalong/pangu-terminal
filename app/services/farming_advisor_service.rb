@@ -7,7 +7,7 @@ class FarmingAdvisorService < ApplicationService
   end
 
   def call
-    return nil if @results.blank? || @farming_priority.blank?
+    return nil if @results.blank?
 
     LlmClient.ask(prompt)
   end
@@ -23,7 +23,9 @@ class FarmingAdvisorService < ApplicationService
       Material deficits, farming estimates, and synthesis opportunities:
       #{format_deficits}
 
-      Note: materials with type enemy_drop have no Waveplate farming source. They must be farmed from open-world enemies or covered through synthesis.
+      Note: materials with type enemy_drop have no Waveplate farming source and must be hunted from open-world enemies.
+      Materials with type flower have no Waveplate farming source and must be gathered from fixed open-world locations.
+      Neither enemy_drop nor flower materials can be covered through synthesis.
 
       Farming priority ranked by efficiency:
       #{format_priority}
@@ -32,6 +34,7 @@ class FarmingAdvisorService < ApplicationService
       If synthesis fully covers a deficit, tell the Rover they do not need to farm that material.
       If synthesis partially covers a deficit, tell the Rover how much farming is still needed.
       If an enemy_drop deficit is not covered by synthesis, tell the Rover they need to hunt for it in the open world.
+      If a flower deficit exists, tell the Rover they need to gather it from the open world.
       Use only the numbers provided above. Do not use em dashes.
     PROMPT
   end
@@ -44,8 +47,17 @@ class FarmingAdvisorService < ApplicationService
       chain = @chain_coverage[material_id]
 
       line = "- #{material.name} (rarity #{material.rarity}, type: #{material.material_type}): deficit #{deficit}"
+      line += " [no Waveplate source, open-world gather only]" if material.material_type == "flower"
+      line += " [no Waveplate source, open-world hunt only]" if material.material_type == "enemy_drop"
       line += ", estimated #{first_source[:estimated_runs]} runs at #{data[:sources].keys.first}" if first_source
-      line += ", synthesis from lower tiers can cover #{chain} units" if chain
+
+      if chain && !no_waveplate_source?(material)
+        if chain >= deficit
+          line += ", synthesis fully covers this deficit -- no farming needed"
+        else
+          line += ", synthesis from lower tiers can cover #{chain} units, #{deficit - chain} still needed"
+        end
+      end
 
       line
     end.join("\n")
@@ -55,5 +67,9 @@ class FarmingAdvisorService < ApplicationService
     @farming_priority.each_with_index.map do |entry, index|
       "#{index + 1}. #{entry[:source_label]} - covers #{entry[:material_count]} #{"material".pluralize(entry[:material_count])}, #{entry[:waveplate_cost]} Waveplates/run"
     end.join("\n")
+  end
+
+  def no_waveplate_source?(material)
+    material.material_type.in?(%w[flower enemy_drop])
   end
 end
