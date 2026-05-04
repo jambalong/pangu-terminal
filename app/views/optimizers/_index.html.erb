@@ -32,6 +32,13 @@
       <% end %>
     <% end %>
 
+    <% if @selected_plan %>
+      <%= form_with url: optimizer_path, method: :get, data: { turbo_frame: "optimizer-results" } do |f| %>
+        <%= hidden_field_tag :run, "1" %>
+        <%= f.submit "> RUN OPTIMIZER", class: "optimizer-run-button" %>
+      <% end %>
+    <% end %>
+
     <%= turbo_frame_tag "optimizer-results" do %>
       <% if @results.present? %>
 
@@ -78,11 +85,13 @@
           <% end %>
 
           <!-- Farming Advisor -->
-          <% if @farming_advice.present? %>
+          <%= turbo_frame_tag "farming-advisor", src: optimizer_advise_path do %>
             <div class="optimizer-advisor">
               <h2 class="optimizer-results-title">&gt; FARMING_ADVISOR</h2>
-              <div class="optimizer-advisor-card">
-                <p class="optimizer-advisor-text"><%= @farming_advice %></p>
+              <div class="optimizer-advisor-card optimizer-advisor-card--loading">
+                <span class="optimizer-advisor-dot"></span>
+                <span class="optimizer-advisor-dot"></span>
+                <span class="optimizer-advisor-dot"></span>
               </div>
             </div>
           <% end %>
