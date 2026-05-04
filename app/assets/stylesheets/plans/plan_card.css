@@ -58,12 +58,7 @@
   position: relative;
 }
 
-.material-list .material-grid-item {
-  position: relative;
-}
-
-.plan-card-body .material-grid-item[data-tooltip]:hover::after,
-.material-list .material-grid-item[data-tooltip]:hover::after {
+.plan-card-body .material-grid-item[data-tooltip]:hover::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: calc(100% + 6px);
