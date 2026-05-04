@@ -88,24 +88,10 @@ class OptimizersControllerSelectPlanTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email: "optimizer_select@example.com", password: "password123", sol3_phase: 3)
     @weapon = Weapon.find_by!(name: "Kumokiri")
-    @other_weapon = Weapon.find_by!(name: "Ages of Harvest")
-    @shell_credit = Material.find_by!(name: "Shell Credit")
-
-    @plan_with_deficits = Plan.create!(
-      user: @user,
-      subject: @weapon,
-      plan_data: {
-        "input" => {
-          "current_level" => 1, "target_level" => 20,
-          "current_ascension_rank" => 0, "target_ascension_rank" => 1
-        },
-        "output" => { @shell_credit.id => 25480 }
-      }
-    )
 
     @plan = Plan.create!(
       user: @user,
-      subject: @other_weapon,
+      subject: @weapon,
       plan_data: { "input" => {}, "output" => {} }
     )
   end
@@ -124,14 +110,53 @@ class OptimizersControllerSelectPlanTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal @plan.id.to_s, session[:optimizer_plan_id].to_s
   end
+end
 
-  test "farming advice is generated when plan has deficits" do
+class OptimizersControllerAdviseTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email: "optimizer_advise@example.com", password: "password123", sol3_phase: 3)
+    @weapon = Weapon.find_by!(name: "Kumokiri")
+    @shell_credit = Material.find_by!(name: "Shell Credit")
+    @lf_whisperin_core = Material.find_by!(name: "LF Whisperin Core")
+
+    @plan = Plan.create!(
+      user: @user,
+      subject: @weapon,
+      plan_data: {
+        "input" => {
+          "current_level" => 1, "target_level" => 20,
+          "current_ascension_rank" => 0, "target_ascension_rank" => 1
+        },
+        "output" => {
+          @shell_credit.id => 25480,
+          @lf_whisperin_core.id => 6
+        }
+      }
+    )
+  end
+
+  test "unauthenticated user is redirected to sign in" do
+    get optimizer_advise_path
+    assert_redirected_to new_user_session_path
+  end
+
+  test "returns no content when no plan in session" do
     sign_in @user
-    post optimizer_select_plan_path,
-      params: { plan_id: @plan_with_deficits.id },
-      headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    get optimizer_advise_path
+    assert_response :no_content
+  end
 
+  test "returns ok with plan in session" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    get optimizer_advise_path
     assert_response :ok
+  end
+
+  test "renders farming advice from stub" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    get optimizer_advise_path
     assert_equal "Stub farming advice.", @controller.instance_variable_get(:@farming_advice)
   end
 end
