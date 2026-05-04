@@ -3,6 +3,7 @@
 ## Framework & Libraries
 - [Rails 8](https://rubyonrails.org)
 - [Hotwire](https://hotwired.dev)
+- [RubyLLM](https://rubyllm.com) - LLM integration
 
 ## Deployment
 - [Kamal 2](https://kamal-deploy.org/)
@@ -24,4 +25,5 @@
 - [Space Mono](https://fonts.google.com/specimen/Space+Mono) - Google Fonts
 
 ## AI Assistance
-- Used as a rubber duck for debugging and bug diagnosis throughout development.
+- [Claude](https://claude.ai) (Anthropic) — rubber duck debugging, design discussions, and scaffolding reference code throughout development
+- [Gemini](https://ai.google.dev) (Google) — LLM provider for the Farming Advisor feature via RubyLLM

@@ -3,6 +3,77 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [0.18.0] - 2026-05-03
+
+**Estimated Time:** 14-16 hours
+
+### Added
+- LLM Farming Advisor powered by RubyLLM and Gemini, renders farming recommendations on the Waveplate Optimizer page based on the player's actual deficits and inventory
+- `FarmingAdvisorService` with context injection: deficits, farming priority, SOL3 phase, and full synthesis chain coverage
+- `LlmClient` thin wrapper around RubyLLM with graceful fallback on rate limit errors
+- `SynthesisService#chain_coverage` calculates craftable units across the full material tier chain using bottom-up pool accumulation
+- Async Turbo Frame for the advisor so optimizer results render immediately while advice loads in the background
+- Pulsing loading indicator shown while the advisor Turbo Frame resolves
+- Separate `advise` route and controller action for the async advisor request
+- Material name tooltips on icon hover in the Planner, Stimulus-based and scoped to the planner page
+- Animated accordion for material summary in the Planner with smooth slide animation, chevron rotation, and fading border
+
+### Changed
+- Waveplate Optimizer material breakdown redesigned to a 2-column grid with chip-style inline source labels
+- RUN OPTIMIZER button restored, plan selection no longer auto-triggers computation
+- Gemini model set to `gemini-3.1-flash-lite-preview` for 500 RPD free tier headroom
+- `ruby_llm` initializer uses credentials accessor without bang to allow asset precompile without master key
+
+### Fixed
+- Eager load material sources in optimizer to eliminate N+1 queries
+- Memoized `exp_materials` lookup in `DropRateService` to eliminate redundant queries
+- Eliminated redundant `EXISTS` check in `calculate_exp_avg_quantity`
+- `ApplicationService.call` now forwards keyword arguments correctly for Ruby 3.4
+- `RAILS_MASTER_KEY` added to GitHub Actions secrets and enabled in CI workflow
+
+---
+
+## [0.17.4] - 2026-04-27
+
+**Estimated Time:** 7-9 hours
+
+### Added
+- `PATCH /api/v1/profile` endpoint to set SOL3 phase for the authenticated user
+- `GET /api/v1/plans/:id/waveplate-summary` endpoint returning materials with active deficits and Waveplate farming estimates
+- Capybara system tests with Cuprite covering the critical user journey: sign in, create plan, update inventory, view optimizer
+- Optimizer controller tests for index, plans_modal, and select_plan actions
+- Test coverage for `PlanForm#from_plan`, `PlansHelper`, `OptimizersHelper`, and `Plan` model branches
+
+### Fixed
+- System test CI failures from database seeding timing, Chrome wait conditions, and missing no-sandbox Cuprite configuration
+
+### Changed
+- `WaveplateSummaryService` refactored to accept inventory as an argument
+
+---
+
+## [0.17.3] - 2026-04-22
+
+**Estimated Time:** 30 minutes
+
+### Changed
+- Updated README with `FarmingPriorityService` documentation and Waveplate Optimizer technical highlights
+
+---
+
+## [0.17.2] - 2026-04-15
+
+**Estimated Time:** 5-6 hours
+
+### Added
+- `FarmingPriorityService` ranks farming source types by deficit material coverage, deduplicating interchangeable locations so they count as one source type
+- Farming Priority section rendered in the Waveplate Optimizer UI
+- `source_type` and `waveplate_cost_per_run` added to `DropRateService` output
+- Sources list added to InventoryItem edit modals
+
+### Changed
+- Optimizer material cards updated with rarity borders and adjusted spacing
+
 ## [0.17.1] - 2026-04-12
 
 **Estimated Time:** 30 minutes

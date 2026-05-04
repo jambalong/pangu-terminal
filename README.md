@@ -5,14 +5,14 @@
 [![CI](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/jambalong/pangu-terminal/graph/badge.svg?token=TJPEEN49A6)](https://codecov.io/github/jambalong/pangu-terminal)
 
-**Status:** MVP complete with planning, inventory tracking, synthesis detection, Waveplate optimizer, and a REST API.
+**Status:** MVP complete with planning, inventory tracking, synthesis detection, Waveplate optimizer, LLM farming advisor, and a REST API.
 
 Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 
 ## What This Project Showcases
 
 ### Full-Stack Rails Architecture
-- Service objects extracting complex business logic (planners, synthesis, drop rate, farming priority)
+- Service objects extracting complex business logic (planners, synthesis, drop rate, farming priority, LLM advisor)
 - Polymorphic associations so character and weapon plans share identical CRUD operations
 - JSONB caching for plan output — computed once, stored as a hash, read without joins
 - Guest authentication via secure UUID tokens stored in cookies (no Devise required for trials)
@@ -22,6 +22,12 @@ Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 - Token-based authentication via Bearer header
 - RESTful endpoints exposing core business logic as JSON
 - Integration tests verifying authentication, authorization, and response contracts
+
+### LLM Integration
+- Context-aware farming advisor injecting live player data into a structured prompt
+- Async Turbo Frame so the page renders immediately while the LLM call resolves in the background
+- Graceful fallback when the API is unavailable
+- Thin `LlmClient` wrapper keeping the service layer decoupled from the RubyLLM interface
 
 ### Production-Ready Deployment
 - Kamal 2 containerized deployment to DigitalOcean
@@ -153,6 +159,36 @@ FarmingPriorityService.call(results)
 ![Waveplate Optimizer](screenshots/optimizer.png)
 
 Drop rate data is sourced from community spreadsheets and covers forgery, simulation, boss, and weekly challenge source types across all SOL3 phases.
+
+---
+
+### LLM Farming Advisor
+Players have a farming priority ranking but still need to decide what to do with it, especially when synthesis can partially cover a deficit.
+
+The Farming Advisor reads the player's actual optimizer data and gives a specific plain-English recommendation before they spend their Waveplates.
+
+- Loads asynchronously via Turbo Frame, optimizer results are not blocked
+- Injects live data into the prompt: deficits, estimated runs, synthesis chain coverage across all tiers, farming priority, and SOL3 phase
+- Instructs the model to reason only over injected numbers, not game knowledge
+- Handles `enemy_drop` materials correctly, no Waveplate source, must be hunted in the open world
+- Falls back to a static message if the API is unavailable
+
+**Technical Highlights:**
+```ruby
+# chain_coverage walks the full tier chain bottom-up
+synthesis = SynthesisService.new(owned, needed)
+reconciled = synthesis.reconcile
+chain = synthesis.chain_coverage
+# => { material_id => craftable_count_across_all_tiers }
+
+# FarmingAdvisorService formats context and calls the LLM
+FarmingAdvisorService.call(
+  results: @results,
+  farming_priority: @farming_priority,
+  sol3_phase: current_user.sol3_phase,
+  chain_coverage: @chain_coverage
+)
+```
 
 ## API
 
@@ -435,9 +471,11 @@ curl https://panguterminal.ambalong.dev/api/v1/plans/1/waveplate-summary \
 Complex calculations live in services, not controllers or models:
 - **ResonatorAscensionPlanner:** Character upgrade cost calculation
 - **WeaponAscensionPlanner:** Weapon upgrade cost calculation
-- **SynthesisService:** Inventory reconciliation and synthesis detection
+- **SynthesisService:** Inventory reconciliation, synthesis detection, and full chain coverage calculation
 - **DropRateService:** Waveplate cost and run estimation per farming source
 - **FarmingPriorityService:** Ranks farming source types by deficit material coverage
+- **FarmingAdvisorService:** Injects optimizer context into a structured prompt and returns a plain-English farming recommendation
+- **LlmClient:** Thin wrapper around RubyLLM with graceful fallback on rate limit errors
 
 This keeps controllers thin and logic testable.
 
@@ -594,7 +632,9 @@ app/
 │   ├── weapon_ascension_planner.rb      # Weapon cost calculation
 │   ├── synthesis_service.rb             # Inventory reconciliation
 │   ├── drop_rate_service.rb             # Waveplate run estimation
-│   └── farming_priority_service.rb      # Farming source ranking
+│   ├── farming_priority_service.rb      # Farming source ranking
+│   ├── farming_advisor_service.rb       # LLM farming recommendation
+│   └── llm_client.rb                    # RubyLLM wrapper
 ├── views/
 │   ├── layouts/
 │   ├── plans/
@@ -632,5 +672,5 @@ The production version of this application is currently deployed via **Kamal 2**
 
 ---
 
-**Last Updated:** April 2026
-**Version:** 0.17.1
+**Last Updated:** May 2026
+**Version:** 0.18.0
