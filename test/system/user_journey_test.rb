@@ -48,7 +48,7 @@ class UserJourneyTest < ApplicationSystemTestCase
     click_link "> SELECT A PLAN"
     assert_text "Select a Plan"
     click_button "Kumokiri"
-    click_button "▶ RUN OPTIMIZER"
+    click_button "> RUN OPTIMIZER"
     assert_selector ".optimizer-metrics"
   end
 end
