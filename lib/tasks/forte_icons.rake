@@ -21,7 +21,9 @@ namespace :forte do
     "resonance_skill"      => "Resonance-Skill",
     "forte_circuit"        => "Forte-Circuit",
     "resonance_liberation" => "Resonance-Liberation",
-    "intro_skill"          => "Intro-Skill"
+    "intro_skill"          => "Intro-Skill",
+    "inherent_skill_1"     => "Inherent-Skill-1",
+    "inherent_skill_2"     => "Inherent-Skill-2"
   }.freeze
 
   SKILL_LABEL_OVERRIDES_RAKE = {
