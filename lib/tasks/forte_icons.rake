@@ -54,6 +54,7 @@ namespace :forte do
       response = Net::HTTP.get_response(URI(url))
       if response.is_a?(Net::HTTPSuccess)
         File.binwrite(dest_file, response.body)
+        system("magick #{dest_file} -resize 64x64 #{dest_file}")
         puts "  saved #{stat_key}.avif"
       else
         puts "  FAILED #{stat_key}: #{response.code}"
@@ -87,6 +88,7 @@ namespace :forte do
         response = Net::HTTP.get_response(URI(url))
         if response.is_a?(Net::HTTPSuccess)
           File.binwrite(dest_file, response.body)
+          system("convert #{dest_file} -resize 64x64 #{dest_file}")
           puts "  saved #{slug}/#{actual_label.downcase}.webp"
         else
           puts "  FAILED #{slug}/#{actual_label}: #{response.code}"

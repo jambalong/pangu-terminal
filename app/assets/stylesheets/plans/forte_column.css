@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: 0rem;
   width: 100%;
 }
 
@@ -20,6 +20,19 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+}
+
+.node-icon-bg {
+  width: 100%;
+  height: 100%;
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.node-diamond .node-icon-bg,
+.node-diamond-top .node-icon-bg {
+  transform: rotate(-45deg);
 }
 
 /* Node Circles (Regular Columns) */
@@ -81,7 +94,7 @@
 /* Node Connector Line */
 .node-connector {
   width: 2px;
-  height: 1rem;
+  height: 1.5rem;
   background-color: var(--ctp-surface1);
   margin: 0.25rem 0;
   transition: background 0.2s ease;
@@ -124,7 +137,7 @@
   display: flex;
   gap: 0.25rem;
   align-items: center;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .skill-level-text span:first-child,
@@ -171,7 +184,6 @@
   border: 2px solid var(--ctp-base);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease;
   position: relative;
   z-index: 2;
@@ -179,7 +191,6 @@
 
 .skill-slider::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 0 8px rgba(203, 166, 247, 0.5);
 }
 
 .skill-slider::-webkit-slider-thumb:active {
@@ -194,13 +205,11 @@
   border: 2px solid var(--ctp-base);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease;
 }
 
 .skill-slider::-moz-range-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 0 8px rgba(203, 166, 247, 0.5);
 }
 
 .skill-slider::-moz-range-thumb:active {
@@ -219,7 +228,6 @@
 }
 
 .skill-slider:focus-visible {
-  box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.2);
   border-radius: 9999px;
 }
 

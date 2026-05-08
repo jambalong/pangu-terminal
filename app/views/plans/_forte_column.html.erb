@@ -1,14 +1,10 @@
 <div class="forte-column <%= 'inherent-node' if config[:inherent] %>">
-  <%# Tier 2 Node - Diamond for inherent, Circle otherwise %>
   <label class="node-label">
-    <%= f.check_box "#{config[:key]}_node_2",
-                { class: "peer hidden" },
-                1,
-                0 %>
+    <%= f.check_box "#{config[:key]}_node_2", { class: "peer hidden" }, 1, 0 %>
     <% if config[:inherent] %>
       <div class="node-diamond-top node-2">
         <% if config[:inherent_2_icon] %>
-          <%= image_tag config[:inherent_2_icon], class: "node-icon", alt: "" %>
+          <div class="node-icon-bg" style="background-image: url('<%= asset_path(config[:inherent_2_icon]) %>')"></div>
         <% else %>
           <span>✱</span>
         <% end %>
@@ -16,7 +12,7 @@
     <% else %>
       <div class="node-circle node-2">
         <% if config[:stat_icon] %>
-          <%= image_tag config[:stat_icon], class: "node-icon", alt: "" %>
+          <div class="node-icon-bg" style="background-image: url('<%= asset_path(config[:stat_icon]) %>')"></div>
         <% else %>
           <span>✱</span>
         <% end %>
@@ -24,19 +20,14 @@
     <% end %>
   </label>
 
-  <%# Connector between Node 2 and Node 1 %>
   <div class="node-connector"></div>
 
-  <%# Tier 1 Node - Diamond for inherent, Circle otherwise %>
   <label class="node-label">
-    <%= f.check_box "#{config[:key]}_node_1",
-                { class: "peer hidden" },
-                1,
-                0 %>
+    <%= f.check_box "#{config[:key]}_node_1", { class: "peer hidden" }, 1, 0 %>
     <% if config[:inherent] %>
       <div class="node-diamond-top node-1">
         <% if config[:inherent_1_icon] %>
-          <%= image_tag config[:inherent_1_icon], class: "node-icon", alt: "" %>
+          <div class="node-icon-bg" style="background-image: url('<%= asset_path(config[:inherent_1_icon]) %>')"></div>
         <% else %>
           <span>✱</span>
         <% end %>
@@ -44,7 +35,7 @@
     <% else %>
       <div class="node-circle node-1">
         <% if config[:stat_icon] %>
-          <%= image_tag config[:stat_icon], class: "node-icon", alt: "" %>
+          <div class="node-icon-bg" style="background-image: url('<%= asset_path(config[:stat_icon]) %>')"></div>
         <% else %>
           <span>✱</span>
         <% end %>
@@ -52,13 +43,11 @@
     <% end %>
   </label>
 
-  <%# Connector between Node 1 and Skill Diamond %>
   <div class="node-connector"></div>
 
-  <%# Skill Node (Diamond - Always Active) %>
   <div class="node-diamond">
     <% if config[:skill_icon] %>
-      <%= image_tag config[:skill_icon], class: "node-icon", alt: "" %>
+      <div class="node-icon-bg" style="background-image: url('<%= asset_path(config[:skill_icon]) %>')"></div>
     <% else %>
       <span>✱</span>
     <% end %>
