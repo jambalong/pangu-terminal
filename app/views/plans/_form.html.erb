@@ -63,7 +63,7 @@
   <% if subject_type == "Resonator" %>
     <%# The Forte Grid %>
     <div class="forte-grid">
-      <% forte_configs.each do |config| %>
+      <% forte_configs(subject).each do |config| %>
         <%= render "forte_column", f: f, config: config %>
       <% end %>
     </div>

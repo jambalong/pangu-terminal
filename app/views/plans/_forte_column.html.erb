@@ -7,15 +7,23 @@
                 0 %>
     <% if config[:inherent] %>
       <div class="node-diamond-top node-2">
-        <span>✱</span>
+        <% if config[:inherent_2_icon] %>
+          <%= image_tag config[:inherent_2_icon], class: "node-icon", alt: "" %>
+        <% else %>
+          <span>✱</span>
+        <% end %>
       </div>
     <% else %>
       <div class="node-circle node-2">
-        <span>✱</span>
+        <% if config[:stat_icon] %>
+          <%= image_tag config[:stat_icon], class: "node-icon", alt: "" %>
+        <% else %>
+          <span>✱</span>
+        <% end %>
       </div>
     <% end %>
   </label>
-  
+
   <%# Connector between Node 2 and Node 1 %>
   <div class="node-connector"></div>
 
@@ -27,11 +35,19 @@
                 0 %>
     <% if config[:inherent] %>
       <div class="node-diamond-top node-1">
-        <span>✱</span>
+        <% if config[:inherent_1_icon] %>
+          <%= image_tag config[:inherent_1_icon], class: "node-icon", alt: "" %>
+        <% else %>
+          <span>✱</span>
+        <% end %>
       </div>
     <% else %>
       <div class="node-circle node-1">
-        <span>✱</span>
+        <% if config[:stat_icon] %>
+          <%= image_tag config[:stat_icon], class: "node-icon", alt: "" %>
+        <% else %>
+          <span>✱</span>
+        <% end %>
       </div>
     <% end %>
   </label>
@@ -41,7 +57,11 @@
 
   <%# Skill Node (Diamond - Always Active) %>
   <div class="node-diamond">
-    <span>✱</span>
+    <% if config[:skill_icon] %>
+      <%= image_tag config[:skill_icon], class: "node-icon", alt: "" %>
+    <% else %>
+      <span>✱</span>
+    <% end %>
   </div>
 
   <%# Skill Level Indicators (Current → Target) %>
