@@ -1,6 +1,11 @@
 class PlansController < ApplicationController
   include PlanLoading
 
+  SUBJECT_TYPES = {
+    "Resonator" => Resonator,
+    "Weapon" => Weapon
+  }.freeze
+
   before_action :set_guest_token
   before_action :set_plan, only: [ :edit, :update, :destroy, :confirm_delete ]
   before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete ]
@@ -12,26 +17,44 @@ class PlansController < ApplicationController
   def new
     @step = (params[:step] || 1).to_i
     @subject_type = params[:subject_type]
+    @subject_class = SUBJECT_TYPES[@subject_type]
 
     case @step
     when 2
+      if @subject_class.nil?
+        @errors = [ "Invalid subject class" ]
+        render_form_with_errors
+        return
+      end
+
       already_planned_ids = load_current_plans.subject_ids_for_type(@subject_type)
-      @subject_list = @subject_type.constantize.where.not(id: already_planned_ids).order(:name)
+      @subject_list = @subject_class.where.not(id: already_planned_ids).order(:name)
     when 3
-      @subject = @subject_type.constantize.find(params[:subject_id])
+      if @subject_class.nil?
+        @errors = [ "Invalid subject class" ]
+        render_form_with_errors
+        return
+      end
+
+      @subject = @subject_class.find(params[:subject_id])
       @form = PlanForm.new(subject_type: @subject_type, subject_id: @subject.id)
     end
 
     render layout: false if turbo_frame_request?
-  rescue NameError
-    @errors = [ "Invalid subject type" ]
-    render_form_with_errors
   end
 
   def create
     @form = PlanForm.new(plan_params)
     @subject_type = @form.subject_type
-    @subject = @subject_type.safe_constantize&.find_by(id: @form.subject_id)
+    @subject_class = SUBJECT_TYPES[@subject_type]
+
+    if @subject_class.nil?
+      @errors = [ "Invalid subject class" ]
+      render_form_with_errors
+      return
+    end
+
+    @subject = @subject_class.find_by(id: @form.subject_id)
 
     return handle_missing_subject if @subject.nil?
 
