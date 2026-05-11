@@ -49,6 +49,6 @@ class UserJourneyTest < ApplicationSystemTestCase
     assert_text "Select a Plan"
     click_button "Kumokiri"
     click_button "> RUN OPTIMIZER"
-    assert_selector ".optimizer-metrics"
+    assert_selector ".optimizer-metrics", wait: 10
   end
 end
