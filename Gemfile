@@ -76,4 +76,4 @@ end
 gem "devise", "~> 5.0"
 gem "rack-attack", "~> 6.8"
 
-gem "ruby_llm", "~> 1.14"
+gem "ruby_llm", "~> 1.15"

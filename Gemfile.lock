@@ -173,7 +173,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.19.3)
+    json (2.19.5)
     kamal (2.11.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -356,7 +356,7 @@ GEM
     ruby-vips (2.2.5)
       ffi (~> 1.12)
       logger
-    ruby_llm (1.14.1)
+    ruby_llm (1.15.0)
       base64
       event_stream_parser (~> 1)
       faraday (>= 1.10.0)
@@ -472,7 +472,7 @@ DEPENDENCIES
   rails (~> 8.1.1)
   rubocop-rails-omakase
   ruby-lsp
-  ruby_llm (~> 1.14)
+  ruby_llm (~> 1.15)
   simplecov
   simplecov-cobertura
   solid_cable
