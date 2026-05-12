@@ -77,8 +77,4 @@ class FarmingAdvisorService < ApplicationService
       "#{index + 1}. #{entry[:source_label]} - covers #{entry[:material_count]} #{"material".pluralize(entry[:material_count])}, #{entry[:waveplate_cost]} Waveplates/run"
     end.join("\n")
   end
-
-  def no_waveplate_source?(material)
-    material.material_type.in?(%w[flower enemy_drop])
-  end
 end
