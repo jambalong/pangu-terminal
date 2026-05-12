@@ -69,7 +69,7 @@ Rails.application.configure do
     user_name: ENV["POSTMARK_API_TOKEN"],
     password: ENV["POSTMARK_API_TOKEN"],
     address: "smtp.postmarkapp.com",
-    port: 587,
+    port: 2525,
     authentication: :plain,
     enable_starttls_auto: true
   }
