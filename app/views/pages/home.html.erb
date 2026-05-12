@@ -60,7 +60,11 @@
           <!-- Mock Plan Header -->
           <div class="mock-header">
             <div class="mock-title">
-              Augusta <span class="text-peach">★★★★★</span>
+              <div class="mock-title-left">
+                <%= image_tag "/images/resonators/augusta.png", alt: "Augusta", class: "mock-portrait" %>
+                Augusta
+              </div>
+              <span class="mock-stars">★★★★★</span>
             </div>
             <div class="mock-subtitle">CONFIGURE RESONATOR PLAN</div>
           </div>
@@ -111,11 +115,11 @@
               </div>
             </div>
 
-            <!-- Column 3: Liberation (Hidden on Small Mobile) -->
+            <!-- Column 3: Liberation — all diamonds -->
             <div class="mock-node-col mobile-hide">
-              <div class="mock-circle active">✱</div>
+              <div class="mock-diamond active">✱</div>
               <div class="mock-line active"></div>
-              <div class="mock-circle active">✱</div>
+              <div class="mock-diamond active">✱</div>
               <div class="mock-line active"></div>
               <div class="mock-diamond active">✱</div>
               <span>10 → 10</span>

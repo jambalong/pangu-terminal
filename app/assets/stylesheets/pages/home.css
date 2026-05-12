@@ -72,9 +72,6 @@
 .text-mauve {
   color: var(--ctp-mauve);
 }
-.text-peach {
-  color: var(--ctp-peach);
-}
 
 .hero-subtitle {
   font-size: 1rem;
@@ -208,6 +205,28 @@
 /* Mock Header */
 .mock-header {
   margin-bottom: 1.5rem;
+}
+
+/* Mock Portrait */
+.mock-portrait {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.mock-title-left {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+/* Mock Stars */
+.mock-stars {
+  font-size: 1.5em;
+  letter-spacing: 0.05em;
+  color: var(--ctp-yellow);
 }
 
 .mock-title {
