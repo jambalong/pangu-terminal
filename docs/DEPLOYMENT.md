@@ -18,6 +18,7 @@ Required in `.kamal/secrets` before deploying:
 | `KAMAL_REGISTRY_PASSWORD` | Docker Hub password or access token for pushing images. |
 | `POSTGRES_PASSWORD` | Production database password. Must match the value used when the database was initialized. |
 | `DATABASE_URL` | Full PostgreSQL connection string for the production database. Example: `postgres://rails:${POSTGRES_PASSWORD}@pangu-terminal-db/pangu_terminal_production`|
+| `POSTMARK_API_TOKEN` | API token for Postmark. Used by Action Mailer to send transactional emails (password reset). Found in your Postmark account under Servers -> your server -> API Tokens. |
 
 ## Deploy
 
