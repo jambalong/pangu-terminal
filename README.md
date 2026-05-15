@@ -1,4 +1,4 @@
-# Wuthering Waves Resource Optimization Platform
+# Progression Planner and Farming Optimizer for Wuthering Waves
 
 **Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next accounting for synthesis chains so you don't waste time grinding materials you can craft.
 
@@ -134,7 +134,7 @@ Players need to know how many runs of a specific farming source it will take to 
 The Waveplate Optimizer:
 - Runs reconciliation against the player's current inventory to find active deficits
 - Estimates runs and Waveplate cost per deficit material, broken down by farming source
-- Converts EXP potion deficits (always expressed in rarity-2 terms) to equivalent higher-rarity drop quantities based on exp_value
+- Converts higher-rarity EXP drops to rarity-2 equivalents for run estimation
 - Falls back to the highest available phase data when no drop rate row exists for the user's current SOL3 phase
 - Ranks farming source types by how many deficit materials each covers (Farming Priority)
 - Includes a toggle to show or hide materials with no farmable Waveplate source
@@ -474,7 +474,7 @@ Complex calculations live in services, not controllers or models:
 - **WeaponAscensionPlanner:** Weapon upgrade cost calculation
 - **SynthesisService:** Inventory reconciliation, synthesis detection, and full chain coverage calculation
 - **DropRateService:** Waveplate cost and run estimation per farming source
-- **FarmingPriorityService:** Ranks farming source types by deficit material coverage
+- **FarmingPriorityService:** Ranks farming source types by material breadth and waveplate efficiency
 - **FarmingAdvisorService:** Injects optimizer context into a structured prompt and returns a plain-English farming recommendation
 - **LlmClient:** Thin wrapper around RubyLLM with graceful fallback on rate limit errors
 
