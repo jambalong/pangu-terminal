@@ -191,6 +191,7 @@ jobs:
           RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
           DATABASE_URL=${{ secrets.DATABASE_URL }}
+          POSTMARK_API_TOKEN=${{ secrets.POSTMARK_API_TOKEN }}
           EOF
 
       - name: Deploy
