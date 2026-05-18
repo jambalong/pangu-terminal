@@ -61,6 +61,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "user-manual", to: "pages#user_manual", as: :user_manual
+
   # Defines the root path route ("/")
   root "pages#home"
 end
