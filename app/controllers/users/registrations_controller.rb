@@ -10,11 +10,17 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def update_resource(resource, params)
-      if params[:password].blank? && params[:password_confirmation].blank?
-        params.delete(:current_password)
-        resource.update_without_password(params)
-      else
-        super
-      end
+    if updating_only_sol3_phase?(params)
+      params.delete(:current_password)
+      resource.update_without_password(params)
+    else
+      super
     end
+  end
+
+  private
+
+  def updating_only_sol3_phase?(params)
+    params.keys.map(&:to_s) == [ "sol3_phase" ]
+  end
 end
