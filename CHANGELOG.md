@@ -13,6 +13,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 - Test coverage for `Users::RegistrationsController` custom Devise logic
 - Test coverage for `PagesController` actions
+- Branded error pages (400, 404, 406, 422, 500) styled to match app theme
 
 ### Changed
 - Updated README with architecture and design decision entries: SHA-256 token hashing, 404 vs 403 enumeration prevention, Rack::Attack per-key rate limiting, LLM context injection, async Turbo Frame pattern, and LlmClient decoupling
