@@ -14,7 +14,7 @@ Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 ### Full-Stack Rails Architecture
 - Service objects extracting complex business logic (planners, synthesis, drop rate, farming priority, LLM advisor)
 - Polymorphic associations so character and weapon plans share identical CRUD operations
-- JSONB caching for plan output — computed once, stored as a hash, read without joins
+- JSONB caching for plan output: computed once, stored as a hash, read without joins
 - Guest authentication via secure UUID tokens stored in cookies (no Devise required for trials)
 - Turbo Streams for real-time inventory updates without full page reloads
 
@@ -545,6 +545,117 @@ Inventory edits trigger Turbo Stream responses that update the edited item plus 
 ```
 
 This updates the edited item immediately, then recomputes synthesis for the entire family (e.g., all Cadence materials) so craftable counts reflect the new inventory state, all without a page reload.
+
+### SHA-256 API Token Hashing
+API tokens are hashed with SHA-256 before storage. The plaintext token is generated once, shown to the user, and never stored:
+
+```ruby
+before_create :generate_token
+
+def generate_token
+  @raw_token = "pt_#{SecureRandom.urlsafe_base64(32)}"
+  self.token = Digest::SHA256.hexdigest(@raw_token)
+end
+```
+
+Authentication hashes the incoming bearer token and looks up the digest:
+
+```ruby
+api_key = ApiKey.find_by(token: Digest::SHA256.hexdigest(token))
+api_key&.touch(:last_used_at)
+```
+
+A database leak exposes only digests. `last_used_at` is updated on every successful authentication so inactive keys can be identified for future auto-revocation.
+
+### 404 Instead of 403 for Non-Owner Resources
+Plan queries are scoped to the current user before the lookup in both the web and API controllers:
+
+```ruby
+# Web: scoped via load_current_plans helper
+def set_plan
+  @plan = load_current_plans.find(params[:id])
+end
+
+# API: scoped directly to current_user
+plan = @current_user.plans.find(params[:id])
+
+# BaseController rescues the result
+rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+```
+
+If a plan exists but belongs to another user, the scoped query raises `RecordNotFound` and returns 404. Returning 403 would confirm the resource exists and leak information about other users' data. 404 prevents enumeration.
+
+### Rack::Attack Rate Limiting
+Three separate throttles with different strategies:
+
+```ruby
+# General: catch scrapers and misconfigured clients
+throttle("req/ip", limit: 300, period: 5.minutes) do |req|
+  req.ip
+end
+
+# Brute force: limit login attempts by IP and email
+throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
+  req.ip if req.path == "/sign-in" && req.post?
+end
+
+throttle("logins/email", limit: 5, period: 20.seconds) do |req|
+  if req.path == "/sign-in" && req.post?
+    req.params["user"]&.dig("email").to_s.downcase.presence
+  end
+end
+
+# API: keyed by token, not IP
+throttle("api/token", limit: 60, period: 1.minute) do |req|
+  if req.path.start_with?("/api")
+    req.get_header("HTTP_AUTHORIZATION")&.delete_prefix("Bearer ")
+  end
+end
+```
+
+The API throttle keys on the bearer token so each consumer gets an independent bucket. One abusive client cannot affect others on the same network. The throttled responder returns JSON for `/api/` routes and plain text elsewhere.
+
+### LLM Context Injection
+The Farming Advisor does not rely on the model's game knowledge. Live player data is injected into the system prompt: deficits, farming priority ranking, synthesis chain coverage across all tiers, and SOL3 phase. The model is instructed to reason only over those numbers:
+
+```ruby
+FarmingAdvisorService.call(
+  results: @results,
+  farming_priority: @farming_priority,
+  chain_coverage: @chain_coverage
+)
+```
+
+`SynthesisService#chain_coverage` pre-computes craftable units bottom-up across the full material tier chain before the prompt is built. The model receives a number, not a reasoning problem. This keeps recommendations grounded in the player's actual data rather than generic game advice.
+
+### LlmClient as a Thin Wrapper
+`FarmingAdvisorService` does not call RubyLLM directly. All provider interaction goes through `LlmClient`, which handles timeouts, rate limits, and unexpected errors:
+
+```ruby
+def self.ask(prompt)
+  Timeout.timeout(20) do
+    RubyLLM.chat.ask(prompt).content
+  end
+rescue Timeout::Error, RubyLLM::RateLimitError, RubyLLM::ContextLengthExceededError
+  "Advisor is temporarily unavailable. Check your farming priority ranking above for recommendations."
+rescue => e
+  Rails.logger.error("LlmClient error: #{e.class} #{e.message}")
+  "Advisor is temporarily unavailable. Check your farming priority ranking above for recommendations."
+end
+```
+
+`FarmingAdvisorService` has no direct dependency on RubyLLM. The model is configured in the RubyLLM initializer, not hardcoded in the client.
+
+### Async Turbo Frame for LLM
+The Farming Advisor loads via a dedicated `advise` route rendered into a Turbo Frame with a `src`:
+
+```erb
+<%= turbo_frame_tag "farming-advisor", src: optimizer_advise_path do %>
+  <%# pulsing loading indicator %>
+<% end %>
+```
+
+The frame fires a separate request to `optimizer_advise_path` after the optimizer results render. The LLM call happens in that request, so farming priority and material breakdown are never blocked by the 20-second timeout window.
 
 ## Technology Stack
 
