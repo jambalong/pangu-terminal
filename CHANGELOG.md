@@ -3,6 +3,98 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.0.0] - 2026-05-18
+
+**Estimated Time:** 7-8 hours
+
+### Security
+- Scoped password-free account update to SOL3 phase changes only; email updates now require current password verification
+
+### Added
+- Test coverage for `Users::RegistrationsController` custom Devise logic
+- Test coverage for `PagesController` actions
+
+### Changed
+- Updated README with architecture and design decision entries: SHA-256 token hashing, 404 vs 403 enumeration prevention, Rack::Attack per-key rate limiting, LLM context injection, async Turbo Frame pattern, and LlmClient decoupling
+- Minor README documentation updates
+
+### Dependencies
+- Updated addressable and net-imap to fix security advisories
+- Bumped propshaft 1.3.1 to 1.3.2
+- Bumped bootsnap 1.23.0 to 1.24.3
+- Bumped puma 7.2.0 to 8.0.1
+- Bumped ruby_llm 1.14.1 to 1.15.0
+- Bumped devise 5.0.3 to 5.0.4
+- Bumped webfactory/ssh-agent 0.9.0 to 0.10.0
+
+---
+
+## [0.19.1] - 2026-05-18
+
+**Estimated Time:** 2-3 hours
+
+### Fixed
+- SSH known hosts fingerprint stored to prevent key mismatch in CD pipeline
+- POSTMARK_API_TOKEN added to CI workflow secrets
+
+---
+
+## [0.19.0] - 2026-05-11
+
+**Estimated Time:** 18-20 hours
+
+### Added
+- User manual with route, layout, Stimulus controller, stylesheet, content, and screenshot assets
+- User manual link in landing page footer
+- Password reset flow via Postmark SMTP with styled reset page
+- Getting Started and Features sections on the landing page
+- Deployment runbook at `docs/DEPLOYMENT.md` including deploy steps, log checking, and rollback procedure
+- POSTMARK_API_TOKEN added to deployment runbook
+- CD pipeline via GitHub Actions with auto-deploy on merge to main
+- Brakeman security scan enabled in CI workflow
+
+### Fixed
+- Replaced `constantize` with an allowlist hash in `PlansController` to address Brakeman warning
+- SMTP port changed from 587 to 2525 to fix timeout
+- Turbo disabled on password reset form to fix redirect behavior
+- Increased wait time for optimizer metrics in system tests
+- nokogiri updated to patch security vulnerabilities
+
+### Changed
+- Landing page mockup portrait updated, star size enlarged, third column changed to all diamonds
+- Dead code `no_waveplate_source?` removed
+
+---
+
+## [0.18.1] - 2026-05-08
+
+**Estimated Time:** 6-8 hours
+
+### Added
+- Forte node icons rendered in the planner form with background-image rendering
+- Forte icon assets for all resonators: skill icons, stat icons, and inherent skills 1 and 2
+- Rake tasks to download forte and inherent skill icon assets
+- `forte_icons` JSONB column on resonators
+- Seeded forte icon paths and inherent skills for all resonators
+
+### Fixed
+- `LlmClient` rescue catches all exceptions to prevent blank advisor frame
+- `LlmClient` 20-second timeout added for slow or dropped API connections
+- Farming advisor handles flower and `enemy_drop` types and runs without farming priority
+- Farming advisor allows synthesis chain coverage for `enemy_drop` materials
+- Farming advisor disambiguates `enemy_drop` synthesis status in prompt
+- Optimizer total runs and Waveplate cost corrected by accounting for co-drops across shared sources
+- Range check on planner sliders now fires on blur instead of input
+- `LlmClient` fallback message returned on rate limit and context length errors
+
+### Changed
+- FarmingAdvisorService prompt revised for output format clarity
+- `sol3_phase` removed as a keyword argument from `FarmingAdvisorService` as it was unnecessary
+- No farmable source placeholder changed to "Open-world only"
+- Gemini model switched to `gemini-3.1-flash-lite-preview` for 500 RPD free tier headroom
+
+---
+
 ## [0.18.0] - 2026-05-03
 
 **Estimated Time:** 14-16 hours
