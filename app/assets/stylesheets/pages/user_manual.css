@@ -508,6 +508,10 @@ pre code {
   .manual-table td {
     padding: 8px 10px;
   }
+
+  #faq {
+    padding-bottom: 2.5rem;
+  }
 }
 
 /* ── Print ── */
