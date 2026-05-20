@@ -9,6 +9,57 @@
 
 Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 
+## Getting Started
+
+### Prerequisites
+- Ruby 3.4+ (via `rbenv`, `asdf`, `mise`, or system)
+- Docker & Docker Compose
+- Git
+
+### Local Development
+
+1. **Clone and navigate:**
+   ```bash
+   git clone https://github.com/jambalong/pangu-terminal.git
+   cd pangu-terminal
+   ```
+
+2. **Install gems:**
+   ```bash
+   bundle install
+   ```
+
+3. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start the database container:**
+   ```bash
+   docker-compose up -d
+   ```
+
+5. **Prepare the database:**
+   ```bash
+   bin/rails db:prepare
+   ```
+
+   Note: If this fails with a password authentication error, the Docker volume may already exist from a previous run with different credentials. Run docker-compose down -v then docker-compose up -d and retry.
+
+6. **Run the server:**
+   ```bash
+   bin/dev
+   ```
+
+   The app will be available at `http://localhost:3000`.
+
+### Running Tests
+
+```bash
+bin/rails test        # unit + integration
+bin/rails test:system # system tests
+```
+
 ## What This Project Showcases
 
 ### Full-Stack Rails Architecture
@@ -33,7 +84,7 @@ Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
 - Kamal 2 containerized deployment to DigitalOcean
 - PostgreSQL JSONB for flexible data modeling
 - Docker-compose local development environment
-- Automated database migrations and seeding
+- Automated database migrations
 
 ## Feature Overview
 
@@ -666,57 +717,6 @@ The frame fires a separate request to `optimizer_advise_path` after the optimize
 | Frontend | Hotwire (Turbo + Stimulus) |
 | Deployment | Docker + Kamal 2 |
 | Testing | Minitest |
-
-## Getting Started
-
-### Prerequisites
-- Ruby 3.4+ (via `rbenv`, `asdf`, `mise`, or system)
-- Docker & Docker Compose
-- Git
-
-### Local Development
-
-1. **Clone and navigate:**
-   ```bash
-   git clone https://github.com/jambalong/pangu-terminal.git
-   cd pangu-terminal
-   ```
-
-2. **Install gems:**
-   ```bash
-   bundle install
-   ```
-
-3. **Set up environment variables:**
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **Start the database container:**
-   ```bash
-   docker-compose up -d
-   ```
-
-5. **Prepare the database:**
-   ```bash
-   bin/rails db:prepare
-   ```
-
-   Note: If this fails with a password authentication error, the Docker volume may already exist from a previous run with different credentials. Run docker-compose down -v then docker-compose up -d and retry.
-
-6. **Run the server:**
-   ```bash
-   bin/dev
-   ```
-
-   The app will be available at `http://localhost:3000`.
-
-### Running Tests
-
-```bash
-bin/rails test        # unit + integration
-bin/rails test:system # system tests
-```
 
 ### Project Structure
 ```
