@@ -34,6 +34,8 @@ Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
    cp .env.example .env
    ```
 
+   Note: The Farming Advisor requires a Gemini API key configured in Rails credentials. To see it in action, visit the live app: `panguterminal.ambalong.dev` - Local setup runs without it nonetheless.
+
 4. **Start the database container:**
    ```bash
    docker-compose up -d
