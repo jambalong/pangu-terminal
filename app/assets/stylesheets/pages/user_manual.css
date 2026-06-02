@@ -393,7 +393,7 @@ pre code {
 
 /* ── FAQ ── */
 #faq {
-  padding-bottom: 12rem;
+  padding-bottom: 4rem;
 }
 
 .faq-item {
@@ -510,7 +510,7 @@ pre code {
   }
 
   #faq {
-    padding-bottom: 2.5rem;
+    padding-bottom: 0;
   }
 }
 
