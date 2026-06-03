@@ -519,13 +519,33 @@ pre code {
   .manual-topbar {
     display: none;
   }
+
   .manual-sidebar {
     display: none;
   }
+
   .manual-main {
     padding: 32px;
   }
+
   .manual-screenshot-placeholder {
+    display: none;
+  }
+
+  .manual-screenshot {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .manual-screenshot img {
+    max-width: 100%;
+  }
+
+  .faq-a {
+    display: block !important;
+  }
+
+  .faq-q::after {
     display: none;
   }
 }
