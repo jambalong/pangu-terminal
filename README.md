@@ -7,7 +7,7 @@
 
 **Status:** MVP complete with planning, inventory tracking, synthesis detection, Waveplate optimizer, LLM farming advisor, and a REST API.
 
-Live at [panguterminal.ambalong.dev](http://panguterminal.ambalong.dev)
+Currently offline. DigitalOcean hosting was decommissioned to control costs. See Deployment section for how to run locally.
 
 ## Getting Started
 
@@ -779,12 +779,11 @@ Kamal configuration files
 
 ### Live Deployment Status
 
-The production version of this application is currently deployed via **Kamal 2** to a **DigitalOcean** droplet.
+Currently offline. DigitalOcean hosting was decommissioned to control costs. See Deployment section for how to run locally.
 
-* **Public URL:** `http://panguterminal.ambalong.dev`
 * **Deployment Tooling:** Infrastructure managed by **Kamal 2** with automated Docker image building, secure environment variable injection (`.kamal/secrets`), and container orchestration.
 
 ---
 
-**Last Updated:** May 2026
+**Last Updated:** July 2026
 **Version:** 1.0.0
