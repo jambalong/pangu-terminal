@@ -2,7 +2,7 @@
 
 **Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next accounting for synthesis chains so you don't waste time grinding materials you can craft.
 
-[![CI](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml)
+<!-- [![CI](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml) -->
 [![codecov](https://codecov.io/github/jambalong/pangu-terminal/graph/badge.svg?token=TJPEEN49A6)](https://codecov.io/github/jambalong/pangu-terminal)
 
 **Status:** MVP complete with planning, inventory tracking, synthesis detection, Waveplate optimizer, LLM farming advisor, and a REST API.
