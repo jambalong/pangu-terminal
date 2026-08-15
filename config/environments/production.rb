@@ -90,6 +90,7 @@ Rails.application.configure do
   #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
   # ]
   config.hosts << "panguterminal.ambalong.dev"
+  config.hosts << "pangu-terminal.onrender.com"
 
   #
   # Skip DNS rebinding protection for the default health check endpoint.
