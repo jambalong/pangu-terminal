@@ -2,12 +2,14 @@
 
 **Pangu Terminal** helps *Wuthering Waves* players plan and track the materials needed to max out their Resonators and weapons. Input your current levels and target upgrades, track what you own, and the app automatically shows you what to farm next accounting for synthesis chains so you don't waste time grinding materials you can craft.
 
-<!-- [![CI](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml) -->
+[![CI](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml/badge.svg)](https://github.com/jambalong/pangu-terminal/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/jambalong/pangu-terminal/graph/badge.svg?token=TJPEEN49A6)](https://codecov.io/github/jambalong/pangu-terminal)
 
 **Status:** MVP complete with planning, inventory tracking, synthesis detection, Waveplate optimizer, LLM farming advisor, and a REST API.
 
-Currently offline. DigitalOcean hosting was decommissioned to control costs. See Deployment section for how to run locally.
+Live at [panguterminal.ambalong.dev](https://panguterminal.ambalong.dev)
+
+Note: hosted on a free tier, the app may take up to a minute to wake up on first load if idle.
 
 ## Getting Started
 
@@ -83,10 +85,10 @@ bin/rails test:system # system tests
 - Thin `LlmClient` wrapper keeping the service layer decoupled from the RubyLLM interface
 
 ### Production-Ready Deployment
-- Kamal 2 containerized deployment to DigitalOcean
+- Dockerized deployment to Render, with PostgreSQL hosted on Neon
 - PostgreSQL JSONB for flexible data modeling
 - Docker-compose local development environment
-- Automated database migrations
+- Automated database migrations and seeding on boot
 
 ## Feature Overview
 
@@ -715,9 +717,9 @@ The frame fires a separate request to `optimizer_advise_path` after the optimize
 | Component | Technology |
 | --- | --- |
 | Backend | Rails 8.1 + Ruby 3.4 |
-| Database | PostgreSQL 17 |
+| Database | PostgreSQL 17 (Neon) |
 | Frontend | Hotwire (Turbo + Stimulus) |
-| Deployment | Docker + Kamal 2 |
+| Deployment | Docker + Render |
 | Testing | Minitest |
 
 ### Project Structure
@@ -772,18 +774,21 @@ test/
 └── system/         # End-to-end user journey (Cuprite + Capybara)
 
 docker-compose.yml
-Kamal configuration files
 ```
+
+Note: this repo still contains `config/deploy.yml` and `.kamal/` files from the original capstone-graded deployment (Kamal 2 + DigitalOcean). These are no longer active — see Live Deployment Status below.
 
 ---
 
 ### Live Deployment Status
 
-Currently offline. DigitalOcean hosting was decommissioned to control costs. See Deployment section for how to run locally.
+The production version of this application is deployed via **Docker** to **Render**, with **PostgreSQL** hosted on **Neon**.
 
-* **Deployment Tooling:** Infrastructure managed by **Kamal 2** with automated Docker image building, secure environment variable injection (`.kamal/secrets`), and container orchestration.
+* **Public URL:** `https://panguterminal.ambalong.dev`
+* **Deployment Tooling:** Render builds and deploys directly from the `main` branch on push, using the repo's existing Dockerfile. Database schema and seed data are applied on container boot via `bin/docker-entrypoint`.
+* **History:** The original capstone-graded deployment used Kamal 2 to a DigitalOcean droplet. That infrastructure was decommissioned after DigitalOcean student credits expired, and the app was migrated to Render + Neon to keep the live demo running at no cost. See `docs/DEPLOYMENT.md` for the historical Kamal runbook.
 
 ---
 
-**Last Updated:** July 2026
+**Last Updated:** August 2026
 **Version:** 1.0.0
