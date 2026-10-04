@@ -3,6 +3,13 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.1.1] - 2026-10-04
+
+### Removed
+- Unused `image_processing` gem (and its `ruby-vips`/`mini_magick` dependencies); the app does not use Active Storage variants. Supersedes Dependabot PR to bump it to 2.2.0.
+
+---
+
 ## [1.1.0] - 2026-10-04
 
 ### Added

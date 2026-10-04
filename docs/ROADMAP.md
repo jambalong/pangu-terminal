@@ -33,7 +33,7 @@ Also missing: any 4* Resonators, other weapons and the new materials (boss/weekl
 
 ## 2. Remaining dependency / platform work
 
-- [ ] `image_processing` 1.14.0 -> 2.2.0 (major; constrained by `~> 1.2`). Check whether Active Storage variants are used at all before bumping or dropping it.
+- [x] `image_processing` removed (unused; v1.1.1).
 - [ ] Re-check Ruby (3.4.7 in `.ruby-version`, `mise.toml`, `Dockerfile`) and PostgreSQL (17 in docker-compose and CI) against current releases; change them together.
 - [ ] Confirm the Farming Advisor works with `gemini-3.1-flash-lite` and ruby_llm 2.0 against the live API (cannot be done without the Gemini key; tests stub `LlmClient`).
 - [ ] System tests (`bin/rails test:system`) could not be run in the authoring sandbox (headless Chromium would not start); rely on the CI `system-test` job.
