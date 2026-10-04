@@ -3,6 +3,14 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.1] - 2026-10-04
+
+### Added
+- `bin/rails images:download` now derives Fandom wiki image URLs from record names (`FandomImageUrl`, MD5-hashed MediaWiki paths with `Resonator_`/`Weapon_`/`Item_` prefixes), so no per-image URL is needed; `config/image_sources.yml` ships preconfigured with a `wiki_names` exception for the shared Rover portrait
+- `FandomImageUrl` tests covering real wiki URLs, apostrophes, colons and the Rover exception
+
+---
+
 ## [1.2.0] - 2026-10-04
 
 ### Added

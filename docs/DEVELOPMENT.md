@@ -40,7 +40,7 @@ bin/rails db:seed:replant               # wipe + reseed (dev/test only)
 bin/rails forte:download_stat_icons     # fetch forte stat icons into public/images/forte/stats
 bin/rails forte:download_skill_icons    # fetch per-Resonator skill icons into public/images/forte/skills
 bin/rails images:missing                # list seeded records whose image files are missing
-bin/rails images:download               # fetch missing portraits/weapons/materials from config/image_sources.yml (KIND=..., DRY_RUN=1)
+bin/rails images:download               # fetch missing portraits/weapons/materials from the Fandom wiki (KIND=..., DRY_RUN=1 to preview URLs)
 bin/rails console
 bin/rails routes
 ```

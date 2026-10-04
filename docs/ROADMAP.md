@@ -13,7 +13,7 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 
 Done in v1.2.0 (see CHANGELOG): 12 Resonators and 11 weapons from 3.2 to 3.7 phase 1, with their materials, sources and mappings. Check remaining image assets with `bin/rails images:missing`. Fusion Accretion (previously unmapped) is now mapped to the Ring set.
 
-- [ ] Add the image files (Resonator portraits, weapon art, material icons) under `public/images/` (by hand, or fill `config/image_sources.yml` and run `bin/rails images:download`), and run `bin/rails forte:download_skill_icons` locally for the new Resonators' skill icons.
+- [ ] Add the image files (Resonator portraits, weapon art, material icons) under `public/images/` (run `DRY_RUN=1 bin/rails images:download` to preview, then `bin/rails images:download`; the Fandom URL pattern is preconfigured in `config/image_sources.yml`), and run `bin/rails forte:download_skill_icons` locally for the new Resonators' skill icons.
 - [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
 - [ ] Confirm the remaining 4* Resonators/weapons and any 3.2 to 3.7 content not in the lists provided (the data above came from wiki tables supplied by the owner).
 - [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
