@@ -6,10 +6,10 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 
 ## How it deploys
 
-- Render builds the repo's `Dockerfile` and deploys from `main` on push (per README; **TODO(owner)**: confirm auto-deploy setting and whether CI must pass first).
+- Render builds the repo's `Dockerfile` (path `./Dockerfile`, build context `.`) and deploys from `main` with Auto-Deploy set to **On Commit**, so every push to `main` deploys. Render does not wait for GitHub Actions; CI results are not a deploy gate, so merge only green PRs. Pre-Deploy Command and Docker Command are empty (the image `CMD`/entrypoint is used). Pull Request Previews are off.
 - `Dockerfile`: multi-stage, Ruby 3.4.7-slim, `RAILS_ENV=production`, `BUNDLE_WITHOUT=development`, runs `assets:precompile` with a dummy secret, runs as non-root user `rails` (uid 1000), exposes port 80, `CMD ["./bin/thrust", "./bin/rails", "server"]` (Thruster in front of Puma).
 - `bin/docker-entrypoint`: when the command is `./bin/rails server`, it runs `bin/rails db:prepare` then `bin/rails db:seed` on **every boot**, then `exec`s the command. So migrations and (idempotent) seed updates ship automatically with each deploy. A failing migration or seed prevents the container from starting.
-- Health check: `GET /up` (Rails health). It is excluded from SSL redirect and host authorization (`config/environments/production.rb`).
+- Health check: Render health check path is `/up` (Rails health). It is excluded from SSL redirect and host authorization (`config/environments/production.rb`).
 - `config.force_ssl` and `assume_ssl` are on; TLS terminates at Render.
 
 ## Configuration
@@ -22,7 +22,9 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 | `RAILS_LOG_LEVEL` | Optional, default `info`; logs go to STDOUT |
 | `RAILS_MAX_THREADS`, `PORT`, `WEB_CONCURRENCY` | Optional Puma tuning; **TODO(owner)**: record the values set on Render |
 
-**TODO(owner)**: list the actual Render service name, region, instance type, and any custom domain/DNS setup for `panguterminal.ambalong.dev`; note that the free tier sleeps when idle (first request can take up to a minute).
+Render service (from the dashboard settings page): web service `pangu-terminal`, runtime Docker, **Free** instance type, region **Oregon (US West)**, source `jambalong/pangu-terminal` branch `main`, custom domain `panguterminal.ambalong.dev`. The free tier sleeps when idle, so the first request can take up to a minute. Maintenance mode and edge caching are paid-only features and unavailable.
+
+**TODO(owner)**: record the Environment tab variable *names* and non-secret values (never commit secrets), and whether the Neon `DATABASE_URL` uses the pooled or direct endpoint.
 
 Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`. Add any new hostname to `config.hosts` or requests get a 403 from Rails host authorization.
 
@@ -36,7 +38,7 @@ Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`
 ## Operations
 
 - **Logs:** Render dashboard (STDOUT, tagged with request id).
-- **Rollback:** redeploy a previous successful deploy from the Render dashboard (**TODO(owner)**: confirm). Rollback does not reverse migrations; if the bad release included a destructive migration, run `bin/rails db:rollback` (**TODO(owner)**: confirm shell access on your Render plan) or restore Neon from a point-in-time branch.
+- **Rollback:** Render dashboard -> service -> Deploys -> pick a previous successful deploy -> Rollback (or push a revert to `main`; Auto-Deploy will redeploy). Disable Auto-Deploy first if you need to hold a bad commit off. Rollback does not reverse migrations; if the bad release included a destructive migration, run `bin/rails db:rollback` (**TODO(owner)**: confirm shell access on your Render plan) or restore Neon from a point-in-time branch.
 - **Reseed manually:** Render shell, `bin/rails db:seed`. Seeds never delete rows; removing a record from production requires a console/migration.
 - **Console:** Render shell, `bin/rails console`.
 - **Secrets rotation:** `RAILS_MASTER_KEY` changes require re-encrypting credentials locally (`bin/rails credentials:edit`), committing `config/credentials.yml.enc`, and updating the env var.
