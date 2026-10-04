@@ -3,6 +3,13 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.3] - 2026-10-05
+
+### Fixed
+- Hiyuki's Inherent Skill 1 icon (missing from wutheringlab) is now fetched from the Fandom wiki by `forte:download_skill_icons` via `SKILL_ICON_URL_OVERRIDES`
+
+---
+
 ## [1.2.2] - 2026-10-05
 
 ### Fixed
