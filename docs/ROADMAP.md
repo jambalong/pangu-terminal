@@ -11,12 +11,10 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 
 ## 1. Game data: 3.2 to 3.7
 
-Done in v1.2.0 (see CHANGELOG): 12 Resonators and 11 weapons from 3.2 to 3.7 phase 1, with their materials, sources and mappings. Check remaining image assets with `bin/rails images:missing`.
+Done in v1.2.0 (see CHANGELOG): 12 Resonators and 11 weapons from 3.2 to 3.7 phase 1, with their materials, sources and mappings. Check remaining image assets with `bin/rails images:missing`. Fusion Accretion (previously unmapped) is now mapped to the Ring set.
 
-- [ ] Add the image files (Resonator portraits, weapon art, material icons) under `public/images/`, and run `bin/rails forte:download_skill_icons` locally for the new Resonators' skill icons.
+- [ ] Add the image files (Resonator portraits, weapon art, material icons) under `public/images/` (by hand, or fill `config/image_sources.yml` and run `bin/rails images:download`), and run `bin/rails forte:download_skill_icons` locally for the new Resonators' skill icons.
 - [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
-- [ ] Rover-Electro's forte stat bonuses (`electro_dmg` / `atk`) are provisional, by analogy with the other Rovers; confirm.
-- [ ] **Fusion Accretion** (4* Rectifier) has no enemy-drop mapping in `05_mapping_tables.rb` and is missing from the wiki lists used so far, so plans for it omit its enemy drops. Find its set (probably the Ring set) and map it; then remove it from `WEAPONS_MISSING_ENEMY_DROP_MAP` in `test/models/seed_data_integrity_test.rb`.
 - [ ] Confirm the remaining 4* Resonators/weapons and any 3.2 to 3.7 content not in the lists provided (the data above came from wiki tables supplied by the owner).
 - [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
 - [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase cap (hard-coded `1..8` in `DropRate`, the dashboard dropdown and `Api::V1::ProfileController`) against 3.7.

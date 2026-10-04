@@ -334,14 +334,14 @@ SOURCE_DATA = [
     name: "Ordinance of the Inevitable",
     source_type: "weekly_challenge",
     waveplate_cost: 60,
-    location: "Simulacrum Nexus, Mengzhou, Huanglong",
+    location: "Mengxuan Vale, Mengzhou, Huanglong",
     region: "Huanglong"
   },
   {
     name: "Gate of the Lost Star",
     source_type: "weekly_challenge",
     waveplate_cost: 60,
-    location: "Tidelost Forest, Roya Frostlands",
+    location: "Exostrider Slumber Site, Tidelost Forest, Roya Frostlands",
     region: "Roya Frostlands"
   },
   {

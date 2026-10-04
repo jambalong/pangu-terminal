@@ -1,0 +1,17 @@
+# Sources for `bin/rails images:download` (see lib/tasks/images.rake).
+#
+# For each seeded record whose image file is missing, the task looks for a URL
+# in `overrides` (keyed by exact record name), then falls back to the model's
+# template. Templates may use:
+#   {slug}  the file name without extension, e.g. "yangyang-xuanling"
+#   {name}  the record name, URL-encoded, e.g. "Yangyang%3A%20Xuanling"
+# Leave a template empty to skip that kind. Downloads are converted to
+# 256x256 PNG and saved to the record's image_url under public/.
+templates:
+  resonators: ""
+  weapons: ""
+  materials: ""
+
+# Exact record name => direct image URL.
+overrides: {}
+#  "Hsin": "https://example.com/path/to/hsin-portrait.png"

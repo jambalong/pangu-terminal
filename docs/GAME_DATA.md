@@ -42,7 +42,7 @@ Seeds must be **idempotent** (`find_or_initialize_by` + `update!`). Production r
 3. `05_mapping_tables.rb`: add the Resonator to `RESONATORS` and its `ResonatorMaterialMap` rows (boss drop, flower, enemy drops, forgery drop, weekly boss).
 4. If the Resonator's skill materials use the newer (LF) forgery sets, add it to `LAHAI_ROI_RESONATORS` (and new weapons to `LAHAI_ROI_WEAPONS`); ensure matching `WeaponTypeMaterial` rows exist for that region.
 5. If it has a new boss/weekly/forgery material: add it in `03_materials.rb` (+ image in `public/images/materials/`), `07_material_sources.rb`, and `08_drop_rates.rb`.
-6. Run `bin/rails db:seed` twice to confirm idempotency, then `bin/rails images:missing` to list the image files still to add, and `bin/rails test` (`test/models/seed_data_integrity_test.rb` fails if a mapping or source is missing).
+6. Run `bin/rails db:seed` twice to confirm idempotency, then `bin/rails images:missing` to list the image files still to add (fill `config/image_sources.yml` with URL templates or per-record URLs and run `bin/rails images:download` locally to fetch and convert them to 256x256 PNG; ImageMagick required), and `bin/rails test` (`test/models/seed_data_integrity_test.rb` fails if a mapping or source is missing).
 
 ## Adding a new weapon
 

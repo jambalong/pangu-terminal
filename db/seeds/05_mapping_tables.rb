@@ -602,6 +602,7 @@ WEAPON_MAPPING_DATA = {
     WEAPONS[:cadenza],
     WEAPONS[:call_of_the_abyss],
     WEAPONS[:comet_flare],
+    WEAPONS[:fusion_accretion],
     WEAPONS[:jinzhou_keeper],
     WEAPONS[:novaburst],
     WEAPONS[:oceans_gift],

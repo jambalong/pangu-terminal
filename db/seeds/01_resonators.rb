@@ -31,7 +31,7 @@ RESONATOR_DATA = {
       { name: "Calcharo", weapon_type: "Broadblade", stat_a: "crit_dmg", stat_b: "atk" },
       { name: "Hsin", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Rebecca", weapon_type: "Pistols", stat_a: "crit_rate", stat_b: "atk" },
-      { name: "Rover-Electro", weapon_type: "Sword", stat_a: "electro_dmg", stat_b: "atk" },
+      { name: "Rover-Electro", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Xiangli Yao", weapon_type: "Gauntlets", stat_a: "crit_dmg", stat_b: "atk" },
       { name: "Yinlin", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" }
     ],

@@ -3,10 +3,6 @@ require "test_helper"
 # Guards against half-finished game data updates: every Resonator and weapon
 # must resolve to a complete set of materials after seeding.
 class SeedDataIntegrityTest < ActiveSupport::TestCase
-  # Seeded weapons whose enemy-drop set is not known yet. Remove an entry once
-  # it is mapped in db/seeds/05_mapping_tables.rb (see docs/ROADMAP.md).
-  WEAPONS_MISSING_ENEMY_DROP_MAP = [ "Fusion Accretion" ].freeze
-
   test "every resonator maps boss, flower, four enemy drops and a weekly boss material" do
     Resonator.find_each do |resonator|
       maps = ResonatorMaterialMap.where(resonator: resonator)
@@ -20,7 +16,7 @@ class SeedDataIntegrityTest < ActiveSupport::TestCase
   end
 
   test "every weapon maps four enemy drop rarities" do
-    Weapon.where.not(name: WEAPONS_MISSING_ENEMY_DROP_MAP).find_each do |weapon|
+    Weapon.find_each do |weapon|
       assert_equal [ 2, 3, 4, 5 ],
         WeaponMaterialMap.where(weapon: weapon, material_type: "enemy_drop").order(:rarity).pluck(:rarity),
         "#{weapon.name} needs enemy_drop rarities 2-5"
