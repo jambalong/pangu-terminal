@@ -3,6 +3,13 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.2] - 2026-10-05
+
+### Fixed
+- Basic-attack skill icons for the 12 new Resonators (Denia, Hiyuki, Hsin, Jingran, Lucilla, Lucy, Qingxiao, Rebecca, Rover-Electro, Sigrika, Suisui, Yangyang: Xuanling) now use the `Normal-Attack` label, which matches the icon source and the other recent Resonators; `forte:download_skill_icons` no longer 404s on them
+
+---
+
 ## [1.2.1] - 2026-10-04
 
 ### Added
