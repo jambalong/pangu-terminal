@@ -48,6 +48,13 @@ namespace :forte do
     "shorekeeper"       => { "resonance_skill" => "Resonance-Skill-" }
   }.freeze
 
+  # Icons missing from wutheringlab, fetched from another source instead.
+  # Key: "<slug>/<skill_key>". The icon is still saved as <label>.webp (64x64).
+  SKILL_ICON_URL_OVERRIDES = {
+    # Hiyuki's Inherent Skill 1 ("Fine Snow") is not on wutheringlab
+    "hiyuki/inherent_skill_1" => "https://static.wikia.nocookie.net/wutheringwaves/images/5/51/Skill_Fine_Snow.png/revision/latest"
+  }.freeze
+
   WUTHERINGLAB_BASE = "https://wutheringlab.com/wp-content/uploads"
 
   desc "Download stat bonus icons from wuwa.wiki into public/images/forte/stats/"
@@ -88,7 +95,8 @@ namespace :forte do
 
       SKILL_LABELS_RAKE.each do |skill_key, default_label|
         actual_label = overrides[skill_key] || default_label
-        url          = "#{WUTHERINGLAB_BASE}/#{name_segment}-#{actual_label}.webp"
+        url          = SKILL_ICON_URL_OVERRIDES["#{slug}/#{skill_key}"] ||
+          "#{WUTHERINGLAB_BASE}/#{name_segment}-#{actual_label}.webp"
         dest_file    = dest.join("#{actual_label.downcase}.webp")
 
         if dest_file.exist?
