@@ -5,7 +5,8 @@
 # - Weekly Challenge
 
 # ===============================================
-# 08. DROP RATES - updated as of 2026.04.04
+# 08. DROP RATES - updated as of 2026.04.04; re-verified against the
+# community spreadsheet for game version 3.7 on 2026.10.04 (no changes)
 # ===============================================
 puts "  --> Creating Drop Rates..."
 

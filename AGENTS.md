@@ -8,7 +8,7 @@ Guidance for AI coding agents (and humans) working in this repository. Keep this
 
 ## Stack
 
-Ruby 3.4.7 (`.ruby-version`, `mise.toml`), Rails ~> 8.1.1, PostgreSQL 17, Puma + Thruster, Hotwire (Turbo + Stimulus via importmap), Tailwind (`tailwindcss-rails`) + per-feature CSS, Propshaft, Devise 5, Rack::Attack, RubyLLM (Gemini), Solid Cache/Queue/Cable, Minitest + Capybara/Cuprite, SimpleCov. Lint: rubocop-rails-omakase. Security: Brakeman, bundler-audit, `importmap audit`.
+Ruby 3.4.7 (`.ruby-version`, `mise.toml`), Rails ~> 8.1.1, PostgreSQL 17, Puma + Thruster, Hotwire (Turbo + Stimulus via importmap), Tailwind (`tailwindcss-rails`) + per-feature CSS, Propshaft, Devise 5, Rack::Attack, RubyLLM 2.x (Gemini), Solid Cache/Queue/Cable, Minitest + Capybara/Cuprite, SimpleCov. Lint: rubocop-rails-omakase. Security: Brakeman, bundler-audit, `importmap audit`.
 
 ## Commands
 
@@ -42,7 +42,6 @@ Run `bin/rubocop` and `bin/rails test` before committing. CI (`.github/workflows
 | `public/images/` | Material/resonator/weapon/forte art referenced by seeded `image_url`s. |
 | `lib/tasks/forte_icons.rake` | `forte:download_stat_icons`, `forte:download_skill_icons`. |
 | `docs/` | Project documentation (index: `docs/README.md`). |
-| `config/deploy.yml`, `.kamal/` | **Legacy** Kamal config; production is Render. Not active. |
 
 ## Conventions
 
@@ -65,7 +64,7 @@ Run `bin/rubocop` and `bin/rails test` before committing. CI (`.github/workflows
 - Password-reset email uses Postmark SMTP (`POSTMARK_API_TOKEN`).
 - `sol3_phase` (1..8) is per-user; drop rate data currently starts at phase 3 for forgery sources.
 - `README.md` is a portfolio piece; reference material lives in `docs/`. Don't re-grow the README.
-- Don't commit `config/master.key`, `.env`, or `.kamal/secrets` (gitignored).
+- Don't commit `config/master.key` or `.env` (gitignored).
 
 ## Docs
 

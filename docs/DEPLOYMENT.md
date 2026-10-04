@@ -1,6 +1,6 @@
 # Deployment
 
-Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, at https://panguterminal.ambalong.dev. The original Kamal 2 / DigitalOcean setup is decommissioned; its runbook is kept in the [legacy appendix](#appendix-legacy-kamal-runbook).
+Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, at https://panguterminal.ambalong.dev. The original Kamal 2 / DigitalOcean setup is decommissioned; the Kamal configuration and runbook were removed (see [History](#history)).
 
 > Items marked **TODO(owner)** are configured in the Render/Neon dashboards, which are not visible from this repository. Fill them in.
 
@@ -49,111 +49,6 @@ docker run --rm -p 3000:80 -e RAILS_MASTER_KEY=<config/master.key> \
   -e DATABASE_URL=postgres://... pangu_terminal
 ```
 
-## Legacy / inactive files
+## History
 
-`config/deploy.yml`, `.kamal/`, `bin/kamal`, the `kamal` gem and the commented-out `deploy` job in `.github/workflows/ci.yml` belong to the retired Kamal pipeline. See [ROADMAP.md](ROADMAP.md) for cleanup.
-
----
-
-# Appendix: Legacy Kamal runbook
-
-> Historical. Not used by the current production deployment. Note that this runbook said seeds do not run automatically; the current `bin/docker-entrypoint` does run them.
-
-## Prerequisites
-
-- Ruby 3.4+
-- Docker
-- Kamal 2 (`gem install kamal`)
-- SSH access to the production server (configured in `config/deploy.yml`)
-- `.kamal/secrets` configured with required environment variables
-
-## Kamal Secrets
-
-Required in `.kamal/secrets` before deploying:
-
-| Key | Description |
-|-----|-------------|
-| `RAILS_MASTER_KEY` | Found in `config/master.key`. Decrypts Rails credentials. |
-| `KAMAL_REGISTRY_PASSWORD` | Docker Hub password or access token for pushing images. |
-| `POSTGRES_PASSWORD` | Production database password. Must match the value used when the database was initialized. |
-| `DATABASE_URL` | Full PostgreSQL connection string for the production database. Example: `postgres://rails:${POSTGRES_PASSWORD}@pangu-terminal-db/pangu_terminal_production`|
-| `POSTMARK_API_TOKEN` | API token for Postmark. Used by Action Mailer to send transactional emails (password reset). Found in your Postmark account under Servers -> your server -> API Tokens. |
-
-## Deploy
-
-```bash
-kamal deploy
-```
-
-Builds the Docker image, pushes it to the registry, boots the new container on the server, and runs database migrations automatically. Pruning of old containers and images happens after a successful boot.
-
-Seeds do **not** run automatically. If a deploy requires seeding:
-
-```bash
-kamal app exec --reuse 'bin/rails db:seed'
-```
-
-## Stuck Deploy
-
-If a deploy fails mid-way, the lock may be left in place. Check lock status:
-
-```bash
-kamal lock status
-```
-
-If locked, release it:
-
-```bash
-kamal lock release
-```
-
-Then retry the deploy.
-
-## Checking Logs
-
-Tail live logs from the running container:
-
-```bash
-kamal app logs
-```
-
-Check what version is currently running:
-
-```bash
-kamal app version
-```
-
-View the full deploy audit trail:
-
-```bash
-kamal audit
-```
-
-## Rollback
-
-Find the version hash to roll back to from the audit log:
-
-```bash
-kamal audit
-```
-
-Look for the last known good `Booted app version` entry. Then roll back to that version:
-
-```bash
-kamal rollback <version-hash>
-```
-
-Example:
-
-```bash
-kamal rollback 0ba23d0b25f872835d0a72f42e78c868a2b8b7a1
-```
-
-Rollback does not re-run migrations. If the bad deploy included a migration, rolling back the app without reversing the migration may cause errors. In that case, run:
-
-```bash
-kamal app exec --reuse 'bin/rails db:rollback'
-```
-
-before or after the rollback depending on whether the migration was destructive.
-
+The app originally deployed with Kamal 2 to a DigitalOcean droplet (capstone-graded deployment). That infrastructure was retired when the credits expired and the app moved to Render + Neon. The Kamal files (`config/deploy.yml`, `.kamal/`, `bin/kamal`, the `kamal` gem, the CI deploy job) were removed in v1.1.0. The old runbook (deploy, lock release, logs, rollback via `kamal rollback`) is available in git history, e.g. `git show 7c3cb68:docs/DEPLOYMENT.md`.

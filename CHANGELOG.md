@@ -3,6 +3,28 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.1.0] - 2026-10-04
+
+### Added
+- `AGENTS.md` and `CLAUDE.md` with agent/contributor guidance
+- Project documentation under `docs/`: architecture, data model, API, game data, development, testing, deployment, roadmap
+
+### Changed
+- Moved the API reference and design decisions from the README into `docs/API.md` and `docs/ARCHITECTURE.md`
+- Rewrote `docs/DEPLOYMENT.md` for the Render + Neon deployment
+- Upgraded `ruby_llm` 1.16.0 to 2.0.0 (fixes CVE-2026-67991 ReDoS flagged by bundler-audit); removed the ignored `use_new_acts_as` setting
+- Switched the Gemini model from the deprecated `gemini-3.1-flash-lite-preview` to `gemini-3.1-flash-lite`
+- Verified the Waveplate drop-rate seeds against the community spreadsheet for game version 3.7; no value changes were needed
+
+### Removed
+- Retired Kamal deployment: `config/deploy.yml`, `.kamal/`, `bin/kamal`, the `kamal` gem (and its dependencies), the commented-out CI deploy job and related ignore entries. Still available in git history.
+
+### Dependencies
+- Bumped rails 8.1.3.1 to 8.1.4, pg 1.6.3 to 1.7.0, solid_queue 1.6.0 to 1.7.0, solid_cable 4.0.2 to 4.1.0, bootsnap 1.25.0 to 1.26.0, thruster 0.1.25 to 0.1.26, brakeman 8.0.6 to 8.1.0, cuprite 0.17 to 0.18, simplecov 1.1.1 to 1.3.2, ruby-lsp 0.26.10 to 0.26.11
+- Updated SimpleCov calls in `test/test_helper.rb` to the non-deprecated `skip` / `merging`
+
+---
+
 ## [1.0.0] - 2026-05-18
 
 **Estimated Time:** 7-8 hours

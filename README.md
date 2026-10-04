@@ -333,8 +333,6 @@ test/
 docker-compose.yml
 ```
 
-Note: this repo still contains `config/deploy.yml` and `.kamal/` files from the original capstone-graded deployment (Kamal 2 + DigitalOcean). These are no longer active — see Live Deployment Status below.
-
 ---
 
 ### Live Deployment Status
@@ -343,9 +341,9 @@ The production version of this application is deployed via **Docker** to **Rende
 
 * **Public URL:** `https://panguterminal.ambalong.dev`
 * **Deployment Tooling:** Render builds and deploys directly from the `main` branch on push, using the repo's existing Dockerfile. Database schema and seed data are applied on container boot via `bin/docker-entrypoint`.
-* **History:** The original capstone-graded deployment used Kamal 2 to a DigitalOcean droplet. That infrastructure was decommissioned after DigitalOcean student credits expired, and the app was migrated to Render + Neon to keep the live demo running at no cost. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the current runbook (the Kamal runbook is kept there as a legacy appendix).
+* **History:** The original capstone-graded deployment used Kamal 2 to a DigitalOcean droplet. That infrastructure was decommissioned after DigitalOcean student credits expired, and the app was migrated to Render + Neon to keep the live demo running at no cost. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the current runbook; the Kamal configuration was removed and remains in git history.
 
 ---
 
-**Last Updated:** August 2026
-**Version:** 1.0.0
+**Last Updated:** October 2026
+**Version:** 1.1.0

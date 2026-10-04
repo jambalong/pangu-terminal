@@ -30,7 +30,7 @@ bin/dev                       # http://localhost:3000
 
 ## Credentials and the Farming Advisor
 
-The advisor reads `Rails.application.credentials.gemini_api_key` (`config/initializers/ruby_llm.rb`; model `gemini-3.1-flash-lite-preview`, 30 s request timeout, 20 s `LlmClient` timeout). Credentials are encrypted in `config/credentials.yml.enc`; the key is `config/master.key` (gitignored, not in the repo). Without the key the app runs and the advisor shows a static fallback message. To use your own key: `bin/rails credentials:edit` (this replaces the repo's encrypted file and master key for your checkout; do not commit that change).
+The advisor reads `Rails.application.credentials.gemini_api_key` (`config/initializers/ruby_llm.rb`; model `gemini-3.1-flash-lite`, 30 s request timeout, 20 s `LlmClient` timeout). Credentials are encrypted in `config/credentials.yml.enc`; the key is `config/master.key` (gitignored, not in the repo). Without the key the app runs and the advisor shows a static fallback message. To use your own key: `bin/rails credentials:edit` (this replaces the repo's encrypted file and master key for your checkout; do not commit that change).
 
 ## Handy tasks
 
