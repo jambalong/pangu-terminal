@@ -1,17 +1,34 @@
 # Sources for `bin/rails images:download` (see lib/tasks/images.rake).
 #
-# For each seeded record whose image file is missing, the task looks for a URL
-# in `overrides` (keyed by exact record name), then falls back to the model's
-# template. Templates may use:
+# For each seeded record whose image file is missing, the task picks a URL in
+# this order: `overrides` (exact record name), then `fandom` (derived from the
+# name), then the model's `templates`. Downloads are converted to 256x256 PNG
+# and saved to the record's image_url under public/.
+
+# Fandom wiki: URLs are derived from record names. MediaWiki stores a file at
+# <base>/<h1>/<h1h2>/<File>/revision/latest, where h is the MD5 of the file name.
+# File name = prefix + name with ":" removed and spaces as "_", e.g.
+# "Forged Empyrean's Sigh" => Item_Forged_Empyrean's_Sigh.png
+fandom:
+  base: https://static.wikia.nocookie.net/wutheringwaves/images
+  prefixes:
+    resonators: Resonator_
+    weapons: Weapon_
+    materials: Item_
+
+# Record name => wiki file stem, for records whose wiki file name differs.
+# All Rovers share one generic portrait (Resonator_Rover.png).
+wiki_names:
+  "Rover-Electro": Rover
+
+# Fallback URL templates per kind (empty = skip). Placeholders:
 #   {slug}  the file name without extension, e.g. "yangyang-xuanling"
-#   {name}  the record name, URL-encoded, e.g. "Yangyang%3A%20Xuanling"
-# Leave a template empty to skip that kind. Downloads are converted to
-# 256x256 PNG and saved to the record's image_url under public/.
+#   {name}  the record name, URL-encoded
 templates:
   resonators: ""
   weapons: ""
   materials: ""
 
-# Exact record name => direct image URL.
+# Exact record name => direct image URL (wins over everything else).
 overrides: {}
 #  "Hsin": "https://example.com/path/to/hsin-portrait.png"

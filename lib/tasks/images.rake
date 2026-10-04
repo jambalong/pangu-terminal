@@ -38,6 +38,8 @@ namespace :images do
     config = YAML.safe_load_file(Rails.root.join("config/image_sources.yml")) || {}
     templates = config["templates"] || {}
     overrides = config["overrides"] || {}
+    fandom = config["fandom"] || {}
+    wiki_names = config["wiki_names"] || {}
     dry_run = ENV["DRY_RUN"].present?
     magick = %w[magick convert].find { |bin| system("which #{bin} > /dev/null 2>&1") }
 
@@ -67,8 +69,13 @@ namespace :images do
         next if dest.exist?
 
         slug = File.basename(record.image_url, ".*")
-        url = overrides[record.name].presence ||
-          templates[kind].presence&.gsub("{slug}", slug)&.gsub("{name}", ERB::Util.url_encode(record.name))
+        url = overrides[record.name].presence
+        if url.nil? && fandom["base"].present? && fandom.dig("prefixes", kind).present?
+          url = FandomImageUrl.call(
+            name: record.name, prefix: fandom.dig("prefixes", kind), base: fandom["base"], wiki_names: wiki_names
+          )
+        end
+        url ||= templates[kind].presence&.gsub("{slug}", slug)&.gsub("{name}", ERB::Util.url_encode(record.name))
 
         if url.nil?
           puts "  no source for #{kind}/#{record.name}"
