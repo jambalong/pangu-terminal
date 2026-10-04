@@ -135,6 +135,24 @@ class WeaponAscensionPlannerTest < ActiveSupport::TestCase
     assert_equal 20, result[waveworn_residue_239_id]
   end
 
+
+  test "Thousandfold Deliverance uses Exoswarm Pendant and Carved Crystal materials" do
+    weapon = Weapon.find_by!(name: "Thousandfold Deliverance")
+    result = WeaponAscensionPlanner.call(
+      weapon: weapon, current_level: 1, target_level: 90,
+      current_ascension_rank: 0, target_ascension_rank: 6
+    )
+    by_name = result.transform_keys { |id| Material.find(id).name }
+
+    expected = {
+      "Fractured Exoswarm Pendant" => 6, "Worn Exoswarm Pendant" => 6,
+      "Chipped Exoswarm Pendant" => 10, "Intact Exoswarm Pendant" => 12,
+      "LF Carved Crystal" => 6, "MF Carved Crystal" => 8,
+      "HF Carved Crystal" => 6, "FF Carved Crystal" => 20
+    }
+    assert_equal expected, by_name.slice(*expected.keys)
+  end
+
   private
 
   def call_planner(overrides = {})

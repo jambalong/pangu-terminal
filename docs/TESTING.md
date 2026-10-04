@@ -18,7 +18,7 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 
 | Dir | Covers |
 | --- | --- |
-| `test/models/` | Validations/associations for each model (cost tables, maps, plan, user, source, drop rate...) |
+| `test/models/` | Validations/associations for each model (cost tables, maps, plan, user, source, drop rate...), plus `seed_data_integrity_test.rb` (every Resonator/weapon fully mapped, every boss/weekly material has a source and drop rates) |
 | `test/services/` | Planners, `SynthesisService`, `DropRateService`, `FarmingPriorityService`, `FarmingAdvisorService` |
 | `test/controllers/` | Web controllers, `api/` (v1 endpoints, auth), `users/registrations` |
 | `test/forms/`, `test/helpers/` | `PlanForm`, view helpers |

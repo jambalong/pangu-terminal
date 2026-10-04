@@ -21,12 +21,17 @@ RESONATOR_DATA = {
       { name: "Iuno", weapon_type: "Gauntlets", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Jianxin", weapon_type: "Gauntlets", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Jiyan", weapon_type: "Broadblade", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Qingxiao", weapon_type: "Sword", stat_a: "crit_dmg", stat_b: "atk" },
       { name: "Qiuyuan", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
-      { name: "Rover-Aero", weapon_type: "Sword", stat_a: "healing_bonus", stat_b: "atk" }
+      { name: "Rover-Aero", weapon_type: "Sword", stat_a: "healing_bonus", stat_b: "atk" },
+      { name: "Sigrika", weapon_type: "Gauntlets", stat_a: "crit_rate", stat_b: "atk" }
     ],
     "Electro" => [
       { name: "Augusta", weapon_type: "Broadblade", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Calcharo", weapon_type: "Broadblade", stat_a: "crit_dmg", stat_b: "atk" },
+      { name: "Hsin", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Rebecca", weapon_type: "Pistols", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Rover-Electro", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Xiangli Yao", weapon_type: "Gauntlets", stat_a: "crit_dmg", stat_b: "atk" },
       { name: "Yinlin", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" }
     ],
@@ -34,14 +39,19 @@ RESONATOR_DATA = {
       { name: "Aemeath", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Brant", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Changli", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Denia", weapon_type: "Rectifier", stat_a: "crit_dmg", stat_b: "atk" },
       { name: "Encore", weapon_type: "Rectifier", stat_a: "fusion_dmg", stat_b: "atk" },
       { name: "Galbrena", weapon_type: "Pistols", stat_a: "crit_dmg", stat_b: "atk" },
+      { name: "Jingran", weapon_type: "Broadblade", stat_a: "crit_rate", stat_b: "hp" },
       { name: "Lupa", weapon_type: "Broadblade", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Mornye", weapon_type: "Broadblade", stat_a: "healing_bonus", stat_b: "def" }
     ],
     "Glacio" => [
       { name: "Carlotta", weapon_type: "Pistols", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Hiyuki", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Lingyang", weapon_type: "Gauntlets", stat_a: "glacio_dmg", stat_b: "atk" },
+      { name: "Lucilla", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Suisui", weapon_type: "Rectifier", stat_a: "healing_bonus", stat_b: "hp" },
       { name: "Zhezhi", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" }
     ],
     "Havoc" => [
@@ -50,11 +60,13 @@ RESONATOR_DATA = {
       { name: "Chisa", weapon_type: "Broadblade", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Phrolova", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Roccia", weapon_type: "Gauntlets", stat_a: "crit_dmg", stat_b: "atk" },
-      { name: "Rover-Havoc", weapon_type: "Sword", stat_a: "havoc_dmg", stat_b: "atk" }
+      { name: "Rover-Havoc", weapon_type: "Sword", stat_a: "havoc_dmg", stat_b: "atk" },
+      { name: "Yangyang: Xuanling", weapon_type: "Sword", stat_a: "crit_rate", stat_b: "atk" }
     ],
     "Spectro" => [
       { name: "Jinhsi", weapon_type: "Rectifier", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Luuk Herssen", weapon_type: "Gauntlets", stat_a: "crit_rate", stat_b: "atk" },
+      { name: "Lucy", weapon_type: "Pistols", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Lynae", weapon_type: "Pistols", stat_a: "crit_rate", stat_b: "atk" },
       { name: "Phoebe", weapon_type: "Rectifier", stat_a: "crit_dmg", stat_b: "atk" },
       { name: "Rover-Spectro", weapon_type: "Sword", stat_a: "spectro_dmg", stat_b: "atk" },
@@ -116,7 +128,7 @@ RESONATOR_DATA.each do |rarity, elements|
   elements.each do |element, resonators|
     resonators.each do |data|
       filename = data[:name].downcase
-                            .gsub(/['"#&]/, "")
+                            .gsub(/['"#&:]/, "")
                             .strip
                             .gsub(/\s+/, "-")
 

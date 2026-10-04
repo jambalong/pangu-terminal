@@ -20,11 +20,23 @@ class ResonatorAscensionPlanner < ApplicationService
     intro_skill_node_2:           "Stat Bonus Tier 2"
   }
 
+  # Resonators that use the newer weapon-type (forgery) material sets
   LAHAI_ROI_RESONATORS = [
     "Aemeath",
+    "Denia",
+    "Hiyuki",
+    "Hsin",
+    "Jingran",
+    "Lucilla",
+    "Lucy",
     "Luuk Herssen",
     "Lynae",
-    "Mornye"
+    "Mornye",
+    "Qingxiao",
+    "Rebecca",
+    "Sigrika",
+    "Suisui",
+    "Yangyang: Xuanling"
   ].freeze
 
   def initialize(

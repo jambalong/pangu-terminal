@@ -9,27 +9,16 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [x] Kamal deployment removed (kept only in git history; see [DEPLOYMENT.md](DEPLOYMENT.md#history)).
 - [x] Dependencies: patch/minor bumps plus `ruby_llm` 2.0.0 (required: 1.16.0 had a high-severity ReDoS advisory, CVE-2026-67991, that failed `bin/bundler-audit`) and Gemini model moved off the deprecated preview id.
 
-## 1. Game data: catch up from 3.2 to 3.7 (needs owner input)
+## 1. Game data: 3.2 to 3.7
 
-Baseline: the newest Resonator in the seeds is **Aemeath (3.1)**, so content from **3.2 onward** is missing. From public coverage (verify against a wiki before seeding):
+Done in v1.2.0 (see CHANGELOG): 12 Resonators and 11 weapons from 3.2 to 3.7 phase 1, with their materials, sources and mappings. Check remaining image assets with `bin/rails images:missing`. Fusion Accretion (previously unmapped) is now mapped to the Ring set.
 
-| Version | New 5* Resonators (reported) | Signature weapons (reported) |
-| --- | --- | --- |
-| 3.2 | Sigrika | |
-| 3.3 | Hiyuki | |
-| 3.4 | Lucilla | |
-| 3.5 | Yangyang: Xuanling (SP form), Suisui, Rover: Electro | |
-| 3.6 | Qingxiao, Jingran | Glint of Clouds, Thousandfold Deliverance |
-| 3.7 | Hsin, Suoming | Blooming Jadehaven, Unspoken Rue |
-
-Also missing: any 4* Resonators, other weapons and the new materials (boss/weekly/forgery/enemy drops), art and mappings introduced in these patches. Blocker: this environment cannot reach game wikis (network egress is restricted) and search results lack reliable material names and costs, so nothing was invented.
-
-- [ ] Provide per-patch lists (Resonators, weapons, new materials), or enable network access to a wiki (see below), or paste wiki tables/screenshots.
-- [ ] Add them following the checklist in [GAME_DATA.md](GAME_DATA.md): `01`, `02`, `03`, `05`, `07` seeds; images in `public/images/`; forte icons via `forte:*` tasks. Work patch by patch (3.2 first) so each PR is reviewable.
-- [ ] A new **Rover** element (Electro) and an **SP form** (Yangyang: Xuanling) may need modeling decisions: Rover variants use `RoverAscensionCost` and `Rover-<Element>` names; an SP form may need to be a separate Resonator row.
-- [ ] Update `LAHAI_ROI_RESONATORS` (`app/services/resonator_ascension_planner.rb`) if any new Resonator uses region-specific materials; consider moving region into data (e.g. `resonators.region`).
+- [ ] Add the image files (Resonator portraits, weapon art, material icons) under `public/images/` (by hand, or fill `config/image_sources.yml` and run `bin/rails images:download`), and run `bin/rails forte:download_skill_icons` locally for the new Resonators' skill icons.
+- [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
+- [ ] Confirm the remaining 4* Resonators/weapons and any 3.2 to 3.7 content not in the lists provided (the data above came from wiki tables supplied by the owner).
+- [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
 - [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase cap (hard-coded `1..8` in `DropRate`, the dashboard dropdown and `Api::V1::ProfileController`) against 3.7.
-- [ ] Optional feature: the spreadsheet also covers **Tacet Fields** (echo drops and Echo EXP), which the app does not model.
+- [ ] Optional feature: the drop-rate spreadsheet also covers **Tacet Fields** (echo drops and Echo EXP), which the app does not model.
 
 ## 2. Remaining dependency / platform work
 

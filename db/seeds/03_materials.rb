@@ -22,7 +22,7 @@ def seed_material_set(data_array, type, category, default_exp: 0, grouped: false
     end
 
     filename = data[:name].downcase
-                        .gsub(/['"#&]/, '')
+                        .gsub(/['"#&:]/, '')
                         .strip
                         .gsub(/\s+/, '-')
 
@@ -86,13 +86,16 @@ BOSS_DROP_DATA = [
   { name: "Cleansing Conch", rarity: 4, description: "The Queen of the Night's drop, used for Resonator Ascension." },
   { name: "Elegy Tacet Core", rarity: 4, description: "Mourning Aix's drop, used for Resonator Ascension." },
   { name: "Gold-Dissolving Feather", rarity: 4, description: "The Impermanence Heron's drop, a Resonator's Ascension item." },
+  { name: "Forged Empyrean's Sigh", rarity: 4, description: "Calamity Effigy's drop, used for Resonator Ascension." },
   { name: "Group Abomination Tacet Core", rarity: 4, description: "Mech Abomination's drop, used for Resonator Ascension." },
   { name: "Hidden Thunder Tacet Core", rarity: 4, description: "Tempest Mephis's drop, Resonator ascension item." },
   { name: "Mysterious Code", rarity: 5, description: "Used for Rover's Ascension." },
+  { name: "Nightmare Flashdrive", rarity: 4, description: "Nightmare: Adam Smasher's drop, used for Resonator Ascension." },
   { name: "Our Choice", rarity: 4, description: "Nameless Explorer's drop, used for Resonator Ascension." },
   { name: "Platinum Core", rarity: 4, description: "Sentry Construct's drop, used for Resonator Ascension." },
   { name: "Rage Tacet Core", rarity: 4, description: "Inferno Rider's drop, used for Resonator Ascension." },
   { name: "Roaring Rock Fist", rarity: 4, description: "Feilian Beringal's drop, used for Resonator Ascension." },
+  { name: "Solidarity's Loneflame", rarity: 4, description: "Myriad Snare: Rustfire Chassis's drop, used for Resonator Ascension." },
   { name: "Sound-Keeping Tacet Core", rarity: 4, description: "Lampylumen Myriad's drop, used for Resonator Ascension." },
   { name: "Strife Tacet Core", rarity: 4, description: "Crownless's drop, a Resonator's Ascension item." },
   { name: "Suncoveter's Reach", rarity: 4, description: "Hyvatia's drop, used for Resonator Ascension." },
@@ -116,6 +119,12 @@ FLOWER_DATA = [
   { name: "Violet Coral", rarity: 1 },
   { name: "Wintry Bell", rarity: 1 },
 
+  # Mengzhou
+  { name: "Blade Blossom", rarity: 1 },
+  { name: "Bloom of Hearkening", rarity: 1 },
+  { name: "Cloudperch Seed", rarity: 1 },
+  { name: "Flowborne Dream", rarity: 1 },
+
   # Mt. Firmament
   { name: "Loong's Pearl", rarity: 1 },
   { name: "Pavo Plum", rarity: 1 },
@@ -138,9 +147,13 @@ FLOWER_DATA = [
 
   # Lahai-Roi
   { name: "Arithmetic Shell", rarity: 1 },
+  { name: "Dream of Stars", rarity: 1 },
   { name: "Edelschnee", rarity: 1 },
+  { name: "Forget-Me-Not", rarity: 1 },
   { name: "Gemini Spore", rarity: 1 },
   { name: "Moss Amber", rarity: 1 },
+  { name: "Past Reveries", rarity: 1 },
+  { name: "Redbell", rarity: 1 },
   { name: "Rimewisp", rarity: 1 }
 ].freeze
 
@@ -200,7 +213,13 @@ ENEMY_DROP_DATA = [
   { name: "Fractured Exoswarm Pendant", rarity: 2 },
   { name: "Worn Exoswarm Pendant", rarity: 3 },
   { name: "Chipped Exoswarm Pendant", rarity: 4 },
-  { name: "Intact Exoswarm Pendant", rarity: 5 }
+  { name: "Intact Exoswarm Pendant", rarity: 5 },
+
+  # Autopuppet Kernel Set
+  { name: "LF Autopuppet Kernel", rarity: 2 },
+  { name: "MF Autopuppet Kernel", rarity: 3 },
+  { name: "HF Autopuppet Kernel", rarity: 4 },
+  { name: "FF Autopuppet Kernel", rarity: 5 }
 ].freeze
 
 seed_material_set(ENEMY_DROP_DATA, "enemy_drop", "Weapon and Skill Material", grouped: true, default_description: "A material used for Weapon & Resonator Ascension and Skill Upgrade.")
@@ -237,11 +256,11 @@ FORGERY_DROP_DATA = [
   { name: "Cadence Leaf", rarity: 4, description: "An advanced material used for Weapon Ascension and Skill Upgrade for Gauntlets Resonators." },
   { name: "Cadence Blossom", rarity: 5, description: "A premium material used for Weapon Ascension and Skill Upgrade for Gauntlets Resonators." },
 
-  # Polarizer Set — Broadblade (Roya Frostlands)
-  { name: "Broken Wing Polarizer", rarity: 2, description: "A basic material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
-  { name: "Monowing Polarizer", rarity: 3, description: "A medium material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
-  { name: "Polywing Polarizer", rarity: 4, description: "An advanced material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
-  { name: "Layered Wing Polarizer", rarity: 5, description: "A premium material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
+  # Polarizer Set — Sword (Roya Frostlands)
+  { name: "Broken Wing Polarizer", rarity: 2, description: "A basic material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
+  { name: "Monowing Polarizer", rarity: 3, description: "A medium material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
+  { name: "Polywing Polarizer", rarity: 4, description: "An advanced material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
+  { name: "Layered Wing Polarizer", rarity: 5, description: "A premium material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
 
   # Combustor Set — Pistols (Roya Frostlands)
   { name: "Incomplete Combustor", rarity: 2, description: "A basic material used for Weapon Ascension and Skill Upgrade for Pistols Resonators." },
@@ -255,11 +274,11 @@ FORGERY_DROP_DATA = [
   { name: "Solidified String", rarity: 4, description: "An advanced material used for Weapon Ascension and Skill Upgrade for Rectifier Resonators." },
   { name: "Melodic String", rarity: 5, description: "A premium material used for Weapon Ascension and Skill Upgrade for Rectifier Resonators." },
 
-  # Carved Crystal Set — Sword (Rinascita)
-  { name: "LF Carved Crystal", rarity: 2, description: "A basic material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
-  { name: "MF Carved Crystal", rarity: 3, description: "A medium material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
-  { name: "HF Carved Crystal", rarity: 4, description: "An advanced material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
-  { name: "FF Carved Crystal", rarity: 5, description: "A premium material used for Weapon Ascension and Skill Upgrade for Sword Resonators." },
+  # Carved Crystal Set — Broadblade (Rinascita)
+  { name: "LF Carved Crystal", rarity: 2, description: "A basic material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
+  { name: "MF Carved Crystal", rarity: 3, description: "A medium material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
+  { name: "HF Carved Crystal", rarity: 4, description: "An advanced material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
+  { name: "FF Carved Crystal", rarity: 5, description: "A premium material used for Weapon Ascension and Skill Upgrade for Broadblade Resonators." },
 
   # Waveworn Shard Set — Gauntlets (Roya Frostlands)
   { name: "LF Waveworn Shard", rarity: 2, description: "A basic material used for Weapon Ascension and Skill Upgrade for Gauntlets Resonators." },
@@ -276,9 +295,12 @@ WEEKLY_BOSS_DROP_DATA = [
   { name: "Dreamless Feather", rarity: 4, description: "Dreamless's drop, used for Skill Upgrade." },
   { name: "Gold in Memory", rarity: 4, description: "Sigillum's drop, used for Skill Upgrade." },
   { name: "Monument Bell", rarity: 4, description: "Bell-Borne Geochelone's drop, used for Skill Upgrade." },
+  { name: "Remnant of the Wheel", rarity: 4, description: "Suhsin the Inevitable's drop, used for Skill Upgrade." },
   { name: "Sentinel's Dagger", rarity: 4, description: "Sentinel Jué's drop, used for Skill Upgrade." },
+  { name: "Skyward Glazed Heart", rarity: 4, description: "Thousand-Puppet Pavilion's drop, used for Skill Upgrade." },
   { name: "The Netherworld's Stare", rarity: 4, description: "Hecate's drop, used for Resonator Ascension." },
   { name: "Unending Destruction", rarity: 4, description: "Scar's drop, used for Skill Upgrade." },
+  { name: "We Who Question", rarity: 4, description: "Denia's drop, used for Skill Upgrade." },
   { name: "When Irises Bloom", rarity: 4, description: "Fleurdelys' drop, used for Skill Upgrade." }
 ].freeze
 
