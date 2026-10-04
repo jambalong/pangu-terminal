@@ -3,6 +3,30 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.0] - 2026-10-04
+
+### Added
+- Game data for versions 3.2 to 3.7 (phase 1): 12 Resonators (Sigrika, Denia, Hiyuki, Lucilla, Lucy, Rebecca, Suisui, Yangyang: Xuanling, Rover-Electro, Qingxiao, Jingran, Hsin) and 11 five-star weapons (Azure Oath, Blooming Jadehaven, Firstlight's Herald, Forged Dwarf Star, Freeze Frame, Frostburn, Glint of Clouds, Skull Thrasher, Solsworn Ciphers, Spectral Trigger, Thousandfold Deliverance)
+- New materials: Mengzhou and Lahai-Roi flowers, ascension bosses (Nightmare Flashdrive, Solidarity's Loneflame, Forged Empyrean's Sigh), skill bosses (We Who Question, Skyward Glazed Heart, Remnant of the Wheel) and the Autopuppet Kernel enemy-drop set
+- Boss sources Nightmare: Adam Smasher, Myriad Snare: Rustfire Chassis and Calamity Effigy; weekly sources Court of Shackled Souls, Seed of Illusory Origin and Ordinance of the Inevitable (drop rates apply to all SOL3 phases)
+- `bin/rails images:missing` lists seeded records whose image files are absent; `bin/rails images:download` fetches them from `config/image_sources.yml` and converts them to 256x256 PNG
+- `SeedDataIntegrityTest` guards against incomplete material mappings and sources, plus a Thousandfold Deliverance planner regression test
+
+### Fixed
+- Fusion Accretion had no enemy-drop mapping, so plans for it omitted its Ring materials; it now maps to the Ring set
+- Corrected the Polarizer (Sword) and Carved Crystal (Broadblade) material descriptions to match their weapon-type mappings
+- Gate of the Lost Star location now includes the Exostrider Slumber Site
+
+### Changed
+- Regional material lists in the Resonator and weapon planners now include the new Resonators/weapons that use the newer forgery sets
+- Image slugs strip `:` so "Yangyang: Xuanling" maps to `yangyang-xuanling.png`
+
+### Notes
+- Suoming, Unspoken Rue and Miasmic Branch are deferred until their 2026-10-22 release is confirmed
+- Image assets for the new content must be added under `public/images/` (see `bin/rails images:missing`)
+
+---
+
 ## [1.1.1] - 2026-10-04
 
 ### Removed
