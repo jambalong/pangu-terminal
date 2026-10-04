@@ -6,7 +6,6 @@
 - [RubyLLM](https://rubyllm.com) - LLM integration
 
 ## Deployment
-- [Kamal 2](https://kamal-deploy.org/)
 - [DigitalOcean](https://www.digitalocean.com/)
 
 ## Game Data
