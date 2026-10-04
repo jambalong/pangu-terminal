@@ -15,12 +15,15 @@ puts "  --> Creating Weapons..."
 WEAPON_DATA = {
   "Sword" => {
     5 => [
+      "Azure Oath",
       "Blazing Brilliance",
       "Bloodpact's Pledge",
       "Defier's Thorn",
       "Emerald of Genesis",
       "Emerald Sentence",
       "Everbright Polestar",
+      "Frostburn",
+      "Glint of Clouds",
       "Laser Shearer",
       "Red Spring",
       "Unflickering Valor"
@@ -45,6 +48,7 @@ WEAPON_DATA = {
       "Lustrous Razor",
       "Radiance Cleaver",
       "Starfield Calibrator",
+      "Thousandfold Deliverance",
       "Thunderflare Dominion",
       "Verdant Summit",
       "Wildfire Mark"
@@ -65,6 +69,8 @@ WEAPON_DATA = {
     5 => [
       "Lux & Umbra",
       "Phasic Homogenizer",
+      "Skull Thrasher",
+      "Spectral Trigger",
       "Spectrum Blaster",
       "Static Mist",
       "The Last Dance",
@@ -89,6 +95,7 @@ WEAPON_DATA = {
       "Daybreaker's Spine",
       "Moongazer's Sigil",
       "Pulsation Bracer",
+      "Solsworn Ciphers",
       "Tragicomedy",
       "Verity's Handle"
     ],
@@ -106,8 +113,12 @@ WEAPON_DATA = {
 
   "Rectifier" => {
     5 => [
+      "Blooming Jadehaven",
       "Boson Astrolabe",
       "Cosmic Ripples",
+      "Firstlight's Herald",
+      "Forged Dwarf Star",
+      "Freeze Frame",
       "Lethean Elegy",
       "Luminous Hymn",
       "Rime-Draped Sprouts",

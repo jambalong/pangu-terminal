@@ -6,15 +6,26 @@ class WeaponAscensionPlanner < ApplicationService
   }
 
   LAHAI_ROI_WEAPONS = [
+    "Azure Oath",
+    "Blooming Jadehaven",
     "Boson Astrolabe",
     "Daybreaker's Spine",
     "Everbright Polestar",
+    "Firstlight's Herald",
+    "Forged Dwarf Star",
+    "Freeze Frame",
+    "Frostburn",
+    "Glint of Clouds",
     "Laser Shearer",
     "Phasic Homogenizer",
     "Pulsation Bracer",
     "Radiance Cleaver",
+    "Skull Thrasher",
+    "Solsworn Ciphers",
+    "Spectral Trigger",
     "Spectrum Blaster",
-    "Starfield Calibrator"
+    "Starfield Calibrator",
+    "Thousandfold Deliverance"
   ].freeze
 
   def initialize(

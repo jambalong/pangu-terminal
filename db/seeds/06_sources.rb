@@ -293,7 +293,50 @@ SOURCE_DATA = [
     region: "The Black Shores"
   },
 
+  {
+    name: "Nightmare: Adam Smasher",
+    source_type: "boss_challenge",
+    waveplate_cost: 60,
+    location: "Etching Plains, Roya Frostlands",
+    region: "Roya Frostlands"
+  },
+  {
+    name: "Myriad Snare: Rustfire Chassis",
+    source_type: "boss_challenge",
+    waveplate_cost: 60,
+    location: "Western Fang Peaks, Mengzhou, Huanglong",
+    region: "Huanglong"
+  },
+  {
+    name: "Calamity Effigy",
+    source_type: "boss_challenge",
+    waveplate_cost: 60,
+    location: "Verdant Court, Xuanfang Hold, Huanglong",
+    region: "Huanglong"
+  },
+
   # --- Weekly Challenge ---
+  {
+    name: "Court of Shackled Souls",
+    source_type: "weekly_challenge",
+    waveplate_cost: 60,
+    location: "Eastern Xuan Peaks, Huanglong",
+    region: "Huanglong"
+  },
+  {
+    name: "Seed of Illusory Origin",
+    source_type: "weekly_challenge",
+    waveplate_cost: 60,
+    location: "Tomorrow's Horizon, Dimmr Deep, Roya Frostlands",
+    region: "Roya Frostlands"
+  },
+  {
+    name: "Ordinance of the Inevitable",
+    source_type: "weekly_challenge",
+    waveplate_cost: 60,
+    location: "Simulacrum Nexus, Mengzhou, Huanglong",
+    region: "Huanglong"
+  },
   {
     name: "Gate of the Lost Star",
     source_type: "weekly_challenge",

@@ -130,7 +130,10 @@ BOSS_MATERIAL_SOURCES = {
   "Roaring Rock Fist"               => "Feilian Beringal",
   "Sound-Keeping Tacet Core"        => "Lampylumen Myriad",
   "Hidden Thunder Tacet Core"       => "Tempest Mephis",
-  "Strife Tacet Core"               => "Crownless"
+  "Strife Tacet Core"               => "Crownless",
+  "Nightmare Flashdrive"            => "Nightmare: Adam Smasher",
+  "Solidarity's Loneflame"          => "Myriad Snare: Rustfire Chassis",
+  "Forged Empyrean's Sigh"          => "Calamity Effigy"
 }.freeze
 
 BOSS_MATERIAL_SOURCES.each do |material_name, source_name|
@@ -148,7 +151,10 @@ WEEKLY_MATERIAL_SOURCES = {
   "Sentinel's Dagger"       => "The Fated Confrontation",
   "Monument Bell"           => "Bell-Borne Geochelone",
   "Dreamless Feather"       => "Statue of the Crownless",
-  "Unending Destruction"    => "Chaotic Juncture"
+  "Unending Destruction"    => "Chaotic Juncture",
+  "We Who Question"         => "Seed of Illusory Origin",
+  "Skyward Glazed Heart"    => "Court of Shackled Souls",
+  "Remnant of the Wheel"    => "Ordinance of the Inevitable"
 }.freeze
 
 WEEKLY_MATERIAL_SOURCES.each do |material_name, source_name|

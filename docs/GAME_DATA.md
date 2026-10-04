@@ -16,7 +16,7 @@ How *Wuthering Waves* concepts map onto this codebase, and how to update game da
 | **EXP potions/cores** | Plans express EXP needs in rarity-2 terms; higher-rarity EXP items count via `exp_value` (`SynthesisService#calculate_exp_satisfaction`). |
 | **Waveplate** | Stamina resource. `sources.waveplate_cost` is per run. |
 | **SOL3 phase** | 1..8 progression phase of the game's Sol-III world level, set per user (`users.sol3_phase`); selects which `drop_rates` rows apply. |
-| **Lahai-Roi** | Region whose Resonators use a different set of weapon-type materials (`WeaponTypeMaterial.region = "lahai_roi"` vs `"base"`). Membership is **hard-coded** in `LAHAI_ROI_RESONATORS` in `app/services/resonator_ascension_planner.rb` (Aemeath, Luuk Herssen, Lynae, Mornye). |
+| **Lahai-Roi (LF) forgery sets** | Newer Resonators and weapons use a different set of weapon-type (forgery) materials (`WeaponTypeMaterial.region = "lahai_roi"` vs `"base"`): Broken Wing Polarizer (Sword), LF Carved Crystal (Broadblade), Incomplete Combustor (Pistols), LF Waveworn Shard (Gauntlets), Spliced String (Rectifier). Membership is **hard-coded** by name in `LAHAI_ROI_RESONATORS` (`app/services/resonator_ascension_planner.rb`) and `LAHAI_ROI_WEAPONS` (`app/services/weapon_ascension_planner.rb`). Despite the name, it now covers every post-3.0 Resonator that uses these sets, including the Mengzhou ones. |
 
 ## Seed pipeline
 
@@ -38,11 +38,11 @@ Seeds must be **idempotent** (`find_or_initialize_by` + `update!`). Production r
 ## Adding a new Resonator (patch checklist)
 
 1. `01_resonators.rb`: add the entry under the right rarity/element (`name`, `weapon_type`, `stat_a`, `stat_b`).
-2. Art: add `public/images/resonators/<slug>.png` (slug = lowercased name, quotes stripped, spaces -> `-`; same rule for materials/weapons); forte icons via `bin/rails forte:download_stat_icons forte:download_skill_icons` (needs network and ImageMagick `magick`/`convert`; per-Resonator label overrides are in `lib/tasks/forte_icons.rake`).
+2. Art: add `public/images/resonators/<slug>.png` (slug = lowercased name, `'"#&:` stripped, spaces -> `-`; same rule for materials/weapons); forte icons via `bin/rails forte:download_stat_icons forte:download_skill_icons` (needs network and ImageMagick `magick`/`convert`; per-Resonator label overrides are in `lib/tasks/forte_icons.rake`).
 3. `05_mapping_tables.rb`: add the Resonator to `RESONATORS` and its `ResonatorMaterialMap` rows (boss drop, flower, enemy drops, forgery drop, weekly boss).
-4. If the Resonator belongs to the Lahai-Roi region (or a new region), update `LAHAI_ROI_RESONATORS` and ensure matching `WeaponTypeMaterial` rows exist for that region.
+4. If the Resonator's skill materials use the newer (LF) forgery sets, add it to `LAHAI_ROI_RESONATORS` (and new weapons to `LAHAI_ROI_WEAPONS`); ensure matching `WeaponTypeMaterial` rows exist for that region.
 5. If it has a new boss/weekly/forgery material: add it in `03_materials.rb` (+ image in `public/images/materials/`), `07_material_sources.rb`, and `08_drop_rates.rb`.
-6. Add or extend tests (`test/models/resonator_test.rb`, planner tests); run `bin/rails db:seed` twice to confirm idempotency.
+6. Run `bin/rails db:seed` twice to confirm idempotency, then `bin/rails images:missing` to list the image files still to add, and `bin/rails test` (`test/models/seed_data_integrity_test.rb` fails if a mapping or source is missing).
 
 ## Adding a new weapon
 

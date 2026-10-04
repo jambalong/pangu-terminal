@@ -67,12 +67,12 @@ namespace :forte do
   desc "Download skill icons from wutheringlab into public/images/forte/skills/[slug]/"
   task download_skill_icons: :environment do
     Resonator.find_each do |resonator|
-      slug = resonator.name.downcase.gsub(/['"#&]/, "").strip.gsub(/\s+/, "-")
+      slug = resonator.name.downcase.gsub(/['"#&:]/, "").strip.gsub(/\s+/, "-")
       dest = Rails.root.join("public/images/forte/skills/#{slug}")
       FileUtils.mkdir_p(dest)
 
       overrides = SKILL_LABEL_OVERRIDES_RAKE[slug] || {}
-      name_segment = resonator.name.gsub(/['"#&]/, "").strip.gsub(/\s+/, "-")
+      name_segment = resonator.name.gsub(/['"#&:]/, "").strip.gsub(/\s+/, "-")
 
       SKILL_LABELS_RAKE.each do |skill_key, default_label|
         actual_label = overrides[skill_key] || default_label
