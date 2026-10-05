@@ -3,6 +3,13 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.6] - 2026-10-05
+
+### Changed
+- Homepage "SYSTEM ONLINE" tag and User Manual version tag updated from the stale `v1.0.0` to the current version
+
+---
+
 ## [1.2.5] - 2026-10-05
 
 ### Changed
