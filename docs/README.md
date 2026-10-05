@@ -10,6 +10,7 @@
 | [TESTING.md](TESTING.md) | Run tests, understand test helpers, CI jobs and security scans |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Deploy/operate production (Render + Neon) |
 | [ROADMAP.md](ROADMAP.md) | See known issues and the "update to current" backlog |
+| [ECHO_FARMING_DESIGN.md](ECHO_FARMING_DESIGN.md) | Read the proposed design and phased plan for Tacet Field / Echo EXP support |
 
 Agent instructions live in the repo root: [`AGENTS.md`](../AGENTS.md) (canonical) and [`CLAUDE.md`](../CLAUDE.md). The top-level [`README.md`](../README.md) is the project showcase; `CHANGELOG.md` records releases.
 

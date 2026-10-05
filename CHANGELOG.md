@@ -3,6 +3,13 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Added
+- `docs/ECHO_FARMING_DESIGN.md`: design and phased plan for Echo farming support (Tacet Field data analysis, integration points, risks, open questions)
+
+---
+
 ## [1.2.6] - 2026-10-05
 
 ### Changed
