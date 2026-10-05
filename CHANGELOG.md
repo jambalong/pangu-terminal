@@ -3,6 +3,14 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.4] - 2026-10-05
+
+### Changed
+- Documentation: Windows/WSL2 development setup (rv, Docker Desktop, build tools, git credentials), local dev account, image workflow (`images:missing`, `images:download`, forte icon overrides) in `docs/GAME_DATA.md`, `docs/DEVELOPMENT.md`, `AGENTS.md`, `docs/TESTING.md` and `docs/ROADMAP.md`
+- Removed the stale `libvips` prerequisite (the `image_processing` gem is gone)
+
+---
+
 ## [1.2.3] - 2026-10-05
 
 ### Fixed
