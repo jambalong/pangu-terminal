@@ -3,6 +3,16 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.2.5] - 2026-10-05
+
+### Changed
+- README: prerequisites and a pointer to `docs/DEVELOPMENT.md`, corrected and expanded Project Structure, fuller Technology Stack table
+- `CREDITS.md`: current hosting (Render, Neon, Postmark), image and data sources, Tailwind
+- `docs/GAME_DATA.md`: complete "Adding a new weapon" checklist
+- `docs/ROADMAP.md`: resolved items closed, new housekeeping items added
+
+---
+
 ## [1.2.4] - 2026-10-05
 
 ### Changed
