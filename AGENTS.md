@@ -40,7 +40,7 @@ Run `bin/rubocop` and `bin/rails test` before committing. CI (`.github/workflows
 | `app/models/` | `Plan` (polymorphic `subject`), `Material`, `Source`, `DropRate`, cost tables, mapping tables, `User`, `ApiKey`, `InventoryItem`. |
 | `db/seeds/01..08_*.rb` | All game data. Loaded in order by `db/seeds.rb` inside one transaction; shares state via `$SEED_DATA`. |
 | `public/images/` | Material/resonator/weapon/forte art referenced by seeded `image_url`s. |
-| `lib/tasks/forte_icons.rake` | `forte:download_stat_icons`, `forte:download_skill_icons`. |
+| `lib/tasks/forte_icons.rake`, `lib/tasks/images.rake` | `forte:download_*` (skill/stat icons; label and URL overrides), `images:missing`, `images:download` (Fandom URLs via `FandomImageUrl`, configured in `config/image_sources.yml`). |
 | `docs/` | Project documentation (index: `docs/README.md`). |
 
 ## Conventions
@@ -63,6 +63,7 @@ Run `bin/rubocop` and `bin/rails test` before committing. CI (`.github/workflows
 - Farming Advisor needs `gemini_api_key` in Rails credentials (`config/credentials.yml.enc`, key in `config/master.key` or `RAILS_MASTER_KEY`). Without it the advisor falls back to a static message.
 - Password-reset email uses Postmark SMTP (`POSTMARK_API_TOKEN`).
 - `sol3_phase` (1..8) is per-user; drop rate data currently starts at phase 3 for forgery sources.
+- Image slugs strip `'"#&:` (e.g. `yangyang-xuanling.png`). `SKILL_LABEL_OVERRIDES` exists in both `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; keep them in sync. After adding data, run `bin/rails images:missing`.
 - `README.md` is a portfolio piece; reference material lives in `docs/`. Don't re-grow the README.
 - Don't commit `config/master.key` or `.env` (gitignored).
 

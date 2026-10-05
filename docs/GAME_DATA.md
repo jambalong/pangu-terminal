@@ -38,11 +38,27 @@ Seeds must be **idempotent** (`find_or_initialize_by` + `update!`). Production r
 ## Adding a new Resonator (patch checklist)
 
 1. `01_resonators.rb`: add the entry under the right rarity/element (`name`, `weapon_type`, `stat_a`, `stat_b`).
-2. Art: add `public/images/resonators/<slug>.png` (slug = lowercased name, `'"#&:` stripped, spaces -> `-`; same rule for materials/weapons); forte icons via `bin/rails forte:download_stat_icons forte:download_skill_icons` (needs network and ImageMagick `magick`/`convert`; per-Resonator label overrides are in `lib/tasks/forte_icons.rake`).
+2. Art: see [Images](#images) (portraits, weapon and material icons come from `bin/rails images:download`; skill icons from `bin/rails forte:download_skill_icons`). The seeded `image_url` slug is the lowercased name with `'"#&:` stripped and spaces turned into `-`.
 3. `05_mapping_tables.rb`: add the Resonator to `RESONATORS` and its `ResonatorMaterialMap` rows (boss drop, flower, enemy drops, forgery drop, weekly boss).
 4. If the Resonator's skill materials use the newer (LF) forgery sets, add it to `LAHAI_ROI_RESONATORS` (and new weapons to `LAHAI_ROI_WEAPONS`); ensure matching `WeaponTypeMaterial` rows exist for that region.
 5. If it has a new boss/weekly/forgery material: add it in `03_materials.rb` (+ image in `public/images/materials/`), `07_material_sources.rb`, and `08_drop_rates.rb`.
 6. Run `bin/rails db:seed` twice to confirm idempotency, then `bin/rails images:missing` to list the image files still to add (`bin/rails images:download` fetches them locally from the Fandom wiki, deriving each URL from the record name, and converts them to 256x256 PNG; ImageMagick required; add exceptions to `wiki_names` or `overrides` in `config/image_sources.yml`), and `bin/rails test` (`test/models/seed_data_integrity_test.rb` fails if a mapping or source is missing).
+
+## Images
+
+Seeded records point at files under `public/images/` (`resonators/`, `weapons/`, `materials/` as 256x256 PNG; `forte/skills/<slug>/` as 64x64 WebP; `forte/stats/` AVIF). `bin/rails images:missing` lists every absent file (including skill icons). Tools run locally (the wikis are blocked from the cloud sandbox) and need ImageMagick.
+
+**Portraits, weapons, materials: `bin/rails images:download`** (`KIND=resonators|weapons|materials`, `DRY_RUN=1` to preview). Configured in `config/image_sources.yml`; URL resolution order is `overrides` (record name -> full URL), then `fandom`, then `templates`.
+
+- The Fandom wiki stores files at `<base>/<h1>/<h1h2>/<File>/revision/latest`, where `h` is the MD5 of the raw file name. `FandomImageUrl` (`app/services/fandom_image_url.rb`) derives it: file = prefix (`Resonator_`, `Weapon_`, `Item_`) + the name with `:` removed and spaces as `_`, e.g. `Item_Forged_Empyrean's_Sigh.png`. Apostrophes stay literal in the hash.
+- All Rovers share one portrait: `wiki_names: { "Rover-Electro": Rover }` maps to `Resonator_Rover.png`.
+- A 404 means the wiki file has a different name: add the record to `wiki_names` (file stem) or `overrides` (URL).
+
+**Forte skill icons: `bin/rails forte:download_skill_icons`** fetches from wutheringlab by Resonator name and skill label (`<Name>-<Label>.webp`).
+
+- Newer Resonators (and a few older ones) label the basic attack `Normal-Attack`, Shorekeeper's skill has a trailing hyphen: these are per-slug entries in `SKILL_LABEL_OVERRIDES` in `db/seeds/01_resonators.rb` (stored icon paths) **and** the same-named map in `lib/tasks/forte_icons.rake` (download URL). Keep both in sync.
+- Icons wutheringlab lacks come from `SKILL_ICON_URL_OVERRIDES` in the rake file (key `"<slug>/<skill_key>"`), e.g. Hiyuki's Inherent Skill 1 from the Fandom wiki's `Skill_Fine_Snow.png`.
+- After changing label overrides run `bin/rails db:seed` so stored `forte_icons` paths update (production seeds on boot).
 
 ## Adding a new weapon
 
