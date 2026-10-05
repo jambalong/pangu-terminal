@@ -1,6 +1,6 @@
 # Roadmap & Known Issues
 
-Working backlog for bringing the project "up to current". Last reviewed 2026-10-05 (game version 3.7 released 2026-09-30). Check items off (and add a `CHANGELOG.md` entry) as they land.
+Working backlog for bringing the project "up to current". Last reviewed 2026-10-05 (game version 3.7 released 2026-09-30; all docs audited against the repo). Check items off (and add a `CHANGELOG.md` entry) as they land.
 
 ## Done (v1.1.0)
 
@@ -18,7 +18,6 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 ## 1. Game data: remaining
 
 - [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
-- [ ] Confirm the remaining 4* Resonators/weapons and any 3.2 to 3.7 content not in the lists provided (the data above came from wiki tables supplied by the owner).
 - [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
 - [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase cap (hard-coded `1..8` in `DropRate`, the dashboard dropdown and `Api::V1::ProfileController`) against 3.7.
 - [ ] Optional feature: the drop-rate spreadsheet also covers **Tacet Fields** (echo drops and Echo EXP), which the app does not model.
@@ -27,14 +26,12 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 
 - [x] `image_processing` removed (unused; v1.1.1).
 - [ ] Re-check Ruby (3.4.7 in `.ruby-version`, `mise.toml`, `Dockerfile`) and PostgreSQL (17 in docker-compose and CI) against current releases; change them together.
-- [ ] Confirm the Farming Advisor works with `gemini-3.1-flash-lite` and ruby_llm 2.0 against the live API (cannot be done without the Gemini key; tests stub `LlmClient`).
-- [ ] System tests (`bin/rails test:system`) could not be run in the authoring sandbox (headless Chromium would not start); rely on the CI `system-test` job.
 - [ ] GitHub Actions versions in `ci.yml` are managed by Dependabot.
 
 ## 3. Documentation follow-ups
 
 - [ ] Remaining **TODO(owner)** in [DEPLOYMENT.md](DEPLOYMENT.md): Environment-tab variable names and the Neon endpoint type (Render service settings are now recorded).
-- [ ] Add API contract tests if any API doc example drifts (e.g. `forte_node_upgrades` booleans vs stored integers).
+- [ ] Keep `docs/API.md` examples in sync with `app/serializers/` when response shapes change (the forte-node booleans in the serializer output are intentional; plans store `0/1` integers).
 
 ## 4. Code observations (not yet verified as bugs)
 
@@ -43,3 +40,6 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - Production runs `db:seed` on every boot; seeds are idempotent but add boot time and never delete. Consider a one-off step if boot time matters on the free tier.
 - Solid Queue/Cable are installed but there are no jobs; confirm whether they should stay.
 - Orphaned guest plans (`guest_token` cookie) are never cleaned up.
+- `SKILL_LABEL_OVERRIDES` is duplicated in `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; consider a single source (e.g. a YAML file read by both).
+- The `Dockerfile` still installs `libvips`, which nothing uses now that `image_processing` is gone; trim it in a separate change.
+- Verify the Farming Advisor on production after the `ruby_llm` 2.0 deploy (tests stub the LLM client).

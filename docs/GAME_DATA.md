@@ -62,7 +62,11 @@ Seeded records point at files under `public/images/` (`resonators/`, `weapons/`,
 
 ## Adding a new weapon
 
-Add to `02_weapons.rb`; add `WeaponMaterialMap` rows in `05_mapping_tables.rb`; add art under `public/images/weapons/`. New weapon rarities require `WeaponLevelCost`/`WeaponAscensionCost` rows for that `weapon_rarity`.
+1. Add to `02_weapons.rb` (`name`, `weapon_type`, `rarity`).
+2. `05_mapping_tables.rb`: add it to `WEAPONS` and to the `WEAPON_MAPPING_DATA` enemy-drop set it uses (Whisperin, Howler, Ring, Exoswarm Core, Mech Core, Exoswarm Pendant, Autopuppet Kernel, ...). Every weapon needs one; the integrity test fails otherwise.
+3. If it uses the newer (LF) forgery set for its weapon type, add its name to `LAHAI_ROI_WEAPONS` (`app/services/weapon_ascension_planner.rb`).
+4. Art: see [Images](#images). New weapon rarities require `WeaponLevelCost`/`WeaponAscensionCost` rows for that `weapon_rarity`.
+5. `bin/rails db:seed` twice, `bin/rails images:missing`, `bin/rails test`.
 
 ## Adding a new SOL3 phase or updating drop rates
 

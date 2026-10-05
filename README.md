@@ -14,9 +14,12 @@ Note: hosted on a free tier, the app may take up to a minute to wake up on first
 ## Getting Started
 
 ### Prerequisites
-- Ruby 3.4+ (via `rbenv`, `asdf`, `mise`, or system)
-- Docker & Docker Compose
+- Ruby 3.4+ (via `rbenv`, `asdf`, `mise`, [`rv`](https://github.com/spinel-coop/rv), or system)
+- A C compiler and the PostgreSQL/OpenSSL/YAML headers (gems with native extensions are compiled locally)
+- Docker & Docker Compose (or a native PostgreSQL)
 - Git
+
+Detailed setup, including Windows/WSL2 and a local dev account: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
 
 ### Local Development
 
@@ -275,9 +278,13 @@ More documentation: [docs/README.md](docs/README.md) (data model, game data, dev
 | --- | --- |
 | Backend | Rails 8.1 + Ruby 3.4 |
 | Database | PostgreSQL 17 (Neon) |
-| Frontend | Hotwire (Turbo + Stimulus) |
+| Frontend | Hotwire (Turbo + Stimulus), Tailwind CSS, importmap |
+| Auth & security | Devise, Rack::Attack, SHA-256 hashed API tokens |
+| LLM | RubyLLM 2 with Gemini |
+| Cache / jobs / cable | Solid Cache, Solid Queue, Solid Cable |
 | Deployment | Docker + Render |
-| Testing | Minitest |
+| Testing | Minitest, Capybara + Cuprite, SimpleCov |
+| Quality | RuboCop (omakase), Brakeman, bundler-audit, GitHub Actions CI |
 
 ### Project Structure
 ```
@@ -288,18 +295,25 @@ app/
 │   ├── material.rb          # Game material definitions
 │   ├── resonator.rb         # Character model
 │   ├── weapon.rb            # Weapon model
-│   └── user.rb              # User authentication (Devise)
+│   ├── source.rb            # Farming sources (Waveplate cost)
+│   ├── drop_rate.rb         # Drop rates per source and SOL3 phase
+│   ├── user.rb              # User authentication (Devise)
+│   └── ...                  # Cost tables, material maps, API keys
 ├── controllers/
 │   ├── api/
 │   │   └── v1/
 │   │       ├── base_controller.rb        # Auth + error handling
 │   │       ├── inventory_controller.rb   # Inventory API endpoint
 │   │       ├── materials_controller.rb   # Materials API endpoint
-│   │       └── plans_controller.rb       # Plans API endpoint
+│   │       ├── plans_controller.rb       # Plans API endpoint
+│   │       └── profile_controller.rb     # SOL3 phase endpoint
 │   ├── plans_controller.rb
-│   ├── inventory_controller.rb
+│   ├── inventory_items_controller.rb
 │   ├── optimizers_controller.rb
 │   └── ...
+├── forms/
+│   └── plan_form.rb                     # Runs the planner, builds plan_data
+├── serializers/                         # JSON shapes for the API
 ├── services/
 │   ├── resonator_ascension_planner.rb   # Resonator cost calculation
 │   ├── weapon_ascension_planner.rb      # Weapon cost calculation
@@ -307,24 +321,32 @@ app/
 │   ├── drop_rate_service.rb             # Waveplate run estimation
 │   ├── farming_priority_service.rb      # Farming source ranking
 │   ├── farming_advisor_service.rb       # LLM farming recommendation
+│   ├── fandom_image_url.rb              # Image URL derivation (rake tooling)
 │   └── llm_client.rb                    # RubyLLM wrapper
 ├── views/
 │   ├── layouts/
 │   ├── plans/
-│   ├── inventory/
-│   ├── optimizer/
+│   ├── inventory_items/
+│   ├── optimizers/
 │   └── ...
 └── helpers/
 
+config/
+└── image_sources.yml    # Sources for bin/rails images:download
+
 db/
 ├── migrate/          # Schema migrations
-├── seeds.rb          # Seed game data (cost tables, materials)
+├── seeds.rb          # Loads db/seeds/01..08 (game data)
+├── seeds/            # Resonators, weapons, materials, cost tables, sources, drop rates
 └── schema.rb
+
+lib/tasks/            # forte_icons.rake, images.rake (icon and image downloads)
+public/images/        # Resonator, weapon, material and forte art
 
 test/
 ├── controllers/    # Web + API controller integration tests
-├── models/
-├── services/       # Planner, synthesis, drop rate, farming priority
+├── models/         # Includes the seed data integrity test
+├── services/       # Planner, synthesis, drop rate, farming priority, image URLs
 ├── forms/
 ├── helpers/
 ├── integration/
@@ -346,4 +368,4 @@ The production version of this application is deployed via **Docker** to **Rende
 ---
 
 **Last Updated:** October 2026
-**Version:** 1.2.4
+**Version:** 1.2.5
