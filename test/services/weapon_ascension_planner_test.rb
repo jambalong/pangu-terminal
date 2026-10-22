@@ -166,4 +166,24 @@ class WeaponAscensionPlannerTest < ActiveSupport::TestCase
     end
     assert_match expected_message_fragment, error.message
   end
+
+  test "uses the material set of the weapon's region" do
+    params = @base_params.merge(
+      current_level: 1, target_level: 90, current_ascension_rank: 0, target_ascension_rank: 6
+    )
+    base_ids = WeaponTypeMaterial.where(weapon_type: @kumokiri.weapon_type, region: "base").pluck(:material_id)
+    lahai_ids = WeaponTypeMaterial.where(weapon_type: @kumokiri.weapon_type, region: "lahai_roi").pluck(:material_id)
+    base_only = base_ids - lahai_ids
+    lahai_only = lahai_ids - base_ids
+    assert_equal "base", @kumokiri.region
+
+    base_output = WeaponAscensionPlanner.call(**params).keys
+    assert_not_empty base_output & base_only
+    assert_empty base_output & lahai_only
+
+    @kumokiri.update!(region: "lahai_roi")
+    lahai_output = WeaponAscensionPlanner.call(**params.merge(weapon: @kumokiri)).keys
+    assert_not_empty lahai_output & lahai_only
+    assert_empty lahai_output & base_only
+  end
 end

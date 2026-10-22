@@ -111,6 +111,25 @@ SKILL_LABELS = {
   "inherent_skill_2" => "Inherent-Skill-2"
 }.freeze
 
+# Resonators that use the newer weapon-type (forgery) material sets: region "lahai_roi".
+LAHAI_ROI_RESONATORS = [
+  "Aemeath",
+  "Denia",
+  "Hiyuki",
+  "Hsin",
+  "Jingran",
+  "Lucilla",
+  "Lucy",
+  "Luuk Herssen",
+  "Lynae",
+  "Mornye",
+  "Qingxiao",
+  "Rebecca",
+  "Sigrika",
+  "Suisui",
+  "Yangyang: Xuanling"
+].freeze
+
 # Per-resonator overrides where wutheringlab uses a different label (config/skill_label_overrides.yml, shared with lib/tasks/forte_icons.rake)
 SKILL_LABEL_OVERRIDES = YAML.load_file(Rails.root.join("config/skill_label_overrides.yml")).freeze
 
@@ -142,6 +161,7 @@ RESONATOR_DATA.each do |rarity, elements|
         rarity: rarity,
         element: element,
         weapon_type: data[:weapon_type],
+        region: LAHAI_ROI_RESONATORS.include?(data[:name]) ? "lahai_roi" : "base",
         image_url: "/images/resonators/#{filename}.png",
         forte_icons: forte_icons,
       )

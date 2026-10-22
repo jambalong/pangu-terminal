@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_08_052813) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_22_210000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -134,6 +134,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_052813) do
     t.integer "rarity", default: 4, null: false
     t.datetime "updated_at", null: false
     t.string "weapon_type", null: false
+    t.string "region", default: "base", null: false
     t.index ["name"], name: "index_resonators_on_name", unique: true
   end
 
@@ -372,6 +373,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_052813) do
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
     t.string "weapon_type", null: false
+    t.string "region", default: "base", null: false
     t.index ["name"], name: "index_weapons_on_name", unique: true
   end
 

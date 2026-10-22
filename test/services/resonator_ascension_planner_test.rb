@@ -320,4 +320,28 @@ class ResonatorAscensionPlannerTest < ActiveSupport::TestCase
     end
     assert_match expected_message_fragment, error.message
   end
+
+  test "uses the material set of the resonator's region" do
+    # Skill leveling is what consumes the weapon-type (forgery) materials.
+    params = @base_params.merge(
+      current_level: 1, target_level: 90, current_ascension_rank: 0, target_ascension_rank: 6,
+      target_skill_levels: {
+        basic_attack: 10, resonance_skill: 10, forte_circuit: 10, resonance_liberation: 10, intro_skill: 10
+      }
+    )
+    base_ids = WeaponTypeMaterial.where(weapon_type: @chisa.weapon_type, region: "base").pluck(:material_id)
+    lahai_ids = WeaponTypeMaterial.where(weapon_type: @chisa.weapon_type, region: "lahai_roi").pluck(:material_id)
+    base_only = base_ids - lahai_ids
+    lahai_only = lahai_ids - base_ids
+    assert_equal "base", @chisa.region
+
+    base_output = ResonatorAscensionPlanner.call(**params).keys
+    assert_not_empty base_output & base_only
+    assert_empty base_output & lahai_only
+
+    @chisa.update!(region: "lahai_roi")
+    lahai_output = ResonatorAscensionPlanner.call(**params.merge(resonator: @chisa)).keys
+    assert_not_empty lahai_output & lahai_only
+    assert_empty lahai_output & base_only
+  end
 end

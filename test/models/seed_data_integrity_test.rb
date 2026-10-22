@@ -43,8 +43,15 @@ class SeedDataIntegrityTest < ActiveSupport::TestCase
     end
   end
 
-  test "regional planner lists only name existing records" do
-    assert_empty ResonatorAscensionPlanner::LAHAI_ROI_RESONATORS - Resonator.pluck(:name)
-    assert_empty WeaponAscensionPlanner::LAHAI_ROI_WEAPONS - Weapon.pluck(:name)
+  test "every Resonator and weapon has a known region" do
+    assert_empty Resonator.where.not(region: ForgeryRegion::REGIONS).pluck(:name)
+    assert_empty Weapon.where.not(region: ForgeryRegion::REGIONS).pluck(:name)
+  end
+
+  test "regional seed lists name existing records and match the stored region" do
+    assert_empty ::LAHAI_ROI_RESONATORS - Resonator.pluck(:name)
+    assert_empty ::LAHAI_ROI_WEAPONS - Weapon.pluck(:name)
+    assert_equal ::LAHAI_ROI_RESONATORS.sort, Resonator.where(region: "lahai_roi").pluck(:name).sort
+    assert_equal ::LAHAI_ROI_WEAPONS.sort, Weapon.where(region: "lahai_roi").pluck(:name).sort
   end
 end

@@ -20,25 +20,6 @@ class ResonatorAscensionPlanner < ApplicationService
     intro_skill_node_2:           "Stat Bonus Tier 2"
   }
 
-  # Resonators that use the newer weapon-type (forgery) material sets
-  LAHAI_ROI_RESONATORS = [
-    "Aemeath",
-    "Denia",
-    "Hiyuki",
-    "Hsin",
-    "Jingran",
-    "Lucilla",
-    "Lucy",
-    "Luuk Herssen",
-    "Lynae",
-    "Mornye",
-    "Qingxiao",
-    "Rebecca",
-    "Sigrika",
-    "Suisui",
-    "Yangyang: Xuanling"
-  ].freeze
-
   def initialize(
     resonator:, current_level:, target_level:,
     current_ascension_rank:, target_ascension_rank:,
@@ -62,7 +43,7 @@ class ResonatorAscensionPlanner < ApplicationService
 
     @materials_by_resonator = ResonatorMaterialMap.where(resonator_id: @resonator.id).to_a
 
-    region = LAHAI_ROI_RESONATORS.include?(@resonator.name) ? "lahai_roi" : "base"
+    region = @resonator.region
     @materials_by_weapon_type = WeaponTypeMaterial.where(
       weapon_type: @resonator.weapon_type,
       region: region
