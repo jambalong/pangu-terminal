@@ -51,9 +51,5 @@
   border-color: var(--accent-color);
 }
 
-.selection-card:hover .icon-circle {
-  transform: scale(1.1);
-}
-
 .theme-blue { --accent-color: var(--ctp-blue); }
 .theme-peach { --accent-color: var(--ctp-peach); }

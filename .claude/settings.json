@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bin/rails test:*)",
+      "Bash(bin/rails db:test:prepare:*)",
+      "Bash(bin/rails routes:*)",
+      "Bash(bin/rails images:missing:*)",
+      "Bash(bin/rubocop:*)",
+      "Bash(bin/brakeman:*)",
+      "Bash(bin/bundler-audit:*)",
+      "Bash(bin/importmap audit:*)",
+      "Bash(bundle install:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./config/master.key)",
+      "Read(./config/credentials/*.key)",
+      "Edit(./config/credentials.yml.enc)",
+      "Edit(./config/master.key)",
+      "Bash(bin/rails db:drop:*)",
+      "Bash(bin/rails db:reset:*)",
+      "Bash(bin/rails db:seed:replant:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
+  }
+}

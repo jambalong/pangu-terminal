@@ -278,7 +278,7 @@ More documentation: [docs/README.md](docs/README.md) (data model, game data, dev
 | --- | --- |
 | Backend | Rails 8.1 + Ruby 3.4 |
 | Database | PostgreSQL 17 (Neon) |
-| Frontend | Hotwire (Turbo + Stimulus), Tailwind CSS, importmap |
+| Frontend | Hotwire (Turbo + Stimulus), plain CSS (Propshaft), importmap |
 | Auth & security | Devise, Rack::Attack, SHA-256 hashed API tokens |
 | LLM | RubyLLM 2 with Gemini |
 | Cache / jobs / cable | Solid Cache, Solid Queue, Solid Cable |

@@ -35,7 +35,7 @@ module Api
       end
 
       def handle_server_error(e)
-        Rails.logger.error(e.message)
+        Rails.logger.error("#{e.class}: #{e.message}\n#{e.backtrace&.first(10)&.join("\n")}")
         render json: { error: "Internal Server Error" }, status: :internal_server_error
       end
     end

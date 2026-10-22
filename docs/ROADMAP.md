@@ -15,6 +15,15 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [x] Image tooling (v1.2.1 to v1.2.3): `images:missing` / `images:download` with Fandom URL derivation, `Normal-Attack` skill icon labels, per-icon URL override for Hiyuki's Inherent Skill 1.
 - [x] Image assets for the new content (portraits, weapon and material icons, forte skill icons).
 
+## Done (v1.3.0)
+
+- [x] Guest plan uniqueness is scoped by `guest_token` (one guest no longer blocks every other guest from planning the same subject).
+- [x] API 500s log the exception class and a backtrace excerpt; `Api::V1::InventoryController` uses `@current_user`.
+- [x] `LlmClient` fallback message is a single constant with `fallback?`, covered by tests.
+- [x] Optimizer computation extracted into `OptimizerService`; farming advice cached for one day per prompt digest.
+- [x] Tailwind removed; stylesheets split into `base/` tokens/global/reset plus per-component files, dead selectors removed, fonts loaded via `<link>`.
+- [x] `libvips` removed from the Dockerfile; agent guidance (`AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`) rewritten with workflow, boundaries and a definition of done.
+
 ## 1. Game data: remaining
 
 - [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
@@ -41,5 +50,8 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - Solid Queue/Cable are installed but there are no jobs; confirm whether they should stay.
 - Orphaned guest plans (`guest_token` cookie) are never cleaned up.
 - `SKILL_LABEL_OVERRIDES` is duplicated in `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; consider a single source (e.g. a YAML file read by both).
-- The `Dockerfile` still installs `libvips`, which nothing uses now that `image_processing` is gone; trim it in a separate change.
+- **Stale plans:** `plans.plan_data.output` is computed once at save time. Changing cost tables, mappings or region lists (`LAHAI_ROI_*`) does not update existing plans. The `input` is stored, so a recompute task (for example `plans:recompute`) or recompute-on-read is feasible. Needs a decision first.
+- `PlanForm` generates about 30 attributes per skill/node and maps them back into three hand-built hashes; a nested `skills` params shape would remove most of it but changes the form and views.
+- The advisor LLM call is still synchronous inside the request (20s timeout). Caching removes repeat calls; moving the first call to a background job or streaming would remove the blocked worker.
+- `InventoryItemsController#update` only handles Turbo Stream on validation failure; a plain HTML failure has no response branch.
 - Verify the Farming Advisor on production after the `ruby_llm` 2.0 deploy (tests stub the LLM client).

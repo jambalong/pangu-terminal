@@ -293,18 +293,6 @@
   color: var(--ctp-overlay0);
 }
 
-.manual-screenshot-placeholder {
-  background: var(--ctp-mantle);
-  border: 1px dashed var(--ctp-surface1);
-  border-radius: 6px;
-  padding: 48px 24px;
-  text-align: center;
-  margin: 28px 0;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ctp-overlay0);
-}
-
 /* ── Callout ── */
 .manual-callout {
   background: rgba(203, 166, 247, 0.06);
@@ -338,7 +326,6 @@ code {
   border: 1px solid var(--ctp-surface1);
   padding: 1px 6px;
   border-radius: 3px;
-  color: var(--ctp-teal);
 }
 
 pre {
@@ -526,10 +513,6 @@ pre code {
 
   .manual-main {
     padding: 32px;
-  }
-
-  .manual-screenshot-placeholder {
-    display: none;
   }
 
   .manual-screenshot {

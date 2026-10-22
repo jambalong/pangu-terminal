@@ -1,4 +1,5 @@
 class FarmingAdvisorService < ApplicationService
+  CACHE_TTL = 1.day
   def initialize(results:, farming_priority:, chain_coverage:)
     @results = results
     @farming_priority = farming_priority
@@ -8,7 +9,12 @@ class FarmingAdvisorService < ApplicationService
   def call
     return nil if @results.blank?
 
-    LlmClient.ask(prompt)
+    text = prompt
+    key = "farming_advice/#{Digest::SHA256.hexdigest(text)}"
+
+    Rails.cache.read(key) || LlmClient.ask(text).tap do |response|
+      Rails.cache.write(key, response, expires_in: CACHE_TTL) unless LlmClient.fallback?(response)
+    end
   end
 
   private

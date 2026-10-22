@@ -14,19 +14,6 @@
   color: var(--ctp-mauve);
 }
 
-.dashboard-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  padding: 20px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
 .view-all-btn {
   font-size: 0.85rem;
   font-weight: 600;
@@ -45,9 +32,6 @@
 }
 
 @media (min-width: 1024px) {
-  .stats-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
   .dashboard-content-layout {
     display: grid;
     grid-template-columns: 7fr 3fr;

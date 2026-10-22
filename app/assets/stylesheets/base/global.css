@@ -1,0 +1,45 @@
+/* Element defaults and shared helpers. Component styles belong in their own file. */
+body {
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--ctp-crust);
+  color: var(--ctp-text);
+}
+
+html, body {
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+input, button, select, textarea {
+  font-family: inherit;
+}
+
+code {
+  color: var(--ctp-blue);
+}
+
+.hidden {
+  display: none !important;
+}
+
+main.no-scroll {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#main_content {
+  padding-bottom: 1rem;
+}

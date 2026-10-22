@@ -329,3 +329,15 @@
     margin-top: 2.25rem;
   }
 }
+
+.forte-slider-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.forte-slider {
+  width: 100%;
+}

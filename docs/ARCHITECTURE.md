@@ -8,7 +8,7 @@ Pangu Terminal is a conventional Rails 8.1 monolith (Hotwire front end, PostgreS
 
 **Inventory and reconciliation.** `InventoryItemsController` edits per-user quantities (Turbo Stream response). `SynthesisService.new(owned, required).reconcile` compares `owned` against a plan's (or all plans') `output` and reports needed / satisfied / deficit / craftable.
 
-**Optimizer.** `OptimizersController#compute_optimizer_results`: reconcile -> keep materials with a deficit -> `DropRateService` per material for the user's `sol3_phase` -> `FarmingPriorityService` ranks source types. The advisor panel is a separate Turbo Frame request (`/app/optimizer/advise`) that calls `FarmingAdvisorService` -> `LlmClient` -> RubyLLM (Gemini).
+**Optimizer.** `OptimizerService` (called from `OptimizersController#index` and `#advise`): reconcile -> keep materials with a deficit -> `DropRateService` per material for the user's `sol3_phase` -> per-source run totals; `FarmingPriorityService` then ranks source types. The advisor panel is a separate Turbo Frame request (`/app/optimizer/advise`) that calls `FarmingAdvisorService` -> `LlmClient` -> RubyLLM (Gemini). Advice is cached in `Rails.cache` for one day, keyed by a SHA-256 digest of the prompt, so identical optimizer state does not call the model again. `LlmClient::FALLBACK_MESSAGE` responses are never cached.
 
 **API.** `/api/v1/*` inherits `Api::V1::BaseController` (`ActionController::API`), authenticates via bearer token, and reuses the same services. See [API.md](API.md).
 
@@ -25,7 +25,19 @@ Solid Cache, Solid Queue and Solid Cable are installed (`config/cache.yml`, `que
 
 ## Frontend
 
-Importmap + Stimulus (`app/javascript/controllers/`), Tailwind via `tailwindcss-rails` (`app/assets/tailwind/application.css`) plus hand-written per-feature CSS in `app/assets/stylesheets/`, served by Propshaft. Static art lives in `public/images/{materials,resonators,weapons,forte,textures}`. `allow_browser versions: :modern` is on in `ApplicationController`.
+Importmap + Stimulus (`app/javascript/controllers/`), hand-written plain CSS in `app/assets/stylesheets/` (no CSS framework and no build step), served by Propshaft. Tailwind was removed in v1.3.0; see [Stylesheets](#stylesheets). Static art lives in `public/images/{materials,resonators,weapons,forte,textures}`. `allow_browser versions: :modern` is on in `ApplicationController`.
+
+### Stylesheets
+
+`stylesheet_link_tag :app` serves every file under `app/assets/stylesheets/`, one `<link>` per file in path order, with no build step.
+
+- `base/reset.css`: browser reset (adapted from Tailwind's preflight, MIT) inside `@layer base`. Layered rules always lose to unlayered ones, so any normal rule in this app overrides the reset regardless of specificity or load order.
+- `base/tokens.css`: design tokens (`:root` custom properties: fonts and the Catppuccin palette). Use `var(--ctp-*)` instead of literal colors.
+- `base/global.css`: element defaults (`body`, inputs, `code`) and shared helpers (`.hidden`, `.container`, `main.no-scroll`).
+- `<feature>/<component>.css`: one file per component or page (`plans/`, `inventory_items/`, `optimizers/`, `devise/`, `layouts/` incl. `flash.css` and `form_errors.css`, `pages/`, `dashboards/`).
+- Web fonts are loaded by `<link>` tags in `app/views/layouts/_fonts.html.erb` (rendered by both layouts), not by CSS `@import`, so the browser can fetch them in parallel.
+
+Because all sheets are global and unscoped, prefix class names with their component (`plan-card-*`, `optimizer-*`) and avoid bare element selectors outside `base/`. There is no utility-class framework: add a named class next to the component CSS instead. A rule that is only referenced from CSS is dead; classes built in Ruby (for example `rarity-bg-<n>` in `InventoryItemsHelper`) are not, so search the helpers before deleting.
 
 ## Design decisions
 
@@ -38,9 +50,10 @@ Complex calculations live in services, not controllers or models:
 - **WeaponAscensionPlanner:** Weapon upgrade cost calculation
 - **SynthesisService:** Inventory reconciliation, synthesis detection, and full chain coverage calculation
 - **DropRateService:** Waveplate cost and run estimation per farming source
+- **OptimizerService:** Reconciles a plan against inventory and estimates farming runs and Waveplates per deficit material
 - **FarmingPriorityService:** Ranks farming source types by material breadth and waveplate efficiency
 - **FarmingAdvisorService:** Injects optimizer context into a structured prompt and returns a plain-English farming recommendation
-- **LlmClient:** Thin wrapper around RubyLLM with graceful fallback on rate limit errors
+- **LlmClient:** Thin wrapper around RubyLLM with a timeout and graceful fallback (`FALLBACK_MESSAGE`, `fallback?`) on any error
 
 This keeps controllers thin and logic testable.
 
@@ -84,6 +97,8 @@ end
 ```
 
 It lowers friction for guest users with a future migration path to registered accounts.
+
+One plan per subject is enforced by a validation scoped to `user_id` for signed-in users and to `guest_token` for guests. Scoping guests by `user_id` alone would not work: every guest has a nil `user_id`, so one guest's plan would block all other guests from planning the same subject. The unique database index only covers `user_id` rows (Postgres treats NULLs as distinct), so guest uniqueness relies on the validation.
 
 ## Turbo Streams for Real-Time Updates
 Inventory edits trigger Turbo Stream responses that update the edited item plus all related items in the synthesis family, reflecting the recalculated craftable counts instantly:
