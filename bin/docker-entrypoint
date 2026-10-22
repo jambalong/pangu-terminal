@@ -3,7 +3,7 @@
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   bundle exec ./bin/rails db:prepare
-  bundle exec ./bin/rails db:seed
+  bundle exec ./bin/rails db:seed:if_changed
 fi
 
 exec bundle exec "${@}"

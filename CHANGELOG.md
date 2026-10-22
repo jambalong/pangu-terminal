@@ -9,6 +9,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Plan create/update validation errors over a plain HTML request (no Turbo) returned 406; they now redirect back to the planner with the errors.
 
 ### Changed
+- Production boot seeds only when needed: `bin/docker-entrypoint` runs `db:seed:if_changed`, which skips `db:seed` when `db/seeds.rb`, `db/seeds/*.rb` and `config/skill_label_overrides.yml` are unchanged since the last successful run (`SeedGuard`, checksum in `ar_internal_metadata`, recorded only after a confirmed success; `FORCE_SEED=1` forces). A failed seed still does not block the boot and is retried next boot.
 - `PlanForm` builds its skill and forte-node hashes and the controller's permitted params from one `SKILLS` list (about 40 fewer lines, same flat form field names, no view changes). Pinned by characterization tests.
 - Dependencies: `thruster` 0.1.27 and `ruby_llm` 2.1.1 (brings `json` 3.1, `faraday` 2.15, `rubocop` 1.92, `uri` 1.1.2). Verified on Ruby 3.4.7 and against the live Farming Advisor.
 

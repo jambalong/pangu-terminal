@@ -1,5 +1,7 @@
 # This block ensures that if ANY file fails, the whole database
 # rolls back to a clean state, preventing "half-seeded" data.
+$SEED_COMPLETED = false
+
 ActiveRecord::Base.transaction do
   puts "🌱 Seeding Database..."
 
@@ -15,6 +17,7 @@ ActiveRecord::Base.transaction do
     load file
   end
 
+  $SEED_COMPLETED = true # read by SeedGuard; the rollback below is swallowed, so exit status cannot tell
   puts "✅ SEEDING COMPLETED!"
 rescue StandardError => e
   puts "❌ SEEDING FAILED!"
