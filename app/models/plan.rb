@@ -11,8 +11,12 @@ class Plan < ApplicationRecord
 
   validates :subject_type, presence: true, inclusion: { in: VALID_SUBJECT_TYPES }
   validates :subject_id, presence: true
+  # Guests have a nil user_id, so scoping on it alone would make every guest
+  # collide with every other guest. Scope guests by their token instead.
   validates :subject_id, uniqueness: { scope: [ :user_id, :subject_type ], message: "already has a plan" },
-    if: -> { VALID_SUBJECT_TYPES.include?(subject_type) }
+    if: -> { user_id.present? && VALID_SUBJECT_TYPES.include?(subject_type) }
+  validates :subject_id, uniqueness: { scope: [ :guest_token, :subject_type ], message: "already has a plan" },
+    if: -> { user_id.blank? && VALID_SUBJECT_TYPES.include?(subject_type) }
   validates :plan_data, presence: true
   validate :subject_must_exist, if: -> { VALID_SUBJECT_TYPES.include?(subject_type) && subject_id.present? }
   validate :must_have_owner

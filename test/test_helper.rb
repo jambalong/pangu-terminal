@@ -17,6 +17,8 @@ require "rails/test_help"
 
 # Prevent real LLM API calls in tests
 LlmClient.instance_eval do
+  singleton_class.alias_method :real_ask, :ask # kept so LlmClient's own tests can exercise the real code
+
   def ask(prompt)
     "Stub farming advice."
   end

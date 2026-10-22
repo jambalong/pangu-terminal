@@ -19,6 +19,24 @@ class Api::V1::InventoryControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "returns 500 JSON and logs class and backtrace on unexpected errors" do
+    logged = StringIO.new
+    original_logger = Rails.logger
+    original_all = Material.method(:all)
+    Rails.logger = ActiveSupport::Logger.new(logged)
+    Material.define_singleton_method(:all) { raise ArgumentError, "kaboom" }
+
+    get api_v1_inventory_index_path, headers: auth_headers
+
+    assert_response :internal_server_error
+    assert_equal "Internal Server Error", response.parsed_body["error"]
+    assert_includes logged.string, "ArgumentError: kaboom"
+    assert_includes logged.string, "inventory_controller.rb"
+  ensure
+    Material.define_singleton_method(:all, original_all)
+    Rails.logger = original_logger
+  end
+
   test "returns 401 with no token" do
     get api_v1_inventory_index_path, headers: {}
     assert_response :unauthorized
