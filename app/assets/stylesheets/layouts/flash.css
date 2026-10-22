@@ -1,0 +1,48 @@
+/* Flash messages (app/views/layouts/_flash.html.erb) */
+#flash-container {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1rem;
+  pointer-events: none;
+}
+
+.flash-message {
+  pointer-events: auto;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  border: 1px solid transparent;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  animation: slide-in 0.3s ease-out;
+}
+
+/* Alert/Error */
+.flash-message.alert {
+  background-color: rgba(243, 139, 168, 0.95);
+  color: var(--ctp-crust);
+  border-color: var(--ctp-red);
+}
+
+/* Notice/Success */
+.flash-message.notice {
+  background-color: rgba(166, 227, 161, 0.95);
+  color: var(--ctp-crust);
+  border-color: var(--ctp-green);
+}
+
+.flash-prefix {
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+@keyframes slide-in {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

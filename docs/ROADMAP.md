@@ -15,11 +15,35 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [x] Image tooling (v1.2.1 to v1.2.3): `images:missing` / `images:download` with Fandom URL derivation, `Normal-Attack` skill icon labels, per-icon URL override for Hiyuki's Inherent Skill 1.
 - [x] Image assets for the new content (portraits, weapon and material icons, forte skill icons).
 
+## Done (v1.3.0)
+
+- [x] Guest plan uniqueness is scoped by `guest_token` (one guest no longer blocks every other guest from planning the same subject).
+- [x] API 500s log the exception class and a backtrace excerpt; `Api::V1::InventoryController` uses `@current_user`.
+- [x] `LlmClient` fallback message is a single constant with `fallback?`, covered by tests.
+- [x] Optimizer computation extracted into `OptimizerService`; farming advice cached for one day per prompt digest.
+- [x] Tailwind removed; stylesheets split into `base/` tokens/global/reset plus per-component files, dead selectors removed, fonts loaded via `<link>`.
+- [x] `libvips` removed from the Dockerfile; agent guidance (`AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`) rewritten with workflow, boundaries and a definition of done.
+
+## Done (v1.4.0)
+
+- [x] Stale plans: game data does not change, so plans only need recomputing after a calculation bug fix. `PlanRecomputer` / `bin/rails plans:recompute` (dry run by default, `APPLY=1` to write) rebuilds `output` from the stored `input`.
+
+## Done (v1.4.1)
+
+- [x] Production verified on 2026-10-22: site up on the new build; the Farming Advisor returns real advice and the advice cache works (a repeat request was served from cache). One earlier call fell back, with no trace in the logs, which is why `LlmClient` now logs every failure class (`bin/rails advisor:check` makes one minimal call to diagnose).
+- [x] Optimizer no longer returns a 500 when the user has no SOL3 phase set (it shows the phase gate).
+- [x] One `DropRate::SOL3_PHASES` range used by drop rate validation, a new `User#sol3_phase` validation (previously any integer could be saved), the dashboard dropdown and the API.
+- [x] `SKILL_LABEL_OVERRIDES` has a single source: `config/skill_label_overrides.yml`.
+- [x] Plain HTML validation failure on inventory edit redirects back with an alert (was a 406).
+- [x] `config.hosts` and the mailer host come from `APP_HOST` / `EXTRA_HOSTS` with the same defaults.
+- [x] `bin/dev` runs `bin/rails server` directly; `Procfile.dev` and foreman are gone.
+- [x] Orphaned guest plans: `bin/rails plans:prune_guests` (dry run by default, `DAYS=90`, `APPLY=1`). Manual on purpose: nothing deletes user data automatically.
+
 ## 1. Game data: remaining
 
-- [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
+- [ ] **Deferred by the owner until they have the data (do not add new Resonators, weapons or materials before then):** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
 - [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
-- [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase cap (hard-coded `1..8` in `DropRate`, the dashboard dropdown and `Api::V1::ProfileController`) against 3.7.
+- [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase range (`DropRate::SOL3_PHASES`) against 3.7. Needs the owner's data.
 - [ ] Optional feature: the drop-rate spreadsheet also covers **Tacet Fields** (echo drops and Echo EXP), which the app does not model.
 
 ## 2. Remaining dependency / platform work
@@ -33,13 +57,13 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [ ] Remaining **TODO(owner)** in [DEPLOYMENT.md](DEPLOYMENT.md): Environment-tab variable names and the Neon endpoint type (Render service settings are now recorded).
 - [ ] Keep `docs/API.md` examples in sync with `app/serializers/` when response shapes change (the forte-node booleans in the serializer output are intentional; plans store `0/1` integers).
 
-## 4. Code observations (not yet verified as bugs)
+## 4. Code observations and decisions
 
-- `Api::V1::InventoryController#index` uses `current_user` while the rest of the API uses `@current_user` (works via Devise's memoization; consider switching for consistency).
-- `config.hosts` and the mailer host are hard-coded in `config/environments/production.rb`; consider env-driven values.
-- Production runs `db:seed` on every boot; seeds are idempotent but add boot time and never delete. Consider a one-off step if boot time matters on the free tier.
-- Solid Queue/Cable are installed but there are no jobs; confirm whether they should stay.
-- Orphaned guest plans (`guest_token` cookie) are never cleaned up.
-- `SKILL_LABEL_OVERRIDES` is duplicated in `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; consider a single source (e.g. a YAML file read by both).
-- The `Dockerfile` still installs `libvips`, which nothing uses now that `image_processing` is gone; trim it in a separate change.
-- Verify the Farming Advisor on production after the `ruby_llm` 2.0 deploy (tests stub the LLM client).
+Decided to leave as is (revisit only if the stated trigger happens):
+
+- Production runs `db:seed` on every boot. Seeds are idempotent and never delete. Revisit if boot time matters on the free tier (then make it a one-off release step).
+- Solid Queue and Solid Cable are installed but unused; Solid Cache is in use (advice cache, Rack::Attack). Kept because removing them means changing the multi-database production config for no gain. Revisit if a job is ever needed or the extra tables bother you.
+- The advisor LLM call is synchronous inside the request (20s timeout). The lazy Turbo Frame keeps the page responsive and the one-day cache removes repeats, so a background job is not worth it yet.
+- `PlanForm` generates about 30 attributes per skill/node and maps them back into three hand-built hashes. A nested `skills` params shape would remove most of it but changes the form contract, views and the system test; not a small change.
+- Region/forgery-set membership (`LAHAI_ROI_*`) lives in code. Moving it to columns needs a schema change plus seed changes; do it together with the next batch of game data.
+- Ruby (3.4.7) and PostgreSQL (17) bumps: change together when there is a reason (security release or a gem requiring it).

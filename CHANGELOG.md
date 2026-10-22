@@ -3,6 +3,64 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.4.1] - 2026-10-22
+
+### Fixed
+- Optimizer returned a 500 for a user with no SOL3 phase set when `run=1` was requested; it now shows the phase gate (and the advisor returns no content).
+- `User#sol3_phase` accepted any integer; it is now validated against `DropRate::SOL3_PHASES`.
+- A plain HTML validation failure when editing an inventory quantity returned 406; it now redirects back with the error.
+- `LlmClient` logs timeouts and rate limits too (previously only unexpected errors), so a transient advisor fallback leaves a trace.
+
+### Added
+- `bin/rails advisor:check` (one minimal LLM call, exits non-zero on fallback) and `bin/rails plans:prune_guests` (dry run by default; `DAYS`, `APPLY=1`) backed by `GuestPlanPruner`.
+- `APP_HOST` and `EXTRA_HOSTS` environment variables for allowed hosts and mailer links (defaults unchanged).
+
+### Changed
+- Docs: `AGENTS.md` and `docs/GAME_DATA.md` no longer describe the duplicated `SKILL_LABEL_OVERRIDES` or the three hard-coded phase ranges.
+- `DropRate::SOL3_PHASES` replaces the phase range hard-coded in three places.
+- `SKILL_LABEL_OVERRIDES` lives in `config/skill_label_overrides.yml`, read by the seeds and `forte:download_skill_icons`.
+- `bin/dev` runs `bin/rails server`; `Procfile.dev` removed.
+- `docs/ROADMAP.md` records what was verified in production, what was done and what is deliberately left.
+
+---
+
+## [1.4.0] - 2026-10-22
+
+### Added
+- `bin/rails plans:recompute`: rebuilds stored plan totals from their stored input after a calculation bug fix. Dry run by default (prints a per-material old -> new diff and any plan whose input no longer validates); `APPLY=1` writes; `PLAN_ID` / `USER_ID` narrow the scope. Backed by `PlanRecomputer` (tested for resonator, weapon and guest plans).
+
+### Changed
+- `PlanForm#plan_data` is now the single place plan data is built; `#save` uses it.
+- Docs: `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEPLOYMENT.md` and `docs/ROADMAP.md` describe the recompute workflow. Suoming and other new content stay deferred until the owner has the data.
+
+---
+
+## [1.3.0] - 2026-10-22
+
+### Fixed
+- Guests can each plan the same Resonator or weapon. The one-plan-per-subject validation was scoped by `user_id`, which is nil for every guest, so one guest's plan blocked all others. Guests are now scoped by `guest_token`.
+- API 500 responses now log the exception class and a backtrace excerpt instead of only the message.
+- `Api::V1::InventoryController` uses `@current_user` like the other API controllers.
+
+### Changed
+- Optimizer computation moved from `OptimizersController` into `OptimizerService`.
+- Farming Advisor responses are cached for one day per prompt digest; the unavailable-advisor fallback is never cached.
+- `LlmClient` exposes `FALLBACK_MESSAGE` and `fallback?`.
+- `Dockerfile` no longer installs the unused `libvips`.
+- Agent guidance rewritten: `AGENTS.md` (workflow, definition of done, boundaries, sandbox recipe), `CLAUDE.md`, `.claude/settings.json` guardrails; `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/DEVELOPMENT.md` and `docs/ROADMAP.md` updated.
+
+### Removed
+- Tailwind CSS (`tailwindcss-rails`), its `app/assets/tailwind/` input and the `tailwindcss:watch` dev process. Only a handful of utilities were in use; they became small named classes next to the component styles (`.forte-slider-group`, `.header-icon`, `.config-rarity`, `.range-arrow`) or were dropped where already overridden by component CSS (`pt-4`, `transition-all`, `transition-colors`). The browser reset now lives in `app/assets/stylesheets/base/reset.css`. Computed styles on 18 pages were compared before and after with no differences.
+
+- Stylesheets tidied: `application.css` split into `base/tokens.css`, `base/global.css`, `layouts/flash.css` and `layouts/form_errors.css`; 11 selectors that nothing referenced removed; the global `code` color in `user_manual.css` (which a later Tailwind rule always overrode) dropped so the shared blue applies everywhere; two hard-coded token colors replaced with `var(--ctp-*)`.
+- README: version, project structure (`OptimizerService`, `assets/stylesheets` layout) and advisor caching brought in line with 1.3.0.
+- Web fonts load through `<link rel="preconnect">` + `<link rel="stylesheet">` in `layouts/_fonts.html.erb` instead of a CSS `@import`.
+
+### Added
+- Tests for `LlmClient`, `OptimizerService` (with a query-count guard), advisor caching, guest plan uniqueness and the API 500 path.
+
+---
+
 ## [1.2.6] - 2026-10-05
 
 ### Changed

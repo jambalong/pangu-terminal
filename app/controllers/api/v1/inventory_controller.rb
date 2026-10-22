@@ -3,7 +3,7 @@ module Api
   module V1
     class InventoryController < BaseController
       def index
-        inventory_map = current_user.inventory_items.index_by(&:material_id)
+        inventory_map = @current_user.inventory_items.index_by(&:material_id)
 
         result = Material.all.each_with_object({}) do |material, hash|
           hash[material.snake_case_name] = inventory_map[material.id]&.quantity || 0

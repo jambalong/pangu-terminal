@@ -19,6 +19,8 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 | `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` (includes `gemini_api_key` for the Farming Advisor) |
 | `DATABASE_URL` | Neon connection string. Used for the primary, cache, queue and cable databases (`config/database.yml`), so one Neon database holds all tables. **TODO(owner)**: note whether the pooled or direct Neon endpoint is used. |
 | `POSTMARK_API_TOKEN` | Postmark SMTP (port 2525) for password-reset emails |
+| `APP_HOST` | Optional. Public hostname for allowed hosts and mailer links; default `panguterminal.ambalong.dev`. Set it if the custom domain changes. |
+| `EXTRA_HOSTS` | Optional. Comma-separated extra allowed hosts (the default `pangu-terminal.onrender.com` is always allowed). |
 | `RAILS_LOG_LEVEL` | Optional, default `info`; logs go to STDOUT |
 | `RAILS_MAX_THREADS`, `PORT`, `WEB_CONCURRENCY` | Optional Puma tuning; **TODO(owner)**: record the values set on Render |
 
@@ -39,6 +41,9 @@ Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`
 
 - **Logs:** Render dashboard (STDOUT, tagged with request id).
 - **Rollback:** Render dashboard -> service -> Deploys -> pick a previous successful deploy -> Rollback (or push a revert to `main`; Auto-Deploy will redeploy). Disable Auto-Deploy first if you need to hold a bad commit off. Rollback does not reverse migrations; if the bad release included a destructive migration, run `bin/rails db:rollback` (**TODO(owner)**: confirm shell access on your Render plan) or restore Neon from a point-in-time branch.
+- **Recompute stored plans after a calculation bug fix:** plans snapshot their material totals in `plans.plan_data` when saved, so a fixed planner does not change existing plans by itself. In the Render shell run `bin/rails plans:recompute` (dry run, lists each changed plan with old -> new quantities and any plan whose stored input no longer validates), review it, then `APPLY=1 bin/rails plans:recompute`. `PLAN_ID=<id>` or `USER_ID=<id>` limit the scope. Only the `output` of plans whose totals differ is rewritten.
+- **Check the Farming Advisor:** Render shell, `bin/rails advisor:check` makes one minimal LLM call. `OK` means the key, model and network work; `FAILED` means it fell back, and the `LlmClient unavailable` / `LlmClient error` line in the logs names the cause (timeout, rate limit, bad key, unknown model).
+- **Prune abandoned guest plans:** Render shell, `bin/rails plans:prune_guests` (dry run; guest plans untouched for `DAYS`, default 90), then `APPLY=1 bin/rails plans:prune_guests`. Never touches plans owned by a user.
 - **Reseed manually:** Render shell, `bin/rails db:seed`. Seeds never delete rows; removing a record from production requires a console/migration.
 - **Console:** Render shell, `bin/rails console`.
 - **Secrets rotation:** `RAILS_MASTER_KEY` changes require re-encrypting credentials locally (`bin/rails credentials:edit`), committing `config/credentials.yml.enc`, and updating the env var.

@@ -105,9 +105,6 @@
 }
 
 /* --- Run Button --- */
-.optimizer-run-form {
-  display: flex;
-}
 
 .optimizer-run-button {
   width: 100%;
@@ -305,14 +302,6 @@
 
 .optimizer-material-header:hover {
   background: var(--ctp-surface0);
-}
-
-.optimizer-material-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-  min-width: 0;
 }
 
 .optimizer-material-icon {
@@ -553,7 +542,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #cba6f7;
+  background: var(--ctp-mauve);
   animation: advisor-pulse 1.2s ease-in-out infinite;
 }
 

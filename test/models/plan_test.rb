@@ -46,6 +46,27 @@ class PlanTest < ActiveSupport::TestCase
     assert @plan.errors[:base].any?
   end
 
+  test "different guests can each plan the same subject" do
+    @plan.save!
+    other = Plan.new(
+      guest_token: "other-guest",
+      subject: @resonator,
+      plan_data: { "input" => {}, "output" => {} }
+    )
+    assert other.valid?, other.errors.full_messages.to_sentence
+  end
+
+  test "invalid when same guest already has a plan for the same subject" do
+    @plan.save!
+    duplicate = Plan.new(
+      guest_token: "abc123",
+      subject: @resonator,
+      plan_data: { "input" => {}, "output" => {} }
+    )
+    assert duplicate.invalid?
+    assert_includes duplicate.errors[:subject_id], "already has a plan"
+  end
+
   test "invalid when same user already has a plan for the same subject" do
     Plan.create!(
       user: @user,

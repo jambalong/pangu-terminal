@@ -26,27 +26,7 @@ namespace :forte do
     "inherent_skill_2"     => "Inherent-Skill-2"
   }.freeze
 
-  SKILL_LABEL_OVERRIDES_RAKE = {
-    "luuk-herssen"      => { "basic_attack" => "Normal-Attack" },
-    "cartethyia"        => { "basic_attack" => "Normal-Attack" },
-    "ciaccona"          => { "basic_attack" => "Normal-Attack" },
-    "lupa"              => { "basic_attack" => "Normal-Attack" },
-    "zani"              => { "basic_attack" => "Normal-Attack" },
-    "youhu"             => { "basic_attack" => "Normal-Attack" },
-    "denia"             => { "basic_attack" => "Normal-Attack" },
-    "hiyuki"            => { "basic_attack" => "Normal-Attack" },
-    "hsin"              => { "basic_attack" => "Normal-Attack" },
-    "jingran"           => { "basic_attack" => "Normal-Attack" },
-    "lucilla"           => { "basic_attack" => "Normal-Attack" },
-    "lucy"              => { "basic_attack" => "Normal-Attack" },
-    "qingxiao"          => { "basic_attack" => "Normal-Attack" },
-    "rebecca"           => { "basic_attack" => "Normal-Attack" },
-    "rover-electro"     => { "basic_attack" => "Normal-Attack" },
-    "sigrika"           => { "basic_attack" => "Normal-Attack" },
-    "suisui"            => { "basic_attack" => "Normal-Attack" },
-    "yangyang-xuanling" => { "basic_attack" => "Normal-Attack" },
-    "shorekeeper"       => { "resonance_skill" => "Resonance-Skill-" }
-  }.freeze
+  SKILL_LABEL_OVERRIDES_RAKE = YAML.load_file(Rails.root.join("config/skill_label_overrides.yml")).freeze
 
   # Icons missing from wutheringlab, fetched from another source instead.
   # Key: "<slug>/<skill_key>". The icon is still saved as <label>.webp (64x64).

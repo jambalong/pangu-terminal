@@ -39,6 +39,9 @@ class InventoryItemsController < ApplicationController
             template: "inventory_items/edit"
           )
         }
+        format.html do
+          redirect_to inventory_items_path, alert: @inventory_item.errors.full_messages.to_sentence
+        end
       end
     end
   end
@@ -49,7 +52,7 @@ class InventoryItemsController < ApplicationController
     @all_inventory_items = current_user.inventory_items.includes(:material)
     @inventory_items = @all_inventory_items
     @plans = load_current_plans
-      @material_lookup = Material.index_by_ids(@all_inventory_items.pluck(:material_id))
+    @material_lookup = Material.index_by_ids(@all_inventory_items.pluck(:material_id))
   end
 
   def apply_filters
@@ -85,11 +88,6 @@ class InventoryItemsController < ApplicationController
     end
 
     @synthesis_result = SynthesisService.new(inventory_hash, requirements_hash).reconcile
-  end
-
-  def exp_potion?(material)
-    return false unless material
-    material.material_type.in?(%w[resonator_exp weapon_exp])
   end
 
   def set_inventory_item
