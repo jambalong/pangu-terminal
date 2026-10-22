@@ -70,7 +70,7 @@ bin/rails test:system # system tests
 ## What This Project Showcases
 
 ### Full-Stack Rails Architecture
-- Service objects extracting complex business logic (planners, synthesis, drop rate, farming priority, LLM advisor)
+- Service objects extracting complex business logic (planners, synthesis, drop rate, optimizer, farming priority, LLM advisor)
 - Polymorphic associations so character and weapon plans share identical CRUD operations
 - JSONB caching for plan output: computed once, stored as a hash, read without joins
 - Guest authentication via secure UUID tokens stored in cookies (no Devise required for trials)
@@ -84,7 +84,8 @@ bin/rails test:system # system tests
 ### LLM Integration
 - Context-aware farming advisor injecting live player data into a structured prompt
 - Async Turbo Frame so the page renders immediately while the LLM call resolves in the background
-- Graceful fallback when the API is unavailable
+- Graceful fallback when the API is unavailable (never cached as real advice)
+- Advice cached for a day per prompt digest, so identical optimizer state does not call the model again
 - Thin `LlmClient` wrapper keeping the service layer decoupled from the RubyLLM interface
 
 ### Production-Ready Deployment
@@ -263,7 +264,7 @@ Endpoints: `GET/POST /plans`, `GET /plans/:id/reconciliation`, `GET /plans/:id/w
 
 Key decisions, each documented with code in **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**:
 
-- **Service objects** for business logic (planners, synthesis, drop rates, farming priority, LLM advisor)
+- **Service objects** for business logic (planners, synthesis, drop rates, optimizer, farming priority, LLM advisor)
 - **JSONB plan caching** and **polymorphic plans** (Resonator | Weapon)
 - **Guest user system** with a migration path to registered accounts
 - **Turbo Streams** for live inventory/synthesis updates
@@ -302,7 +303,7 @@ app/
 ├── controllers/
 │   ├── api/
 │   │   └── v1/
-│   │       ├── base_controller.rb        # Auth + error handling
+│   │       ├── base_controller.rb        # Token auth + JSON error handling
 │   │       ├── inventory_controller.rb   # Inventory API endpoint
 │   │       ├── materials_controller.rb   # Materials API endpoint
 │   │       ├── plans_controller.rb       # Plans API endpoint
@@ -319,6 +320,7 @@ app/
 │   ├── weapon_ascension_planner.rb      # Weapon cost calculation
 │   ├── synthesis_service.rb             # Inventory reconciliation
 │   ├── drop_rate_service.rb             # Waveplate run estimation
+│   ├── optimizer_service.rb             # Plan vs inventory deficits and farming runs
 │   ├── farming_priority_service.rb      # Farming source ranking
 │   ├── farming_advisor_service.rb       # LLM farming recommendation
 │   ├── fandom_image_url.rb              # Image URL derivation (rake tooling)
@@ -329,7 +331,8 @@ app/
 │   ├── inventory_items/
 │   ├── optimizers/
 │   └── ...
-└── helpers/
+├── helpers/
+└── assets/stylesheets/  # Plain CSS, no framework: base/ (tokens, reset, global) + one file per component
 
 config/
 └── image_sources.yml    # Sources for bin/rails images:download
@@ -346,7 +349,7 @@ public/images/        # Resonator, weapon, material and forte art
 test/
 ├── controllers/    # Web + API controller integration tests
 ├── models/         # Includes the seed data integrity test
-├── services/       # Planner, synthesis, drop rate, farming priority, image URLs
+├── services/       # Planners, synthesis, drop rate, optimizer, farming priority, LLM client, image URLs
 ├── forms/
 ├── helpers/
 ├── integration/
@@ -368,4 +371,4 @@ The production version of this application is deployed via **Docker** to **Rende
 ---
 
 **Last Updated:** October 2026
-**Version:** 1.2.5
+**Version:** 1.3.0
