@@ -373,4 +373,4 @@ The production version of this application is deployed via **Docker** to **Rende
 ---
 
 **Last Updated:** October 2026
-**Version:** 1.4.1
+**Version:** 1.5.0

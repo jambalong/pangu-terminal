@@ -39,7 +39,7 @@ Maintenance backlog: bugs, platform, documentation and game-data upkeep. Last re
 - [x] `bin/dev` runs `bin/rails server` directly; `Procfile.dev` and foreman are gone.
 - [x] Orphaned guest plans: `bin/rails plans:prune_guests` (dry run by default, `DAYS=90`, `APPLY=1`). Manual on purpose: nothing deletes user data automatically.
 
-## Done (unreleased, heading for v1.5.0)
+## Done (v1.5.0)
 
 - [x] `PlanForm` DRY: one `SKILLS` list drives attributes, the mapping hashes and the controller's permitted params. The flat form field names are unchanged, so no view or JavaScript change was needed (a nested params shape is no longer worth it).
 - [x] Seeding on every boot: `db:seed:if_changed` (`SeedGuard`) skips the seed when its inputs are unchanged since the last successful run (about 4s saved per boot locally); failures are retried next boot, `FORCE_SEED=1` forces.
@@ -65,6 +65,8 @@ Maintenance backlog: bugs, platform, documentation and game-data upkeep. Last re
 - [ ] Keep `docs/API.md` examples in sync with `app/serializers/` when response shapes change (the forte-node booleans in the serializer output are intentional; plans store `0/1` integers).
 
 ## 4. Code observations and decisions
+
+- A single full-suite failure was seen once locally on the first run after a branch switch and migration (18 runs since, including from freshly created parallel-worker databases, and every CI run, were green). It could not be reproduced and its text was not captured. If it shows up again, keep the Minitest seed and the failure output before re-running.
 
 Decided to leave as is (revisit only if the stated trigger happens):
 

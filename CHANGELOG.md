@@ -3,7 +3,7 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## [Unreleased]
+## [1.5.0] - 2026-10-22
 
 ### Fixed
 - CI: the `system-test` job's database service was the untagged `postgres` image (latest, currently 18) while everything else is documented and tested on 17; it is now pinned to `postgres:17`.
@@ -11,6 +11,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Plan create/update validation errors over a plain HTML request (no Turbo) returned 406; they now redirect back to the planner with the errors.
 
 ### Added
+- `docs/PRODUCT_ROADMAP.md`: project identity, principles, non-goals and a proposed Now/Next/Later feature roadmap for the owner to edit. `docs/ROADMAP.md` is now the maintenance backlog, with its stale review date fixed.
 - `resonators.region` and `weapons.region` (`base` / `lahai_roi`, default `base`; migration `AddRegionToResonatorsAndWeapons`): which forgery material set a Resonator or weapon uses. The seeds set it from `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS` (moved out of the planners); the planners read the column. `ForgeryRegion` validates the value. Existing plans are unaffected (their totals are stored); the seed runs before the server starts, so no plan is calculated with the default.
 
 ### Changed
