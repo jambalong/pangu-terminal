@@ -321,6 +321,7 @@ app/
 │   ├── synthesis_service.rb             # Inventory reconciliation
 │   ├── drop_rate_service.rb             # Waveplate run estimation
 │   ├── optimizer_service.rb             # Plan vs inventory deficits and farming runs
+│   ├── plan_recomputer.rb               # Rebuilds stored plan totals after a bug fix
 │   ├── farming_priority_service.rb      # Farming source ranking
 │   ├── farming_advisor_service.rb       # LLM farming recommendation
 │   ├── fandom_image_url.rb              # Image URL derivation (rake tooling)
@@ -343,7 +344,7 @@ db/
 ├── seeds/            # Resonators, weapons, materials, cost tables, sources, drop rates
 └── schema.rb
 
-lib/tasks/            # forte_icons.rake, images.rake (icon and image downloads)
+lib/tasks/            # plans.rake (recompute), forte_icons.rake, images.rake (icon and image downloads)
 public/images/        # Resonator, weapon, material and forte art
 
 test/
@@ -371,4 +372,4 @@ The production version of this application is deployed via **Docker** to **Rende
 ---
 
 **Last Updated:** October 2026
-**Version:** 1.3.0
+**Version:** 1.4.0

@@ -70,6 +70,8 @@ Trade-off: a normalized plan_materials table would make individual materials que
 but since requirements are computed once and read as a whole, JSONB caching avoids
 unnecessary schema complexity.
 
+The snapshot is deliberately not recomputed on read: game data does not change, so a plan only goes stale when a calculation bug is fixed. `PlanRecomputer` (`bin/rails plans:recompute`, dry run by default) rebuilds `output` from the stored `input` for exactly that case.
+
 ## Polymorphic Associations
 Plans can belong to either a Resonator or Weapon via polymorphic association:
 ```ruby

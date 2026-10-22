@@ -3,6 +3,17 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.4.0] - 2026-10-22
+
+### Added
+- `bin/rails plans:recompute`: rebuilds stored plan totals from their stored input after a calculation bug fix. Dry run by default (prints a per-material old -> new diff and any plan whose input no longer validates); `APPLY=1` writes; `PLAN_ID` / `USER_ID` narrow the scope. Backed by `PlanRecomputer` (tested for resonator, weapon and guest plans).
+
+### Changed
+- `PlanForm#plan_data` is now the single place plan data is built; `#save` uses it.
+- Docs: `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEPLOYMENT.md` and `docs/ROADMAP.md` describe the recompute workflow. Suoming and other new content stay deferred until the owner has the data.
+
+---
+
 ## [1.3.0] - 2026-10-22
 
 ### Fixed

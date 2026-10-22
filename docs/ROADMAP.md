@@ -24,9 +24,13 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [x] Tailwind removed; stylesheets split into `base/` tokens/global/reset plus per-component files, dead selectors removed, fonts loaded via `<link>`.
 - [x] `libvips` removed from the Dockerfile; agent guidance (`AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`) rewritten with workflow, boundaries and a definition of done.
 
+## Done (v1.4.0)
+
+- [x] Stale plans: game data does not change, so plans only need recomputing after a calculation bug fix. `PlanRecomputer` / `bin/rails plans:recompute` (dry run by default, `APPLY=1` to write) rebuilds `output` from the stored `input`.
+
 ## 1. Game data: remaining
 
-- [ ] **Deferred until the 2026-10-22 release is confirmed:** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
+- [ ] **Deferred by the owner until they have the data (do not add new Resonators, weapons or materials before then):** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
 - [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
 - [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase cap (hard-coded `1..8` in `DropRate`, the dashboard dropdown and `Api::V1::ProfileController`) against 3.7.
 - [ ] Optional feature: the drop-rate spreadsheet also covers **Tacet Fields** (echo drops and Echo EXP), which the app does not model.
@@ -50,7 +54,6 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - Solid Queue/Cable are installed but there are no jobs; confirm whether they should stay.
 - Orphaned guest plans (`guest_token` cookie) are never cleaned up.
 - `SKILL_LABEL_OVERRIDES` is duplicated in `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; consider a single source (e.g. a YAML file read by both).
-- **Stale plans:** `plans.plan_data.output` is computed once at save time. Changing cost tables, mappings or region lists (`LAHAI_ROI_*`) does not update existing plans. The `input` is stored, so a recompute task (for example `plans:recompute`) or recompute-on-read is feasible. Needs a decision first.
 - `PlanForm` generates about 30 attributes per skill/node and maps them back into three hand-built hashes; a nested `skills` params shape would remove most of it but changes the form and views.
 - The advisor LLM call is still synchronous inside the request (20s timeout). Caching removes repeat calls; moving the first call to a background job or streaming would remove the blocked worker.
 - `InventoryItemsController#update` only handles Turbo Stream on validation failure; a plain HTML failure has no response branch.
