@@ -1,17 +1,18 @@
 require "test_helper"
 require "capybara/cuprite"
 
-Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(
-    app,
-    window_size: [ 1400, 1400 ],
-    browser_options: { "no-sandbox": nil },
-    headless: true
-  )
-end
-
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :cuprite
+  # Rails registers the Cuprite driver itself from these options (a separate
+  # Capybara.register_driver block would be overridden). The 30s process_timeout
+  # covers a cold CI runner starting Chrome (Ferrum's default is 10s);
+  # no-sandbox lets Chrome run as root in containers.
+  driven_by :cuprite,
+    screen_size: [ 1400, 1400 ],
+    options: {
+      headless: true,
+      process_timeout: 30,
+      browser_options: { "no-sandbox": nil }
+    }
 
   setup do
     original = $stdout

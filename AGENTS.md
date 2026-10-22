@@ -40,6 +40,8 @@ export RBENV_VERSION=3.3.6                     # only if 3.4.7 cannot be install
 RAILS_ENV=test bin/rails db:prepare && bin/rails test
 ```
 
+System tests also run in the sandbox: `BROWSER_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome bin/rails test:system` (use `ls /opt/pw-browsers` if the directory name differs).
+
 Treat results on a different Ruby/Postgres than CI as strong evidence, not proof; CI (3.4.7, Postgres 17) is the authority. Say which versions you verified on.
 
 ## Repository map
