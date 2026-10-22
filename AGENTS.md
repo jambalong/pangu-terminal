@@ -66,6 +66,7 @@ Treat results on a different Ruby/Postgres than CI as strong evidence, not proof
 - Material "keys" in the API are `Material#snake_case_name`.
 - Never call RubyLLM directly; go through `LlmClient` (timeout + graceful fallback). It returns `LlmClient::FALLBACK_MESSAGE` on failure; use `LlmClient.fallback?(text)` to detect it and never cache or treat it as real advice. Tests stub `LlmClient.ask` in `test/test_helper.rb` (the real method is kept as `LlmClient.real_ask` for its own tests).
 - API controllers use `@current_user` (set by `BaseController#authenticate_api_key!`), never Devise's `current_user`.
+- CSS: plain CSS, no framework or build step. Colors come from `var(--ctp-*)` tokens in `app/assets/stylesheets/base/tokens.css`; one file per component under `app/assets/stylesheets/<feature>/`; no bare element selectors outside `base/`. See `docs/ARCHITECTURE.md#stylesheets`.
 - Style: rubocop-rails-omakase (spaces inside array brackets, double quotes). Match surrounding code.
 - Commit style: conventional-ish (`feat:`, `fix:`, `docs:`, `chore(deps):`, `refactor:`, `ci:`). User-visible changes get a `CHANGELOG.md` entry (SemVer, newest first).
 

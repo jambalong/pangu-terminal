@@ -20,6 +20,9 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Removed
 - Tailwind CSS (`tailwindcss-rails`), its `app/assets/tailwind/` input and the `tailwindcss:watch` dev process. Only a handful of utilities were in use; they became small named classes next to the component styles (`.forte-slider-group`, `.header-icon`, `.config-rarity`, `.range-arrow`) or were dropped where already overridden by component CSS (`pt-4`, `transition-all`, `transition-colors`). The browser reset now lives in `app/assets/stylesheets/base/reset.css`. Computed styles on 18 pages were compared before and after with no differences.
 
+- Stylesheets tidied: `application.css` split into `base/tokens.css`, `base/global.css`, `layouts/flash.css` and `layouts/form_errors.css`; 11 selectors that nothing referenced removed; the global `code` color in `user_manual.css` (which a later Tailwind rule always overrode) dropped so the shared blue applies everywhere; two hard-coded token colors replaced with `var(--ctp-*)`.
+- Web fonts load through `<link rel="preconnect">` + `<link rel="stylesheet">` in `layouts/_fonts.html.erb` instead of a CSS `@import`.
+
 ### Added
 - Tests for `LlmClient`, `OptimizerService` (with a query-count guard), advisor caching, guest plan uniqueness and the API 500 path.
 

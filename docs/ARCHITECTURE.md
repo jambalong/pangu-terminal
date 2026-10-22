@@ -32,10 +32,12 @@ Importmap + Stimulus (`app/javascript/controllers/`), hand-written plain CSS in 
 `stylesheet_link_tag :app` serves every file under `app/assets/stylesheets/`, one `<link>` per file in path order, with no build step.
 
 - `base/reset.css`: browser reset (adapted from Tailwind's preflight, MIT) inside `@layer base`. Layered rules always lose to unlayered ones, so any normal rule in this app overrides the reset regardless of specificity or load order.
-- `application.css`: fonts, design tokens (`:root` custom properties, Catppuccin palette) and element defaults.
-- `<feature>/<component>.css`: one file per component or page (`plans/`, `inventory_items/`, `optimizers/`, `devise/`, `layouts/`, `pages/`, `dashboards/`).
+- `base/tokens.css`: design tokens (`:root` custom properties: fonts and the Catppuccin palette). Use `var(--ctp-*)` instead of literal colors.
+- `base/global.css`: element defaults (`body`, inputs, `code`) and shared helpers (`.hidden`, `.container`, `main.no-scroll`).
+- `<feature>/<component>.css`: one file per component or page (`plans/`, `inventory_items/`, `optimizers/`, `devise/`, `layouts/` incl. `flash.css` and `form_errors.css`, `pages/`, `dashboards/`).
+- Web fonts are loaded by `<link>` tags in `app/views/layouts/_fonts.html.erb` (rendered by both layouts), not by CSS `@import`, so the browser can fetch them in parallel.
 
-Because all sheets are global and unscoped, prefix class names with their component (`plan-card-*`, `optimizer-*`) and avoid bare element selectors outside `base/` and `application.css`.
+Because all sheets are global and unscoped, prefix class names with their component (`plan-card-*`, `optimizer-*`) and avoid bare element selectors outside `base/`. There is no utility-class framework: add a named class next to the component CSS instead. A rule that is only referenced from CSS is dead; classes built in Ruby (for example `rarity-bg-<n>` in `InventoryItemsHelper`) are not, so search the helpers before deleting.
 
 ## Design decisions
 

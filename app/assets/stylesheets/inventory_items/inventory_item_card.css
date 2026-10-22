@@ -203,19 +203,6 @@
   width: 100%;
 }
 
-.synthesis-indicator {
-  position: absolute;
-  top: 0rem;
-  right: 0rem;
-  border-radius: 0.85rem;
-}
-
-.hidden-indicator {
-  position: absolute;
-  top: 0rem;
-  right: 0rem;
-}
-
 /* Progress Info */
 .progress-container {
   display: flex;

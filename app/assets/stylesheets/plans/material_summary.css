@@ -68,16 +68,6 @@
   padding: 1rem 0;
 }
 
-.material-badge {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0.75rem;
-  background-color: var(--ctp-mantle);
-  border: 1px solid var(--ctp-surface1);
-  border-radius: 6px;
-}
-
 .empty-text {
   color: var(--ctp-surface2);
   font-size: 0.875rem;

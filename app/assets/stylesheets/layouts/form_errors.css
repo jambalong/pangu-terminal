@@ -1,0 +1,34 @@
+/* Devise/ActiveModel error summary (#error_explanation) */
+#error_explanation {
+  background-color: rgba(243, 139, 168, 0.1); /* Subtle Red tint */
+  border: 1px solid var(--ctp-red);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: 'JetBrains Mono', 'Space Mono', monospace;
+}
+
+#error_explanation h2 {
+  display: none; /* Hide the "X errors prohibited..." heading for a cleaner look */
+}
+
+#error_explanation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#error_explanation ul li {
+  color: var(--ctp-red);
+  font-size: 0.813rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+#error_explanation ul li::before {
+  content: "[!]";
+  font-weight: bold;
+  flex-shrink: 0;
+}

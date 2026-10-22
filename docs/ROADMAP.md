@@ -21,6 +21,7 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [x] API 500s log the exception class and a backtrace excerpt; `Api::V1::InventoryController` uses `@current_user`.
 - [x] `LlmClient` fallback message is a single constant with `fallback?`, covered by tests.
 - [x] Optimizer computation extracted into `OptimizerService`; farming advice cached for one day per prompt digest.
+- [x] Tailwind removed; stylesheets split into `base/` tokens/global/reset plus per-component files, dead selectors removed, fonts loaded via `<link>`.
 - [x] `libvips` removed from the Dockerfile; agent guidance (`AGENTS.md`, `CLAUDE.md`, `.claude/settings.json`) rewritten with workflow, boundaries and a definition of done.
 
 ## 1. Game data: remaining
