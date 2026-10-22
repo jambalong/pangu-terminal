@@ -112,7 +112,7 @@ Treat results on a different Ruby/Postgres than CI as strong evidence, not proof
 - Stored plans keep the quantities computed when they were saved. Game data does not change, so this only matters after you fix a calculation bug (planner, cost table or mapping error): then run `bin/rails plans:recompute` (dry run, prints a per-material diff) and `APPLY=1 bin/rails plans:recompute` to write. Optional `PLAN_ID=` / `USER_ID=` narrow the scope. See `docs/DEPLOYMENT.md#operations`.
 - Password-reset email uses Postmark SMTP (`POSTMARK_API_TOKEN`).
 - `sol3_phase` (`DropRate::SOL3_PHASES`, 1..8) is per-user and validated on `User`; drop rate data currently starts at phase 3 for forgery sources.
-- Image slugs strip `'"#&:` (e.g. `yangyang-xuanling.png`). `SKILL_LABEL_OVERRIDES` exists in both `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; keep them in sync. After adding data, run `bin/rails images:missing`.
+- Image slugs strip `'"#&:` (e.g. `yangyang-xuanling.png`). Skill icon label overrides live in `config/skill_label_overrides.yml` (read by the seeds and `forte:download_skill_icons`). After adding data, run `bin/rails images:missing`.
 - `README.md` is a portfolio piece; reference material lives in `docs/`. Don't re-grow the README.
 - Don't commit `config/master.key` or `.env` (gitignored).
 
