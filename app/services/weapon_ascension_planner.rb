@@ -5,29 +5,6 @@ class WeaponAscensionPlanner < ApplicationService
     0 => 20, 1 => 40, 2 => 50, 3 => 60, 4 => 70, 5 => 80, 6 => 90
   }
 
-  LAHAI_ROI_WEAPONS = [
-    "Azure Oath",
-    "Blooming Jadehaven",
-    "Boson Astrolabe",
-    "Daybreaker's Spine",
-    "Everbright Polestar",
-    "Firstlight's Herald",
-    "Forged Dwarf Star",
-    "Freeze Frame",
-    "Frostburn",
-    "Glint of Clouds",
-    "Laser Shearer",
-    "Phasic Homogenizer",
-    "Pulsation Bracer",
-    "Radiance Cleaver",
-    "Skull Thrasher",
-    "Solsworn Ciphers",
-    "Spectral Trigger",
-    "Spectrum Blaster",
-    "Starfield Calibrator",
-    "Thousandfold Deliverance"
-  ].freeze
-
   def initialize(
     weapon:, current_level:, target_level:,
     current_ascension_rank:, target_ascension_rank:
@@ -46,7 +23,7 @@ class WeaponAscensionPlanner < ApplicationService
 
     @materials_by_weapon = WeaponMaterialMap.where(weapon_id: @weapon.id).to_a
 
-    region = LAHAI_ROI_WEAPONS.include?(@weapon.name) ? "lahai_roi" : "base"
+    region = @weapon.region
     @materials_by_weapon_type = WeaponTypeMaterial.where(
       weapon_type: @weapon.weapon_type,
       region: region

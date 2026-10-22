@@ -46,8 +46,8 @@ Cost tables (no FKs, keyed by level/rank/material_type):
 
 | Table | Purpose |
 | --- | --- |
-| `resonators` | `name` (unique), `element`, `weapon_type`, `rarity`, `image_url`, `forte_icons` jsonb (stat/skill icon paths for the forte UI) |
-| `weapons` | `name` (unique), `weapon_type`, `rarity`, `image_url` |
+| `resonators` | `name` (unique), `element`, `weapon_type`, `rarity`, `image_url`, `region` (`base` or `lahai_roi`: which forgery material set its skills use; set by the seed), `forte_icons` jsonb (stat/skill icon paths for the forte UI) |
+| `weapons` | `name` (unique), `weapon_type`, `rarity`, `image_url`, `region` (`base` or `lahai_roi`, set by the seed, read by `WeaponAscensionPlanner`) |
 | `materials` | `name` (unique by validation), `category`, `material_type`, `rarity` 1..5, `exp_value`, `item_group_id` (synthesis family), `image_url`, `description` |
 | `resonator_material_maps` / `weapon_material_maps` | Resolve an abstract `material_type` + `rarity` for a specific Resonator/weapon to a concrete `material_id` (unique per material/type/subject) |
 | `weapon_type_materials` | Same resolution for materials shared by weapon type (+ optional `region`) |

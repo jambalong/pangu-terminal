@@ -43,12 +43,12 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 
 - [x] `PlanForm` DRY: one `SKILLS` list drives attributes, the mapping hashes and the controller's permitted params. The flat form field names are unchanged, so no view or JavaScript change was needed (a nested params shape is no longer worth it).
 - [x] Seeding on every boot: `db:seed:if_changed` (`SeedGuard`) skips the seed when its inputs are unchanged since the last successful run (about 4s saved per boot locally); failures are retried next boot, `FORCE_SEED=1` forces.
+- [x] Region/forgery-set membership is data: `resonators.region` / `weapons.region` (migration `AddRegionToResonatorsAndWeapons`), set by the seeds from `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS` and read by the planners; `ForgeryRegion` validates it.
 - [x] Dependabot: `thruster` 0.1.27 and `ruby_llm` 2.1.1 merged; advisor re-verified in production.
 
 ## 1. Game data: remaining
 
 - [ ] **Deferred by the owner until they have the data (do not add new Resonators, weapons or materials before then):** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
-- [ ] Consider moving region/forgery-set membership into data (e.g. `resonators.region`, `weapons.region`) instead of the name lists `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS`.
 - [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase range (`DropRate::SOL3_PHASES`) against 3.7. Needs the owner's data.
 - [ ] Optional feature: the drop-rate spreadsheet also covers **Tacet Fields** (echo drops and Echo EXP), which the app does not model.
 
@@ -69,5 +69,4 @@ Decided to leave as is (revisit only if the stated trigger happens):
 
 - Solid Queue and Solid Cable are installed but unused; Solid Cache is in use (advice cache, Rack::Attack). Kept because removing them means changing the multi-database production config for no gain. Revisit if a job is ever needed or the extra tables bother you.
 - The advisor LLM call is synchronous inside the request (20s timeout). The lazy Turbo Frame keeps the page responsive and the one-day cache removes repeats, so a background job is not worth it yet.
-- Region/forgery-set membership (`LAHAI_ROI_*`) lives in code. Moving it to columns needs a schema change plus seed changes; do it together with the next batch of game data.
 - Ruby (3.4.7) and PostgreSQL (17) bumps: change together when there is a reason (security release or a gem requiring it).

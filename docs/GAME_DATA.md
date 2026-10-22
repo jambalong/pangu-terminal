@@ -40,7 +40,7 @@ Seeds must be **idempotent** (`find_or_initialize_by` + `update!`). Production r
 1. `01_resonators.rb`: add the entry under the right rarity/element (`name`, `weapon_type`, `stat_a`, `stat_b`).
 2. Art: see [Images](#images) (portraits, weapon and material icons come from `bin/rails images:download`; skill icons from `bin/rails forte:download_skill_icons`). The seeded `image_url` slug is the lowercased name with `'"#&:` stripped and spaces turned into `-`.
 3. `05_mapping_tables.rb`: add the Resonator to `RESONATORS` and its `ResonatorMaterialMap` rows (boss drop, flower, enemy drops, forgery drop, weekly boss).
-4. If the Resonator's skill materials use the newer (LF) forgery sets, add it to `LAHAI_ROI_RESONATORS` (and new weapons to `LAHAI_ROI_WEAPONS`); ensure matching `WeaponTypeMaterial` rows exist for that region.
+4. If the Resonator's skill materials use the newer (LF) forgery sets, add its name to `LAHAI_ROI_RESONATORS` in `db/seeds/01_resonators.rb` (the seed stores it as `resonators.region = "lahai_roi"`, default `"base"`; new weapons go in `LAHAI_ROI_WEAPONS` in `db/seeds/02_weapons.rb`); ensure matching `WeaponTypeMaterial` rows exist for that region.
 5. If it has a new boss/weekly/forgery material: add it in `03_materials.rb` (+ image in `public/images/materials/`), `07_material_sources.rb`, and `08_drop_rates.rb`.
 6. Run `bin/rails db:seed` twice to confirm idempotency, then `bin/rails images:missing` to list the image files still to add (`bin/rails images:download` fetches them locally from the Fandom wiki, deriving each URL from the record name, and converts them to 256x256 PNG; ImageMagick required; add exceptions to `wiki_names` or `overrides` in `config/image_sources.yml`), and `bin/rails test` (`test/models/seed_data_integrity_test.rb` fails if a mapping or source is missing).
 
@@ -64,7 +64,7 @@ Seeded records point at files under `public/images/` (`resonators/`, `weapons/`,
 
 1. Add to `02_weapons.rb` (`name`, `weapon_type`, `rarity`).
 2. `05_mapping_tables.rb`: add it to `WEAPONS` and to the `WEAPON_MAPPING_DATA` enemy-drop set it uses (Whisperin, Howler, Ring, Exoswarm Core, Mech Core, Exoswarm Pendant, Autopuppet Kernel, ...). Every weapon needs one; the integrity test fails otherwise.
-3. If it uses the newer (LF) forgery set for its weapon type, add its name to `LAHAI_ROI_WEAPONS` (`app/services/weapon_ascension_planner.rb`).
+3. If it uses the newer (LF) forgery set for its weapon type, add its name to `LAHAI_ROI_WEAPONS` in `db/seeds/02_weapons.rb` (stored as `weapons.region = "lahai_roi"`; the planner reads the column).
 4. Art: see [Images](#images). New weapon rarities require `WeaponLevelCost`/`WeaponAscensionCost` rows for that `weapon_rarity`.
 5. `bin/rails db:seed` twice, `bin/rails images:missing`, `bin/rails test`.
 

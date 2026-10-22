@@ -8,6 +8,9 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Fixed
 - Plan create/update validation errors over a plain HTML request (no Turbo) returned 406; they now redirect back to the planner with the errors.
 
+### Added
+- `resonators.region` and `weapons.region` (`base` / `lahai_roi`, default `base`; migration `AddRegionToResonatorsAndWeapons`): which forgery material set a Resonator or weapon uses. The seeds set it from `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS` (moved out of the planners); the planners read the column. `ForgeryRegion` validates the value. Existing plans are unaffected (their totals are stored); the seed runs before the server starts, so no plan is calculated with the default.
+
 ### Changed
 - Production boot seeds only when needed: `bin/docker-entrypoint` runs `db:seed:if_changed`, which skips `db:seed` when `db/seeds.rb`, `db/seeds/*.rb` and `config/skill_label_overrides.yml` are unchanged since the last successful run (`SeedGuard`, checksum in `ar_internal_metadata`, recorded only after a confirmed success; `FORCE_SEED=1` forces). A failed seed still does not block the boot and is retried next boot.
 - `PlanForm` builds its skill and forte-node hashes and the controller's permitted params from one `SKILLS` list (about 40 fewer lines, same flat form field names, no view changes). Pinned by characterization tests.

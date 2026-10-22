@@ -141,6 +141,30 @@ WEAPON_DATA = {
   }
 }.freeze
 
+# Weapons that use the newer weapon-type (forgery) material sets: region "lahai_roi".
+LAHAI_ROI_WEAPONS = [
+  "Azure Oath",
+  "Blooming Jadehaven",
+  "Boson Astrolabe",
+  "Daybreaker's Spine",
+  "Everbright Polestar",
+  "Firstlight's Herald",
+  "Forged Dwarf Star",
+  "Freeze Frame",
+  "Frostburn",
+  "Glint of Clouds",
+  "Laser Shearer",
+  "Phasic Homogenizer",
+  "Pulsation Bracer",
+  "Radiance Cleaver",
+  "Skull Thrasher",
+  "Solsworn Ciphers",
+  "Spectral Trigger",
+  "Spectrum Blaster",
+  "Starfield Calibrator",
+  "Thousandfold Deliverance"
+].freeze
+
 WEAPON_DATA.each do | weapon_type, rarities |
   rarities.each do | rarity, names |
     names.each do | name |
@@ -153,6 +177,7 @@ WEAPON_DATA.each do | weapon_type, rarities |
       weapon.update!(
         weapon_type: weapon_type,
         rarity: rarity,
+        region: LAHAI_ROI_WEAPONS.include?(name) ? "lahai_roi" : "base",
         image_url: "/images/weapons/#{filename}.png"
       )
 
