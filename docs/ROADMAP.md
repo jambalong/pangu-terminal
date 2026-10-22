@@ -42,6 +42,7 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 ## Done (unreleased, heading for v1.5.0)
 
 - [x] `PlanForm` DRY: one `SKILLS` list drives attributes, the mapping hashes and the controller's permitted params. The flat form field names are unchanged, so no view or JavaScript change was needed (a nested params shape is no longer worth it).
+- [x] Seeding on every boot: `db:seed:if_changed` (`SeedGuard`) skips the seed when its inputs are unchanged since the last successful run (about 4s saved per boot locally); failures are retried next boot, `FORCE_SEED=1` forces.
 - [x] Dependabot: `thruster` 0.1.27 and `ruby_llm` 2.1.1 merged; advisor re-verified in production.
 
 ## 1. Game data: remaining
@@ -66,7 +67,6 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 
 Decided to leave as is (revisit only if the stated trigger happens):
 
-- Production runs `db:seed` on every boot. Seeds are idempotent and never delete. Revisit if boot time matters on the free tier (then make it a one-off release step).
 - Solid Queue and Solid Cable are installed but unused; Solid Cache is in use (advice cache, Rack::Attack). Kept because removing them means changing the multi-database production config for no gain. Revisit if a job is ever needed or the extra tables bother you.
 - The advisor LLM call is synchronous inside the request (20s timeout). The lazy Turbo Frame keeps the page responsive and the one-day cache removes repeats, so a background job is not worth it yet.
 - Region/forgery-set membership (`LAHAI_ROI_*`) lives in code. Moving it to columns needs a schema change plus seed changes; do it together with the next batch of game data.
