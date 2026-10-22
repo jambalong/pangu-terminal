@@ -322,6 +322,7 @@ app/
 │   ├── drop_rate_service.rb             # Waveplate run estimation
 │   ├── optimizer_service.rb             # Plan vs inventory deficits and farming runs
 │   ├── plan_recomputer.rb               # Rebuilds stored plan totals after a bug fix
+│   ├── guest_plan_pruner.rb             # Cleans up abandoned guest plans
 │   ├── farming_priority_service.rb      # Farming source ranking
 │   ├── farming_advisor_service.rb       # LLM farming recommendation
 │   ├── fandom_image_url.rb              # Image URL derivation (rake tooling)
@@ -372,4 +373,4 @@ The production version of this application is deployed via **Docker** to **Rende
 ---
 
 **Last Updated:** October 2026
-**Version:** 1.4.0
+**Version:** 1.4.1

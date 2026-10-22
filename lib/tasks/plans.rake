@@ -22,3 +22,16 @@ namespace :plans do
     puts "Dry run only. Re-run with APPLY=1 to write." if !apply && result[:changed].any?
   end
 end
+
+namespace :plans do
+  desc "Delete guest plans untouched for DAYS days (default 90). Dry run unless APPLY=1."
+  task prune_guests: :environment do
+    age = ENV["DAYS"].present? ? ENV["DAYS"].to_i.days : GuestPlanPruner::DEFAULT_AGE
+    apply = ENV["APPLY"] == "1"
+
+    result = GuestPlanPruner.call(older_than: age, apply: apply)
+
+    puts "#{apply ? 'Deleted' : 'Would delete'} #{result[:stale]} guest plan(s) untouched for #{(age / 1.day).to_i}+ days."
+    puts "Dry run only. Re-run with APPLY=1 to delete." if !apply && result[:stale].positive?
+  end
+end

@@ -4,8 +4,8 @@ module Api
       def update
         sol3_phase = params[:sol3_phase].to_i
 
-        unless sol3_phase.between?(1, 8)
-          return render json: { error: "sol3_phase must be an integer between 1 and 8" }, status: :unprocessable_entity
+        unless DropRate::SOL3_PHASES.cover?(sol3_phase)
+          return render json: { error: "sol3_phase must be an integer between #{DropRate::SOL3_PHASES.first} and #{DropRate::SOL3_PHASES.last}" }, status: :unprocessable_entity
         end
 
         if @current_user.update(sol3_phase: sol3_phase)

@@ -12,7 +12,7 @@ class OptimizersController < ApplicationController
       @plans.find_by(id: session[:optimizer_plan_id])
     end
 
-    if @selected_plan && params[:run]
+    if @selected_plan && params[:run] && sol3_phase_set?
       @results, @chain_coverage, @totals = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
     end
@@ -29,7 +29,7 @@ class OptimizersController < ApplicationController
 
   def advise
     @selected_plan = @plans.find_by(id: session[:optimizer_plan_id])
-    return head :no_content unless @selected_plan
+    return head :no_content unless @selected_plan && sol3_phase_set?
 
     @results, @chain_coverage, @totals = compute_optimizer_results
     @farming_priority = FarmingPriorityService.call(@results)
@@ -43,6 +43,12 @@ class OptimizersController < ApplicationController
   end
 
   private
+
+  # The view shows a "set your SOL3 phase" gate while it is nil; the optimizer
+  # cannot estimate runs without it (DropRateService requires an integer).
+  def sol3_phase_set?
+    current_user.sol3_phase.present?
+  end
 
   def load_plans
     @plans = load_current_plans

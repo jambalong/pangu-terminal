@@ -111,28 +111,8 @@ SKILL_LABELS = {
   "inherent_skill_2" => "Inherent-Skill-2"
 }.freeze
 
-# Per-resonator overrides where wutheringlab uses a different label
-SKILL_LABEL_OVERRIDES = {
-  "luuk-herssen"      => { "basic_attack" => "Normal-Attack" },
-  "cartethyia"        => { "basic_attack" => "Normal-Attack" },
-  "ciaccona"          => { "basic_attack" => "Normal-Attack" },
-  "lupa"              => { "basic_attack" => "Normal-Attack" },
-  "zani"              => { "basic_attack" => "Normal-Attack" },
-  "youhu"             => { "basic_attack" => "Normal-Attack" },
-  "denia"             => { "basic_attack" => "Normal-Attack" },
-  "hiyuki"            => { "basic_attack" => "Normal-Attack" },
-  "hsin"              => { "basic_attack" => "Normal-Attack" },
-  "jingran"           => { "basic_attack" => "Normal-Attack" },
-  "lucilla"           => { "basic_attack" => "Normal-Attack" },
-  "lucy"              => { "basic_attack" => "Normal-Attack" },
-  "qingxiao"          => { "basic_attack" => "Normal-Attack" },
-  "rebecca"           => { "basic_attack" => "Normal-Attack" },
-  "rover-electro"     => { "basic_attack" => "Normal-Attack" },
-  "sigrika"           => { "basic_attack" => "Normal-Attack" },
-  "suisui"            => { "basic_attack" => "Normal-Attack" },
-  "yangyang-xuanling" => { "basic_attack" => "Normal-Attack" },
-  "shorekeeper"       => { "resonance_skill" => "Resonance-Skill-" }
-}.freeze
+# Per-resonator overrides where wutheringlab uses a different label (config/skill_label_overrides.yml, shared with lib/tasks/forte_icons.rake)
+SKILL_LABEL_OVERRIDES = YAML.load_file(Rails.root.join("config/skill_label_overrides.yml")).freeze
 
 STAT_ICON_PATH = "/images/forte/stats"
 

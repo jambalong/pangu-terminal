@@ -39,6 +39,9 @@ class InventoryItemsController < ApplicationController
             template: "inventory_items/edit"
           )
         }
+        format.html do
+          redirect_to inventory_items_path, alert: @inventory_item.errors.full_messages.to_sentence
+        end
       end
     end
   end

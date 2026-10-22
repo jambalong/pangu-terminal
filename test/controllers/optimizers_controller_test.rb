@@ -160,3 +160,33 @@ class OptimizersControllerAdviseTest < ActionDispatch::IntegrationTest
     assert_equal "Stub farming advice.", @controller.instance_variable_get(:@farming_advice)
   end
 end
+
+class OptimizersControllerWithoutSol3PhaseTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email: "optimizer_nophase@example.com", password: "password123")
+    shell_credit = Material.find_by!(name: "Shell Credit")
+    @plan = Plan.create!(
+      user: @user,
+      subject: Weapon.find_by!(name: "Kumokiri"),
+      plan_data: { "input" => {}, "output" => { shell_credit.id => 25480 } }
+    )
+  end
+
+  test "index with run=1 shows the phase gate instead of crashing" do
+    sign_in @user
+
+    get optimizer_path, params: { plan_id: @plan.id, run: 1 }
+
+    assert_response :ok
+    assert_select ".optimizer-gate"
+  end
+
+  test "advise returns no content instead of crashing" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+
+    get optimizer_advise_path
+
+    assert_response :no_content
+  end
+end

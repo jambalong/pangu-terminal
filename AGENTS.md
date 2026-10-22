@@ -17,7 +17,7 @@ cp .env.example .env && docker-compose up -d   # Postgres 17 on :5432 (POSTGRES_
 bundle install
 bin/rails db:prepare                           # create + migrate (+ seeds on first create)
 bin/rails db:seed                              # idempotent game-data seed
-bin/dev                                        # Procfile.dev: rails server (http://localhost:3000)
+bin/dev                                        # rails server on :3000 (no CSS build step, no foreman)
 
 bin/rails test                                 # unit/controller/integration (parallel, seeds per worker)
 bin/rails test test/services/synthesis_service_test.rb   # single file
@@ -46,7 +46,7 @@ Treat results on a different Ruby/Postgres than CI as strong evidence, not proof
 
 | Path | What lives there |
 | --- | --- |
-| `app/services/` | Business logic. Planners (`ResonatorAscensionPlanner`, `WeaponAscensionPlanner`), `SynthesisService`, `DropRateService`, `FarmingPriorityService`, `OptimizerService`, `PlanRecomputer`, `FarmingAdvisorService`, `WaveplateSummaryService`, `LlmClient`. `ApplicationService.call` = `new(...).call`. |
+| `app/services/` | Business logic. Planners (`ResonatorAscensionPlanner`, `WeaponAscensionPlanner`), `SynthesisService`, `DropRateService`, `FarmingPriorityService`, `OptimizerService`, `PlanRecomputer`, `GuestPlanPruner`, `FarmingAdvisorService`, `WaveplateSummaryService`, `LlmClient`. `ApplicationService.call` = `new(...).call`. |
 | `app/forms/plan_form.rb` | Form object that runs the planner and builds `plan_data`. |
 | `app/controllers/` | Web controllers; `api/v1/` is the token-authenticated JSON API (`ActionController::API`); `concerns/plan_loading.rb` scopes plans. |
 | `app/serializers/` | Plain-Ruby JSON serializers for the API. |
@@ -111,7 +111,7 @@ Treat results on a different Ruby/Postgres than CI as strong evidence, not proof
 - Farming Advisor needs `gemini_api_key` in Rails credentials (`config/credentials.yml.enc`, key in `config/master.key` or `RAILS_MASTER_KEY`). Without it the advisor falls back to a static message. Advice is cached for one day per prompt digest in `Rails.cache` (Solid Cache in production).
 - Stored plans keep the quantities computed when they were saved. Game data does not change, so this only matters after you fix a calculation bug (planner, cost table or mapping error): then run `bin/rails plans:recompute` (dry run, prints a per-material diff) and `APPLY=1 bin/rails plans:recompute` to write. Optional `PLAN_ID=` / `USER_ID=` narrow the scope. See `docs/DEPLOYMENT.md#operations`.
 - Password-reset email uses Postmark SMTP (`POSTMARK_API_TOKEN`).
-- `sol3_phase` (1..8) is per-user; drop rate data currently starts at phase 3 for forgery sources.
+- `sol3_phase` (`DropRate::SOL3_PHASES`, 1..8) is per-user and validated on `User`; drop rate data currently starts at phase 3 for forgery sources.
 - Image slugs strip `'"#&:` (e.g. `yangyang-xuanling.png`). `SKILL_LABEL_OVERRIDES` exists in both `db/seeds/01_resonators.rb` and `lib/tasks/forte_icons.rake`; keep them in sync. After adding data, run `bin/rails images:missing`.
 - `README.md` is a portfolio piece; reference material lives in `docs/`. Don't re-grow the README.
 - Don't commit `config/master.key` or `.env` (gitignored).
