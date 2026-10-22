@@ -16,6 +16,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `APP_HOST` and `EXTRA_HOSTS` environment variables for allowed hosts and mailer links (defaults unchanged).
 
 ### Changed
+- Docs: `AGENTS.md` and `docs/GAME_DATA.md` no longer describe the duplicated `SKILL_LABEL_OVERRIDES` or the three hard-coded phase ranges.
 - `DropRate::SOL3_PHASES` replaces the phase range hard-coded in three places.
 - `SKILL_LABEL_OVERRIDES` lives in `config/skill_label_overrides.yml`, read by the seeds and `forte:download_skill_icons`.
 - `bin/dev` runs `bin/rails server`; `Procfile.dev` removed.

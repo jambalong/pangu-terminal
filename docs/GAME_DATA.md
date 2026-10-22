@@ -56,7 +56,7 @@ Seeded records point at files under `public/images/` (`resonators/`, `weapons/`,
 
 **Forte skill icons: `bin/rails forte:download_skill_icons`** fetches from wutheringlab by Resonator name and skill label (`<Name>-<Label>.webp`).
 
-- Newer Resonators (and a few older ones) label the basic attack `Normal-Attack`, Shorekeeper's skill has a trailing hyphen: these are per-slug entries in `SKILL_LABEL_OVERRIDES` in `db/seeds/01_resonators.rb` (stored icon paths) **and** the same-named map in `lib/tasks/forte_icons.rake` (download URL). Keep both in sync.
+- Newer Resonators (and a few older ones) label the basic attack `Normal-Attack`, Shorekeeper's skill has a trailing hyphen: these are per-slug entries in `config/skill_label_overrides.yml`, the single source read by both `db/seeds/01_resonators.rb` (stored icon paths) and `lib/tasks/forte_icons.rake` (download URL).
 - Icons wutheringlab lacks come from `SKILL_ICON_URL_OVERRIDES` in the rake file (key `"<slug>/<skill_key>"`), e.g. Hiyuki's Inherent Skill 1 from the Fandom wiki's `Skill_Fine_Snow.png`.
 - After changing label overrides run `bin/rails db:seed` so stored `forte_icons` paths update (production seeds on boot).
 
@@ -70,7 +70,7 @@ Seeded records point at files under `public/images/` (`resonators/`, `weapons/`,
 
 ## Adding a new SOL3 phase or updating drop rates
 
-`DropRate.sol3_phase` is validated to `1..8` (`app/models/drop_rate.rb`), the dashboard dropdown is `(1..8)` (`app/views/dashboards/show.html.erb`), and the API validates `1..8` (`Api::V1::ProfileController`). To add phase 9+, change all three and add seed rows in `08_drop_rates.rb`. `DropRateService` falls back to the highest available phase when the user's phase has no row.
+The phase range is one constant, `DropRate::SOL3_PHASES` (`app/models/drop_rate.rb`), used by the `DropRate` and `User` validations, the dashboard dropdown and `Api::V1::ProfileController`. To add phase 9+, change that constant and add seed rows in `08_drop_rates.rb`. `DropRateService` falls back to the highest available phase when the user's phase has no row.
 
 ## New or changed sources
 
