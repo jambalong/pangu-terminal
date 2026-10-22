@@ -11,12 +11,6 @@
 
  @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 html, body {
   min-height: -webkit-fill-available;
   overflow-x: hidden;
@@ -164,4 +158,20 @@ main.no-scroll {
 
 #main_content {
   padding-bottom: 1rem;
+}
+
+body {
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--ctp-crust);
+  color: var(--ctp-text);
+}
+
+input, button, select, textarea {
+  font-family: inherit;
+}
+
+code {
+  color: var(--ctp-blue);
 }

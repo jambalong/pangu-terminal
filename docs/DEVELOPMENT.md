@@ -50,7 +50,7 @@ New game data needs image files (see [GAME_DATA.md](GAME_DATA.md#images)): `bin/
 
 ## Processes
 
-`Procfile.dev` (via `bin/dev`): `web: bin/rails server` and `css: bin/rails tailwindcss:watch`. Solid Queue is not needed locally (no app jobs). Tailwind output goes to `app/assets/builds/` (gitignored).
+`Procfile.dev` (via `bin/dev`): `web: bin/rails server`. There is no CSS build step; Propshaft serves `app/assets/stylesheets/` directly. Solid Queue is not needed locally (no app jobs).
 
 ## Credentials and the Farming Advisor
 
@@ -79,7 +79,7 @@ bin/rails routes
 | --- | --- |
 | `PG::ConnectionBad` / connection refused | `docker-compose up -d`; check port 5432 is free |
 | `password authentication failed` | Recreate the volume (above) or make `.env` match the existing volume |
-| Missing CSS | Run `bin/dev` (not `bin/rails server`) so Tailwind builds, or `bin/rails tailwindcss:build` |
+| CSS change not showing | No build step exists. Hard refresh; in test/production-like runs restart the server because Propshaft caches asset digests at boot |
 | `ActiveSupport::MessageEncryptor::InvalidMessage` | No/incorrect `config/master.key`; only needed for credentials (advisor key, production) |
 | `You have to install development tools first` while installing gems | Install the compiler and headers listed under Prerequisites, then rerun `rv clean-install` / `bundle install` |
 | `permission denied ... /var/run/docker.sock` | Add your user to the `docker` group and restart the shell; check Docker Desktop's WSL integration |

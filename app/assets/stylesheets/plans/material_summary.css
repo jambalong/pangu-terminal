@@ -82,3 +82,9 @@
   color: var(--ctp-surface2);
   font-size: 0.875rem;
 }
+
+.header-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--ctp-text);
+}

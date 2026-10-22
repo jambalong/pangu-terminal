@@ -3,7 +3,7 @@
 ## Framework & Libraries
 - [Rails 8](https://rubyonrails.org)
 - [Hotwire](https://hotwired.dev)
-- [Tailwind CSS](https://tailwindcss.com)
+- [Tailwind CSS](https://tailwindcss.com) - the browser reset in `app/assets/stylesheets/base/reset.css` is adapted from its "preflight" (MIT)
 - [RubyLLM](https://rubyllm.com) - LLM integration
 
 ## Hosting & Services

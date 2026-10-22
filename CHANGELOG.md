@@ -17,6 +17,9 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `Dockerfile` no longer installs the unused `libvips`.
 - Agent guidance rewritten: `AGENTS.md` (workflow, definition of done, boundaries, sandbox recipe), `CLAUDE.md`, `.claude/settings.json` guardrails; `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/DEVELOPMENT.md` and `docs/ROADMAP.md` updated.
 
+### Removed
+- Tailwind CSS (`tailwindcss-rails`), its `app/assets/tailwind/` input and the `tailwindcss:watch` dev process. Only a handful of utilities were in use; they became small named classes next to the component styles (`.forte-slider-group`, `.header-icon`, `.config-rarity`, `.range-arrow`) or were dropped where already overridden by component CSS (`pt-4`, `transition-all`, `transition-colors`). The browser reset now lives in `app/assets/stylesheets/base/reset.css`. Computed styles on 18 pages were compared before and after with no differences.
+
 ### Added
 - Tests for `LlmClient`, `OptimizerService` (with a query-count guard), advisor caching, guest plan uniqueness and the API 500 path.
 

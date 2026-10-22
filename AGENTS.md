@@ -8,7 +8,7 @@ Guidance for AI coding agents (and humans) working in this repository. Keep this
 
 ## Stack
 
-Ruby 3.4.7 (`.ruby-version`, `mise.toml`), Rails ~> 8.1.1, PostgreSQL 17, Puma + Thruster, Hotwire (Turbo + Stimulus via importmap), Tailwind (`tailwindcss-rails`) + per-feature CSS, Propshaft, Devise 5, Rack::Attack, RubyLLM 2.x (Gemini), Solid Cache/Queue/Cable, Minitest + Capybara/Cuprite, SimpleCov. Lint: rubocop-rails-omakase. Security: Brakeman, bundler-audit, `importmap audit`.
+Ruby 3.4.7 (`.ruby-version`, `mise.toml`), Rails ~> 8.1.1, PostgreSQL 17, Puma + Thruster, Hotwire (Turbo + Stimulus via importmap), plain per-feature CSS (no CSS framework or build step), Propshaft, Devise 5, Rack::Attack, RubyLLM 2.x (Gemini), Solid Cache/Queue/Cable, Minitest + Capybara/Cuprite, SimpleCov. Lint: rubocop-rails-omakase. Security: Brakeman, bundler-audit, `importmap audit`.
 
 ## Commands
 
@@ -17,7 +17,7 @@ cp .env.example .env && docker-compose up -d   # Postgres 17 on :5432 (POSTGRES_
 bundle install
 bin/rails db:prepare                           # create + migrate (+ seeds on first create)
 bin/rails db:seed                              # idempotent game-data seed
-bin/dev                                        # Procfile.dev: rails server + tailwindcss:watch (http://localhost:3000)
+bin/dev                                        # Procfile.dev: rails server (http://localhost:3000)
 
 bin/rails test                                 # unit/controller/integration (parallel, seeds per worker)
 bin/rails test test/services/synthesis_service_test.rb   # single file

@@ -25,7 +25,17 @@ Solid Cache, Solid Queue and Solid Cable are installed (`config/cache.yml`, `que
 
 ## Frontend
 
-Importmap + Stimulus (`app/javascript/controllers/`), Tailwind via `tailwindcss-rails` (`app/assets/tailwind/application.css`) plus hand-written per-feature CSS in `app/assets/stylesheets/`, served by Propshaft. Static art lives in `public/images/{materials,resonators,weapons,forte,textures}`. `allow_browser versions: :modern` is on in `ApplicationController`.
+Importmap + Stimulus (`app/javascript/controllers/`), hand-written plain CSS in `app/assets/stylesheets/` (no CSS framework and no build step), served by Propshaft. Tailwind was removed in v1.3.0; see [Stylesheets](#stylesheets). Static art lives in `public/images/{materials,resonators,weapons,forte,textures}`. `allow_browser versions: :modern` is on in `ApplicationController`.
+
+### Stylesheets
+
+`stylesheet_link_tag :app` serves every file under `app/assets/stylesheets/`, one `<link>` per file in path order, with no build step.
+
+- `base/reset.css`: browser reset (adapted from Tailwind's preflight, MIT) inside `@layer base`. Layered rules always lose to unlayered ones, so any normal rule in this app overrides the reset regardless of specificity or load order.
+- `application.css`: fonts, design tokens (`:root` custom properties, Catppuccin palette) and element defaults.
+- `<feature>/<component>.css`: one file per component or page (`plans/`, `inventory_items/`, `optimizers/`, `devise/`, `layouts/`, `pages/`, `dashboards/`).
+
+Because all sheets are global and unscoped, prefix class names with their component (`plan-card-*`, `optimizer-*`) and avoid bare element selectors outside `base/` and `application.css`.
 
 ## Design decisions
 

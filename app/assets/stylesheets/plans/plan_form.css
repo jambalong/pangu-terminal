@@ -116,3 +116,7 @@
   transform: translateY(0px);
   box-shadow: 0 4px 6px -1px rgba(17, 17, 27, 0.2);
 }
+
+.range-arrow {
+  color: var(--ctp-text);
+}

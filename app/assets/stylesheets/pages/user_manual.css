@@ -338,7 +338,6 @@ code {
   border: 1px solid var(--ctp-surface1);
   padding: 1px 6px;
   border-radius: 3px;
-  color: var(--ctp-teal);
 }
 
 pre {
