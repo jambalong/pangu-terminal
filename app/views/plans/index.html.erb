@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "main_content" do %>
   <div id="sync-banner-container">
-    <%= render "plans/sync_banner", plans: @plans %>
+    <%= render "plans/sync_banner" %>
   </div>
 
   <div class="planner-container">
@@ -32,13 +32,13 @@
       </div>
 
       <div id="materials-summary-content" data-accordion-target="content">
-        <%= render "materials_summary", materials_summary: @materials_summary %>
+        <%= render "materials_summary", materials_summary: @materials_summary, materials_lookup: @materials_lookup %>
       </div>
     </section>
 
     <div id="plans-list-container">
       <turbo-frame id="plans-list">
-        <%= render @plans %>
+        <%= render partial: "plans/plan", collection: @plans, as: :plan, locals: { materials_lookup: @materials_lookup } %>
       </turbo-frame>
     </div>
   </div>

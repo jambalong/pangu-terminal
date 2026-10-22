@@ -4,13 +4,7 @@
   <header class="modal-header">
     <div class="config-header">
       <div class="config-title">
-        <div class="plan-card-portrait">
-          <% if subject.image_url.present? %>
-            <%= image_tag(subject.image_url, alt: subject.name) %>
-          <% else %>
-            <span class="portrait-initials"><%= subject.name[0..1].upcase %></span>
-          <% end %>
-        </div>
+        <%= render "shared/subject_portrait", subject: subject %>
         <%= subject.name %>
       </div>
       <span class="rarity-5 config-rarity">

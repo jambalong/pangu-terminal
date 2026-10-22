@@ -3,6 +3,17 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Changed
+- Views: every partial now declares strict locals and takes its data as locals instead of controller instance variables (plan cards, materials summary, inventory cards, optimizer results, farming advice). The duplicated modal shell and material/portrait markup moved into `shared/_modal`, `shared/_material_icon` and `shared/_subject_portrait`. `sorted_plan_materials` now takes the materials lookup as an argument. No visible change.
+
+### Added
+- `test/views/partials_test.rb`: guard rails that fail when a partial lacks a locals declaration or reads an instance variable.
+
+### Removed
+- Unused `rarity_border_class` / `rarity_bg_class` helpers.
+
 ## [1.5.0] - 2026-10-22
 
 ### Fixed

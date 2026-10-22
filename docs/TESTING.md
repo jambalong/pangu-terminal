@@ -22,6 +22,7 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 | `test/services/` | Planners, `SynthesisService`, `DropRateService`, `FarmingPriorityService`, `OptimizerService` (includes a query-count guard), `FarmingAdvisorService` (includes caching), `LlmClient`, `FandomImageUrl` |
 | `test/controllers/` | Web controllers, `api/` (v1 endpoints, auth), `users/registrations` |
 | `test/forms/`, `test/helpers/` | `PlanForm`, view helpers |
+| `test/views/partials_test.rb` | View guard rails: every partial declares strict locals and none reads an `@ivar` |
 | `test/integration/rate_limiting_test.rb` | Rack::Attack throttles (uses an isolated `MemoryStore`) |
 | `test/system/user_journey_test.rb` | Sign in -> set SOL3 phase -> create plan -> edit inventory -> optimizer |
 

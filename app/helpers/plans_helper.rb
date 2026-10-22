@@ -17,9 +17,9 @@ module PlansHelper
     key.to_s.humanize.titleize
   end
 
-  def sorted_plan_materials(output_hash)
+  def sorted_plan_materials(output_hash, materials_lookup)
     output_hash.sort_by { |mat_id, _|
-      material = @materials_lookup[mat_id.to_i]
+      material = materials_lookup[mat_id.to_i]
       material_sort_key(material)
     }
   end

@@ -1,3 +1,5 @@
+<%# locals: (f:, config:) %>
+
 <div class="forte-column <%= 'inherent-node' if config[:inherent] %>">
   <label class="node-label">
     <%= f.check_box "#{config[:key]}_node_2", { class: "peer hidden" }, 1, 0 %>
