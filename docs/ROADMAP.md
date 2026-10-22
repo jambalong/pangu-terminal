@@ -1,6 +1,6 @@
 # Roadmap & Known Issues
 
-Working backlog for bringing the project "up to current". Last reviewed 2026-10-05 (game version 3.7 released 2026-09-30; all docs audited against the repo). Check items off (and add a `CHANGELOG.md` entry) as they land.
+Maintenance backlog: bugs, platform, documentation and game-data upkeep. Last reviewed 2026-10-22 (game version 3.7 released 2026-09-30; docs audited against the repo). Feature ideas live in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md). Check items off (and add a `CHANGELOG.md` entry) as they land.
 
 ## Done (v1.1.0)
 
