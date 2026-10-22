@@ -7,7 +7,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Fixed
 - CI: the `system-test` job's database service was the untagged `postgres` image (latest, currently 18) while everything else is documented and tested on 17; it is now pinned to `postgres:17`.
-- CI: Cuprite waits up to 30s (was 10s) for Chrome to start, after a runner hit `Ferrum::ProcessTimeoutError` before any test ran.
+- System tests: the Cuprite options in `test/application_system_test_case.rb` never applied, because Rails registers its own Cuprite driver from the `driven_by` options and overrides a separate `Capybara.register_driver` block. The options now live in `driven_by`, with Cuprite waiting up to 30s (Ferrum default 10s) for Chrome and `no-sandbox` so it also runs as root in containers. A runner had hit `Ferrum::ProcessTimeoutError` before any test ran.
 - Plan create/update validation errors over a plain HTML request (no Turbo) returned 406; they now redirect back to the planner with the errors.
 
 ### Changed
