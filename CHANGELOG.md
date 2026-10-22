@@ -3,6 +3,25 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.3.0] - 2026-10-22
+
+### Fixed
+- Guests can each plan the same Resonator or weapon. The one-plan-per-subject validation was scoped by `user_id`, which is nil for every guest, so one guest's plan blocked all others. Guests are now scoped by `guest_token`.
+- API 500 responses now log the exception class and a backtrace excerpt instead of only the message.
+- `Api::V1::InventoryController` uses `@current_user` like the other API controllers.
+
+### Changed
+- Optimizer computation moved from `OptimizersController` into `OptimizerService`.
+- Farming Advisor responses are cached for one day per prompt digest; the unavailable-advisor fallback is never cached.
+- `LlmClient` exposes `FALLBACK_MESSAGE` and `fallback?`.
+- `Dockerfile` no longer installs the unused `libvips`.
+- Agent guidance rewritten: `AGENTS.md` (workflow, definition of done, boundaries, sandbox recipe), `CLAUDE.md`, `.claude/settings.json` guardrails; `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/DEVELOPMENT.md` and `docs/ROADMAP.md` updated.
+
+### Added
+- Tests for `LlmClient`, `OptimizerService` (with a query-count guard), advisor caching, guest plan uniqueness and the API 500 path.
+
+---
+
 ## [1.2.6] - 2026-10-05
 
 ### Changed

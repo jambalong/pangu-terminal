@@ -85,3 +85,7 @@ bin/rails routes
 | `permission denied ... /var/run/docker.sock` | Add your user to the `docker` group and restart the shell; check Docker Desktop's WSL integration |
 | `rv run bin/dev`: `no Ruby script found in input` | `bin/dev` is a shell script: set up `rv shell` integration and run `bin/dev` directly |
 | `git-credential-manager.exe: not found` on push | Fix `credential.helper` (see Windows / WSL2) |
+
+## Cloud sandboxes (no Docker)
+
+See "Cloud/sandbox sessions without Docker" in [AGENTS.md](../AGENTS.md) for running the test suite against the system Postgres when Docker and Ruby 3.4.7 are unavailable.
