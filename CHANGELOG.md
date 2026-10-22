@@ -3,6 +3,17 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Fixed
+- Plan create/update validation errors over a plain HTML request (no Turbo) returned 406; they now redirect back to the planner with the errors.
+
+### Changed
+- `PlanForm` builds its skill and forte-node hashes and the controller's permitted params from one `SKILLS` list (about 40 fewer lines, same flat form field names, no view changes). Pinned by characterization tests.
+- Dependencies: `thruster` 0.1.27 and `ruby_llm` 2.1.1 (brings `json` 3.1, `faraday` 2.15, `rubocop` 1.92, `uri` 1.1.2). Verified on Ruby 3.4.7 and against the live Farming Advisor.
+
+---
+
 ## [1.4.1] - 2026-10-22
 
 ### Fixed

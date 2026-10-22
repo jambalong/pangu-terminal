@@ -165,30 +165,13 @@ class PlansController < ApplicationController
             errors: @errors
           })
       }
+      format.html do
+        redirect_to plans_path, alert: Array(@errors).to_sentence.presence || "The plan could not be saved."
+      end
     end
   end
 
   def plan_params
-    core = [ :id, :subject_type, :subject_id, :current_level, :target_level, :current_ascension_rank, :target_ascension_rank ]
-
-    # Skill fields
-    skills = [
-      :basic_attack_current, :basic_attack_target,
-      :resonance_skill_current, :resonance_skill_target,
-      :forte_circuit_current, :forte_circuit_target,
-      :resonance_liberation_current, :resonance_liberation_target,
-      :intro_skill_current, :intro_skill_target
-    ]
-
-    # Node fields (0 or 1)
-    nodes = [
-      :basic_attack_node_1, :basic_attack_node_2,
-      :resonance_skill_node_1, :resonance_skill_node_2,
-      :forte_circuit_node_1, :forte_circuit_node_2,
-      :resonance_liberation_node_1, :resonance_liberation_node_2,
-      :intro_skill_node_1, :intro_skill_node_2
-    ]
-
-    params.require(:plan).permit(core + skills + nodes)
+    params.require(:plan).permit(PlanForm.permitted_params)
   end
 end

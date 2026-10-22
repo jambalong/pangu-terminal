@@ -107,6 +107,28 @@ class PlansControllerCreateTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "plain HTML create with invalid levels redirects back with the errors instead of 406" do
+    sign_in @user
+
+    assert_no_difference "Plan.count" do
+      post plans_path, params: { plan: weapon_params.merge(current_level: 30, target_level: 20) }
+    end
+
+    assert_redirected_to plans_path
+    assert flash[:alert].present?
+  end
+
+  test "plain HTML create with a missing subject redirects back instead of 406" do
+    sign_in @user
+
+    assert_no_difference "Plan.count" do
+      post plans_path, params: { plan: weapon_params.merge(subject_id: 0) }
+    end
+
+    assert_redirected_to plans_path
+    assert flash[:alert].present?
+  end
+
   test "renders errors on duplicate path" do
     sign_in @user
     Plan.create!(

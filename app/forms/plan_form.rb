@@ -11,11 +11,24 @@ class PlanForm
   attribute :current_ascension_rank, :integer, default: 0
   attribute :target_ascension_rank, :integer, default: 6
 
-  %w[basic_attack resonance_skill forte_circuit resonance_liberation intro_skill].each do |skill|
+  SKILLS = %w[basic_attack resonance_skill forte_circuit resonance_liberation intro_skill].freeze
+
+  SKILLS.each do |skill|
     attribute "#{skill}_current".to_sym, :integer, default: 1
     attribute "#{skill}_target".to_sym, :integer, default: 10
     attribute "#{skill}_node_1".to_sym, :integer, default: 1
     attribute "#{skill}_node_2".to_sym, :integer, default: 1
+  end
+
+  CORE_ATTRIBUTES = %i[
+    id subject_type subject_id current_level target_level current_ascension_rank target_ascension_rank
+  ].freeze
+
+  # Every attribute the planner form may submit; PlansController permits exactly these.
+  def self.permitted_params
+    CORE_ATTRIBUTES + SKILLS.flat_map do |skill|
+      [ :"#{skill}_current", :"#{skill}_target", :"#{skill}_node_1", :"#{skill}_node_2" ]
+    end
   end
 
   attr_reader :plan
@@ -143,37 +156,15 @@ class PlanForm
   end
 
   def map_current_skill_levels
-    {
-      basic_attack: basic_attack_current,
-      resonance_skill: resonance_skill_current,
-      forte_circuit: forte_circuit_current,
-      resonance_liberation: resonance_liberation_current,
-      intro_skill: intro_skill_current
-    }
+    SKILLS.to_h { |skill| [ skill.to_sym, public_send("#{skill}_current") ] }
   end
 
   def map_target_skill_levels
-    {
-      basic_attack: basic_attack_target,
-      resonance_skill: resonance_skill_target,
-      forte_circuit: forte_circuit_target,
-      resonance_liberation: resonance_liberation_target,
-      intro_skill: intro_skill_target
-    }
+    SKILLS.to_h { |skill| [ skill.to_sym, public_send("#{skill}_target") ] }
   end
 
   def map_forte_nodes_upgrades
-    {
-      basic_attack_node_1: basic_attack_node_1.to_i,
-      basic_attack_node_2: basic_attack_node_2.to_i,
-      resonance_skill_node_1: resonance_skill_node_1.to_i,
-      resonance_skill_node_2: resonance_skill_node_2.to_i,
-      forte_circuit_node_1: forte_circuit_node_1.to_i,
-      forte_circuit_node_2: forte_circuit_node_2.to_i,
-      resonance_liberation_node_1: resonance_liberation_node_1.to_i,
-      resonance_liberation_node_2: resonance_liberation_node_2.to_i,
-      intro_skill_node_1: intro_skill_node_1.to_i,
-      intro_skill_node_2: intro_skill_node_2.to_i
-    }
+    SKILLS.flat_map { |skill| %w[node_1 node_2].map { |node| "#{skill}_#{node}" } }
+          .to_h { |name| [ name.to_sym, public_send(name).to_i ] }
   end
 end
