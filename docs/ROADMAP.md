@@ -44,6 +44,7 @@ Maintenance backlog: bugs, platform, documentation and game-data upkeep. Last re
 - [x] `PlanForm` DRY: one `SKILLS` list drives attributes, the mapping hashes and the controller's permitted params. The flat form field names are unchanged, so no view or JavaScript change was needed (a nested params shape is no longer worth it).
 - [x] Seeding on every boot: `db:seed:if_changed` (`SeedGuard`) skips the seed when its inputs are unchanged since the last successful run (about 4s saved per boot locally); failures are retried next boot, `FORCE_SEED=1` forces.
 - [x] Region/forgery-set membership is data: `resonators.region` / `weapons.region` (migration `AddRegionToResonatorsAndWeapons`), set by the seeds from `LAHAI_ROI_RESONATORS` / `LAHAI_ROI_WEAPONS` and read by the planners; `ForgeryRegion` validates it.
+- [x] Farming Advisor off the request thread: `FarmingAdviceRequest` + `FarmingAdviceJob` + `advisor-poll` Stimulus controller; cache hits are instant, a miss enqueues one job and the frame polls. Adapter is `:async` unless `SOLID_QUEUE_IN_PUMA` is set.
 - [x] Dependabot: `thruster` 0.1.27 and `ruby_llm` 2.1.1 merged; advisor re-verified in production.
 
 ## 1. Game data: remaining
@@ -67,6 +68,5 @@ Maintenance backlog: bugs, platform, documentation and game-data upkeep. Last re
 
 Decided to leave as is (revisit only if the stated trigger happens):
 
-- Solid Queue and Solid Cable are installed but unused; Solid Cache is in use (advice cache, Rack::Attack). Kept because removing them means changing the multi-database production config for no gain. Revisit if a job is ever needed or the extra tables bother you.
-- The advisor LLM call is synchronous inside the request (20s timeout). The lazy Turbo Frame keeps the page responsive and the one-day cache removes repeats, so a background job is not worth it yet.
+- Solid Queue is only used if `SOLID_QUEUE_IN_PUMA` is set (default is the in-process `:async` adapter, so no Render change is needed). Solid Cable is installed but unused (Rails 8 default; Turbo Stream broadcasts would use it). Kept because removing them means changing the multi-database production config for no gain. Revisit if the extra tables bother you.
 - Ruby (3.4.7) and PostgreSQL (17) bumps: change together when there is a reason (security release or a gem requiring it).

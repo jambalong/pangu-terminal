@@ -1,21 +1,52 @@
 class FarmingAdvisorService < ApplicationService
   CACHE_TTL = 1.day
+
+  # Builds the advisor for a user's plan (same inputs the optimizer page shows).
+  def self.for(user:, plan:)
+    optimizer = OptimizerService.call(user: user, plan: plan)
+    new(
+      results: optimizer[:results],
+      farming_priority: FarmingPriorityService.call(optimizer[:results]),
+      chain_coverage: optimizer[:chain_coverage]
+    )
+  end
+
   def initialize(results:, farming_priority:, chain_coverage:)
     @results = results
     @farming_priority = farming_priority
     @chain_coverage = chain_coverage
   end
 
+  # Synchronous: cached advice if present, otherwise one LLM call (used by the job).
   def call
-    return nil if @results.blank?
+    return nil unless advisable?
 
-    text = prompt
-    key = "farming_advice/#{Digest::SHA256.hexdigest(text)}"
+    cached_advice || generate
+  end
 
-    Rails.cache.read(key) || LlmClient.ask(text).tap do |response|
-      Rails.cache.write(key, response, expires_in: CACHE_TTL) unless LlmClient.fallback?(response)
+  def advisable?
+    @results.present?
+  end
+
+  def cached_advice
+    Rails.cache.read(cache_key) if advisable?
+  end
+
+  # Calls the LLM and caches a real answer; the fallback message is never cached.
+  def generate
+    LlmClient.ask(prompt).tap do |response|
+      Rails.cache.write(cache_key, response, expires_in: CACHE_TTL) unless LlmClient.fallback?(response)
     end
   end
+
+  def cache_key
+    "farming_advice/#{Digest::SHA256.hexdigest(prompt)}"
+  end
+
+  # Short-lived markers that let the web request and the job coordinate.
+  def pending_key = "#{cache_key}/pending"
+
+  def failed_key = "#{cache_key}/failed"
 
   private
 

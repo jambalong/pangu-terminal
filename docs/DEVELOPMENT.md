@@ -50,7 +50,7 @@ New game data needs image files (see [GAME_DATA.md](GAME_DATA.md#images)): `bin/
 
 ## Processes
 
-`bin/dev` runs `bin/rails server` on `PORT` (default 3000); there is no `Procfile.dev`. There is no CSS build step; Propshaft serves `app/assets/stylesheets/` directly. Solid Queue is not needed locally (no app jobs).
+`bin/dev` runs `bin/rails server` on `PORT` (default 3000); there is no `Procfile.dev`. There is no CSS build step; Propshaft serves `app/assets/stylesheets/` directly. Jobs run in-process in development (the `:async` adapter), so no queue worker is needed locally.
 
 ## Credentials and the Farming Advisor
 

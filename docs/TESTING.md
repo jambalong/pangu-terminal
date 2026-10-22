@@ -30,6 +30,7 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 - **Parallel**: `parallelize(workers: :number_of_processors)`; each worker has its own DB and `parallelize_setup` loads `db/seeds` once per worker (stdout silenced). The seeds are therefore part of every test's world: use real seeded records (e.g. `Resonator.find_by!(name: "Aalto")`).
 - **LLM stub**: `LlmClient.ask` is redefined to return `"Stub farming advice."`; no network calls in tests. The original is kept as `LlmClient.real_ask` so `test/services/llm_client_test.rb` can exercise the real timeout/fallback code against a fake `RubyLLM.chat`.
 - **Cache**: the test cache store is `:null_store`. Tests that need caching swap `Rails.cache` for a `MemoryStore` and restore it in `ensure`.
+- **Real cache / LLM per test**: `include MemoryCacheTestHelper` (real in-memory `Rails.cache`, restored in teardown) and `LlmAskTestHelper#with_llm_response` (both in `test_helper.rb`); jobs use `ActiveJob::TestHelper` (`assert_enqueued_with`, `perform_enqueued_jobs`).
 - **No `minitest/mock`**: stub by redefining a singleton method (`define_singleton_method`) and restoring the original in `ensure`.
 - **Inventory callback**: `User#initialize_inventory` is skipped (set/unset in `setup`/`teardown`); create rows with `user.inventory_item_for(material)` or call `user.send(:initialize_inventory)` (system test does this).
 - Devise integration helpers (`sign_in`) are included.

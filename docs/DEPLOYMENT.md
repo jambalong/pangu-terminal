@@ -20,6 +20,7 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 | `DATABASE_URL` | Neon connection string. Used for the primary, cache, queue and cable databases (`config/database.yml`), so one Neon database holds all tables. **TODO(owner)**: note whether the pooled or direct Neon endpoint is used. |
 | `POSTMARK_API_TOKEN` | Postmark SMTP (port 2525) for password-reset emails |
 | `APP_HOST` | Optional. Public hostname for allowed hosts and mailer links; default `panguterminal.ambalong.dev`. Set it if the custom domain changes. |
+| `SOLID_QUEUE_IN_PUMA` | Optional. When set, ActiveJob uses Solid Queue (processed inside Puma) instead of the default in-process `:async` adapter. Not needed: `FarmingAdviceJob` is short and its result is cached, so a restart only costs one regenerated advice. |
 | `EXTRA_HOSTS` | Optional. Comma-separated extra allowed hosts (the default `pangu-terminal.onrender.com` is always allowed). |
 | `RAILS_LOG_LEVEL` | Optional, default `info`; logs go to STDOUT |
 | `RAILS_MAX_THREADS`, `PORT`, `WEB_CONCURRENCY` | Optional Puma tuning; **TODO(owner)**: record the values set on Render |

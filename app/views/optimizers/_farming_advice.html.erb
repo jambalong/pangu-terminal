@@ -1,5 +1,10 @@
-<%= turbo_frame_tag "farming-advisor" do %>
-  <% if @farming_advice.present? %>
+<%= turbo_frame_tag "farming-advisor", data: { controller: "advisor-poll" } do %>
+  <% if @advice_pending %>
+    <div class="optimizer-advisor" data-advisor-poll-target="pending">
+      <h2 class="optimizer-results-title">&gt; FARMING_ADVISOR</h2>
+      <%= render "optimizers/advisor_loading" %>
+    </div>
+  <% elsif @farming_advice.present? %>
     <div class="optimizer-advisor">
       <h2 class="optimizer-results-title">&gt; FARMING_ADVISOR</h2>
       <div class="optimizer-advisor-card">

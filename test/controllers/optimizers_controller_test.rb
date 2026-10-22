@@ -113,6 +113,10 @@ class OptimizersControllerSelectPlanTest < ActionDispatch::IntegrationTest
 end
 
 class OptimizersControllerAdviseTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+  include MemoryCacheTestHelper
+  include LlmAskTestHelper
+
   setup do
     @user = User.create!(email: "optimizer_advise@example.com", password: "password123", sol3_phase: 3)
     @weapon = Weapon.find_by!(name: "Kumokiri")
@@ -146,18 +150,73 @@ class OptimizersControllerAdviseTest < ActionDispatch::IntegrationTest
     assert_response :no_content
   end
 
+  test "first request answers pending and enqueues the job" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+
+    assert_enqueued_with(job: FarmingAdviceJob, args: [ @user.id, @plan.id ]) do
+      get optimizer_advise_path
+    end
+
+    assert_response :ok
+    assert_select "[data-advisor-poll-target='pending']"
+    assert_select ".optimizer-advisor-text", false
+  end
+
+  test "polling while the job is pending does not enqueue more jobs" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    get optimizer_advise_path
+
+    assert_no_enqueued_jobs do
+      get optimizer_advise_path
+    end
+    assert_select "[data-advisor-poll-target='pending']"
+  end
+
+  test "serves the advice once the job has run" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    get optimizer_advise_path
+    perform_enqueued_jobs
+
+    get optimizer_advise_path
+
+    assert_response :ok
+    assert_select ".optimizer-advisor-text", text: "Stub farming advice."
+    assert_select "[data-advisor-poll-target='pending']", false
+  end
+
+  test "repeat visits are served from the cache without a job" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    get optimizer_advise_path
+    perform_enqueued_jobs
+
+    assert_no_enqueued_jobs do
+      get optimizer_advise_path
+      get optimizer_advise_path
+    end
+    assert_select ".optimizer-advisor-text", text: "Stub farming advice."
+  end
+
+  test "shows the fallback when the job could not get advice and stops polling" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    get optimizer_advise_path
+    with_llm_response(LlmClient::FALLBACK_MESSAGE) { perform_enqueued_jobs }
+
+    get optimizer_advise_path
+
+    assert_select ".optimizer-advisor-text", text: LlmClient::FALLBACK_MESSAGE
+    assert_select "[data-advisor-poll-target='pending']", false
+  end
+
   test "returns ok with plan in session" do
     sign_in @user
     get optimizer_path, params: { plan_id: @plan.id }
     get optimizer_advise_path
     assert_response :ok
-  end
-
-  test "renders farming advice from stub" do
-    sign_in @user
-    get optimizer_path, params: { plan_id: @plan.id }
-    get optimizer_advise_path
-    assert_equal "Stub farming advice.", @controller.instance_variable_get(:@farming_advice)
   end
 end
 

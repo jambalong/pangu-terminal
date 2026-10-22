@@ -54,7 +54,10 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
+  # Solid Queue only runs jobs when a worker exists (SOLID_QUEUE_IN_PUMA or a
+  # separate process). Without one, fall back to the in-process async adapter so
+  # background jobs such as FarmingAdviceJob still run.
+  config.active_job.queue_adapter = ENV["SOLID_QUEUE_IN_PUMA"].present? ? :solid_queue : :async
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Ignore bad email addresses and do not raise email delivery errors.
