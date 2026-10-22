@@ -24,6 +24,32 @@ LlmClient.instance_eval do
   end
 end
 
+# The suite runs on :null_store. Include this to get a real in-memory cache for
+# one test class (restored in teardown), for code that depends on cache hits.
+module MemoryCacheTestHelper
+  extend ActiveSupport::Concern
+
+  included do
+    setup do
+      @original_cache = Rails.cache
+      Rails.cache = ActiveSupport::Cache::MemoryStore.new
+    end
+
+    teardown { Rails.cache = @original_cache }
+  end
+end
+
+# Replaces LlmClient.ask for the block (the suite stubs it globally already).
+module LlmAskTestHelper
+  def with_llm_response(response)
+    original = LlmClient.method(:ask)
+    LlmClient.define_singleton_method(:ask) { |_prompt| response }
+    yield
+  ensure
+    LlmClient.define_singleton_method(:ask, original)
+  end
+end
+
 module ActiveSupport
   class TestCase
     include Devise::Test::IntegrationHelpers

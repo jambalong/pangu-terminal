@@ -8,7 +8,7 @@ Pangu Terminal is a conventional Rails 8.1 monolith (Hotwire front end, PostgreS
 
 **Inventory and reconciliation.** `InventoryItemsController` edits per-user quantities (Turbo Stream response). `SynthesisService.new(owned, required).reconcile` compares `owned` against a plan's (or all plans') `output` and reports needed / satisfied / deficit / craftable.
 
-**Optimizer.** `OptimizerService` (called from `OptimizersController#index` and `#advise`): reconcile -> keep materials with a deficit -> `DropRateService` per material for the user's `sol3_phase` -> per-source run totals; `FarmingPriorityService` then ranks source types. The advisor panel is a separate Turbo Frame request (`/app/optimizer/advise`) that calls `FarmingAdvisorService` -> `LlmClient` -> RubyLLM (Gemini). Advice is cached in `Rails.cache` for one day, keyed by a SHA-256 digest of the prompt, so identical optimizer state does not call the model again. `LlmClient::FALLBACK_MESSAGE` responses are never cached.
+**Optimizer.** `OptimizerService` (called from `OptimizersController#index` and `#advise`): reconcile -> keep materials with a deficit -> `DropRateService` per material for the user's `sol3_phase` -> per-source run totals; `FarmingPriorityService` then ranks source types. The advisor panel is a separate Turbo Frame request (`/app/optimizer/advise`) handled by `FarmingAdviceRequest`, which never waits on the model: advice is cached in `Rails.cache` for one day keyed by a SHA-256 digest of the prompt (`FarmingAdvisorService#cache_key`), so identical optimizer state is served instantly. On a miss it marks the key pending, enqueues `FarmingAdviceJob` once and answers with a loading card; the `advisor-poll` Stimulus controller re-fetches the frame every 2s (at most 30 times). The job calls `FarmingAdvisorService#generate` -> `LlmClient` -> RubyLLM (Gemini), caches a real answer, and on `LlmClient::FALLBACK_MESSAGE` leaves a 30s failed marker so the next poll shows the fallback instead of looping (the fallback itself is never cached).
 
 **API.** `/api/v1/*` inherits `Api::V1::BaseController` (`ActionController::API`), authenticates via bearer token, and reuses the same services. See [API.md](API.md).
 
@@ -21,7 +21,7 @@ Pangu Terminal is a conventional Rails 8.1 monolith (Hotwire front end, PostgreS
 
 ## Background infrastructure
 
-Solid Cache, Solid Queue and Solid Cable are installed (`config/cache.yml`, `queue.yml`, `cable.yml`, `recurring.yml`). In production all four databases (`primary`, `cache`, `queue`, `cable`) point at the same `DATABASE_URL`. No application jobs exist yet (`app/jobs/application_job.rb` only). Rack::Attack uses `Rails.cache`.
+Solid Cache, Solid Queue and Solid Cable are installed (`config/cache.yml`, `queue.yml`, `cable.yml`, `recurring.yml`). In production all four databases (`primary`, `cache`, `queue`, `cable`) point at the same `DATABASE_URL`. The one application job is `FarmingAdviceJob`. Production uses the in-process `:async` ActiveJob adapter unless `SOLID_QUEUE_IN_PUMA` is set (then `:solid_queue`), because Solid Queue only processes jobs when a worker runs; this keeps the advisor working with no extra Render configuration. Solid Cable is installed (Rails 8 default, and the transport Turbo Stream broadcasts would use) but nothing uses it yet. Rack::Attack uses `Rails.cache`.
 
 ## Frontend
 

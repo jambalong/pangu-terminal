@@ -85,14 +85,10 @@
           <% end %>
 
           <!-- Farming Advisor -->
-          <%= turbo_frame_tag "farming-advisor", src: optimizer_advise_path do %>
+          <%= turbo_frame_tag "farming-advisor", src: optimizer_advise_path, data: { controller: "advisor-poll" } do %>
             <div class="optimizer-advisor">
               <h2 class="optimizer-results-title">&gt; FARMING_ADVISOR</h2>
-              <div class="optimizer-advisor-card optimizer-advisor-card--loading">
-                <span class="optimizer-advisor-dot"></span>
-                <span class="optimizer-advisor-dot"></span>
-                <span class="optimizer-advisor-dot"></span>
-              </div>
+              <%= render "optimizers/advisor_loading" %>
             </div>
           <% end %>
 

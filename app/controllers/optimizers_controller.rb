@@ -31,13 +31,9 @@ class OptimizersController < ApplicationController
     @selected_plan = @plans.find_by(id: session[:optimizer_plan_id])
     return head :no_content unless @selected_plan && sol3_phase_set?
 
-    @results, @chain_coverage, @totals = compute_optimizer_results
-    @farming_priority = FarmingPriorityService.call(@results)
-    @farming_advice = FarmingAdvisorService.call(
-      results: @results,
-      farming_priority: @farming_priority,
-      chain_coverage: @chain_coverage
-    )
+    status, advice = FarmingAdviceRequest.new(user: current_user, plan: @selected_plan).fetch
+    @advice_pending = status == :pending
+    @farming_advice = advice
 
     render partial: "farming_advice"
   end
