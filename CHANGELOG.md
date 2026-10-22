@@ -3,6 +3,26 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.4.1] - 2026-10-22
+
+### Fixed
+- Optimizer returned a 500 for a user with no SOL3 phase set when `run=1` was requested; it now shows the phase gate (and the advisor returns no content).
+- `User#sol3_phase` accepted any integer; it is now validated against `DropRate::SOL3_PHASES`.
+- A plain HTML validation failure when editing an inventory quantity returned 406; it now redirects back with the error.
+- `LlmClient` logs timeouts and rate limits too (previously only unexpected errors), so a transient advisor fallback leaves a trace.
+
+### Added
+- `bin/rails advisor:check` (one minimal LLM call, exits non-zero on fallback) and `bin/rails plans:prune_guests` (dry run by default; `DAYS`, `APPLY=1`) backed by `GuestPlanPruner`.
+- `APP_HOST` and `EXTRA_HOSTS` environment variables for allowed hosts and mailer links (defaults unchanged).
+
+### Changed
+- `DropRate::SOL3_PHASES` replaces the phase range hard-coded in three places.
+- `SKILL_LABEL_OVERRIDES` lives in `config/skill_label_overrides.yml`, read by the seeds and `forte:download_skill_icons`.
+- `bin/dev` runs `bin/rails server`; `Procfile.dev` removed.
+- `docs/ROADMAP.md` records what was verified in production, what was done and what is deliberately left.
+
+---
+
 ## [1.4.0] - 2026-10-22
 
 ### Added

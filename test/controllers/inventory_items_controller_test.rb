@@ -101,6 +101,17 @@ class InventoryItemsControllerUpdateTest < ActionDispatch::IntegrationTest
     assert_equal original_quantity, @inventory_item.reload.quantity
   end
 
+  test "redirects back with an alert on an invalid quantity over plain HTML" do
+    sign_in @user
+    original_quantity = @inventory_item.quantity
+
+    patch inventory_item_path(@inventory_item), params: { inventory_item: { quantity: -1 } }
+
+    assert_redirected_to inventory_items_path
+    assert_match(/greater than or equal to 0/, flash[:alert])
+    assert_equal original_quantity, @inventory_item.reload.quantity
+  end
+
   test "non-owner gets 404" do
     sign_in @other_user
     patch inventory_item_path(@inventory_item),

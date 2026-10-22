@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :inventory_items, dependent: :destroy
   has_many :materials, through: :inventory_items
 
+  validates :sol3_phase, inclusion: { in: DropRate::SOL3_PHASES }, allow_nil: true
+
   after_create :initialize_inventory
 
   def inventory_item_for(material)

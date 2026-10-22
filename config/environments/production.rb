@@ -1,6 +1,10 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Public hostname used for allowed hosts and mailer links. Override with APP_HOST
+  # (for example when the custom domain changes); EXTRA_HOSTS is a comma-separated
+  # list of additional allowed hosts. Defaults match the current production setup.
+  app_host = ENV.fetch("APP_HOST", "panguterminal.ambalong.dev")
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -59,7 +63,7 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {
-    host: "panguterminal.ambalong.dev",
+    host: app_host,
     protocol: "https"
   }
 
@@ -89,8 +93,9 @@ Rails.application.configure do
   #   "example.com",     # Allow requests from example.com
   #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
   # ]
-  config.hosts << "panguterminal.ambalong.dev"
+  config.hosts << app_host
   config.hosts << "pangu-terminal.onrender.com"
+  ENV.fetch("EXTRA_HOSTS", "").split(",").map(&:strip).reject(&:empty?).each { |host| config.hosts << host }
 
   #
   # Skip DNS rebinding protection for the default health check endpoint.

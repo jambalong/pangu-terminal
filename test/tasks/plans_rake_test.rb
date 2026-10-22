@@ -47,4 +47,21 @@ class PlansRakeTest < ActiveSupport::TestCase
     assert_includes out, "Updated 1 plan(s)"
     assert_equal @correct, @plan.reload.plan_data["output"][@shell_credit.id.to_s]
   end
+
+  test "prune_guests dry run reports and APPLY=1 deletes" do
+    @task.reenable
+    Rake::Task["plans:prune_guests"].reenable
+    guest = Plan.create!(guest_token: "old-guest", subject: Weapon.find_by!(name: "Kumokiri"), plan_data: { "input" => {}, "output" => {} })
+    guest.update_columns(updated_at: 200.days.ago)
+
+    out, = capture_io { Rake::Task["plans:prune_guests"].invoke }
+    assert_includes out, "Would delete 1 guest plan(s)"
+    assert Plan.exists?(guest.id)
+
+    Rake::Task["plans:prune_guests"].reenable
+    ENV["APPLY"] = "1"
+    out, = capture_io { Rake::Task["plans:prune_guests"].invoke }
+    assert_includes out, "Deleted 1 guest plan(s)"
+    assert_not Plan.exists?(guest.id)
+  end
 end

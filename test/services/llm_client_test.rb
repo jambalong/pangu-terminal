@@ -22,24 +22,34 @@ class LlmClientTest < ActiveSupport::TestCase
     end
   end
 
-  test "falls back on rate limit and timeout errors" do
+  test "falls back and logs on rate limit and timeout errors" do
     [ RubyLLM::RateLimitError.new("slow down"), Timeout::Error.new ].each do |error|
-      with_chat(FakeChat.new(error)) do
-        assert_equal LlmClient::FALLBACK_MESSAGE, LlmClient.real_ask("prompt")
+      logged = capture_log do
+        with_chat(FakeChat.new(error)) do
+          assert_equal LlmClient::FALLBACK_MESSAGE, LlmClient.real_ask("prompt")
+        end
       end
+      assert_includes logged, "LlmClient unavailable: #{error.class}"
     end
   end
 
-  test "falls back and logs on unexpected errors" do
-    logged = StringIO.new
+  def capture_log
+    io = StringIO.new
     original = Rails.logger
-    Rails.logger = ActiveSupport::Logger.new(logged)
-    with_chat(FakeChat.new(RuntimeError.new("boom"))) do
-      assert_equal LlmClient::FALLBACK_MESSAGE, LlmClient.real_ask("prompt")
-    end
-    assert_includes logged.string, "RuntimeError boom"
+    Rails.logger = ActiveSupport::Logger.new(io)
+    yield
+    io.string
   ensure
     Rails.logger = original
+  end
+
+  test "falls back and logs on unexpected errors" do
+    logged = capture_log do
+      with_chat(FakeChat.new(RuntimeError.new("boom"))) do
+        assert_equal LlmClient::FALLBACK_MESSAGE, LlmClient.real_ask("prompt")
+      end
+    end
+    assert_includes logged, "LlmClient error: RuntimeError boom"
   end
 
   test "fallback? recognises only the fallback message" do
