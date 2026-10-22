@@ -36,6 +36,52 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     assert_equal "Stub farming advice.", result
   end
 
+  # Swaps in a real cache and a counting LlmClient.ask; the suite default is a null store.
+  def with_cache_and_llm(responses)
+    original_cache = Rails.cache
+    original_ask = LlmClient.method(:ask)
+    calls = []
+    Rails.cache = ActiveSupport::Cache::MemoryStore.new
+    LlmClient.define_singleton_method(:ask) { |prompt| calls << prompt; responses.shift }
+    yield calls
+  ensure
+    LlmClient.define_singleton_method(:ask, original_ask)
+    Rails.cache = original_cache
+  end
+
+  def advise
+    FarmingAdvisorService.call(
+      results: @results,
+      farming_priority: @farming_priority,
+      chain_coverage: @chain_coverage
+    )
+  end
+
+  test "caches advice for identical optimizer state" do
+    with_cache_and_llm([ "First advice.", "Second advice." ]) do |calls|
+      assert_equal "First advice.", advise
+      assert_equal "First advice.", advise
+      assert_equal 1, calls.size
+    end
+  end
+
+  test "asks again when the deficits change" do
+    with_cache_and_llm([ "First advice.", "Second advice." ]) do |calls|
+      assert_equal "First advice.", advise
+      @results[@shell_credit.id][:deficit] = 100
+      assert_equal "Second advice.", advise
+      assert_equal 2, calls.size
+    end
+  end
+
+  test "does not cache the fallback message" do
+    with_cache_and_llm([ LlmClient::FALLBACK_MESSAGE, "Recovered advice." ]) do |calls|
+      assert_equal LlmClient::FALLBACK_MESSAGE, advise
+      assert_equal "Recovered advice.", advise
+      assert_equal 2, calls.size
+    end
+  end
+
   test "returns nil when results are blank" do
     result = FarmingAdvisorService.call(
       results: {},
