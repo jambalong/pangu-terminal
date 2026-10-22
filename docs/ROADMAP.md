@@ -39,6 +39,11 @@ Working backlog for bringing the project "up to current". Last reviewed 2026-10-
 - [x] `bin/dev` runs `bin/rails server` directly; `Procfile.dev` and foreman are gone.
 - [x] Orphaned guest plans: `bin/rails plans:prune_guests` (dry run by default, `DAYS=90`, `APPLY=1`). Manual on purpose: nothing deletes user data automatically.
 
+## Done (unreleased, heading for v1.5.0)
+
+- [x] `PlanForm` DRY: one `SKILLS` list drives attributes, the mapping hashes and the controller's permitted params. The flat form field names are unchanged, so no view or JavaScript change was needed (a nested params shape is no longer worth it).
+- [x] Dependabot: `thruster` 0.1.27 and `ruby_llm` 2.1.1 merged; advisor re-verified in production.
+
 ## 1. Game data: remaining
 
 - [ ] **Deferred by the owner until they have the data (do not add new Resonators, weapons or materials before then):** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown).
@@ -64,6 +69,5 @@ Decided to leave as is (revisit only if the stated trigger happens):
 - Production runs `db:seed` on every boot. Seeds are idempotent and never delete. Revisit if boot time matters on the free tier (then make it a one-off release step).
 - Solid Queue and Solid Cable are installed but unused; Solid Cache is in use (advice cache, Rack::Attack). Kept because removing them means changing the multi-database production config for no gain. Revisit if a job is ever needed or the extra tables bother you.
 - The advisor LLM call is synchronous inside the request (20s timeout). The lazy Turbo Frame keeps the page responsive and the one-day cache removes repeats, so a background job is not worth it yet.
-- `PlanForm` generates about 30 attributes per skill/node and maps them back into three hand-built hashes. A nested `skills` params shape would remove most of it but changes the form contract, views and the system test; not a small change.
 - Region/forgery-set membership (`LAHAI_ROI_*`) lives in code. Moving it to columns needs a schema change plus seed changes; do it together with the next batch of game data.
 - Ruby (3.4.7) and PostgreSQL (17) bumps: change together when there is a reason (security release or a gem requiring it).
