@@ -6,6 +6,8 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Fixed
+- CI: the `system-test` job's database service was the untagged `postgres` image (latest, currently 18) while everything else is documented and tested on 17; it is now pinned to `postgres:17`.
+- CI: Cuprite waits up to 30s (was 10s) for Chrome to start, after a runner hit `Ferrum::ProcessTimeoutError` before any test ran.
 - Plan create/update validation errors over a plain HTML request (no Turbo) returned 406; they now redirect back to the planner with the errors.
 
 ### Changed

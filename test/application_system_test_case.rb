@@ -6,6 +6,7 @@ Capybara.register_driver(:cuprite) do |app|
     app,
     window_size: [ 1400, 1400 ],
     browser_options: { "no-sandbox": nil },
+    process_timeout: 30, # default 10s is too tight for a cold CI runner launching Chrome
     headless: true
   )
 end
