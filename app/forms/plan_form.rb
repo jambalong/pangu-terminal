@@ -24,19 +24,24 @@ class PlanForm
     id.present?
   end
 
-  def save(user, guest_token, existing_plan = nil)
+  # Runs the planner for the current attributes. Single source of truth for the
+  # shape stored in plans.plan_data; used by #save and by PlanRecomputer.
+  def plan_data
     apply_defaults_to_blanks
-
-    plan = existing_plan || Plan.new(user: user, guest_token: guest_token)
-    plan.subject_type = subject_type
-    plan.subject_id = subject_id
 
     subject = subject_type.constantize.find(subject_id)
 
-    plan.plan_data = {
+    {
       input: build_input_data(subject),
       output: run_planner_service(subject)
     }
+  end
+
+  def save(user, guest_token, existing_plan = nil)
+    plan = existing_plan || Plan.new(user: user, guest_token: guest_token)
+    plan.subject_type = subject_type
+    plan.subject_id = subject_id
+    plan.plan_data = plan_data
 
     if plan.save
       plan

@@ -39,6 +39,7 @@ Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`
 
 - **Logs:** Render dashboard (STDOUT, tagged with request id).
 - **Rollback:** Render dashboard -> service -> Deploys -> pick a previous successful deploy -> Rollback (or push a revert to `main`; Auto-Deploy will redeploy). Disable Auto-Deploy first if you need to hold a bad commit off. Rollback does not reverse migrations; if the bad release included a destructive migration, run `bin/rails db:rollback` (**TODO(owner)**: confirm shell access on your Render plan) or restore Neon from a point-in-time branch.
+- **Recompute stored plans after a calculation bug fix:** plans snapshot their material totals in `plans.plan_data` when saved, so a fixed planner does not change existing plans by itself. In the Render shell run `bin/rails plans:recompute` (dry run, lists each changed plan with old -> new quantities and any plan whose stored input no longer validates), review it, then `APPLY=1 bin/rails plans:recompute`. `PLAN_ID=<id>` or `USER_ID=<id>` limit the scope. Only the `output` of plans whose totals differ is rewritten.
 - **Reseed manually:** Render shell, `bin/rails db:seed`. Seeds never delete rows; removing a record from production requires a console/migration.
 - **Console:** Render shell, `bin/rails console`.
 - **Secrets rotation:** `RAILS_MASTER_KEY` changes require re-encrypting credentials locally (`bin/rails credentials:edit`), committing `config/credentials.yml.enc`, and updating the env var.
