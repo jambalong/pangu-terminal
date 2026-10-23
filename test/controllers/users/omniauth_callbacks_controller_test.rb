@@ -123,4 +123,24 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to edit_user_registration_path
   end
+
+  test "new accounts get a welcome that names their username" do
+    mock_oauth(:google_oauth2, uid: "g-welcome")
+
+    sign_in_via_oauth(:google_oauth2)
+
+    user = Identity.find_by!(provider: "google_oauth2", uid: "g-welcome").user
+    assert_match(/Welcome! You are signed in as #{user.display_name}/, flash[:notice])
+  end
+
+  test "returning users get the standard sign-in message, not the welcome" do
+    user = User.new(display_name: "regular")
+    user.identities.build(provider: "discord", uid: "d-ret")
+    user.save!
+    mock_oauth(:discord, uid: "d-ret")
+
+    sign_in_via_oauth(:discord)
+
+    assert_no_match(/Welcome/, flash[:notice].to_s)
+  end
 end

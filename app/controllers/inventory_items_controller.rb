@@ -8,6 +8,7 @@ class InventoryItemsController < ApplicationController
   def index
     @selected_plan = @plans.find_by(id: params[:plan_id]) if params[:plan_id].present?
     @categories = Material.ordered_categories
+    @nothing_owned = !current_user.inventory_items.where("quantity > 0").exists?
     apply_filters
     apply_plan_filter
     compute_synthesis_data

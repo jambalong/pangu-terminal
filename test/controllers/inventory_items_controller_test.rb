@@ -40,6 +40,21 @@ class InventoryItemsControllerIndexTest < ActionDispatch::IntegrationTest
     get inventory_items_path(category: "Weapon and Skill Material")
     assert_response :ok
   end
+
+  test "shows a start-with-what-you-own hint while nothing is owned" do
+    sign_in @user
+    get inventory_items_path
+
+    assert_select ".inventory-hint", text: /Start with what you own/
+  end
+
+  test "hides the hint once something is owned" do
+    sign_in @user
+    @user.inventory_item_for(Material.find_by!(name: "Shell Credit")).update!(quantity: 10)
+    get inventory_items_path
+
+    assert_select ".inventory-hint", count: 0
+  end
 end
 
 class InventoryItemsControllerEditTest < ActionDispatch::IntegrationTest

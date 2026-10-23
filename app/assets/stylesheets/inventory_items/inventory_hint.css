@@ -1,0 +1,18 @@
+.inventory-hint {
+  background-color: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-left: 4px solid var(--ctp-mauve);
+  border-radius: 0.5rem;
+  color: var(--ctp-subtext0);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+.inventory-hint strong {
+  color: var(--ctp-text);
+}
+
+.inventory-hint a {
+  color: var(--ctp-mauve);
+}
