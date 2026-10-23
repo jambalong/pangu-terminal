@@ -1,4 +1,11 @@
 module ApplicationHelper
+  DEFAULT_DESCRIPTION = "Plan Wuthering Waves material costs, track your inventory, see what you can craft instead of farm, and know where your next Waveplate goes. Free and fan-made.".freeze
+
+  # Public URL on the canonical host, whichever hostname served the request.
+  def canonical_url(path = request.path)
+    "https://#{ENV.fetch("APP_HOST", "panguterminal.ambalong.dev")}#{path}"
+  end
+
   def format_quantity(number)
     return "0" if number.zero?
     return number.to_s if number < 1000

@@ -45,6 +45,8 @@ New accounts are created with Google or Discord (see [ARCHITECTURE.md](ARCHITECT
 
 Scopes are minimal: Discord `identify`, Google `openid profile`; no email is requested or stored. Redirect URIs are built from the request host, so a new hostname needs its own redirect URI at each provider. Rate limit: 20 requests per minute per IP on `/users/auth/*`.
 
+`public/robots.txt` and `public/sitemap.xml` are static files with the production hostname written in; update them if the custom domain changes. Canonical and Open Graph URLs use `APP_HOST` (default `panguterminal.ambalong.dev`).
+
 Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`. Add any new hostname to `config.hosts` or requests get a 403 from Rails host authorization.
 
 ## Release procedure
