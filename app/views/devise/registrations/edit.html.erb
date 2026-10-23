@@ -7,13 +7,13 @@
     html: { method: :patch, data: { turbo: false } }) do |f| %>
     <div class="auth-form-group">
       <div class="label-with-hint">
-        <%= f.label :display_name, "Gamertag", class: "auth-label" %>
+        <%= f.label :display_name, "Username", class: "auth-label" %>
         <span class="hint-text">3 to 16 characters, lowercase</span>
       </div>
       <%= f.text_field :display_name, maxlength: User::DISPLAY_NAME_LENGTH.max, autocomplete: "nickname", class: "auth-input" %>
     </div>
 
-    <%= f.submit "Save Gamertag", class: "auth-submit" %>
+    <%= f.submit "Save Username", class: "auth-submit" %>
   <% end %>
 
   <%= form_for(

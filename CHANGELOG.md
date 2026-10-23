@@ -6,9 +6,9 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
-- Gamertag: new accounts get a neutral lowercase name like `rover-4821` instead of your Google or Discord name, and you can change it under Account Settings (3 to 16 characters: lowercase letters, numbers, `.`, `_`, `-`). It never needs a password to change. The navbar caps the name's width.
+- Username: new accounts get a neutral lowercase name like `rover-4821` instead of your Google or Discord name, and you can change it under Account Settings (3 to 16 characters: lowercase letters, numbers, `.`, `_`, `-`). It never needs a password to change. The navbar caps the name's width.
 - Privacy policy page at `/privacy` (linked from the landing page footer). Google requires a policy URL to publish the OAuth consent screen.
-- Sign in with Google or Discord. New accounts are created through OAuth only: no email address or password is needed, and neither provider is asked for your email (Discord `identify`, Google `openid profile`). Your name is shown in the navbar as a gamertag you can edit. Guest plans are claimed on first sign-in.
+- Sign in with Google or Discord. New accounts are created through OAuth only: no email address or password is needed, and neither provider is asked for your email (Discord `identify`, Google `openid profile`). Your name is shown in the navbar as a username you can edit. Guest plans are claimed on first sign-in.
 - Account Settings has a **Sign-in methods** section to link or unlink Google and Discord (you cannot unlink your last way in). Linking only happens while signed in, never by matching an email.
 - Accounts without a password can change settings and delete their account without a current password.
 - Rate limit on `/users/auth/*` (20 requests per minute per IP).
