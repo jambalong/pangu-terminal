@@ -348,3 +348,54 @@
     width: 100%;
   }
 }
+.oauth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.oauth-buttons form {
+  width: 100%;
+}
+
+.oauth-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--ctp-mantle);
+  color: var(--ctp-text);
+  font-weight: 900;
+  border: 1px solid var(--ctp-mauve);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.oauth-button:hover {
+  background-color: var(--ctp-mauve);
+  color: var(--ctp-base);
+}
+
+.auth-email-toggle {
+  margin-top: 1.5rem;
+}
+
+.auth-email-toggle > summary {
+  cursor: pointer;
+  color: var(--ctp-subtext0);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.sign-in-methods {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ctp-mauve);
+}
+
+.sign-in-method-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}

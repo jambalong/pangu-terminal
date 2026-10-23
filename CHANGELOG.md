@@ -5,6 +5,16 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Added
+- Sign in with Google or Discord. New accounts are created through OAuth only: no email address or password is needed, and neither provider is asked for your email (Discord `identify`, Google `openid profile`). Your display name comes from the provider and is shown in the navbar. Guest plans are claimed on first sign-in.
+- Account Settings has a **Sign-in methods** section to link or unlink Google and Discord (you cannot unlink your last way in). Linking only happens while signed in, never by matching an email.
+- Accounts without a password can change settings and delete their account without a current password.
+- Rate limit on `/users/auth/*` (20 requests per minute per IP).
+
+### Changed
+- The sign-in page leads with the provider buttons; the email form moves behind **Sign in with email** and the sign-up form is removed. Existing email and password accounts keep working. Until a provider is configured on the server the old sign-up form stays available, so there is always a way to create an account.
+- `users.email` is optional (new `identities` table, `users.display_name`).
+
 ### Changed
 - Views: every partial now declares strict locals and takes its data as locals instead of controller instance variables (plan cards, materials summary, inventory cards, optimizer results, farming advice). The duplicated modal shell and material/portrait markup moved into `shared/_modal`, `shared/_material_icon` and `shared/_subject_portrait`. `sorted_plan_materials` now takes the materials lookup as an argument. No visible change.
 - Docs: `docs/ROADMAP.md` merged into `docs/PRODUCT_ROADMAP.md` (one roadmap: product, maintenance backlog, history). The feature roadmap is reprioritized with username accounts (email optional, with recovery codes) first, and carries a full implementation spec for it.

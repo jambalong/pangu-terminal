@@ -2,16 +2,39 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :omniauthable, omniauth_providers: OauthProviders.names
 
+  has_many :identities, dependent: :destroy
   has_many :api_keys, dependent: :destroy
   has_many :plans, dependent: :destroy
   has_many :inventory_items, dependent: :destroy
   has_many :materials, through: :inventory_items
 
+  validates :display_name, length: { maximum: 50 }, allow_nil: true
   validates :sol3_phase, inclusion: { in: DropRate::SOL3_PHASES }, allow_nil: true
 
+  before_validation :normalize_blank_email
   after_create :initialize_inventory
+
+  # Name shown in the navbar. Never exposes an email beyond its local part.
+  def shown_name
+    display_name.presence || email.to_s.split("@").first.presence || "Account"
+  end
+
+  def password?
+    encrypted_password.present?
+  end
+
+  # Accounts created through OAuth have no password and may have no email.
+  def oauth_only?
+    !password? && identities.any?
+  end
+
+  # A way to sign in that does not depend on the identity being removed.
+  def can_unlink?(identity)
+    identities.reject { |other| other == identity }.any? || (password? && email.present?)
+  end
 
   def inventory_item_for(material)
     inventory_items.find_or_create_by!(material: material) do |item|
@@ -19,7 +42,23 @@ class User < ApplicationRecord
     end
   end
 
+  protected
+
+  # Password users still need an email to sign in; OAuth-only users do not.
+  def email_required?
+    !oauth_only?
+  end
+
+  def password_required?
+    return false if oauth_only? && password.blank? && password_confirmation.blank?
+    super
+  end
+
   private
+
+  def normalize_blank_email
+    self.email = nil if email.blank?
+  end
 
   def initialize_inventory
     materials = Material.pluck(:id).map do |mat_id|

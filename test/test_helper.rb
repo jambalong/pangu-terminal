@@ -50,6 +50,45 @@ module LlmAskTestHelper
   end
 end
 
+# OmniAuth test mode: no network, callbacks return the mocked auth hash.
+# `with_oauth_env` sets the provider ENV vars (which gate the sign-in buttons).
+module OauthTestHelper
+  extend ActiveSupport::Concern
+
+  included do
+    setup do
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.logger = Logger.new(File::NULL)
+    end
+
+    teardown do
+      OauthProviders.names.each { |provider| OmniAuth.config.mock_auth[provider] = nil }
+      OmniAuth.config.test_mode = false
+    end
+  end
+
+  def mock_oauth(provider, uid: "uid-#{SecureRandom.hex(4)}", name: "Test Player")
+    OmniAuth.config.mock_auth[provider] = OmniAuth::AuthHash.new(
+      provider: provider.to_s, uid: uid, info: { name: name }
+    )
+    uid
+  end
+
+  def sign_in_via_oauth(provider)
+    post "/users/auth/#{provider}"
+    follow_redirect!
+  end
+
+  def with_oauth_env(*providers)
+    keys = providers.flat_map { |p| OauthProviders::PROVIDERS.fetch(p).values_at(:id, :secret) }
+    original = keys.index_with { |key| ENV[key] }
+    keys.each { |key| ENV[key] = "test-value" }
+    yield
+  ensure
+    original.each { |key, value| ENV[key] = value }
+  end
+end
+
 module ActiveSupport
   class TestCase
     include Devise::Test::IntegrationHelpers

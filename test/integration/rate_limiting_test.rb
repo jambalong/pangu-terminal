@@ -21,4 +21,18 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_equal "Rate limit exceeded. Try again later.", json["error"]
   end
+
+  test "returns 429 after exceeding the OAuth throttle" do
+    21.times { get "/users/auth/unknown" }
+
+    assert_response :too_many_requests
+  end
+
+  test "the legacy sign-in form is still throttled per email" do
+    6.times do
+      post user_session_path, params: { user: { email: "victim@example.com", password: "nope" } }, headers: { "REMOTE_ADDR" => "10.0.0.#{rand(200)}" }
+    end
+
+    assert_response :too_many_requests
+  end
 end
