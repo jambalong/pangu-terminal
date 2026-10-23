@@ -6,6 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
+- Privacy policy page at `/privacy` (linked from the landing page footer). Google requires a policy URL to publish the OAuth consent screen.
 - Sign in with Google or Discord. New accounts are created through OAuth only: no email address or password is needed, and neither provider is asked for your email (Discord `identify`, Google `openid profile`). Your display name comes from the provider and is shown in the navbar. Guest plans are claimed on first sign-in.
 - Account Settings has a **Sign-in methods** section to link or unlink Google and Discord (you cannot unlink your last way in). Linking only happens while signed in, never by matching an email.
 - Accounts without a password can change settings and delete their account without a current password.

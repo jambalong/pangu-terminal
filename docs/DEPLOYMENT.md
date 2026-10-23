@@ -38,6 +38,7 @@ New accounts are created with Google or Discord (see [ARCHITECTURE.md](ARCHITECT
 
 - [ ] Google Cloud Console: create an OAuth consent screen and a **Web** OAuth client. Authorized redirect URI: `https://panguterminal.ambalong.dev/users/auth/google_oauth2/callback`.
 - [ ] Discord Developer Portal: create an application, OAuth2 page, add redirect `https://panguterminal.ambalong.dev/users/auth/discord/callback`.
+- [ ] On the consent screen Branding page set the home page to `https://panguterminal.ambalong.dev` and the privacy policy to `https://panguterminal.ambalong.dev/privacy` (Google requires both to publish), add `ambalong.dev` under authorized domains, and leave the logo empty (a logo triggers verification). Then publish the app so any Google account can sign in.
 - [ ] Render: add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` as environment variables, then redeploy.
 - [ ] Check `/sign-in` shows the buttons and that signing in with each provider lands on the dashboard.
 
