@@ -23,6 +23,7 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 | `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` | Discord OAuth application. Same behavior. |
 | `APP_HOST` | Optional. Public hostname for allowed hosts and mailer links; default `panguterminal.ambalong.dev`. Set it if the custom domain changes. |
 | `SOLID_QUEUE_IN_PUMA` | Optional. When set, ActiveJob uses Solid Queue (processed inside Puma) instead of the default in-process `:async` adapter. Not needed: `FarmingAdviceJob` is short and its result is cached, so a restart only costs one regenerated advice. |
+| `ADVISOR_DAILY_LIMIT_PER_USER`, `ADVISOR_DAILY_LIMIT_GLOBAL` | Optional. Farming Advisor generations per account and in total per day (defaults 20 and 500). Each new generation is one Gemini call; cached advice and polling are free. Raise them if the Gemini quota allows, lower them to protect it. |
 | `EXTRA_HOSTS` | Optional. Comma-separated extra allowed hosts (the default `pangu-terminal.onrender.com` is always allowed). |
 | `RAILS_LOG_LEVEL` | Optional, default `info`; logs go to STDOUT |
 | `WEB_CONCURRENCY` | Set to **2** on Render (two Puma workers). The Free instance has about 512 MB of RAM; if logs show out-of-memory restarts, lower it to 1. |

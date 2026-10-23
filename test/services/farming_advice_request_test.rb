@@ -66,4 +66,48 @@ class FarmingAdviceRequestTest < ActiveSupport::TestCase
 
     assert_not_equal before, FarmingAdvisorService.for(user: @user, plan: @plan).cache_key
   end
+
+  def with_limit(name, value)
+    original = FarmingAdviceRequest.method(name)
+    FarmingAdviceRequest.define_singleton_method(name) { value }
+    yield
+  ensure
+    FarmingAdviceRequest.define_singleton_method(name, original)
+  end
+
+  test "stops enqueuing once the user's daily budget is spent" do
+    with_limit(:user_daily_limit, 1) do
+      assert_enqueued_jobs 1 do
+        assert_equal [ :pending, nil ], @request.fetch
+      end
+      Rails.cache.delete(@advisor.pending_key)
+
+      assert_no_enqueued_jobs do
+        assert_equal [ :limited, FarmingAdviceRequest::LIMIT_MESSAGE ], @request.fetch
+      end
+    end
+  end
+
+  test "stops enqueuing once the global daily budget is spent" do
+    with_limit(:global_daily_limit, 1) do
+      other = User.create!(email: "advice_other@example.com", password: "password123", sol3_phase: 3)
+      # A different prompt: identical prompts share one cached or pending answer
+      other_plan = Plan.create!(user: other, subject: @plan.subject,
+                                plan_data: { "input" => {}, "output" => { @shell_credit.id => 1000 } })
+
+      FarmingAdviceRequest.new(user: other, plan: other_plan).fetch
+
+      assert_no_enqueued_jobs { assert_equal [ :limited, FarmingAdviceRequest::LIMIT_MESSAGE ], @request.fetch }
+    end
+  end
+
+  test "cached advice and polling a pending job do not spend the budget" do
+    with_limit(:user_daily_limit, 1) do
+      @request.fetch
+      3.times { assert_equal [ :pending, nil ], @request.fetch }
+
+      Rails.cache.write(@advisor.cache_key, "Hit the forgery first.")
+      assert_equal [ :ready, "Hit the forgery first." ], @request.fetch
+    end
+  end
 end

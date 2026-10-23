@@ -35,4 +35,16 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     assert_response :too_many_requests
   end
+
+  test "returns 429 after too many plan creations from one IP" do
+    61.times { post "/app/planner", params: {} }
+
+    assert_response :too_many_requests
+  end
+
+  test "returns 429 after too many sign-ups from one IP" do
+    6.times { post "/signup", params: { user: { email: "x@example.com", password: "password123" } } }
+
+    assert_response :too_many_requests
+  end
 end
