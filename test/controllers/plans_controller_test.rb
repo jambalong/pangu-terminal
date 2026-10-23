@@ -26,14 +26,14 @@ class PlansControllerIndexTest < ActionDispatch::IntegrationTest
   test "guests are told no account is needed" do
     get plans_path
 
-    assert_select ".plans-empty", text: /No account is needed/
+    assert_select ".plans-empty-note", text: /No account is needed/
   end
 
   test "signed-in users are not told to sign in" do
     sign_in @user
     get plans_path
 
-    assert_select ".plans-empty", text: /No account is needed/, count: 0
+    assert_select ".plans-empty-note", count: 0
   end
 end
 

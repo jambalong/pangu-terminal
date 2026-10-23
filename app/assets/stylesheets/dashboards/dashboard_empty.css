@@ -1,0 +1,12 @@
+.dashboard-empty {
+  padding: 1.5rem 1rem;
+  border: 1px dashed var(--ctp-surface1);
+  border-radius: 12px;
+  color: var(--ctp-subtext0);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.dashboard-empty a {
+  color: var(--ctp-mauve);
+}

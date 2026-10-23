@@ -34,4 +34,14 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
     get authenticated_root_path
     assert_select ".onboarding-card", count: 0
   end
+
+  test "page has no duplicate element ids" do
+    sign_in @user
+    get authenticated_root_path
+
+    # "main_content" is rendered by both the layout and each page's frame; it
+    # predates this test, so it is the one known repeat.
+    ids = css_select("[id]").map { |node| node["id"] } - [ "main_content" ]
+    assert_equal [], ids.tally.select { |_id, count| count > 1 }.keys
+  end
 end
