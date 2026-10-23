@@ -6,6 +6,10 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
+- Link previews and search basics: pages now carry a description, canonical URL and Open Graph/Twitter tags (so a shared link shows a title, summary and icon), `robots.txt` keeps the app, accounts and API out of search while allowing the public pages, and a small `sitemap.xml` lists them.
+
+### Fixed
+- The web app manifest pointed at an icon file that did not exist; it now uses `/favicon.png`.
 - Security headers: an enforcing Content-Security-Policy (scripts only from the app or with a per-request nonce; no framing) and a Permissions-Policy that turns off camera, microphone, geolocation, payment and USB.
 - Abuse limits ahead of wider sharing: the Farming Advisor now has a daily generation budget (20 per account and 500 overall; cached advice and polling are free) and shows a notice when it is spent; plan creation is limited to 60 per hour per IP and the fallback sign-up form to 5 per hour per IP.
 - Username: new accounts get a neutral lowercase name like `rover-4821` instead of your Google or Discord name, and you can change it under Account Settings (3 to 16 characters: lowercase letters, numbers, `.`, `_`, `-`). It never needs a password to change. The navbar caps the name's width.

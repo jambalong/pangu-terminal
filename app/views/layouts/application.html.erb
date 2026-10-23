@@ -2,6 +2,11 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Pangu Terminal" %></title>
+    <%= render "layouts/meta",
+          title: content_for(:title).presence || "Pangu Terminal",
+          description: content_for(:description).presence || ApplicationHelper::DEFAULT_DESCRIPTION,
+          url: canonical_url,
+          image_url: canonical_url("/favicon.png") %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Pangu Terminal">
