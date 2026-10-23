@@ -2,7 +2,7 @@
 
 Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, at https://panguterminal.ambalong.dev. The original Kamal 2 / DigitalOcean setup is decommissioned; the Kamal configuration and runbook were removed (see [History](#history)).
 
-> Items marked **TODO(owner)** are configured in the Render/Neon dashboards, which are not visible from this repository. Fill them in.
+> Render and Neon settings below were recorded from the dashboards by the owner on 2026-10-23. Dashboard values are not visible from this repository, so re-check them if something here looks wrong.
 
 ## How it deploys
 
@@ -17,17 +17,18 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 | Variable | Purpose |
 | --- | --- |
 | `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` (includes `gemini_api_key` for the Farming Advisor) |
-| `DATABASE_URL` | Neon connection string. Used for the primary, cache, queue and cable databases (`config/database.yml`), so one Neon database holds all tables. **TODO(owner)**: note whether the pooled or direct Neon endpoint is used. |
+| `DATABASE_URL` | Neon connection string. Used for the primary, cache, queue and cable databases (`config/database.yml`), so one Neon database holds all tables. It is the **pooled** endpoint (host contains `-pooler`, PgBouncer). Neon runs **PostgreSQL 17.11**, matching CI and `docker-compose.yml`. `database.yml` sets no `prepared_statements: false` or `advisory_locks: false`; migrations run through the pooler without problems (for example the 2026-10-22 region migration). If you ever see advisory-lock or prepared-statement errors, point `DATABASE_URL` at Neon's direct endpoint. |
 | `POSTMARK_API_TOKEN` | Postmark SMTP (port 2525) for password-reset emails |
 | `APP_HOST` | Optional. Public hostname for allowed hosts and mailer links; default `panguterminal.ambalong.dev`. Set it if the custom domain changes. |
 | `SOLID_QUEUE_IN_PUMA` | Optional. When set, ActiveJob uses Solid Queue (processed inside Puma) instead of the default in-process `:async` adapter. Not needed: `FarmingAdviceJob` is short and its result is cached, so a restart only costs one regenerated advice. |
 | `EXTRA_HOSTS` | Optional. Comma-separated extra allowed hosts (the default `pangu-terminal.onrender.com` is always allowed). |
 | `RAILS_LOG_LEVEL` | Optional, default `info`; logs go to STDOUT |
-| `RAILS_MAX_THREADS`, `PORT`, `WEB_CONCURRENCY` | Optional Puma tuning; **TODO(owner)**: record the values set on Render |
+| `WEB_CONCURRENCY` | Set to **2** on Render (two Puma workers). The Free instance has about 512 MB of RAM; if logs show out-of-memory restarts, lower it to 1. |
+| `RAILS_MAX_THREADS`, `PORT` | Not set: Puma uses its default of 3 threads per worker (`config/puma.rb`) and Render supplies the port. |
 
 Render service (from the dashboard settings page): web service `pangu-terminal`, runtime Docker, **Free** instance type, region **Oregon (US West)**, source `jambalong/pangu-terminal` branch `main`, custom domain `panguterminal.ambalong.dev`. The free tier sleeps when idle, so the first request can take up to a minute. Maintenance mode and edge caching are paid-only features and unavailable.
 
-**TODO(owner)**: record the Environment tab variable *names* and non-secret values (never commit secrets), and whether the Neon `DATABASE_URL` uses the pooled or direct endpoint.
+Environment tab (as of 2026-10-23) holds exactly five variables: `DATABASE_URL`, `POSTMARK_API_TOKEN`, `RAILS_ENV` (`production`), `RAILS_MASTER_KEY` and `WEB_CONCURRENCY` (`2`). The optional variables in the table above (`APP_HOST`, `EXTRA_HOSTS`, `SOLID_QUEUE_IN_PUMA`, `RAILS_LOG_LEVEL`) are unset and use their defaults. Never commit secret values.
 
 Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`. Add any new hostname to `config.hosts` or requests get a 403 from Rails host authorization.
 
@@ -41,12 +42,16 @@ Allowed hosts are `panguterminal.ambalong.dev` and `pangu-terminal.onrender.com`
 ## Operations
 
 - **Logs:** Render dashboard (STDOUT, tagged with request id).
-- **Rollback:** Render dashboard -> service -> Deploys -> pick a previous successful deploy -> Rollback (or push a revert to `main`; Auto-Deploy will redeploy). Disable Auto-Deploy first if you need to hold a bad commit off. Rollback does not reverse migrations; if the bad release included a destructive migration, run `bin/rails db:rollback` (**TODO(owner)**: confirm shell access on your Render plan) or restore Neon from a point-in-time branch.
-- **Recompute stored plans after a calculation bug fix:** plans snapshot their material totals in `plans.plan_data` when saved, so a fixed planner does not change existing plans by itself. In the Render shell run `bin/rails plans:recompute` (dry run, lists each changed plan with old -> new quantities and any plan whose stored input no longer validates), review it, then `APPLY=1 bin/rails plans:recompute`. `PLAN_ID=<id>` or `USER_ID=<id>` limit the scope. Only the `output` of plans whose totals differ is rewritten.
-- **Check the Farming Advisor:** Render shell, `bin/rails advisor:check` makes one minimal LLM call. `OK` means the key, model and network work; `FAILED` means it fell back, and the `LlmClient unavailable` / `LlmClient error` line in the logs names the cause (timeout, rate limit, bad key, unknown model).
-- **Prune abandoned guest plans:** Render shell, `bin/rails plans:prune_guests` (dry run; guest plans untouched for `DAYS`, default 90), then `APPLY=1 bin/rails plans:prune_guests`. Never touches plans owned by a user.
-- **Reseed manually:** Render shell, `bin/rails db:seed` (or `FORCE_SEED=1 bin/rails db:seed:if_changed` to also refresh the recorded checksum). Seeds never delete rows; removing a record from production requires a console/migration.
-- **Console:** Render shell, `bin/rails console`.
+- **Rollback:** Render dashboard -> service -> Deploys -> pick a previous successful deploy -> Rollback (or push a revert to `main`; Auto-Deploy will redeploy). Disable Auto-Deploy first if you need to hold a bad commit off. Rollback does not reverse migrations; if the bad release included a destructive migration, run `bin/rails db:rollback` from your machine (see [Running tasks without a Render shell](#running-tasks-without-a-render-shell)) or restore Neon from a point-in-time branch.
+- **Recompute stored plans after a calculation bug fix:** plans snapshot their material totals in `plans.plan_data` when saved, so a fixed planner does not change existing plans by itself. From your machine (see below) run `bin/rails plans:recompute` (dry run, lists each changed plan with old -> new quantities and any plan whose stored input no longer validates), review it, then `APPLY=1 bin/rails plans:recompute`. `PLAN_ID=<id>` or `USER_ID=<id>` limit the scope. Only the `output` of plans whose totals differ is rewritten.
+- **Check the Farming Advisor:** `bin/rails advisor:check` makes one minimal LLM call (needs the Gemini key, so it runs locally only with `RAILS_MASTER_KEY`; otherwise open the optimizer page on the live site as the check). `OK` means the key, model and network work; `FAILED` means it fell back, and the `LlmClient unavailable` / `LlmClient error` line in the logs names the cause (timeout, rate limit, bad key, unknown model).
+- **Prune abandoned guest plans:** `bin/rails plans:prune_guests` from your machine (dry run; guest plans untouched for `DAYS`, default 90), then `APPLY=1 bin/rails plans:prune_guests`. Never touches plans owned by a user.
+- **Reseed manually:** Seeds run automatically on every deploy when their files change. To force one, set the env var for a deploy or run from your machine `bin/rails db:seed` (or `FORCE_SEED=1 bin/rails db:seed:if_changed` to also refresh the recorded checksum). Seeds never delete rows; removing a record from production requires a console/migration.
+- **Console:** not available (no Render shell). Use a local console against Neon only if you must, read-only first.
+- **Running tasks without a Render shell:** the Free plan has no Shell tab. Maintenance tasks that only need the database (`plans:recompute`, `plans:prune_guests`, `db:rollback`) can run from your own checkout against Neon:
+  1. In Neon, open the connection details, turn **off** "Pooled connection" to get the direct endpoint, and copy the connection string (it contains the password; treat it as a secret and never commit it).
+  2. Run, for example: `RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 DATABASE_URL='<direct connection string>' bin/rails plans:recompute`. No master key is needed for DB-only tasks.
+  3. Always do the dry run first and read the output; only then add `APPLY=1`. Never run `db:seed`, `db:reset` or `db:drop` this way (see `AGENTS.md`).
 - **Secrets rotation:** `RAILS_MASTER_KEY` changes require re-encrypting credentials locally (`bin/rails credentials:edit`), committing `config/credentials.yml.enc`, and updating the env var.
 
 ## Local Docker run (production image)

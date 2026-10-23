@@ -3,6 +3,14 @@
 Changes to this project will be documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Changed
+- Docs: `docs/ROADMAP.md` merged into `docs/PRODUCT_ROADMAP.md` (one roadmap: product, maintenance backlog, history). The feature roadmap is reprioritized with username accounts (email optional, with recovery codes) first, and carries a full implementation spec for it.
+- Docs: `docs/DEPLOYMENT.md` records the owner's Render and Neon answers (five env vars, pooled Neon endpoint on PostgreSQL 17.11, `WEB_CONCURRENCY=2`, no Render shell) and documents running maintenance tasks from a local checkout against Neon.
+
+---
+
 ## [1.5.0] - 2026-10-22
 
 ### Fixed
