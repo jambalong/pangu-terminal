@@ -7,12 +7,16 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Changed
 - Views: every partial now declares strict locals and takes its data as locals instead of controller instance variables (plan cards, materials summary, inventory cards, optimizer results, farming advice). The duplicated modal shell and material/portrait markup moved into `shared/_modal`, `shared/_material_icon` and `shared/_subject_portrait`. `sorted_plan_materials` now takes the materials lookup as an argument. No visible change.
+- Docs: `docs/ROADMAP.md` merged into `docs/PRODUCT_ROADMAP.md` (one roadmap: product, maintenance backlog, history). The feature roadmap is reprioritized with username accounts (email optional, with recovery codes) first, and carries a full implementation spec for it.
+- Docs: `docs/DEPLOYMENT.md` records the owner's Render and Neon answers (five env vars, pooled Neon endpoint on PostgreSQL 17.11, `WEB_CONCURRENCY=2`, no Render shell) and documents running maintenance tasks from a local checkout against Neon.
 
 ### Added
 - `test/views/partials_test.rb`: guard rails that fail when a partial lacks a locals declaration or reads an instance variable.
 
 ### Removed
 - Unused `rarity_border_class` / `rarity_bg_class` helpers.
+
+---
 
 ## [1.5.0] - 2026-10-22
 

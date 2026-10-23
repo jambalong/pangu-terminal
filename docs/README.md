@@ -9,8 +9,7 @@
 | [DEVELOPMENT.md](DEVELOPMENT.md) | Set up a local environment (Ruby, Docker Postgres, credentials, env vars) |
 | [TESTING.md](TESTING.md) | Run tests, understand test helpers, CI jobs and security scans |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Deploy/operate production (Render + Neon) |
-| [ROADMAP.md](ROADMAP.md) | See known issues and the maintenance backlog |
-| [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md) | See the product identity, principles, non-goals and the proposed feature roadmap |
+| [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md) | See the product identity, the prioritized feature roadmap (with the username-accounts spec), the maintenance backlog and the history of what shipped |
 
 Agent instructions live in the repo root: [`AGENTS.md`](../AGENTS.md) (canonical) and [`CLAUDE.md`](../CLAUDE.md). The top-level [`README.md`](../README.md) is the project showcase; `CHANGELOG.md` records releases.
 

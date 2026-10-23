@@ -75,7 +75,7 @@ Treat results on a different Ruby/Postgres than CI as strong evidence, not proof
 ## Workflow
 
 1. Read the relevant `docs/` page and the code before editing. Reproduce a bug with a failing test first.
-2. Make the smallest change that solves the problem. No drive-by refactors; note extra findings in `docs/ROADMAP.md` instead.
+2. Make the smallest change that solves the problem. No drive-by refactors; note extra findings in `docs/PRODUCT_ROADMAP.md` (Part 2) instead.
 3. Run the gate (below). Fix failures at the root; never skip, disable or weaken a test to get green.
 4. Update docs and `CHANGELOG.md` in the same change when behavior, routes, API responses, schema, seeds workflow or deployment change.
 5. Commit with a conventional message. Develop on the assigned branch; open a PR only when asked.
