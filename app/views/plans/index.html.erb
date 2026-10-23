@@ -39,9 +39,12 @@
     <div id="plans-list-container" class="plans-container">
       <%# Hidden by CSS as soon as a plan card exists, so create and delete need no extra stream updates. %>
       <div class="plans-empty">
+        <span class="plans-empty-icon" aria-hidden="true">📋</span>
         <h2 class="plans-empty-title">No plans yet</h2>
-        <p>Pick a Resonator or weapon and the planner totals every material it needs, from ascension to skills.
-          <%= user_signed_in? ? "" : "No account is needed to try it; sign in later to keep your plans and unlock the optimizer." %></p>
+        <p class="plans-empty-text">Pick a Resonator or weapon and the planner totals every material it needs, from ascension to skills.</p>
+        <% unless user_signed_in? %>
+          <p class="plans-empty-note">No account is needed to try it. Sign in later to keep your plans and unlock the optimizer.</p>
+        <% end %>
         <%= link_to "✚ Create your first plan", new_plan_path(step: 1), data: { turbo_frame: "modal" }, class: "new-plan-btn" %>
       </div>
       <turbo-frame id="plans-list">

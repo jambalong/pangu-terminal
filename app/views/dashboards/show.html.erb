@@ -16,6 +16,11 @@
 
       <div class="plans-column">
         <%= render partial: "plans/plan", collection: @recent_plans, as: :plan, locals: { materials_lookup: @materials_lookup } %>
+        <% if @recent_plans.empty? %>
+          <p class="dashboard-empty">Your latest plans show up here.
+            <%= link_to "Create one", plans_path, data: { turbo_frame: "main_content", turbo_action: "advance" } %>
+            to see its materials at a glance.</p>
+        <% end %>
       </div>
     </div>
 

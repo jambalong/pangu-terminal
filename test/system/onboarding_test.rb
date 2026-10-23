@@ -36,4 +36,14 @@ class OnboardingTest < ApplicationSystemTestCase
 
     assert_no_text "No plans yet", wait: 5
   end
+
+  test "the SOL3 step is answered right inside the checklist and ticks itself off" do
+    assert_text "0 of 3 done"
+
+    select "Phase 5", from: "onboarding_sol3_phase"
+    click_button "Set phase"
+
+    assert_text "1 of 3 done"
+    assert_equal 5, @user.reload.sol3_phase
+  end
 end
