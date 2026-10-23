@@ -4,7 +4,7 @@
       <h1 class="inventory-title">Inventory</h1>
       
       <%= form_with url: inventory_items_path, method: :get, 
-          data: { turbo_frame: "inventory-grid" }, 
+          data: { turbo_frame: "inventory-grid", controller: "auto-submit" }, 
           class: "filter-form" do |f| %>
 
         <div class="select-wrapper">
@@ -13,7 +13,7 @@
               { include_blank: "All Plans" }, 
               { 
                 class: "inventory-select", 
-                onchange: "this.form.requestSubmit()",
+                data: { action: "change->auto-submit#submit" },
                 "aria-label": "Filter by plan"
               } %>
         </div>
@@ -23,7 +23,7 @@
               placeholder: "Search materials...", 
               class: "inventory-input",
               autocomplete: "off",
-              oninput: "this.form.requestSubmit()" %>
+              data: { action: "input->auto-submit#submit" } %>
         </div>
             
         <div class="select-wrapper">
@@ -32,7 +32,7 @@
               { include_blank: "All Categories" }, 
               { 
                 class: "inventory-select", 
-                onchange: "this.form.requestSubmit()",
+                data: { action: "change->auto-submit#submit" },
                 "aria-label": "Filter by category"
               } %>
         </div>

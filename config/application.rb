@@ -16,6 +16,11 @@ module PanguTerminal
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # Turn off browser features the app never uses. Set as a header directly
+    # because Rails' permissions_policy DSL still emits the old Feature-Policy.
+    config.action_dispatch.default_headers["Permissions-Policy"] =
+      "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

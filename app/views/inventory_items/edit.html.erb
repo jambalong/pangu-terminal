@@ -9,11 +9,12 @@
 
   <%= form_with model: @inventory_item,
     url: inventory_item_path(@inventory_item, plan_id: params[:plan_id]),
-    class: "qty-form" do |f| %>
+    class: "qty-form",
+    data: { controller: "auto-submit" } do |f| %>
     <%= f.number_field :quantity,
         autofocus: true,
         class: "qty-input",
-        onblur: "this.form.requestSubmit()" %>
+        data: { action: "blur->auto-submit#submit" } %>
   <% end %>
 
   <ul class="item-sources-list">
