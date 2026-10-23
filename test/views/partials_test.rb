@@ -39,4 +39,14 @@ class PartialsTest < ActiveSupport::TestCase
     error = assert_raises(ActionView::Template::Error) { view.render("shared/material_icon") }
     assert_match(/missing local: :material/, error.message)
   end
+
+  test "views use no inline event handlers (the content security policy blocks them)" do
+    offenders = Dir[Rails.root.join("app/views/**/*.erb")].flat_map do |path|
+      File.readlines(path).each_with_index.filter_map do |line, index|
+        "#{path.delete_prefix("#{Rails.root}/")}:#{index + 1}" if line.match?(/\bon(change|input|blur|click|submit|focus|keydown|keyup)\s*[:=]/)
+      end
+    end
+
+    assert_empty offenders, "Use Stimulus data-action instead of inline handlers"
+  end
 end

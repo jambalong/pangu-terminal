@@ -174,6 +174,10 @@ rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
 If a plan exists but belongs to another user, the scoped query raises `RecordNotFound` and returns 404. Returning 403 would confirm the resource exists and leak information about other users' data. 404 prevents enumeration.
 
+## Security headers
+
+`config/initializers/content_security_policy.rb` sends an enforcing policy: same-origin by default, scripts only from the app or with the per-request nonce (importmap tags get it automatically, so there is no inline-script allowance and inline event handlers are not allowed; forms that submit on change use the `auto-submit` Stimulus controller), styles allow inline because views use `style=` attributes, plus Google Fonts for CSS and font files, no plugins, no framing (`frame-ancestors 'none'`). `form-action` is deliberately unset: browsers apply it to redirects after a form post and it would block the hand-off to Google or Discord. `Permissions-Policy` (set in `config/application.rb`, because the Rails DSL still emits the old `Feature-Policy`) disables camera, microphone, geolocation, payment and USB. Anything new that loads from another host (an analytics script, an image CDN) must be added to the policy; `test/system/content_security_policy_test.rb` loads the main pages in Chrome and fails on any violation.
+
 ## Rack::Attack Rate Limiting
 The throttles below, plus `plans/create/ip` (60 POSTs per hour on `/app/planner`; guests need no account, so this stops one client filling the database by dropping its cookie), `signups/ip` (5 POSTs per hour on `/signup`, the fallback form) and `oauth/ip` (20 requests per minute per IP on `/users/auth/*`, covering both the request and callback phases). Three separate throttles with different strategies:
 
