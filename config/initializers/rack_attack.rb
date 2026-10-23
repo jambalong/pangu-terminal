@@ -24,6 +24,18 @@ class Rack::Attack
     end
   end
 
+  ### Account and Plan Creation Throttles ###
+  # Guests can create plans without an account, so one client could otherwise
+  # fill the database by dropping its cookie. The sign-up form only exists as a
+  # fallback while no OAuth provider is configured.
+  throttle("plans/create/ip", limit: 60, period: 1.hour) do |req|
+    req.ip if req.path == "/app/planner" && req.post?
+  end
+
+  throttle("signups/ip", limit: 5, period: 1.hour) do |req|
+    req.ip if req.path == "/signup" && req.post?
+  end
+
   ### OAuth Throttle ###
   # Covers the request and callback phases under /users/auth/. A normal sign-in
   # is two hits (POST to start, GET callback), so 20 a minute is generous.

@@ -163,6 +163,20 @@ class OptimizersControllerAdviseTest < ActionDispatch::IntegrationTest
     assert_select ".optimizer-advisor-text", false
   end
 
+  test "shows the limit notice when the daily advisor budget is spent" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+    original = FarmingAdviceRequest.method(:user_daily_limit)
+    FarmingAdviceRequest.define_singleton_method(:user_daily_limit) { 0 }
+
+    assert_no_enqueued_jobs do
+      get optimizer_advise_path
+    end
+    assert_select ".optimizer-advisor-text", text: FarmingAdviceRequest::LIMIT_MESSAGE
+  ensure
+    FarmingAdviceRequest.define_singleton_method(:user_daily_limit, original)
+  end
+
   test "polling while the job is pending does not enqueue more jobs" do
     sign_in @user
     get optimizer_path, params: { plan_id: @plan.id }
