@@ -32,10 +32,8 @@ class OptimizersController < ApplicationController
     return head :no_content unless @selected_plan && sol3_phase_set?
 
     status, advice = FarmingAdviceRequest.new(user: current_user, plan: @selected_plan).fetch
-    @advice_pending = status == :pending
-    @farming_advice = advice
 
-    render partial: "farming_advice"
+    render partial: "farming_advice", locals: { pending: status == :pending, advice: advice }
   end
 
   private

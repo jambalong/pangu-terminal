@@ -46,7 +46,7 @@
         </div>
       <% else %>
         <div class="inventory-grid">
-          <%= render @inventory_items %>
+          <%= render partial: "inventory_items/inventory_item", collection: @inventory_items, as: :inventory_item, locals: { synthesis_result: @synthesis_result, plan_id: params[:plan_id] } %>
         </div>
       <% end %>
     <% end %>

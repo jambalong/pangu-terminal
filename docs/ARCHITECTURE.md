@@ -27,6 +27,13 @@ Solid Cache, Solid Queue and Solid Cable are installed (`config/cache.yml`, `que
 
 Importmap + Stimulus (`app/javascript/controllers/`), hand-written plain CSS in `app/assets/stylesheets/` (no CSS framework and no build step), served by Propshaft. Tailwind was removed in v1.3.0; see [Stylesheets](#stylesheets). Static art lives in `public/images/{materials,resonators,weapons,forte,textures}`. `allow_browser versions: :modern` is on in `ApplicationController`.
 
+### Views and partials
+
+- Partials are components: each starts with a strict-locals comment (`<%# locals: (plan:, materials_lookup:) %>`) and never reads controller instance variables; templates pass data in explicitly. `test/views/partials_test.rb` enforces both.
+- Shared building blocks live in `app/views/shared/`: `_modal` (the Turbo Frame modal shell, used with `render layout: "shared/modal", locals: { container_class:, content_class:, close_on_esc: } do`), `_material_icon` and `_subject_portrait`.
+- Templates are still bound to their controller, so they may read `@ivars` and pass them down as locals.
+- Collections are rendered with `render partial: ..., collection: ..., as: ..., locals: {...}` so shared locals reach every item.
+
 ### Stylesheets
 
 `stylesheet_link_tag :app` serves every file under `app/assets/stylesheets/`, one `<link>` per file in path order, with no build step.

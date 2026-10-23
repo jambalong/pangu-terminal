@@ -1,9 +1,11 @@
+<%# locals: (selected_plan:, sol3_phase:, results: nil, totals: nil, farming_priority: nil) %>
+
 <div class="optimizer-container">
   <div class="optimizer-header">
     <h1 class="optimizer-title">Waveplate Optimizer</h1>
   </div>
 
-  <% if current_user.sol3_phase.nil? %>
+  <% if sol3_phase.nil? %>
     <div class="optimizer-gate">
       <p class="optimizer-gate-message">
         Set your SOL3 phase from the
@@ -14,14 +16,14 @@
       </p>
     </div>
   <% else %>
-    <% if @selected_plan %>
+    <% if selected_plan %>
       <%= link_to optimizer_plans_modal_path,
           data: { turbo_frame: "modal" },
           class: "optimizer-plan-card" do %>
-        <%= image_tag @selected_plan.subject.image_url, class: "optimizer-plan-icon", alt: "Subject Icon" if @selected_plan.subject.image_url.present? %>
+        <%= image_tag selected_plan.subject.image_url, class: "optimizer-plan-icon", alt: "Subject Icon" if selected_plan.subject.image_url.present? %>
         <div class="optimizer-plan-info">
-          <span class="optimizer-plan-name"><%= @selected_plan.subject.name %></span>
-          <span class="optimizer-plan-type"><%= @selected_plan.subject_type.upcase %> PLAN LOADED</span>
+          <span class="optimizer-plan-name"><%= selected_plan.subject.name %></span>
+          <span class="optimizer-plan-type"><%= selected_plan.subject_type.upcase %> PLAN LOADED</span>
         </div>
       <% end %>
     <% else %>
@@ -32,7 +34,7 @@
       <% end %>
     <% end %>
 
-    <% if @selected_plan %>
+    <% if selected_plan %>
       <%= form_with url: optimizer_path, method: :get, data: { turbo_frame: "optimizer-results" } do |f| %>
         <%= hidden_field_tag :run, "1" %>
         <%= f.submit "> RUN OPTIMIZER", class: "optimizer-run-button" %>
@@ -40,11 +42,11 @@
     <% end %>
 
     <%= turbo_frame_tag "optimizer-results" do %>
-      <% if @results.present? %>
+      <% if results.present? %>
 
           <!-- Summary metrics -->
-          <% total_runs = @totals[:total_runs] %>
-          <% total_wp = @totals[:total_wp] %>
+          <% total_runs = totals[:total_runs] %>
+          <% total_wp = totals[:total_wp] %>
           <% days = total_wp > 0 ? (total_wp / 240.0).ceil : 0 %>
 
           <div class="optimizer-metrics">
@@ -63,11 +65,11 @@
           </div>
 
           <!-- Farming priority list -->
-          <% if @farming_priority.any? %>
+          <% if farming_priority.any? %>
             <div class="optimizer-priority">
               <h2 class="optimizer-results-title">&gt; FARMING_PRIORITY</h2>
               <ol class="optimizer-priority-list">
-                <% @farming_priority.each_with_index do |entry, index| %>
+                <% farming_priority.each_with_index do |entry, index| %>
                   <li class="optimizer-priority-item">
                     <span class="optimizer-priority-rank"><%= index + 1 %>.</span>
                     <span class="optimizer-priority-label"><%= entry[:source_label] %></span>
@@ -106,20 +108,12 @@
 
           <!-- Material breakdown list -->
           <div class="optimizer-results-grid">
-            <% @results.each do |material_id, data| %>
+            <% results.each do |material_id, data| %>
               <%= tag.div class: "optimizer-material-card #{'hidden' if data[:sources].empty?}",
                           data: (data[:sources].empty? ? { toggle_target: "item" } : {}) do %>
 
                 <div class="optimizer-material-header">
-                  <div class="item-icon rarity-border-<%= data[:material].rarity %> optimizer-material-icon">
-                    <div class="rarity-bg-<%= data[:material].rarity %>">
-                      <% if data[:material].image_url.present? %>
-                        <%= image_tag(data[:material].image_url, alt: data[:material].name) %>
-                      <% else %>
-                        <span class="icon-initials"><%= data[:material].name[0..1].upcase %></span>
-                      <% end %>
-                    </div>
-                  </div>
+                  <%= render "shared/material_icon", material: data[:material], class_name: "optimizer-material-icon" %>
 
                   <div class="optimizer-material-details">
                     <div class="optimizer-material-header-row">

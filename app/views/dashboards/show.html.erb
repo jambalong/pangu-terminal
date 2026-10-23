@@ -11,7 +11,7 @@
       </div>
 
       <div class="plans-column">
-        <%= render @recent_plans %>
+        <%= render partial: "plans/plan", collection: @recent_plans, as: :plan, locals: { materials_lookup: @materials_lookup } %>
       </div>
     </div>
 

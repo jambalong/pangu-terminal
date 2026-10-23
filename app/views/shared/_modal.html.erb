@@ -1,0 +1,13 @@
+<%# locals: (container_class: nil, content_class: nil, close_on_esc: true) %>
+<%# Shared modal shell. Render with a block: render layout: "shared/modal", locals: { ... } do ... end %>
+
+<%= turbo_frame_tag "modal" do %>
+  <%= tag.div class: "modal-backdrop",
+              data: { controller: "modal", action: [ ("keydown.esc->modal#close" if close_on_esc), "click->modal#closeOutside" ].compact.join(" ") } do %>
+    <%= tag.div class: class_names("modal-container", container_class) do %>
+      <%= tag.div id: "modal-content", class: content_class do %>
+        <%= yield %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

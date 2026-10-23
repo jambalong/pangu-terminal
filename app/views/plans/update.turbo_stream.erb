@@ -1,12 +1,12 @@
 <%= turbo_stream.update "flash-container", partial: "layouts/flash" %>
 
 <%= turbo_stream.update "materials-summary-content" do %>
-  <%= render "plans/materials_summary", materials_summary: @materials_summary %>
+  <%= render "plans/materials_summary", materials_summary: @materials_summary, materials_lookup: @materials_lookup %>
 <% end %>
 
 <%# Update the plan targeted by dom_id %>
 <%= turbo_stream.replace dom_id(@plan) do %>
-  <%= render partial: "plans/plan", locals: { plan: @plan } %>
+  <%= render partial: "plans/plan", locals: { plan: @plan, materials_lookup: @materials_lookup } %>
 <% end %>
 
 <%# Close the edit modal %>
