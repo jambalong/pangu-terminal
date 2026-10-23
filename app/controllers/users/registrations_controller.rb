@@ -15,7 +15,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def update_resource(resource, params)
-    if updating_only_sol3_phase?(params)
+    if updating_without_credentials?(params)
       params.delete(:current_password)
       resource.update_without_password(params)
     elsif !resource.password?
@@ -35,7 +35,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     redirect_to new_user_session_path, alert: "Create your account by signing in with Google or Discord."
   end
 
-  def updating_only_sol3_phase?(params)
-    params.keys.map(&:to_s) == [ "sol3_phase" ]
+  # Gamertag and SOL3 phase are not sensitive, so they never ask for a password.
+  def updating_without_credentials?(params)
+    keys = params.keys.map(&:to_s)
+    keys.any? && (keys - [ "sol3_phase", "display_name" ]).empty?
   end
 end

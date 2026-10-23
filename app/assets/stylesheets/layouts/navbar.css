@@ -120,6 +120,12 @@
   padding: 0.5rem 0.75rem;
   transition: all 0.2s ease;
   border-radius: 0.5rem;
+  display: inline-block;
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .user-badge::before {

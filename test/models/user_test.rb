@@ -30,7 +30,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "an OAuth user needs neither email nor password" do
-    user = oauth_user(display_name: "Player")
+    user = oauth_user(display_name: "player")
     assert user.valid?, user.errors.full_messages.to_sentence
     assert user.save
     assert_nil user.reload.email
@@ -71,7 +71,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "shown_name prefers display_name, then the email local part" do
-    assert_equal "Player", User.new(display_name: "Player", email: "a@example.com").shown_name
+    assert_equal "player", User.new(display_name: "player", email: "a@example.com").shown_name
     assert_equal "a", User.new(email: "a@example.com").shown_name
     assert_equal "Account", User.new.shown_name
   end
@@ -84,5 +84,46 @@ class UserTest < ActiveSupport::TestCase
 
     user.identities.create!(provider: "google_oauth2", uid: "x")
     assert user.can_unlink?(identity)
+  end
+
+  test "generated display names are lowercase, valid and fit the cap" do
+    50.times do
+      name = User.generate_display_name
+      assert_match User::DISPLAY_NAME_FORMAT, name
+      assert_includes User::DISPLAY_NAME_LENGTH, name.length
+    end
+  end
+
+  test "display_name is lowercased and stripped" do
+    user = oauth_user(display_name: "  Rover-Fan ")
+    user.save!
+    assert_equal "rover-fan", user.reload.display_name
+  end
+
+  test "display_name length is capped" do
+    assert oauth_user(display_name: "a" * 16).valid?
+    assert oauth_user(display_name: "a" * 17).invalid?
+    assert oauth_user(display_name: "ab").invalid?
+  end
+
+  test "display_name rejects spaces and symbols" do
+    [ "two words", "bad!name", "-lead" ].each do |name|
+      assert oauth_user(display_name: name).invalid?, "#{name.inspect} should be invalid"
+    end
+  end
+
+  test "blank display_name is stored as nil" do
+    user = oauth_user(display_name: "  ")
+    user.save!
+    assert_nil user.reload.display_name
+  end
+
+  test "an older long display_name stays valid until it is changed" do
+    user = oauth_user
+    user.save!
+    user.update_column(:display_name, "john alvin ambalong")
+
+    assert user.reload.update(sol3_phase: 4)
+    assert_not user.update(display_name: "john alvin ambalong jr")
   end
 end

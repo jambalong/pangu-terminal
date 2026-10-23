@@ -43,21 +43,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     user = identity&.user || create_user_from(auth)
     return failure unless user
 
-    user.update(display_name: display_name_from(auth)) if user.display_name.blank?
+    user.update(display_name: User.generate_display_name) if user.display_name.blank?
     set_flash_message(:notice, :success, kind: OauthProviders.label(auth.provider)) if is_navigational_format?
     sign_in_and_redirect user, event: :authentication
   end
 
   def create_user_from(auth)
-    user = User.new(display_name: display_name_from(auth))
+    user = User.new(display_name: User.generate_display_name)
     user.identities.build(provider: auth.provider, uid: auth.uid.to_s)
     user.save ? user : nil
   rescue ActiveRecord::RecordNotUnique
     # A concurrent callback created the same identity first.
     Identity.find_by(provider: auth.provider, uid: auth.uid.to_s)&.user
-  end
-
-  def display_name_from(auth)
-    auth.info&.name.to_s.strip.first(50).presence
   end
 end
