@@ -6,6 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
+- Contextual onboarding: a new account's dashboard shows a short "Get started" checklist (set your SOL3 phase, create a plan, enter what you own) that ticks itself off from your data and can be hidden for good. Empty pages now explain themselves: the planner offers a first plan (and tells guests no account is needed), the inventory says to start with what you own, and the optimizer points to the planner when there are no plans and warns that results assume an empty inventory. A new account's first sign-in greets you with your username.
 - Link previews and search basics: pages now carry a description, canonical URL and Open Graph/Twitter tags (so a shared link shows a title, summary and icon), `robots.txt` keeps the app, accounts and API out of search while allowing the public pages, and a small `sitemap.xml` lists them.
 
 ### Fixed

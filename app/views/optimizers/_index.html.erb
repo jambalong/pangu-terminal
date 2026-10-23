@@ -1,4 +1,4 @@
-<%# locals: (selected_plan:, sol3_phase:, results: nil, totals: nil, farming_priority: nil) %>
+<%# locals: (selected_plan:, sol3_phase:, results: nil, totals: nil, farming_priority: nil, plans_any: true, inventory_empty: false) %>
 
 <div class="optimizer-container">
   <div class="optimizer-header">
@@ -27,11 +27,27 @@
         </div>
       <% end %>
     <% else %>
-      <%= link_to optimizer_plans_modal_path,
-          data: { turbo_frame: "modal" },
-          class: "optimizer-plan-card optimizer-plan-card--empty" do %>
-        <span class="optimizer-plan-placeholder">&gt; SELECT A PLAN</span>
+      <% if plans_any %>
+        <%= link_to optimizer_plans_modal_path,
+            data: { turbo_frame: "modal" },
+            class: "optimizer-plan-card optimizer-plan-card--empty" do %>
+          <span class="optimizer-plan-placeholder">&gt; SELECT A PLAN</span>
+        <% end %>
+      <% else %>
+        <div class="optimizer-hint">
+          The optimizer works from your plans, and you have none yet.
+          <%= link_to "Create a plan", plans_path, class: "optimizer-gate-link", data: { turbo_frame: "main_content", turbo_action: "advance" } %>
+          first, then come back to see where your Waveplates should go.
+        </div>
       <% end %>
+    <% end %>
+
+    <% if selected_plan && inventory_empty %>
+      <div class="optimizer-hint">
+        Your inventory is empty, so the results assume you own nothing.
+        <%= link_to "Enter what you own", inventory_items_path, class: "optimizer-gate-link", data: { turbo_frame: "main_content", turbo_action: "advance" } %>
+        for numbers that fit your account.
+      </div>
     <% end %>
 
     <% if selected_plan %>

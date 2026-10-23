@@ -40,11 +40,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def sign_in_with(auth)
     identity = Identity.find_by(provider: auth.provider, uid: auth.uid.to_s)
+    new_account = identity.nil?
     user = identity&.user || create_user_from(auth)
     return failure unless user
 
     user.update(display_name: User.generate_display_name) if user.display_name.blank?
-    set_flash_message(:notice, :success, kind: OauthProviders.label(auth.provider)) if is_navigational_format?
+    if new_account
+      flash[:notice] = "Welcome! You are signed in as #{user.display_name}. You can change that name in Account Settings."
+    elsif is_navigational_format?
+      set_flash_message(:notice, :success, kind: OauthProviders.label(auth.provider))
+    end
     sign_in_and_redirect user, event: :authentication
   end
 

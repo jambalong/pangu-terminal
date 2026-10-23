@@ -1,0 +1,29 @@
+<%# locals: (steps:) %>
+
+<div class="dashboard-card onboarding-card" data-controller="dismissible" data-dismissible-key-value="onboarding_dismissed" data-dismissible-persist-value="true">
+  <div class="dashboard-card-header">
+    <h2 class="dashboard-card-title">Get started</h2>
+    <button type="button" class="onboarding-dismiss" data-action="click->dismissible#dismiss" aria-label="Hide getting started">Hide</button>
+  </div>
+
+  <ol class="onboarding-steps">
+    <% steps.each do |step| %>
+      <li class="onboarding-step <%= "is-done" if step[:done] %>">
+        <span class="onboarding-check" aria-hidden="true"><%= step[:done] ? "✓" : "○" %></span>
+        <div class="onboarding-text">
+          <% case step[:key] %>
+          <% when :sol3_phase %>
+            <strong>Set your SOL3 phase</strong>
+            <span>The optimizer needs it to estimate drop rates. Pick it in the SOL3 Phase card on this page.</span>
+          <% when :plan %>
+            <strong><%= link_to "Create your first plan", plans_path, data: { turbo_frame: "main_content", turbo_action: "advance" } %></strong>
+            <span>Choose a Resonator or weapon and the planner totals every material it needs.</span>
+          <% when :inventory %>
+            <strong><%= link_to "Enter what you own", inventory_items_path, data: { turbo_frame: "main_content", turbo_action: "advance" } %></strong>
+            <span>The optimizer subtracts it from your plans and shows what you can craft instead of farm.</span>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</div>

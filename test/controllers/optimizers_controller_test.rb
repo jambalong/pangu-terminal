@@ -65,6 +65,30 @@ class OptimizersControllerIndexTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
   end
+
+  test "with no plans it points to the planner instead of offering plan selection" do
+    @plan.destroy
+    sign_in @user
+    get optimizer_path
+
+    assert_select ".optimizer-hint", text: /you have none yet/
+    assert_select ".optimizer-plan-card--empty", count: 0
+  end
+
+  test "warns that results assume an empty inventory" do
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+
+    assert_select ".optimizer-hint", text: /inventory is empty/
+  end
+
+  test "no inventory warning once something is owned" do
+    @user.inventory_item_for(@shell_credit).update!(quantity: 100)
+    sign_in @user
+    get optimizer_path, params: { plan_id: @plan.id }
+
+    assert_select ".optimizer-hint", text: /inventory is empty/, count: 0
+  end
 end
 
 class OptimizersControllerPlansModalTest < ActionDispatch::IntegrationTest

@@ -15,6 +15,8 @@ class DashboardsController < ApplicationController
     @farming_progress = 0 # Future logic
     @estimated_days = 0   # Future logic
 
+    @onboarding = OnboardingChecklist.call(user: current_user)
+    @onboarding = OnboardingChecklist.call(user: current_user)
     @recent_plans = @plans.order(created_at: :desc).limit(2)
 
     response.set_header("Turbo-Location", authenticated_root_path) if turbo_frame_request?

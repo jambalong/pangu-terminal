@@ -69,6 +69,10 @@ Size: S under a day, M a few days, L a week or more. "Data" means it needs game 
 
 **Why this order:** 1 (done) was the owner's priority and unblocks wider testing. 2 and 3 are the biggest mission gains from code that already exists. 4 improves the accuracy of everything after it. 5 and 6 build on 2. Items 7 to 11 extend the loop once the core is strong; start 11 when the Tacet Fields data is available.
 
+### Before sharing publicly (done 2026-10-23)
+
+Contextual onboarding (dashboard checklist and empty-state hints) and a hardening pass shipped before the feature items: daily advisor budget and creation throttles, an enforcing Content-Security-Policy with a Permissions-Policy, link previews, `robots.txt` and a sitemap (see [CHANGELOG.md](../CHANGELOG.md), [ARCHITECTURE.md](ARCHITECTURE.md)). Still open and not code: keep the free Render instance awake (it sleeps when idle, so the first visitor waits up to a minute; a free uptime monitor pinging `/up` every 10 minutes fits within the monthly free hours), confirm Neon's backup window, and consider a 1200x630 preview image.
+
 ### Item 1: OAuth sign-in (replaces the username spec)
 
 The earlier plan (username accounts, optional email, recovery codes, `/recover`) is **superseded**. The owner chose OAuth-only account creation: players sign in with Google or Discord, no email or password is entered, and the app requests no email scope (Discord `identify`, Google `openid profile`). Reasons: it removes the email objection directly, avoids building recovery codes and a recovery throttle, and offloads credential storage and account recovery to the providers. Legacy email/password users keep working; the sign-up form stays only as a fallback while no provider is configured. Design and decisions are in [ARCHITECTURE.md](ARCHITECTURE.md#authentication-and-ownership); `users.email` is nullable and `identities` holds `(provider, uid)`.

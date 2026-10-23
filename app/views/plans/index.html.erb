@@ -36,7 +36,14 @@
       </div>
     </section>
 
-    <div id="plans-list-container">
+    <div id="plans-list-container" class="plans-container">
+      <%# Hidden by CSS as soon as a plan card exists, so create and delete need no extra stream updates. %>
+      <div class="plans-empty">
+        <h2 class="plans-empty-title">No plans yet</h2>
+        <p>Pick a Resonator or weapon and the planner totals every material it needs, from ascension to skills.
+          <%= user_signed_in? ? "" : "No account is needed to try it; sign in later to keep your plans and unlock the optimizer." %></p>
+        <%= link_to "✚ Create your first plan", new_plan_path(step: 1), data: { turbo_frame: "modal" }, class: "new-plan-btn" %>
+      </div>
       <turbo-frame id="plans-list">
         <%= render partial: "plans/plan", collection: @plans, as: :plan, locals: { materials_lookup: @materials_lookup } %>
       </turbo-frame>

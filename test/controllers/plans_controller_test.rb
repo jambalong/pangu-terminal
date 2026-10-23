@@ -15,6 +15,26 @@ class PlansControllerIndexTest < ActionDispatch::IntegrationTest
     get plans_path
     assert_response :ok
   end
+
+  test "index shows the empty state and a create button when there are no plans" do
+    sign_in @user
+    get plans_path
+
+    assert_select ".plans-empty .new-plan-btn"
+  end
+
+  test "guests are told no account is needed" do
+    get plans_path
+
+    assert_select ".plans-empty", text: /No account is needed/
+  end
+
+  test "signed-in users are not told to sign in" do
+    sign_in @user
+    get plans_path
+
+    assert_select ".plans-empty", text: /No account is needed/, count: 0
+  end
 end
 
 class PlansControllerNewTest < ActionDispatch::IntegrationTest

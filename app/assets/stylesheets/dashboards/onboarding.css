@@ -1,0 +1,78 @@
+.onboarding-card {
+  position: relative;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--ctp-mauve);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.onboarding-card.is-dismissing {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.onboarding-dismiss {
+  background: transparent;
+  border: none;
+  color: var(--ctp-subtext0);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.onboarding-dismiss:hover {
+  color: var(--ctp-mauve);
+}
+
+.onboarding-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.onboarding-step {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  color: var(--ctp-text);
+}
+
+.onboarding-step.is-done {
+  color: var(--ctp-overlay0);
+}
+
+.onboarding-step.is-done .onboarding-text strong {
+  text-decoration: line-through;
+}
+
+.onboarding-check {
+  color: var(--ctp-mauve);
+  width: 1.25rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.onboarding-step.is-done .onboarding-check {
+  color: var(--ctp-green);
+}
+
+.onboarding-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.onboarding-text span {
+  color: var(--ctp-subtext0);
+  font-size: 0.875rem;
+}
+
+.onboarding-text a {
+  color: var(--ctp-mauve);
+}
+
+.onboarding-step.is-done .onboarding-text span {
+  display: none;
+}

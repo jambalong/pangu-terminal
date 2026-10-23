@@ -5,6 +5,7 @@ class OptimizersController < ApplicationController
   before_action :load_plans
 
   def index
+    @inventory_empty = !current_user.inventory_items.where("quantity > 0").exists?
     @selected_plan = if params[:plan_id].present?
       session[:optimizer_plan_id] = params[:plan_id]
       @plans.find_by(id: params[:plan_id])
@@ -23,6 +24,7 @@ class OptimizersController < ApplicationController
   end
 
   def select_plan
+    @inventory_empty = !current_user.inventory_items.where("quantity > 0").exists?
     session[:optimizer_plan_id] = params[:plan_id]
     @selected_plan = @plans.find_by(id: params[:plan_id])
   end
