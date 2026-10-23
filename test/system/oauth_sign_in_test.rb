@@ -4,7 +4,7 @@ class OauthSignInTest < ApplicationSystemTestCase
   include OauthTestHelper
 
   test "sign in with a provider creates an account and lands on the dashboard" do
-    mock_oauth(:discord, uid: "sys-1", name: "SystemPlayer")
+    mock_oauth(:discord, uid: "sys-1")
 
     with_oauth_env(:discord, :google_oauth2) do
       visit new_user_session_path
@@ -14,7 +14,7 @@ class OauthSignInTest < ApplicationSystemTestCase
 
       click_button "Continue with Discord"
       assert_text "Dashboard"
-      assert_text "SystemPlayer"
+      assert_text Identity.find_by!(uid: "sys-1").user.display_name
     end
   end
 

@@ -54,14 +54,14 @@ class Users::SessionsAndSignupTest < ActionDispatch::IntegrationTest
   end
 
   test "navbar shows display_name for OAuth users" do
-    user = User.new(display_name: "WavePlayer")
+    user = User.new(display_name: "waveplayer")
     user.identities.build(provider: "discord", uid: "n-1")
     user.save!
     sign_in user
 
     get authenticated_root_path
 
-    assert_select ".user-badge", text: "WavePlayer"
+    assert_select ".user-badge", text: "waveplayer"
   end
 
   test "navbar falls back to the email local part for legacy users" do

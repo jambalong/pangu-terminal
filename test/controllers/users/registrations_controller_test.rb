@@ -67,7 +67,7 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   # OAuth-only accounts
   test "OAuth user updates settings without a current password" do
-    oauth_user = User.new(display_name: "Player")
+    oauth_user = User.new(display_name: "player")
     oauth_user.identities.build(provider: "discord", uid: "r-1")
     oauth_user.save!
     sign_in oauth_user
@@ -146,5 +146,37 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?]", identity_path(@user.identities.first)
     assert_select "form[action=?]", "/users/auth/google_oauth2"
     assert_select "form[action=?]", "/users/auth/discord", count: 0
+  end
+
+  test "gamertag can be changed without a password and is lowercased" do
+    patch update_user_registration_path, params: { user: { display_name: "New-Tag" } }
+
+    assert_redirected_to edit_user_registration_path
+    assert_equal "new-tag", @user.reload.display_name
+  end
+
+  test "gamertag works for OAuth users without a password" do
+    oauth_user = User.new(display_name: "rover-1111")
+    oauth_user.identities.build(provider: "discord", uid: "r-7")
+    oauth_user.save!
+    sign_in oauth_user
+
+    patch update_user_registration_path, params: { user: { display_name: "starfall" } }
+
+    assert_equal "starfall", oauth_user.reload.display_name
+  end
+
+  test "an invalid gamertag is rejected and not saved" do
+    @user.update!(display_name: "keepme")
+
+    patch update_user_registration_path, params: { user: { display_name: "this name is far too long" } }
+
+    assert_equal "keepme", @user.reload.display_name
+    assert_response :unprocessable_content
+  end
+
+  test "settings page has a gamertag field" do
+    get edit_user_registration_path
+    assert_select "input[name='user[display_name]'][maxlength='16']"
   end
 end

@@ -57,6 +57,9 @@ module OauthTestHelper
 
   included do
     setup do
+      # Devise sets OmniAuth's path prefix when routes load. Routes load lazily
+      # when eager_load is off, so the first request in a fresh process would 404.
+      Rails.application.reload_routes_unless_loaded
       OmniAuth.config.test_mode = true
       OmniAuth.config.logger = Logger.new(File::NULL)
     end

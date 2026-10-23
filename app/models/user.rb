@@ -11,11 +11,26 @@ class User < ApplicationRecord
   has_many :inventory_items, dependent: :destroy
   has_many :materials, through: :inventory_items
 
-  validates :display_name, length: { maximum: 50 }, allow_nil: true
+  # The gamertag shown in the navbar: lowercase, short enough to never need an
+  # ellipsis. Only checked when it changes so older, longer names stay valid.
+  DISPLAY_NAME_LENGTH = 3..16
+  DISPLAY_NAME_FORMAT = /\A[a-z0-9][a-z0-9._-]*\z/
+
+  validates :display_name,
+            length: { within: DISPLAY_NAME_LENGTH },
+            format: { with: DISPLAY_NAME_FORMAT, message: "can only use lowercase letters, numbers, dots, dashes and underscores" },
+            allow_nil: true,
+            if: :will_save_change_to_display_name?
   validates :sol3_phase, inclusion: { in: DropRate::SOL3_PHASES }, allow_nil: true
 
   before_validation :normalize_blank_email
+  before_validation :normalize_display_name
   after_create :initialize_inventory
+
+  # Neutral default so no real name is ever taken from a provider.
+  def self.generate_display_name
+    "rover-#{SecureRandom.random_number(1000..9999)}"
+  end
 
   # Name shown in the navbar. Never exposes an email beyond its local part.
   def shown_name
@@ -55,6 +70,12 @@ class User < ApplicationRecord
   end
 
   private
+
+  def normalize_display_name
+    return unless will_save_change_to_display_name?
+
+    self.display_name = display_name.to_s.strip.downcase.presence
+  end
 
   def normalize_blank_email
     self.email = nil if email.blank?

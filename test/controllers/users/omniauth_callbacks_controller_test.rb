@@ -4,7 +4,7 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
   include OauthTestHelper
 
   test "creates a user and identity on first sign-in and signs them in" do
-    mock_oauth(:discord, uid: "d-1", name: "WavePlayer")
+    mock_oauth(:discord, uid: "d-1", name: "Real Name")
 
     assert_difference [ "User.count", "Identity.count" ], 1 do
       sign_in_via_oauth(:discord)
@@ -12,7 +12,8 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to authenticated_root_path
     user = Identity.find_by!(provider: "discord", uid: "d-1").user
-    assert_equal "WavePlayer", user.display_name
+    assert_match(/\Arover-\d{4}\z/, user.display_name)
+    assert_no_match(/real/i, user.display_name.to_s)
     assert_nil user.email
     assert_predicate user.encrypted_password, :blank?
     follow_redirect!
@@ -26,11 +27,11 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
       sign_in_via_oauth(:google_oauth2)
     end
 
-    assert_equal "Google Person", Identity.find_by!(provider: "google_oauth2", uid: "g-1").user.display_name
+    assert_match(/\Arover-\d{4}\z/, Identity.find_by!(provider: "google_oauth2", uid: "g-1").user.display_name)
   end
 
   test "returning user signs in to the same account" do
-    user = User.new(display_name: "Back Again")
+    user = User.new(display_name: "back-again")
     user.identities.build(provider: "discord", uid: "d-2")
     user.save!
     mock_oauth(:discord, uid: "d-2", name: "Renamed")
@@ -40,7 +41,7 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to authenticated_root_path
-    assert_equal "Back Again", user.reload.display_name
+    assert_equal "back-again", user.reload.display_name
   end
 
   test "claims guest plans for a new user" do
@@ -98,7 +99,7 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "refuses to link an identity that belongs to another account" do
-    other = User.new(display_name: "Other")
+    other = User.new(display_name: "other")
     other.identities.build(provider: "discord", uid: "d-5")
     other.save!
     user = User.create!(email: "link2@example.com", password: "password123")
