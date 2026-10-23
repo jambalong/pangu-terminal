@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :inventory_items, dependent: :destroy
   has_many :materials, through: :inventory_items
 
-  # The gamertag shown in the navbar: lowercase, short enough to never need an
+  # The username shown in the navbar: lowercase, short enough to never need an
   # ellipsis. Only checked when it changes so older, longer names stay valid.
   DISPLAY_NAME_LENGTH = 3..16
   DISPLAY_NAME_FORMAT = /\A[a-z0-9][a-z0-9._-]*\z/

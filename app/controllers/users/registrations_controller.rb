@@ -35,7 +35,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     redirect_to new_user_session_path, alert: "Create your account by signing in with Google or Discord."
   end
 
-  # Gamertag and SOL3 phase are not sensitive, so they never ask for a password.
+  # Username and SOL3 phase are not sensitive, so they never ask for a password.
   def updating_without_credentials?(params)
     keys = params.keys.map(&:to_s)
     keys.any? && (keys - [ "sol3_phase", "display_name" ]).empty?
