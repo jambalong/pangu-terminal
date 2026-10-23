@@ -39,12 +39,12 @@ Size: S under a day, M a few days, L a week or more. "Data" means it needs game 
 
 | # | Feature | Why it fits | Size | Needs |
 | --- | --- | --- | --- | --- |
-| 1 | **Username accounts, email optional** (owner priority; a tester did not want to share an email). Spec below. | "Zero friction to try": players should not have to hand over an email. | L | schema change on `users`, Rack::Attack key update |
+| 1 | **OAuth sign-in (Google, Discord)** (owner priority; a tester did not want to share an email). **Shipped**; owner still has to create the OAuth clients and set the env vars, see [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps). | "Zero friction to try": players should not have to hand over an email. | L | done |
 | 2 | **Whole-account optimizer**: run the optimizer over all plans (or a chosen set) instead of one at a time | The core question is "what should I farm next across everything I want". `Plan.fetch_materials_summary` and `SynthesisService` already aggregate. | M | none |
 | 3 | **Waveplate timeline**: turn total Waveplates into "about N days of regeneration" (builds on 2) | Makes the plan feel real and helps players choose what to build first. | S | confirm the regen rate and cap (assumed 1 Waveplate per 6 minutes, cap 240) |
 | 4 | **Faster inventory entry**: grid with keyboard navigation, JSON/CSV export and import (the API already exposes inventory) | Inventory is the highest-effort part of using the app; less friction means more accurate advice. | M | none |
 | 5 | **Plan priority**: order plans and weight the optimizer toward the top ones | Lets "farm for X first" be explicit instead of implied. | M | pairs with 2 |
-| 6 | **Shareable read-only plan link**: a tokenized public page of a plan and its totals (shows no username or email unless the owner opts in) | Community growth and "help me plan" threads; works for guests. | M | a nullable `share_token` on `plans` |
+| 6 | **Shareable read-only plan link**: a tokenized public page of a plan and its totals (shows no display name or email unless the owner opts in) | Community growth and "help me plan" threads; works for guests. | M | a nullable `share_token` on `plans` |
 
 ### Next
 
@@ -67,22 +67,11 @@ Size: S under a day, M a few days, L a week or more. "Data" means it needs game 
 
 **How to pick:** a feature belongs if it reduces wasted Waveplate or shortens the time to "I know what to farm". Prefer items that need no new game data. Each shipped item adds a `CHANGELOG.md` entry, tests, and an update to this file.
 
-**Why this order:** 1 is the owner's priority and unblocks wider testing. 2 and 3 are the biggest mission gains from code that already exists. 4 improves the accuracy of everything after it. 5 and 6 build on 2. Items 7 to 11 extend the loop once the core is strong; start 11 when the Tacet Fields data is available.
+**Why this order:** 1 (done) was the owner's priority and unblocks wider testing. 2 and 3 are the biggest mission gains from code that already exists. 4 improves the accuracy of everything after it. 5 and 6 build on 2. Items 7 to 11 extend the loop once the core is strong; start 11 when the Tacet Fields data is available.
 
-### Spec for item 1: username accounts
+### Item 1: OAuth sign-in (replaces the username spec)
 
-Decisions already made so implementation needs no further questions.
-
-- **Sign-up:** username (required), password and confirmation, email (optional, labelled "only used for password reset"). **Sign-in:** one field, "Username or email". Devise `authentication_keys: [:login]` with a virtual `login` attribute; the form param is `user[login]`.
-- **Username rules:** 3 to 30 characters of letters, digits, `_`, `.` and `-`. Unique case-insensitively (unique index on `lower(username)` plus a `case_sensitive: false` validation), stored as typed, a small reserved list (`admin`, `root`, `support`, `pangu`, `api`, ...). Required on create; nullable for existing users until they add one in settings.
-- **Email optional:** `users.email` becomes nullable (it is `NOT NULL DEFAULT ''` with a unique index today). Normalize blank to `NULL` before validation so empty strings never collide; override Devise's `email_required?` to return false. Format and uniqueness are still validated when present.
-- **Existing users keep working:** they sign in with their email exactly as before and may add a username in settings. No backfill.
-- **Recovery without email:** password reset by email only works for accounts that have one, so every account can have a **recovery code**: 20 random characters shown once, stored only as a bcrypt digest (`recovery_code_digest`). Accounts created without an email get one at sign-up with a clear "save this, we cannot reset your password otherwise" screen; accounts with an email can generate one in settings. A `/recover` form takes username, recovery code and a new password, then rotates the code and shows the new one. Throttle it like sign-in.
-- **Rack::Attack:** the `logins/email` throttle reads `req.params["user"]["email"]`; it must read `login` (and a recovery throttle must be added), or username sign-ins would bypass the per-account limit.
-- **UI and copy:** show the username (fall back to the email) in the navbar and dashboard; never display one user's email elsewhere; update the user manual and the sign-up/sign-in/settings screens; the password-reset mailer only exists for accounts with an email.
-- **Migration:** add `username` (string, nullable) with the partial unique index on `lower(username)`, add `recovery_code_digest` (string, nullable), make `email` nullable and keep a unique index that ignores NULLs. Reversible; runs on boot via `db:prepare`. Existing sessions stay valid.
-- **Tests:** model (username validation, case-insensitive uniqueness, reserved names, optional email, blank email stored as NULL); flows (sign up with username only, with both, sign in by username in any case and by email, wrong password, an existing email-only user still signs in); recovery (success rotates the code, wrong code rejected, throttled); settings; update the system test journey; production check with a throwaway username account, deleted afterwards.
-- **Docs:** `DATA_MODEL.md`, `DEPLOYMENT.md` (Postmark only for reset), `AGENTS.md` gotchas, user manual, `CHANGELOG.md`.
+The earlier plan (username accounts, optional email, recovery codes, `/recover`) is **superseded**. The owner chose OAuth-only account creation: players sign in with Google or Discord, no email or password is entered, and the app requests no email scope (Discord `identify`, Google `openid profile`). Reasons: it removes the email objection directly, avoids building recovery codes and a recovery throttle, and offloads credential storage and account recovery to the providers. Legacy email/password users keep working; the sign-up form stays only as a fallback while no provider is configured. Design and decisions are in [ARCHITECTURE.md](ARCHITECTURE.md#authentication-and-ownership); `users.email` is nullable and `identities` holds `(provider, uid)`.
 
 # Part 2: Maintenance backlog
 

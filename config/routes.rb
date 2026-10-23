@@ -9,15 +9,16 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  devise_for :users, skip: [ :sessions, :registrations ]
+  devise_for :users, skip: [ :sessions, :registrations ],
+    controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   devise_scope :user do
     get "sign-in", to: "devise/sessions#new", as: :new_user_session
     post "sign-in", to: "devise/sessions#create", as: :user_session
     delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
 
-    get "signup", to: "devise/registrations#new", as: :new_user_registration
-    post "signup", to: "devise/registrations#create", as: :user_registration
-    delete "signup", to: "devise/registrations#destroy"
+    get "signup", to: "users/registrations#new", as: :new_user_registration
+    post "signup", to: "users/registrations#create", as: :user_registration
+    delete "signup", to: "users/registrations#destroy"
 
     get "settings", to: "users/registrations#edit", as: :edit_user_registration
     patch "settings", to: "users/registrations#update", as: :update_user_registration
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
 
     resources :inventory_items, only: [ :index, :edit, :update ], path: "inventory"
     resources :api_keys, only: [ :create, :destroy ]
+    resources :identities, only: :destroy
 
     get "optimizer", to: "optimizers#index"
     get "optimizer/plans_modal", to: "optimizers#plans_modal"

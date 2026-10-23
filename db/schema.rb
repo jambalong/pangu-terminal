@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_22_210000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,6 +45,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_210000) do
     t.integer "rarity", default: 1, null: false
     t.datetime "updated_at", null: false
     t.index ["node_identifier", "material_type", "rarity"], name: "idx_on_node_identifier_material_type_rarity_358d94ea80", unique: true
+  end
+
+  create_table "identities", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
+    t.index ["user_id", "provider"], name: "index_identities_on_user_id_and_provider", unique: true
+    t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
   create_table "inventory_items", force: :cascade do |t|
@@ -313,13 +324,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_210000) do
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "email", default: "", null: false
+    t.string "email"
     t.string "encrypted_password", default: "", null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.integer "sol3_phase"
     t.datetime "updated_at", null: false
+    t.string "display_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -379,6 +391,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_210000) do
 
   add_foreign_key "api_keys", "users"
   add_foreign_key "drop_rates", "sources"
+  add_foreign_key "identities", "users"
   add_foreign_key "inventory_items", "materials"
   add_foreign_key "inventory_items", "users"
   add_foreign_key "material_sources", "materials"

@@ -24,6 +24,13 @@ class Rack::Attack
     end
   end
 
+  ### OAuth Throttle ###
+  # Covers the request and callback phases under /users/auth/. A normal sign-in
+  # is two hits (POST to start, GET callback), so 20 a minute is generous.
+  throttle("oauth/ip", limit: 20, period: 1.minute) do |req|
+    req.ip if req.path.start_with?("/users/auth/")
+  end
+
   ### API Token Throttle ###
   # Scoped to /api/ routes only. Keyed by token so each API consumer
   # gets their own bucket, so one abusive client can't affect others.

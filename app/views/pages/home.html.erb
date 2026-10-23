@@ -254,7 +254,7 @@
             advanced features.</p>
           <div class="cta-actions">
             <%= link_to "Create Free Account",
-            new_user_registration_path,
+            (OauthProviders.any? ? new_user_session_path : new_user_registration_path),
             data: {
               turbo: false,
             },

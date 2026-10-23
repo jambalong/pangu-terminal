@@ -272,6 +272,18 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  #
+  # Providers come from ENV via OauthProviders (see config/initializers/00_oauth_providers.rb).
+  # Only providers with both variables set get a strategy; the test environment
+  # registers all of them with dummy credentials so OmniAuth test mode works.
+  # Scopes are minimal on purpose: no email is requested from either provider.
+  OauthProviders::PROVIDERS.each do |provider, settings|
+    if OauthProviders.configured?(provider)
+      config.omniauth provider, ENV.fetch(settings[:id]), ENV.fetch(settings[:secret]), scope: settings[:scope]
+    elsif Rails.env.test?
+      config.omniauth provider, "test-id", "test-secret", scope: settings[:scope]
+    end
+  end
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

@@ -14,7 +14,8 @@ Pangu Terminal is a conventional Rails 8.1 monolith (Hotwire front end, PostgreS
 
 ## Authentication and ownership
 
-- Web users: Devise (`database_authenticatable, registerable, recoverable, rememberable, validatable`). Sign-in/sign-up/settings routes are customised in `config/routes.rb` (`/sign-in`, `/signup`, `/settings`); `Users::RegistrationsController` allows a password-free update only when the sole param is `sol3_phase`.
+- Web users: Devise (`database_authenticatable, registerable, recoverable, rememberable, validatable, omniauthable`). New accounts come from OAuth (Google, Discord): `Users::OmniauthCallbacksController` finds an `Identity` by `(provider, uid)` or creates a `User` plus `Identity`, then signs in (`sync_guest_plans` runs through `after_sign_in_path_for`). Providers are read from ENV by `OauthProviders` (`config/initializers/00_oauth_providers.rb`); a provider with unset variables registers no strategy and shows no button. Scopes request no email, so OAuth users have `email = NULL`. Linking happens only while signed in (never by matching email, which would allow account takeover via an unverified provider email); `IdentitiesController#destroy` unlinks unless it is the last way in. The email sign-up form (`Users::RegistrationsController#new/create`) is only reachable while no provider is configured, so production always has a way to create an account. The request phase is POST-only (`omniauth-rails_csrf_protection`). Reasons for OAuth-only instead of username accounts: a tester would not give an email, and a username/password scheme needs recovery codes and its own abuse handling, while the providers already handle both.
+- Legacy email/password users keep working (sign-in form behind "Sign in with email", password reset by email). Sign-in/sign-up/settings routes are customised in `config/routes.rb` (`/sign-in`, `/signup`, `/settings`); `Users::RegistrationsController` allows a password-free update when the sole param is `sol3_phase`, and for OAuth-only users (no password to confirm); password users must still confirm their current password.
 - Guests: `PlansController#set_guest_token` stores a UUID in `cookies.permanent[:guest_token]`. On sign-in/sign-up, `ApplicationController#sync_guest_plans` claims the guest's plans (dropping duplicates of subjects the user already planned) and clears the cookie.
 - `PlanLoading#load_current_plans` is the single place that scopes plans to the current user or guest; always go through it (or `current_user.plans`) instead of `Plan.find`.
 - Optimizer, inventory, dashboard and API-key pages require `authenticate_user!`; the planner works for guests.
@@ -174,7 +175,7 @@ rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 If a plan exists but belongs to another user, the scoped query raises `RecordNotFound` and returns 404. Returning 403 would confirm the resource exists and leak information about other users' data. 404 prevents enumeration.
 
 ## Rack::Attack Rate Limiting
-Three separate throttles with different strategies:
+The throttles below, plus `oauth/ip` (20 requests per minute per IP on `/users/auth/*`, covering both the request and callback phases). Three separate throttles with different strategies:
 
 ```ruby
 # General: catch scrapers and misconfigured clients
