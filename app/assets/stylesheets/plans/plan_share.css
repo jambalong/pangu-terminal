@@ -1,0 +1,94 @@
+.share-container {
+  padding: 1.5rem;
+}
+
+.share-container .modal-header {
+  margin-bottom: 1rem;
+  padding-right: 2rem;
+}
+
+.share-box {
+  margin-bottom: 1rem;
+}
+
+.share-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--ctp-subtext0);
+  font-size: 0.9rem;
+}
+
+.share-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.75rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 0.5rem;
+  color: var(--ctp-text);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.share-copy,
+.share-create {
+  padding: 0.6rem 1.1rem;
+  background: var(--ctp-mauve);
+  border: 1px solid var(--ctp-mauve);
+  border-radius: 0.5rem;
+  color: var(--ctp-base);
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.share-create {
+  width: 100%;
+}
+
+.share-status {
+  min-height: 1.25rem;
+  margin: 0.4rem 0 0;
+  color: var(--ctp-green);
+  font-size: 0.85rem;
+}
+
+.share-note {
+  margin-bottom: 1rem;
+  color: var(--ctp-subtext0);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.share-stop {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 1px solid var(--ctp-red);
+  border-radius: 0.5rem;
+  color: var(--ctp-red);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.share-stop:hover {
+  background: var(--ctp-red);
+  color: var(--ctp-base);
+}
+
+.shared-badge {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--ctp-mauve);
+  border-radius: 999px;
+  color: var(--ctp-mauve);
+  font-size: 0.7rem;
+  font-weight: 600;
+  vertical-align: middle;
+}

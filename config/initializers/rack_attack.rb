@@ -42,6 +42,10 @@ class Rack::Attack
     req.ip if req.path == "/app/planner" && req.post?
   end
 
+  throttle("shared/ip", limit: 60, period: 1.minute) do |req|
+    req.ip if req.path.start_with?("/p/")
+  end
+
   throttle("imports/ip", limit: 20, period: 1.hour) do |req|
     req.ip if req.path == "/app/inventory/import" && req.post?
   end

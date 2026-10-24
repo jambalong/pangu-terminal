@@ -61,4 +61,10 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     assert_response :too_many_requests
   end
+
+  test "returns 429 after too many shared-plan page requests from one IP" do
+    61.times { get "/p/#{'a' * 22}" }
+
+    assert_response :too_many_requests
+  end
 end
