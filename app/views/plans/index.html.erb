@@ -18,24 +18,25 @@
     </div>
 
     <section class="materials-accordion" data-controller="accordion">
-      <div class="accordion-header" data-action="click->accordion#toggle">
-        <div class="header-content">
+      <button type="button" class="accordion-header" aria-expanded="false" aria-controls="materials-summary-content" data-action="click->accordion#toggle">
+        <span class="header-content">
           <svg xmlns="http://www.w3.org/2000/svg" class="header-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
           <span class="header-title">Material Summary</span>
-        </div>
+        </span>
 
         <svg xmlns="http://www.w3.org/2000/svg" class="accordion-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
-      </div>
+      </button>
 
       <div id="materials-summary-content" data-accordion-target="content">
         <%= render "materials_summary", materials_summary: @materials_summary, materials_lookup: @materials_lookup %>
       </div>
     </section>
 
+    <h2 class="visually-hidden">Your plans</h2>
     <div id="plans-list-container" class="plans-container">
       <%# Hidden by CSS as soon as a plan card exists, so create and delete need no extra stream updates. %>
       <div class="plans-empty">

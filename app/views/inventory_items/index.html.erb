@@ -49,6 +49,7 @@
       </div>
     <% end %>
 
+    <h2 class="visually-hidden">Materials</h2>
     <%= turbo_frame_tag "inventory-grid" do %>
       <% if @inventory_items.empty? %>
         <div class="empty-state">

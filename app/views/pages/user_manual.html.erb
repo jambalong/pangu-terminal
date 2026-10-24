@@ -14,14 +14,14 @@
 
 <div class="manual-wrapper">
 
-<nav class="manual-sidebar" data-user-manual-target="sidebar">
+<nav class="manual-sidebar" data-user-manual-target="sidebar" aria-label="Manual">
   <div class="manual-nav-logo">
     <p class="app-name">Pangu Terminal</p>
     <p class="doc-label">// user manual</p>
     <a href="<%= root_path %>" class="manual-back-link">Back to app</a>
   </div>
 
-  <nav class="manual-nav">
+  <div class="manual-nav">
     <ul data-action="click->user-manual#closeMenu">
       <li class="nav-section-head">Overview</li>
       <li><a href="#introduction">Introduction</a></li>
@@ -44,7 +44,7 @@
       <li class="nav-section-head">Support</li>
       <li><a href="#faq">FAQ / Troubleshooting</a></li>
     </ul>
-  </nav>
+  </div>
 </nav>
 
 <main class="manual-main">

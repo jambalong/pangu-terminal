@@ -75,7 +75,7 @@
             <%= f.select :sol3_phase,
                 options_for_select(DropRate::SOL3_PHASES.map { |i| ["Phase #{i}", i] }, current_user.sol3_phase),
                 { include_blank: current_user.sol3_phase.nil? ? "Select Phase" : false },
-                { class: "game-profile-select" } %>
+                { class: "game-profile-select", "aria-label": "SOL3 phase" } %>
           </div>
 
           <div style="padding-top: 1rem;">

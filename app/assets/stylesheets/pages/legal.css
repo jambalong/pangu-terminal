@@ -28,6 +28,7 @@
 
 .legal-page a {
   color: var(--ctp-mauve);
+  text-decoration: underline;
 }
 
 .legal-back {

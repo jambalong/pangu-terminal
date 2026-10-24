@@ -1,5 +1,5 @@
 <div class="auth-container" style="max-width: 500px;">
-  <h2 class="auth-title">Account Settings</h2>
+  <h1 class="auth-title">Account Settings</h1>
 
   <%= render "devise/shared/error_messages", resource: resource %>
 
@@ -61,7 +61,7 @@
   <% end %>
 
   <div class="sign-in-methods" id="sign-in-methods">
-    <h3>Sign-in methods</h3>
+    <h2 class="settings-heading">Sign-in methods</h2>
     <% linked = current_user.identities.index_by(&:provider) %>
     <% OauthProviders.names.each do |provider| %>
       <% identity = linked[provider.to_s] %>
@@ -85,7 +85,7 @@
   </div>
 
   <div class="danger-zone">
-    <h3 class="danger-title">Danger Zone</h3>
+    <h2 class="danger-title">Danger Zone</h2>
     <p>Once you delete your account, all your saved plans will be permanently removed.</p>
     <%= button_to "Delete Account", user_registration_path, 
     method: :delete,
@@ -98,7 +98,7 @@
   </div>
 
   <div class="api-keys-section" id="api-keys">
-    <h3>API Keys</h3>
+    <h2>API Keys</h2>
 
     <% if flash[:api_token] %>
       <div class="api-token-reveal">

@@ -8,6 +8,12 @@
 
 .accordion-header {
   list-style: none;
+  width: 100%;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   display: flex;
   align-items: center;
   justify-content: space-between;

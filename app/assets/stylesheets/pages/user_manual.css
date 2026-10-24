@@ -243,6 +243,12 @@
   font-weight: 400;
 }
 
+.manual-section p a,
+.manual-section li a,
+.manual-section td a {
+  text-decoration: underline;
+}
+
 .manual-section h3 {
   font-family: var(--font-main);
   font-size: 13px;
