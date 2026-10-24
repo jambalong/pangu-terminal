@@ -6,6 +6,16 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["field"]
 
+  // Start in the first box, except on a touch screen, where that would
+  // pop the on-screen keyboard over the page, so wait for a tap. A box that needs
+  // fixing already has autofocus from the server.
+  connect() {
+    const alreadyFocused = this.fieldTargets.some((field) => field === document.activeElement)
+    if (!alreadyFocused && this.hasFieldTarget && !window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
+      this.fieldTargets[0].focus()
+    }
+  }
+
   navigate(event) {
     if (event.ctrlKey || event.metaKey || event.altKey) return
 

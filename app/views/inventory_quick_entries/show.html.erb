@@ -5,7 +5,8 @@
     </div>
 
     <p class="quick-intro">
-      Type what you own and press <kbd>Enter</kbd> (or the down arrow) to move to the next material; <kbd>Shift</kbd>+<kbd>Enter</kbd> or the up arrow goes back.
+      Type what you own for each material.
+      <span class="quick-keys">Press <kbd>Enter</kbd> (or the down arrow) to move to the next one; <kbd>Shift</kbd>+<kbd>Enter</kbd> or the up arrow goes back.</span>
       Numbers like <code>1,200</code> and <code>25k</code> work. Nothing is saved until you press Save.
       <% if @list[:showing_all] %>
         <% if @list[:has_plans] %>
@@ -57,7 +58,7 @@
                     inputmode: "numeric",
                     autocomplete: "off",
                     placeholder: "0",
-                    autofocus: (error && @errors.keys.first == material.id) || (@errors.blank? && group.equal?(@list[:groups].first) && item.equal?(group[:items].first)),
+                    autofocus: (error && @errors.keys.first == material.id),
                     aria: { invalid: (true if error), describedby: [ ("needed_#{material.id}" if item[:needed]), ("error_#{material.id}" if error) ].compact.join(" ").presence },
                     data: { quick_entry_target: "field", action: "keydown->quick-entry#navigate focus->quick-entry#select" } %>
               <% if error %>

@@ -58,3 +58,48 @@ li a,
 .optimizer-hint a {
   text-decoration: underline;
 }
+
+/* Target size (WCAG 2.2 AA): standalone links and small controls are at least
+   24px tall, and 44px on touch screens. Links inside running text are exempt. */
+.footer-links a,
+.view-all-btn,
+.plan-actions a,
+.inventory-data-links a,
+.auth-links a,
+.manual-back-link,
+.legal-back a,
+.edit-link,
+.delete-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+
+.auth-checkbox {
+  width: 24px;
+  height: 24px;
+}
+
+@media (pointer: coarse) {
+  .footer-links a,
+  .view-all-btn,
+  .plan-actions a,
+  .inventory-data-links a,
+  .auth-links a,
+  .manual-back-link,
+  .legal-back a,
+  .edit-link,
+  .delete-link {
+    min-height: 44px;
+    padding-inline: 0.5rem;
+  }
+
+  .plan-move {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .inventory-data-links {
+    gap: 0.25rem 0.75rem;
+  }
+}
