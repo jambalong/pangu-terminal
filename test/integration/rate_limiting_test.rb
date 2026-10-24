@@ -2,6 +2,9 @@ require "test_helper"
 
 class RateLimitingTest < ActionDispatch::IntegrationTest
   setup do
+    # Throttles count in fixed windows; start at a window boundary so a burst of
+    # requests can never straddle two windows and slip under the limit.
+    travel_to Time.utc(2026, 1, 1, 0, 0, 1)
     Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
     @user = User.create!(email: "ratelimit_#{SecureRandom.hex(4)}@example.com", password: "password123")
     @api_key = @user.api_keys.create!(name: "test key")
@@ -9,6 +12,7 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
+    travel_back
     Rack::Attack.cache.store = Rails.cache
   end
 
