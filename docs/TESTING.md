@@ -46,6 +46,8 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 
 `assert_no_axe_violations(skip: [...])` (in `test/application_system_test_case.rb`) runs axe-core against the current page in Chrome and lists violations. The axe script is vendored at `test/support/axe.min.js` (axe-core 4.10.2, MPL-2.0, header kept) because the `axe-core-capybara` gem needs Selenium, which this suite does not use. Add new pages to `test/system/accessibility_test.rb`; `SKIPPED` is empty (color contrast included); only add a rule to it for a known gap with a follow-up. axe finds roughly a third of accessibility problems, so keyboard-only and screen reader checks stay manual.
 
+The phone test ("pages fit a phone screen and have usable tap targets") resizes to 375x812 and fails on horizontal scroll or standalone links, buttons and inputs under 24px (links inside running text are exempt). Target sizes live in `base/accessibility.css`; touch screens (`pointer: coarse`) get 44px.
+
 ## CI (`.github/workflows/ci.yml`, on PRs and pushes to `main`)
 
 | Job | Command |

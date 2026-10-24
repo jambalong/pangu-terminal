@@ -14,6 +14,12 @@
   text-decoration: underline;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .quick-keys {
+    display: none;
+  }
+}
+
 .quick-intro kbd {
   padding: 0.05rem 0.4rem;
   border: 1px solid var(--ctp-surface2);

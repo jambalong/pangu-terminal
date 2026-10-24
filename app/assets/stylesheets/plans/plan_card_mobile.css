@@ -1,0 +1,32 @@
+/* Plan cards on narrow screens: the title row gets the full width and the
+   controls sit on their own row instead of squeezing the title. */
+.plan-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.plan-card-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .plan-card-header {
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .plan-card-subject {
+    flex: 1 1 100%;
+    min-width: 0;
+    gap: 0.75rem;
+  }
+
+  .plan-actions {
+    flex: 1 1 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}

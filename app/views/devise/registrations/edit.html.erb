@@ -25,7 +25,7 @@
 
     <div class="auth-form-group">
       <%= f.label :email, class: "auth-label" %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input" %>
+      <%= f.email_field :email, autocomplete: "email", class: "auth-input" %>
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>

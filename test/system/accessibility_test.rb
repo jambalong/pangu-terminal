@@ -336,4 +336,49 @@ class AccessibilityTest < ApplicationSystemTestCase
       assert_no_selector "h1", text: "Kumokiri"
     end
   end
+
+  # Phone-sized screen: nothing scrolls sideways and standalone links and buttons
+  # are at least 24px tall (WCAG 2.2 target size; links inside text are exempt).
+  PHONE_CHECK = <<~JS.freeze
+    (() => {
+      const de = document.documentElement
+      const small = []
+      document.querySelectorAll("a, button, input:not([type=hidden])").forEach((el) => {
+        const r = el.getBoundingClientRect()
+        const visible = r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden"
+        const exempt = el.closest("p, li, .visually-hidden, .skip-link, .quick-intro, .import-intro, .onboarding-text, .optimizer-hint, .inventory-hint")
+        if (visible && !exempt && el.type !== "checkbox" && el.type !== "radio" && (r.width < 24 || r.height < 24)) {
+          small.push(((el.textContent || el.getAttribute("aria-label") || el.name || "").trim().slice(0, 24)) + " " + Math.round(r.width) + "x" + Math.round(r.height))
+        }
+      })
+      return JSON.stringify({ wide: de.scrollWidth > de.clientWidth, small: small })
+    })()
+  JS
+
+  def assert_phone_friendly
+    result = JSON.parse(page.evaluate_script(PHONE_CHECK))
+    assert_not result["wide"], "#{current_path} scrolls sideways on a phone"
+    assert_equal [], result["small"], "#{current_path} has tap targets under 24px"
+  end
+
+  test "pages fit a phone screen and have usable tap targets" do
+    page.driver.resize(375, 812)
+    shell = Material.find_by!(name: "Shell Credit")
+    plan = Plan.create!(user: @user, subject: Weapon.find_by!(name: "Kumokiri"),
+                        plan_data: { "input" => {}, "output" => { shell.id.to_s => 25480 } })
+    token = plan.share!
+
+    [ root_path, new_user_session_path, privacy_path, shared_plan_path(token) ].each do |path|
+      visit path
+      assert_selector "body"
+      assert_phone_friendly
+    end
+
+    sign_in_through_form
+    [ authenticated_root_path, plans_path, inventory_items_path, inventory_quick_entry_path, optimizer_path ].each do |path|
+      visit path
+      assert_selector "body"
+      assert_phone_friendly
+    end
+  end
 end
