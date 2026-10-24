@@ -23,8 +23,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "meta[name=description][content*='Wuthering Waves']"
     assert_select "link[rel=canonical][href='https://panguterminal.ambalong.dev/']"
     assert_select "meta[property='og:title'][content='Pangu Terminal']"
-    assert_select "meta[property='og:image'][content='https://panguterminal.ambalong.dev/favicon.png']"
-    assert_select "meta[name='twitter:card'][content=summary]"
+    assert_select "meta[property='og:image'][content='https://panguterminal.ambalong.dev/og-image.png']"
+    assert_select "meta[name='twitter:card'][content=summary_large_image]"
   end
 
   test "privacy page sets its own title and canonical URL" do
