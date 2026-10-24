@@ -34,6 +34,9 @@ Rails.application.routes.draw do
       end
     end
 
+    get "inventory/export", to: "inventory_exports#show", as: :inventory_export
+    get "inventory/import", to: "inventory_imports#new", as: :new_inventory_import
+    post "inventory/import", to: "inventory_imports#create", as: :inventory_import
     resources :inventory_items, only: [ :index, :edit, :update ], path: "inventory"
     resources :api_keys, only: [ :create, :destroy ]
     resources :identities, only: :destroy

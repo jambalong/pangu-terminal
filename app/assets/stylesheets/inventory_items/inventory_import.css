@@ -1,0 +1,74 @@
+.inventory-data-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.inventory-data-links a {
+  color: var(--ctp-mauve);
+}
+
+.import-page {
+  max-width: 44rem;
+}
+
+.import-intro {
+  color: var(--ctp-subtext0);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.import-intro a,
+.import-result a {
+  color: var(--ctp-mauve);
+  text-decoration: underline;
+}
+
+.import-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.import-textarea {
+  font-family: var(--font-mono);
+  width: 100%;
+}
+
+.import-result {
+  background-color: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-left: 4px solid var(--ctp-green);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.import-result--error {
+  border-left-color: var(--ctp-red);
+}
+
+.import-skipped {
+  margin: 0.75rem 0;
+  color: var(--ctp-subtext0);
+}
+
+.import-skipped ul {
+  margin: 0.5rem 0 0 1.25rem;
+}
+
+.import-formats {
+  margin-top: 2rem;
+  color: var(--ctp-subtext0);
+}
+
+.import-formats pre {
+  background-color: var(--ctp-mantle);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
