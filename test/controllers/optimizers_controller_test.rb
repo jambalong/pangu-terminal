@@ -41,7 +41,7 @@ class OptimizersControllerIndexTest < ActionDispatch::IntegrationTest
     get optimizer_path, params: { plan_id: @plan.id }
 
     assert_response :ok
-    assert_equal @plan.id.to_s, session[:optimizer_plan_id].to_s
+    assert_equal [ @plan.id.to_s ], session[:optimizer_plan_ids]
   end
 
   test "loads plan from session when no plan_id param" do
@@ -132,7 +132,7 @@ class OptimizersControllerSelectPlanTest < ActionDispatch::IntegrationTest
       headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
     assert_response :ok
-    assert_equal @plan.id.to_s, session[:optimizer_plan_id].to_s
+    assert_equal [ @plan.id.to_s ], session[:optimizer_plan_ids]
   end
 end
 
@@ -178,7 +178,7 @@ class OptimizersControllerAdviseTest < ActionDispatch::IntegrationTest
     sign_in @user
     get optimizer_path, params: { plan_id: @plan.id }
 
-    assert_enqueued_with(job: FarmingAdviceJob, args: [ @user.id, @plan.id ]) do
+    assert_enqueued_with(job: FarmingAdviceJob, args: [ @user.id, [ @plan.id ] ]) do
       get optimizer_advise_path
     end
 
@@ -285,5 +285,110 @@ class OptimizersControllerWithoutSol3PhaseTest < ActionDispatch::IntegrationTest
     get optimizer_advise_path
 
     assert_response :no_content
+  end
+end
+
+class OptimizersControllerSelectionTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
+  setup do
+    @user = User.create!(email: "selection@example.com", password: "password123", sol3_phase: 3)
+    @shell_credit = Material.find_by!(name: "Shell Credit")
+    kumokiri, other_weapon = Weapon.where(name: "Kumokiri").to_a + Weapon.where.not(name: "Kumokiri").limit(1).to_a
+    @plan_a = Plan.create!(user: @user, subject: kumokiri,
+                           plan_data: { "input" => {}, "output" => { @shell_credit.id.to_s => 25480 } })
+    @plan_b = Plan.create!(user: @user, subject: other_weapon,
+                           plan_data: { "input" => {}, "output" => { @shell_credit.id.to_s => 1000 } })
+    @stranger = User.create!(email: "selection_stranger@example.com", password: "password123")
+    @foreign = Plan.create!(user: @stranger, subject: kumokiri, plan_data: { "input" => {}, "output" => {} })
+    sign_in @user
+  end
+
+  def select_all
+    post optimizer_select_plan_path, params: { all: 1 }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+  end
+
+  test "all plans can be selected and the card says so" do
+    select_all
+
+    assert_response :ok
+    assert_includes response.body, "All plans (2)"
+  end
+
+  test "all plans stays dynamic: a plan created later is included" do
+    select_all
+    third = Plan.create!(user: @user, subject: Weapon.where.not(id: [ @plan_a.subject_id, @plan_b.subject_id ]).first,
+                         plan_data: { "input" => {}, "output" => {} })
+
+    get optimizer_path
+
+    assert_includes response.body, "All plans (3)"
+    assert third.persisted?
+  end
+
+  test "a chosen set of plans is stored and shown" do
+    post optimizer_select_plan_path, params: { plan_ids: [ @plan_a.id, @plan_b.id ] },
+                                     headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_equal [ @plan_a.id.to_s, @plan_b.id.to_s ], session[:optimizer_plan_ids]
+    assert_includes response.body, "2 plans"
+  end
+
+  test "selecting a chosen set clears all-plans mode" do
+    select_all
+    post optimizer_select_plan_path, params: { plan_ids: [ @plan_a.id ] }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    get optimizer_path
+    assert_not_includes response.body, "All plans"
+    assert_includes response.body, @plan_a.subject.name
+  end
+
+  test "someone else's plan ids are ignored, not an error" do
+    post optimizer_select_plan_path, params: { plan_ids: [ @foreign.id ] }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_response :ok
+    assert_includes response.body, "SELECT A PLAN"
+  end
+
+  test "malformed selection params are harmless" do
+    post optimizer_select_plan_path, params: { plan_ids: { "0" => "x" }, plan_id: [ "a" ] },
+                                     headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_response :ok
+  end
+
+  test "running with all plans shows the combined deficit" do
+    select_all
+    get optimizer_path, params: { run: 1 }
+
+    assert_response :ok
+    assert_select ".optimizer-metrics"
+  end
+
+  test "advice for all plans enqueues one job covering every plan" do
+    select_all
+    get optimizer_path
+
+    assert_enqueued_with(job: FarmingAdviceJob, args: [ @user.id, [ @plan_a.id, @plan_b.id ] ]) do
+      get optimizer_advise_path
+    end
+  end
+
+  test "the chooser lists plans as checkboxes inside a labelled group, pre-checked for the current set" do
+    post optimizer_select_plan_path, params: { plan_ids: [ @plan_a.id ] }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    get optimizer_plans_modal_path
+
+    assert_select "fieldset legend"
+    assert_select "input[type=checkbox][name='plan_ids[]']", count: 2
+    assert_select "input[type=checkbox][value='#{@plan_a.id}'][checked]"
+    assert_select "input[type=checkbox][value='#{@plan_b.id}'][checked]", count: 0
+    assert_select "button", text: "Use all plans (2)"
+  end
+
+  test "the chooser never lists another user's plans" do
+    get optimizer_plans_modal_path
+
+    assert_select "input[value='#{@foreign.id}']", count: 0
   end
 end

@@ -1,0 +1,102 @@
+/* Plan chooser dialog and the stacked portraits on the optimizer's plan card. */
+
+.optimizer-plan-icons {
+  display: inline-flex;
+  align-items: center;
+}
+
+.optimizer-plan-icons .optimizer-plan-icon + .optimizer-plan-icon {
+  margin-left: -0.75rem;
+}
+
+.optimizer-use-all,
+.optimizer-use-selected {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background-color: var(--ctp-mauve);
+  border: 1px solid var(--ctp-mauve);
+  border-radius: 0.5rem;
+  color: var(--ctp-base);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.optimizer-use-all:hover,
+.optimizer-use-selected:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.optimizer-use-all {
+  margin-bottom: 1.25rem;
+}
+
+.optimizer-use-selected {
+  margin-top: 1rem;
+  background-color: var(--ctp-mantle);
+  color: var(--ctp-text);
+}
+
+.optimizer-use-selected:hover {
+  background-color: var(--ctp-mauve);
+  color: var(--ctp-base);
+}
+
+.optimizer-plan-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.optimizer-plan-legend {
+  margin-bottom: 0.75rem;
+  color: var(--ctp-subtext0);
+  font-size: 0.85rem;
+}
+
+/* The checkbox stays in the page for keyboards and screen readers; the card is its visible face. */
+.optimizer-plan-checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.optimizer-plan-select-card {
+  position: relative;
+}
+
+.optimizer-plan-select-card:has(.optimizer-plan-checkbox:checked) {
+  border-color: var(--ctp-mauve);
+  background: var(--ctp-surface0);
+}
+
+.optimizer-plan-select-card:has(.optimizer-plan-checkbox:focus-visible) {
+  outline: 2px solid var(--ctp-mauve);
+  outline-offset: 2px;
+}
+
+.optimizer-plan-tick {
+  margin-left: auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ctp-overlay0);
+  border-radius: 50%;
+  color: transparent;
+  font-weight: 700;
+}
+
+.optimizer-plan-checkbox:checked ~ .optimizer-plan-tick {
+  background-color: var(--ctp-mauve);
+  border-color: var(--ctp-mauve);
+  color: var(--ctp-base);
+}

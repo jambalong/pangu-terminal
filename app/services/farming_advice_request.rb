@@ -19,13 +19,13 @@ class FarmingAdviceRequest
 
   def self.global_daily_limit = ENV.fetch("ADVISOR_DAILY_LIMIT_GLOBAL", 500).to_i
 
-  def initialize(user:, plan:)
+  def initialize(user:, plans: nil, plan: nil)
     @user = user
-    @plan = plan
+    @plans = Array(plans || plan)
   end
 
   def fetch
-    advisor = FarmingAdvisorService.for(user: @user, plan: @plan)
+    advisor = FarmingAdvisorService.for(user: @user, plans: @plans)
     return [ :none, nil ] unless advisor.advisable?
 
     if (advice = advisor.cached_advice)
@@ -47,7 +47,7 @@ class FarmingAdviceRequest
   def enqueue(advisor)
     Rails.cache.write(advisor.pending_key, true, expires_in: PENDING_TTL)
     spend_budget
-    FarmingAdviceJob.perform_later(@user.id, @plan.id)
+    FarmingAdviceJob.perform_later(@user.id, @plans.map(&:id))
   end
 
   def budget_spent?

@@ -6,10 +6,13 @@ class FarmingAdviceJob < ApplicationJob
 
   discard_on ActiveRecord::RecordNotFound
 
-  def perform(user_id, plan_id)
+  # plan_ids is an array (an integer from an older enqueue is accepted too).
+  def perform(user_id, plan_ids)
     user = User.find(user_id)
-    plan = user.plans.find(plan_id)
-    advisor = FarmingAdvisorService.for(user: user, plan: plan)
+    plans = user.plans.where(id: Array(plan_ids)).to_a
+    raise ActiveRecord::RecordNotFound, "no plans to advise on" if plans.empty?
+
+    advisor = FarmingAdvisorService.for(user: user, plans: plans)
     return unless advisor.advisable?
 
     begin

@@ -1,9 +1,9 @@
 class FarmingAdvisorService < ApplicationService
   CACHE_TTL = 1.day
 
-  # Builds the advisor for a user's plan (same inputs the optimizer page shows).
-  def self.for(user:, plan:)
-    optimizer = OptimizerService.call(user: user, plan: plan)
+  # Builds the advisor for a user's plans (same inputs the optimizer page shows).
+  def self.for(user:, plans: nil, plan: nil)
+    optimizer = OptimizerService.call(user: user, plans: plans || plan)
     new(
       results: optimizer[:results],
       farming_priority: FarmingPriorityService.call(optimizer[:results]),

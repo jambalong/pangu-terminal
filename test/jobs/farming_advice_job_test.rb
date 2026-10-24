@@ -57,4 +57,26 @@ class FarmingAdviceJobTest < ActiveSupport::TestCase
 
     assert_nothing_raised { FarmingAdviceJob.perform_now(@user.id, @plan.id) }
   end
+
+  test "advises on several plans at once" do
+    other = Plan.create!(
+      user: @user, subject: Weapon.where.not(id: @plan.subject_id).first,
+      plan_data: { "input" => {}, "output" => { Material.find_by!(name: "Shell Credit").id.to_s => 500 } }
+    )
+    combined = FarmingAdvisorService.for(user: @user, plans: [ @plan, other ])
+
+    with_llm_response("Combined advice.") do
+      FarmingAdviceJob.perform_now(@user.id, [ @plan.id, other.id ])
+    end
+
+    assert_equal "Combined advice.", Rails.cache.read(combined.cache_key)
+  end
+
+  test "ignores plan ids that belong to someone else" do
+    stranger = User.create!(email: "job_stranger@example.com", password: "password123", sol3_phase: 3)
+    foreign = Plan.create!(user: stranger, subject: @plan.subject, plan_data: @plan.plan_data)
+
+    assert_nothing_raised { FarmingAdviceJob.perform_now(@user.id, [ foreign.id ]) }
+    assert_nil Rails.cache.read(FarmingAdvisorService.for(user: stranger, plans: [ foreign ]).cache_key)
+  end
 end

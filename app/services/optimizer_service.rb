@@ -1,13 +1,15 @@
-# Compares a plan's requirements to a user's inventory and estimates the farming
-# needed to close each deficit. Returns the data the optimizer views render.
+# Compares the requirements of one or more plans to a user's inventory and
+# estimates the farming needed to close each deficit. Several plans (the whole
+# account, or a chosen set) are summed first, so a material wanted by two plans
+# is farmed once. Returns the data the optimizer views render.
 class OptimizerService < ApplicationService
-  def initialize(user:, plan:)
+  def initialize(user:, plans: nil, plan: nil)
     @user = user
-    @plan = plan
+    @plans = Array(plans || plan)
   end
 
   def call
-    needed = (@plan.plan_data.dig("output") || {}).transform_keys(&:to_i)
+    needed = needed_materials
     owned = @user.inventory_items.index_by(&:material_id).transform_values(&:quantity)
     synthesis = SynthesisService.new(owned, needed)
     deficits = synthesis.reconcile.select { |_material_id, data| data[:deficit] > 0 }
@@ -26,6 +28,12 @@ class OptimizerService < ApplicationService
   end
 
   private
+
+  def needed_materials
+    @plans.each_with_object(Hash.new(0)) do |plan, totals|
+      (plan.plan_data["output"] || {}).each { |material_id, quantity| totals[material_id.to_i] += quantity }
+    end
+  end
 
   def source_totals(results)
     by_source = Hash.new { |hash, source_name| hash[source_name] = { estimated_runs: 0, waveplate_cost_per_run: 0 } }
