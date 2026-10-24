@@ -6,6 +6,16 @@ class Rack::Attack
   #
   # Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
+  ### Health Check Safelist ###
+  # Render's health check and any uptime monitor hit /up constantly. Throttle
+  # counters are stored in Rails.cache (Solid Cache, so the database), and a
+  # database write on every ping would keep the free Neon compute awake around
+  # the clock and burn its monthly compute hours. /up returns no data and does
+  # no work, so it needs no throttling.
+  safelist("health check") do |req|
+    req.path == "/up"
+  end
+
   ### General IP Throttle ###
   # Catches malicious clients or misconfigured scrapers hitting the whole app.
   # 300 requests per 5 minutes is the rack-attack recommended default.
