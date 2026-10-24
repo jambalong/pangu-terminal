@@ -66,4 +66,58 @@ class AccessibilityTest < ApplicationSystemTestCase
     assert_selector "a.nav-plan[aria-current=page]"
     assert_no_selector "a.nav-inventory[aria-current]"
   end
+
+  def focus_inside_dialog?
+    page.evaluate_script("document.querySelector('[role=dialog]').contains(document.activeElement)")
+  end
+
+  test "the new plan dialog is named, takes focus, traps Tab and gives focus back on Escape" do
+    visit plans_path
+    find("a.new-plan-btn", text: "NEW PLAN", match: :first).click
+
+    assert_selector "[role=dialog][aria-modal=true]"
+    title = page.evaluate_script(
+      "document.getElementById(document.querySelector('[role=dialog]').getAttribute('aria-labelledby')).textContent.trim()"
+    )
+    assert_equal "Select Plan Type", title
+    assert_selector "[role=dialog] :focus"
+    assert_no_axe_violations(skip: SKIPPED)
+
+    12.times do
+      page.driver.browser.keyboard.type(:Tab)
+      assert focus_inside_dialog?, "Tab escaped the dialog"
+    end
+    12.times do
+      page.driver.browser.keyboard.type([ :shift, :Tab ])
+      assert focus_inside_dialog?, "Shift+Tab escaped the dialog"
+    end
+
+    page.driver.browser.keyboard.type(:Escape)
+    assert_no_selector "[role=dialog]"
+    assert_selector ".new-plan-btn:focus"
+  end
+
+  test "the dialog has a close button" do
+    visit plans_path
+    find("a.new-plan-btn", text: "NEW PLAN", match: :first).click
+    assert_selector "[role=dialog]"
+
+    click_button "Close dialog"
+
+    assert_no_selector "[role=dialog]"
+  end
+
+  test "the delete confirmation closes with Escape" do
+    sign_in_through_form
+    plan = Plan.create!(user: @user, subject: Weapon.find_by!(name: "Kumokiri"), plan_data: { "input" => {}, "output" => {} })
+    visit confirm_delete_plan_path(plan)
+    visit plans_path
+    click_link "Delete", match: :first
+    assert_selector "[role=dialog]"
+
+    page.driver.browser.keyboard.type(:Escape)
+
+    assert_no_selector "[role=dialog]"
+    assert Plan.exists?(plan.id)
+  end
 end

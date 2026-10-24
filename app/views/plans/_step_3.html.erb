@@ -1,7 +1,7 @@
 <%# locals: (plan:, subject:, subject_type:, errors: nil) %>
 
 <div class="config-container">
-  <header class="modal-header">
+  <div class="modal-header">
     <div class="config-header">
       <div class="config-title">
         <%= render "shared/subject_portrait", subject: subject %>
@@ -14,7 +14,7 @@
     <p class="config-subtitle">
       CONFIGURE <%= subject_type.upcase %> PLAN
     </p>
-  </header>
+  </div>
 
   <div id="plan-form-frame" class="custom-scrollbar">
     <%= render "form", plan: plan, subject: subject, subject_type: subject_type, errors: errors %>

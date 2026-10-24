@@ -174,6 +174,10 @@ rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
 If a plan exists but belongs to another user, the scoped query raises `RecordNotFound` and returns 404. Returning 403 would confirm the resource exists and leak information about other users' data. 404 prevents enumeration.
 
+## Modals
+
+`shared/_modal` is the one dialog shell (`role="dialog"`, `aria-modal`, close button). `modal_controller.js` names the dialog after its first heading, moves focus in on open, traps Tab and Shift+Tab, closes on Escape or outside click, and returns focus to the opener when the dialog is removed (closed, or replaced by a Turbo response). Do not put a `<header>` element inside a dialog: it counts as a second banner landmark. Covered by `test/system/accessibility_test.rb`.
+
 ## Onboarding
 
 Guidance appears where the user is stuck, with no stored onboarding state. `OnboardingChecklist` (`app/services/onboarding_checklist.rb`) derives three steps from the user's data (SOL3 phase set, a plan exists, some inventory above zero); the dashboard shows the card until all are done. "Hide" is remembered in the browser (`dismissible` Stimulus controller with `persist` and its own key, in `localStorage`; if storage is blocked the card simply returns). The planner empty state is always rendered and hidden by CSS (`.plans-container:has(.plan-card)`) so create and delete need no stream updates; the inventory hint shows while no item is above zero; the optimizer shows a hint with no plans, and another when a plan is selected but the inventory is empty. New OAuth accounts get a welcome flash naming their username.
