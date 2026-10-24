@@ -20,6 +20,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   def assert_no_axe_violations(skip: [])
     browser = page.driver.browser
+    # Measure after entry animations finish; mid-fade colors read as low contrast.
+    20.times do
+      break if page.evaluate_script("document.getAnimations().every((a) => a.playState !== 'running')")
+
+      sleep 0.1
+    end
     browser.execute(AXE_SOURCE)
     options = { rules: skip.index_with { { enabled: false } } }.to_json
     json = browser.evaluate_async(<<~JS, 30)

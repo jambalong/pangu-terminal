@@ -1,9 +1,9 @@
 require "application_system_test_case"
 
-# Runs axe-core on the main pages. Rules listed in SKIPPED are known gaps that
-# a later change will fix and remove from this list.
+# Runs axe-core on the main pages, including WCAG AA color contrast. Rules
+# listed in SKIPPED would be known gaps with a follow-up; the list is empty.
 class AccessibilityTest < ApplicationSystemTestCase
-  SKIPPED = %w[ color-contrast ].freeze
+  SKIPPED = %w[].freeze
 
   setup do
     @user = User.create!(email: "a11y@example.com", password: "password123", sol3_phase: 3)
@@ -119,5 +119,19 @@ class AccessibilityTest < ApplicationSystemTestCase
 
     assert_no_selector "[role=dialog]"
     assert Plan.exists?(plan.id)
+  end
+
+  test "an error message outlives the old 2.5 second timeout and can be dismissed" do
+    visit new_user_session_path
+    fill_in "Email", with: "a11y@example.com"
+    fill_in "Password", with: "wrong-password"
+    click_button "Sign In"
+
+    assert_selector ".flash-message.alert"
+    sleep 3.2
+    assert_selector ".flash-message.alert"
+
+    click_button "Dismiss message"
+    assert_no_selector ".flash-message.alert", wait: 3
   end
 end

@@ -27,7 +27,8 @@
   --ctp-subtext0: #a6adc8;
   --ctp-overlay2: #9399b2;
   --ctp-overlay1: #7f849c;
-  --ctp-overlay0: #6c7086;
+  /* Lightened from Catppuccin's #6c7086 so muted text passes WCAG AA (4.5:1) on base, mantle and crust. */
+  --ctp-overlay0: #878ca5;
   --ctp-surface2: #585b70;
   --ctp-surface1: #45475a;
   --ctp-surface0: #313244;

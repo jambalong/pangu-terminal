@@ -44,7 +44,7 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 
 ## Accessibility testing
 
-`assert_no_axe_violations(skip: [...])` (in `test/application_system_test_case.rb`) runs axe-core against the current page in Chrome and lists violations. The axe script is vendored at `test/support/axe.min.js` (axe-core 4.10.2, MPL-2.0, header kept) because the `axe-core-capybara` gem needs Selenium, which this suite does not use. Add new pages to `test/system/accessibility_test.rb`; only add a rule to `SKIPPED` for a known gap with a follow-up. axe finds roughly a third of accessibility problems, so keyboard-only and screen reader checks stay manual.
+`assert_no_axe_violations(skip: [...])` (in `test/application_system_test_case.rb`) runs axe-core against the current page in Chrome and lists violations. The axe script is vendored at `test/support/axe.min.js` (axe-core 4.10.2, MPL-2.0, header kept) because the `axe-core-capybara` gem needs Selenium, which this suite does not use. Add new pages to `test/system/accessibility_test.rb`; `SKIPPED` is empty (color contrast included); only add a rule to it for a known gap with a follow-up. axe finds roughly a third of accessibility problems, so keyboard-only and screen reader checks stay manual.
 
 ## CI (`.github/workflows/ci.yml`, on PRs and pushes to `main`)
 

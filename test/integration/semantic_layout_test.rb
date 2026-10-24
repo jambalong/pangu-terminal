@@ -47,4 +47,15 @@ class SemanticLayoutTest < ActionDispatch::IntegrationTest
 
     assert_select "nav nav", count: 0
   end
+
+  test "error messages stay until dismissed and notices fade on their own" do
+    post user_session_path, params: { user: { email: "nobody@example.com", password: "wrong-password" } }
+    assert_select ".flash-message.alert[data-flash-persist-value=true] button.flash-close"
+
+    user = User.create!(email: "flash@example.com", password: "password123")
+    post user_session_path, params: { user: { email: user.email, password: "password123" } }
+    follow_redirect!
+    assert_select ".flash-message.notice[data-flash-persist-value=false]"
+    assert_select ".flash-message.notice button.flash-close", count: 0
+  end
 end

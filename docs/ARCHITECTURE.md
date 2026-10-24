@@ -174,6 +174,10 @@ rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
 If a plan exists but belongs to another user, the scoped query raises `RecordNotFound` and returns 404. Returning 403 would confirm the resource exists and leak information about other users' data. 404 prevents enumeration.
 
+## Colors and contrast
+
+Text colors come from `var(--ctp-*)` tokens in `base/tokens.css`. `--ctp-overlay0` is deliberately lighter than stock Catppuccin (`#878ca5` instead of `#6c7086`) so muted text passes WCAG AA (4.5:1) on `base`, `mantle` and `crust`; on `surface0` or lighter backgrounds use `--ctp-overlay2` or lighter. The axe system tests enforce contrast on the main pages, so a new low-contrast pairing fails CI.
+
 ## Modals
 
 `shared/_modal` is the one dialog shell (`role="dialog"`, `aria-modal`, close button). `modal_controller.js` names the dialog after its first heading, moves focus in on open, traps Tab and Shift+Tab, closes on Escape or outside click, and returns focus to the opener when the dialog is removed (closed, or replaced by a Turbo response). Do not put a `<header>` element inside a dialog: it counts as a second banner landmark. Covered by `test/system/accessibility_test.rb`.
