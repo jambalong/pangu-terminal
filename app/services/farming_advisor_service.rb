@@ -3,15 +3,18 @@ class FarmingAdvisorService < ApplicationService
 
   # Builds the advisor for a user's plans (same inputs the optimizer page shows).
   def self.for(user:, plans: nil, plan: nil)
-    optimizer = OptimizerService.call(user: user, plans: plans || plan)
+    chosen = Array(plans || plan)
+    optimizer = OptimizerService.call(user: user, plans: chosen)
     new(
       results: optimizer[:results],
       farming_priority: FarmingPriorityService.call(optimizer[:results]),
-      chain_coverage: optimizer[:chain_coverage]
+      chain_coverage: optimizer[:chain_coverage],
+      plan_names: chosen.map { |chosen_plan| chosen_plan.subject.name }
     )
   end
 
-  def initialize(results:, farming_priority:, chain_coverage:)
+  def initialize(results:, farming_priority:, chain_coverage:, plan_names: [])
+    @plan_names = plan_names
     @results = results
     @farming_priority = farming_priority
     @chain_coverage = chain_coverage
@@ -56,7 +59,7 @@ class FarmingAdvisorService < ApplicationService
       Always address the Rover directly. Keep your tone practical like a knowledgeable companion giving clear advice.
 
       Material deficits, farming estimates, and synthesis opportunities:
-      #{format_deficits}
+      #{format_deficits}#{plan_order_note}
 
       Note: materials with type enemy_drop have no Waveplate farming source. They must be hunted from open-world enemies. They CAN be partially or fully covered through synthesis if lower tier surplus exists.
       Materials with type flower have no Waveplate farming source and cannot be synthesized. They must be gathered from fixed open-world locations.
@@ -74,6 +77,15 @@ class FarmingAdvisorService < ApplicationService
       If a flower deficit exists, tell the Rover they need to gather it from the open world.
       Use only the numbers provided above. Do not use em dashes.
     PROMPT
+  end
+
+  # With several plans the player has ranked them; tell the model so ties go to the top plans.
+  def plan_order_note
+    return "" if @plan_names.size < 2
+
+    ranked = @plan_names.each_with_index.map { |name, index| "#{index + 1}. #{name}" }.join(", ")
+    "\n\nThe Rover's plans in priority order (earlier plans come first): #{ranked}.\n" \
+      "When two farming options are close, favor the materials the earlier plans need."
   end
 
   def format_deficits

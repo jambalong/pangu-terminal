@@ -1,4 +1,4 @@
-<%# locals: (plan:, materials_lookup:) %>
+<%# locals: (plan:, materials_lookup:, rank: nil, total: nil, focus_direction: nil) %>
 
 <div id="<%= dom_id(plan) %>" class="plan-card">
   <div class="plan-card-header">
@@ -7,10 +7,29 @@
 
       <h3 class="plan-card-title">
         <%= plan.subject.name %>
+        <% if rank %>
+          <span class="plan-rank" aria-label="Priority <%= rank %> of <%= total %>">#<%= rank %></span>
+        <% end %>
       </h3>
     </div>
 
     <div class="plan-actions">
+      <% if rank && total > 1 %>
+        <%# A button that has just been used and is now disabled (the plan reached an end) cannot keep focus, so focus goes to the other arrow. %>
+        <% focus_on = focus_direction %>
+        <% focus_on = (focus_direction == "up" ? "down" : "up") if (focus_direction == "up" && rank == 1) || (focus_direction == "down" && rank == total) %>
+        <% { "up" => "▲", "down" => "▼" }.each do |direction, arrow| %>
+          <% unavailable = (direction == "up" && rank == 1) || (direction == "down" && rank == total) %>
+          <%= button_to arrow, move_plan_path(plan, direction: direction),
+                method: :patch,
+                class: "plan-move",
+                disabled: unavailable,
+                form_class: "plan-move-form",
+                aria: { label: "Move #{plan.subject.name} #{direction}, priority #{rank} of #{total}" },
+                data: ({ controller: "focus-on-connect" } if focus_on == direction) %>
+        <% end %>
+      <% end %>
+
       <%= link_to "Edit",
           edit_plan_path(plan),
           data: { turbo_frame: "modal" },

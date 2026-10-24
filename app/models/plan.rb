@@ -21,6 +21,12 @@ class Plan < ApplicationRecord
   validate :subject_must_exist, if: -> { VALID_SUBJECT_TYPES.include?(subject_type) && subject_id.present? }
   validate :must_have_owner
 
+  # Priority order: explicit positions first-to-last, with plans that have none
+  # (created before priorities existed) ahead of them in creation order.
+  scope :by_priority, -> { order(Arel.sql("COALESCE(plans.position, 0) ASC, plans.created_at ASC, plans.id ASC")) }
+
+  before_create :assign_position
+
   scope :subject_ids_for_type, ->(type) { where(subject_type: type).pluck(:subject_id) }
 
   def self.fetch_materials_summary(plans)
@@ -37,6 +43,14 @@ class Plan < ApplicationRecord
   end
 
   private
+
+  # New plans go to the end of their owner's list (a user's, or a guest's).
+  def assign_position
+    return if position
+
+    siblings = user_id ? Plan.where(user_id: user_id) : Plan.where(user_id: nil, guest_token: guest_token)
+    self.position = (siblings.maximum(:position) || 0) + 1
+  end
 
   def must_have_owner
     if user_id.blank? && guest_token.blank?

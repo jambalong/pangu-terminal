@@ -14,6 +14,7 @@ class OptimizersController < ApplicationController
       @results, @chain_coverage, @totals = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
       @timeline = WaveplateTimeline.call(total: @totals[:total_wp], banked: @waveplate_bank)
+      @breakdown = PlanPriorityBreakdown.call(user: current_user, plans: @selected_plans, banked: @waveplate_bank)
     end
   end
 

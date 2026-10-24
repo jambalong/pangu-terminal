@@ -4,8 +4,10 @@
   <%= render "plans/materials_summary", materials_summary: @materials_summary, materials_lookup: @materials_lookup %>
 <% end %>
 
-<%# Use dom_id to target the plan to remove %>
-<%= turbo_stream.remove dom_id(@plan) %>
+<%# Re-render the list so the remaining plans get their new ranks %>
+<%= turbo_stream.update "plans-list" do %>
+  <%= render "plans/list", plans: @plans, materials_lookup: @materials_lookup %>
+<% end %>
 
 <%# Close the confirm delete modal %>
 <%= turbo_stream.replace "modal" do %>

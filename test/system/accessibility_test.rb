@@ -261,4 +261,36 @@ class AccessibilityTest < ApplicationSystemTestCase
     assert_text "Saved 2 materials."
     assert_equal [ 25_000, 40 ], [ @user.inventory_items.find_by!(material: shell).quantity, @user.inventory_items.find_by!(material: core).quantity ]
   end
+
+  test "plans can be reordered, focus stays on a move button, and the optimizer follows the order" do
+    sign_in_through_form
+    shell = Material.find_by!(name: "Shell Credit")
+    first, second = Weapon.limit(2).map do |weapon|
+      Plan.create!(user: @user, subject: weapon, plan_data: { "input" => {}, "output" => { shell.id.to_s => 5000 } })
+    end
+    visit plans_path
+    assert_selector ".plan-rank", text: "#1"
+    assert_no_axe_violations(skip: SKIPPED)
+
+    down = "button[aria-label='Move #{first.subject.name} down, priority 1 of 2']"
+    # A click, not a key press: the test driver sends a key as separate key and character
+    # events, and the trailing one lands on whichever button takes focus next. The buttons
+    # are native <button>s, so keyboards work the same way.
+    find(down).click
+
+    assert_text "Moved #{first.subject.name} down."
+    assert_selector "button[aria-label='Move #{first.subject.name} up, priority 2 of 2']:focus"
+    assert_selector ".plan-card:first-of-type .plan-card-title", text: second.subject.name
+    assert_selector "button[aria-label='Move #{first.subject.name} up, priority 2 of 2']:not([disabled])"
+    assert_equal [ second, first ], @user.plans.by_priority.to_a
+
+    visit optimizer_path
+    click_link "> SELECT A PLAN"
+    click_button "Use all plans (2)"
+    click_button "> RUN OPTIMIZER"
+
+    assert_selector ".optimizer-order-name", text: second.subject.name, wait: 10
+    assert_equal [ second.subject.name, first.subject.name ], all(".optimizer-order-name").map(&:text)
+    assert_no_axe_violations(skip: SKIPPED)
+  end
 end

@@ -133,4 +133,35 @@ class FarmingAdvisorServiceTest < ActiveSupport::TestCase
     prompt = service.send(:prompt)
     assert_match "synthesis fully covers this deficit -- no farming needed", prompt
   end
+
+  def advisor(plan_names)
+    FarmingAdvisorService.new(results: @results, farming_priority: @farming_priority, chain_coverage: @chain_coverage, plan_names: plan_names)
+  end
+
+  test "a single plan's prompt has no priority note and is unchanged by plan names" do
+    without_names = FarmingAdvisorService.new(results: @results, farming_priority: @farming_priority, chain_coverage: @chain_coverage)
+
+    assert_equal without_names.cache_key, advisor([ "Aemeath" ]).cache_key
+    assert_not_includes advisor([ "Aemeath" ]).send(:prompt), "priority order"
+  end
+
+  test "several plans put their priority order into the prompt" do
+    prompt = advisor([ "Aemeath", "Kumokiri" ]).send(:prompt)
+
+    assert_includes prompt, "plans in priority order (earlier plans come first): 1. Aemeath, 2. Kumokiri."
+    assert_includes prompt, "favor the materials the earlier plans need"
+  end
+
+  test "reordering the plans changes the advice key, so it is regenerated" do
+    assert_not_equal advisor([ "Aemeath", "Kumokiri" ]).cache_key, advisor([ "Kumokiri", "Aemeath" ]).cache_key
+  end
+
+  test "the prompt keeps its structure with and without the note" do
+    plain = advisor([]).send(:prompt)
+    noted = advisor([ "A", "B" ]).send(:prompt)
+
+    assert_match(/synthesis opportunities:\n\S.*\n\nNote: materials/m, plain)
+    assert_match(/priority order[^\n]*\nWhen two farming options[^\n]*\n\nNote: materials/, noted)
+    assert plain.lines.all? { |line| line == "\n" || !line.start_with?(" ") }, "no stray indentation"
+  end
 end

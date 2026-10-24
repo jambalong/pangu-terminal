@@ -6,6 +6,6 @@ module PlanLoading
       Plan.where(user_id: nil, guest_token: @guest_token).preload(:subject)
     end
 
-    plans.order(created_at: :asc)
+    plans.by_priority
   end
 end
