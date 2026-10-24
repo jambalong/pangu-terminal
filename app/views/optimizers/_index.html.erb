@@ -1,4 +1,4 @@
-<%# locals: (selected_plans:, sol3_phase:, results: nil, totals: nil, farming_priority: nil, plans_any: true, inventory_empty: false, all_selected: false, timeline: nil, waveplate_bank: 0) %>
+<%# locals: (selected_plans:, sol3_phase:, results: nil, totals: nil, farming_priority: nil, plans_any: true, inventory_empty: false, all_selected: false, timeline: nil, waveplate_bank: 0, breakdown: []) %>
 
 <div class="optimizer-container">
   <div class="optimizer-header">
@@ -94,6 +94,39 @@
           <p class="optimizer-metrics-footnote">
             Your Waveplate bar holds <%= WaveplateTimeline::CAP %>, about one day of regeneration. Anything that regenerates beyond that is lost, so spend it before you log off.
           </p>
+
+          <% if breakdown.any? %>
+            <section class="optimizer-order" aria-labelledby="optimizer-order-title">
+              <h2 class="optimizer-results-title" id="optimizer-order-title">&gt; FARM_IN_THIS_ORDER</h2>
+              <p class="optimizer-order-note">
+                Your plans are taken in priority order (change it with the arrows in the
+                <%= link_to "Planner", plans_path, class: "optimizer-gate-link", data: { turbo_frame: "main_content", turbo_action: "advance" } %>).
+                Each line is the extra farming that plan adds, and how long everything up to it takes to regenerate.
+              </p>
+              <ol class="optimizer-order-list">
+                <% breakdown.each do |step| %>
+                  <li class="optimizer-order-item">
+                    <span class="optimizer-order-rank"><%= step[:rank] %>.</span>
+                    <span class="optimizer-order-name"><%= step[:plan].subject.name %></span>
+                    <span class="optimizer-order-meta">
+                      <% if step[:waveplates].zero? %>
+                        no extra farming
+                      <% else %>
+                        +<%= number_with_delimiter(step[:waveplates]) %>
+                        <%= image_tag "/images/textures/waveplate.png", class: "optimizer-waveplate-icon", alt: "Waveplates" %>
+                      <% end %>
+                      &middot;
+                      <% if step[:timeline][:ready] %>
+                        ready now
+                      <% else %>
+                        up to here in <%= waveplate_duration(step[:timeline][:minutes]) %>
+                      <% end %>
+                    </span>
+                  </li>
+                <% end %>
+              </ol>
+            </section>
+          <% end %>
 
           <!-- Farming priority list -->
           <% if farming_priority.any? %>

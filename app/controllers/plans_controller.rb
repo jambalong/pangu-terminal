@@ -7,8 +7,8 @@ class PlansController < ApplicationController
   }.freeze
 
   before_action :set_guest_token
-  before_action :set_plan, only: [ :edit, :update, :destroy, :confirm_delete ]
-  before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete ]
+  before_action :set_plan, only: [ :edit, :update, :destroy, :confirm_delete, :move ]
+  before_action :authorize_owner!, only: [ :edit, :update, :destroy, :confirm_delete, :move ]
 
   def index
     load_plans_and_materials
@@ -110,6 +110,26 @@ class PlansController < ApplicationController
   end
 
   def confirm_delete
+  end
+
+  # Priority: move a plan one place up or down. Rendered as a stream so the
+  # list, the live-region message and keyboard focus all update together.
+  def move
+    direction = params[:direction].to_s
+    result = PlanReorderer.call(plans: load_current_plans, plan: @plan, direction: direction)
+    load_plans_and_materials
+    @focus = { plan_id: @plan.id, direction: direction }
+
+    flash.now[:notice] = if result == :moved
+      "Moved #{@plan.subject.name} #{direction}."
+    else
+      "#{@plan.subject.name} is already #{direction == "up" ? "first" : "last"}."
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to plans_path, notice: flash.now[:notice] }
+    end
   end
 
   def destroy

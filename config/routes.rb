@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     resources :plans, path: "planner" do
       member do
         get :confirm_delete
+        patch :move
       end
     end
 

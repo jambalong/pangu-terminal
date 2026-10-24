@@ -6,6 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
+- Plan priority: order your plans with the up and down arrows on each plan card (new plans go last; each card shows its rank). Lists everywhere use that order. With two or more plans selected, the optimizer shows "farm in this order": the extra farming each plan adds and how long everything up to it takes to regenerate, and the Farming Advisor is told your order. The arrows work with a keyboard and announce the move.
 - Quick entry for the inventory: one page with a labelled box per material (by default only what your plans need, with how much they need), moved through with Enter or the arrow keys, with numbers like `1,200` and `25k` accepted and one Save button. If any entry is not a number nothing is saved and the problem entries are listed and marked. The dashboard checklist now sends you there.
 - Inventory import and export: download your whole inventory as CSV or JSON (the JSON is the same shape as the API's), edit it anywhere, and import a CSV or JSON file or pasted text. Materials are matched by key or name, only quantities change, and unusable rows are skipped and listed instead of guessed at. Files are limited to 1 MB.
 - Waveplate timeline: the optimizer now shows how long the Waveplates you still need take to regenerate (1 every 6 minutes, 240 a day), in plain words such as "9 days 14 h". Enter the Waveplates you have now (optional) and they are subtracted first. A note explains that the bar caps at 240, about a day of regeneration.

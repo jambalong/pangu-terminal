@@ -9,7 +9,7 @@ class FarmingAdviceJob < ApplicationJob
   # plan_ids is an array (an integer from an older enqueue is accepted too).
   def perform(user_id, plan_ids)
     user = User.find(user_id)
-    plans = user.plans.where(id: Array(plan_ids)).to_a
+    plans = user.plans.by_priority.where(id: Array(plan_ids)).to_a
     raise ActiveRecord::RecordNotFound, "no plans to advise on" if plans.empty?
 
     advisor = FarmingAdvisorService.for(user: user, plans: plans)

@@ -436,3 +436,52 @@ class OptimizersControllerTimelineTest < ActionDispatch::IntegrationTest
     assert_select "input#waveplate_bank[type=number][min='0'][max='240']"
   end
 end
+
+class OptimizersControllerPriorityTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email: "optimizer_priority@example.com", password: "password123", sol3_phase: 3)
+    shell = Material.find_by!(name: "Shell Credit")
+    @plans = Weapon.limit(2).each_with_index.map do |weapon, index|
+      Plan.create!(user: @user, subject: weapon, plan_data: { "input" => {}, "output" => { shell.id.to_s => 5000 * (index + 1) } })
+    end
+    sign_in @user
+  end
+
+  test "several plans show the farm-in-this-order panel in priority order" do
+    get optimizer_path, params: { all: 1, run: 1 }
+
+    assert_select ".optimizer-order h2", text: /FARM_IN_THIS_ORDER/
+    assert_equal @plans.map { |plan| plan.subject.name }, css_select(".optimizer-order-name").map { |node| node.text.squish }
+    assert_select ".optimizer-order-meta", text: /up to here in|ready now/, count: 2
+  end
+
+  test "reordering the plans reorders the panel" do
+    PlanReorderer.call(plans: @user.plans.by_priority, plan: @plans.last, direction: "up")
+
+    get optimizer_path, params: { all: 1, run: 1 }
+
+    assert_equal @plans.reverse.map { |plan| plan.subject.name }, css_select(".optimizer-order-name").map { |node| node.text.squish }
+  end
+
+  test "a single plan has no order panel" do
+    get optimizer_path, params: { plan_id: @plans.first.id, run: 1 }
+
+    assert_select ".optimizer-order", count: 0
+  end
+
+  test "the panel is not shown before the optimizer is run" do
+    get optimizer_path, params: { all: 1 }
+
+    assert_select ".optimizer-order", count: 0
+  end
+
+  test "the banked Waveplates count in the panel's times" do
+    get optimizer_path, params: { all: 1, run: 1, waveplate_bank: 0 }
+    without_bank = css_select(".optimizer-order-meta").last.text.squish
+
+    get optimizer_path, params: { all: 1, run: 1, waveplate_bank: 240 }
+    with_bank = css_select(".optimizer-order-meta").last.text.squish
+
+    assert_not_equal without_bank, with_bank
+  end
+end

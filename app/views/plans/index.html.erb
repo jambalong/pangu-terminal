@@ -49,7 +49,7 @@
         <%= link_to "✚ Create your first plan", new_plan_path(step: 1), data: { turbo_frame: "modal" }, class: "new-plan-btn" %>
       </div>
       <turbo-frame id="plans-list">
-        <%= render partial: "plans/plan", collection: @plans, as: :plan, locals: { materials_lookup: @materials_lookup } %>
+        <%= render "plans/list", plans: @plans, materials_lookup: @materials_lookup %>
       </turbo-frame>
     </div>
   </div>
