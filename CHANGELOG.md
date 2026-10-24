@@ -6,6 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
+- Waveplate timeline: the optimizer now shows how long the Waveplates you still need take to regenerate (1 every 6 minutes, 240 a day), in plain words such as "9 days 14 h". Enter the Waveplates you have now (optional) and they are subtracted first. A note explains that the bar caps at 240, about a day of regeneration.
 - Whole-account optimizer: the optimizer can now run on all your plans at once ("Use all plans", which also picks up plans you create later) or on a chosen set, instead of one plan at a time. Their materials are summed before your inventory is subtracted, and the Farming Advisor looks at the same combined result. The plan chooser works with the keyboard and a screen reader.
 - Colors: muted text, the inventory quantity separator and the landing page step numbers now meet WCAG AA contrast (the muted grey is slightly lighter). Messages stay on screen longer: notices fade after 6 seconds instead of 2.5, and error messages stay until you dismiss them with a close button.
 - Dialogs (new plan, edit inventory, delete confirmation, optimizer plan picker) are now accessible: they have a close button, announce their title to screen readers, take keyboard focus, keep Tab inside, close with Escape (including the delete confirmation and plan picker, which ignored it) and hand focus back to the button that opened them.

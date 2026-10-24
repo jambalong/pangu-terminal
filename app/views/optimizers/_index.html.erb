@@ -1,4 +1,4 @@
-<%# locals: (selected_plans:, sol3_phase:, results: nil, totals: nil, farming_priority: nil, plans_any: true, inventory_empty: false, all_selected: false) %>
+<%# locals: (selected_plans:, sol3_phase:, results: nil, totals: nil, farming_priority: nil, plans_any: true, inventory_empty: false, all_selected: false, timeline: nil, waveplate_bank: 0) %>
 
 <div class="optimizer-container">
   <div class="optimizer-header">
@@ -57,6 +57,10 @@
     <% if selected_plans.any? %>
       <%= form_with url: optimizer_path, method: :get, data: { turbo_frame: "optimizer-results" } do |f| %>
         <%= hidden_field_tag :run, "1" %>
+        <div class="optimizer-bank">
+          <%= label_tag :waveplate_bank, "Waveplates you have now (optional)", class: "optimizer-bank-label" %>
+          <%= number_field_tag :waveplate_bank, (waveplate_bank if waveplate_bank.positive?), placeholder: "0", min: 0, max: WaveplateTimeline::CAP, step: 1, inputmode: "numeric", class: "optimizer-bank-input" %>
+        </div>
         <%= f.submit "> RUN OPTIMIZER", class: "optimizer-run-button" %>
       <% end %>
     <% end %>
@@ -67,7 +71,7 @@
           <!-- Summary metrics -->
           <% total_runs = totals[:total_runs] %>
           <% total_wp = totals[:total_wp] %>
-          <% days = total_wp > 0 ? (total_wp / 240.0).ceil : 0 %>
+          <% timeline ||= WaveplateTimeline.call(total: total_wp) %>
 
           <div class="optimizer-metrics">
             <div class="optimizer-metric-card">
@@ -79,10 +83,17 @@
               <span class="optimizer-metric-value"><%= number_with_delimiter(total_runs) %> <span class="optimizer-metric-unit">runs</span></span>
             </div>
             <div class="optimizer-metric-card">
-              <span class="optimizer-metric-label">Daily rate (@240/day)</span>
-              <span class="optimizer-metric-value"><%= number_with_delimiter(days) %> <span class="optimizer-metric-unit">days</span></span>
+              <span class="optimizer-metric-label">Time to regenerate</span>
+              <span class="optimizer-metric-value"><%= waveplate_duration(timeline[:minutes]) %></span>
+              <span class="optimizer-metric-note">
+                1 Waveplate every <%= WaveplateTimeline::REGEN_MINUTES %> minutes (<%= WaveplateTimeline::PER_DAY %> a day).
+                <%= "Counting the #{timeline[:banked]} you have now." if timeline[:banked].positive? %>
+              </span>
             </div>
           </div>
+          <p class="optimizer-metrics-footnote">
+            Your Waveplate bar holds <%= WaveplateTimeline::CAP %>, about one day of regeneration. Anything that regenerates beyond that is lost, so spend it before you log off.
+          </p>
 
           <!-- Farming priority list -->
           <% if farming_priority.any? %>

@@ -14,7 +14,7 @@ How *Wuthering Waves* concepts map onto this codebase, and how to update game da
 | **Material type** | Abstract kind (`credit`, `resonator_exp`, `weapon_exp`, `boss_drop`, `flower`, `enemy_drop`, `forgery_drop`, `weekly_boss_drop`). Cost tables speak in `(material_type, rarity)`; map tables resolve to a concrete material per Resonator/weapon. |
 | **Rarity tier** | Materials rarity 1..5. Lower tiers synthesize 3:1 into the next tier within the same `item_group_id` (not for EXP potions or credits). |
 | **EXP potions/cores** | Plans express EXP needs in rarity-2 terms; higher-rarity EXP items count via `exp_value` (`SynthesisService#calculate_exp_satisfaction`). |
-| **Waveplate** | Stamina resource. `sources.waveplate_cost` is per run. |
+| **Waveplate** | Stamina resource. `sources.waveplate_cost` is per run. It regenerates 1 per 6 minutes and the bar caps at 240 (`WaveplateTimeline`, confirmed by the owner 2026-10-24). |
 | **SOL3 phase** | 1..8 progression phase of the game's Sol-III world level, set per user (`users.sol3_phase`); selects which `drop_rates` rows apply. |
 | **Lahai-Roi (LF) forgery sets** | Newer Resonators and weapons use a different set of weapon-type (forgery) materials (`WeaponTypeMaterial.region = "lahai_roi"` vs `"base"`): Broken Wing Polarizer (Sword), LF Carved Crystal (Broadblade), Incomplete Combustor (Pistols), LF Waveworn Shard (Gauntlets), Spliced String (Rectifier). Membership is **hard-coded** by name in `LAHAI_ROI_RESONATORS` (`app/services/resonator_ascension_planner.rb`) and `LAHAI_ROI_WEAPONS` (`app/services/weapon_ascension_planner.rb`). Despite the name, it now covers every post-3.0 Resonator that uses these sets, including the Mengzhou ones. |
 
