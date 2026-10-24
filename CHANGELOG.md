@@ -5,6 +5,8 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-10-24
+
 ### Added
 - Link preview: sharing the site or a plan link in chat apps now shows a 1200x630 card instead of the small icon.
 - Phone layout: plan cards, the optimizer plan summary and its farming order wrap cleanly at phone width, links and buttons are at least 24px (44px on touch screens), the quick entry keyboard hint is hidden on touch devices and the first box no longer pops the keyboard open on load. A phone-width system test checks for sideways scrolling and small tap targets.
