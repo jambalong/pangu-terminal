@@ -1,4 +1,3 @@
-<%= turbo_frame_tag "main_content" do %>
+<%= main_content_frame do %>
   <%= render "index", selected_plan: @selected_plan, sol3_phase: current_user.sol3_phase, results: @results, totals: @totals, farming_priority: @farming_priority, plans_any: @plans.any?, inventory_empty: @inventory_empty %>
-  <%= turbo_frame_tag "modal" %>
 <% end %>

@@ -134,4 +134,31 @@ class AccessibilityTest < ApplicationSystemTestCase
     click_button "Dismiss message"
     assert_no_selector ".flash-message.alert", wait: 3
   end
+
+  test "the optimizer plan picker can be opened again after choosing a plan" do
+    sign_in_through_form
+    Plan.create!(user: @user, subject: Weapon.find_by!(name: "Kumokiri"), plan_data: { "input" => {}, "output" => {} })
+    visit optimizer_path
+
+    click_link "> SELECT A PLAN"
+    assert_selector "[role=dialog]"
+    click_button "Kumokiri"
+    assert_no_selector "[role=dialog]"
+
+    find("a.optimizer-plan-card").click
+    assert_selector "[role=dialog]"
+    assert_equal 1, page.evaluate_script("document.querySelectorAll('turbo-frame#modal').length")
+  end
+
+  test "navigating with the nav links keeps a single main_content frame" do
+    sign_in_through_form
+
+    click_link "Inventory", match: :first
+    assert_selector "h1", text: "Inventory"
+    click_link "Planner", match: :first
+    assert_selector "h1", text: "Planner"
+
+    assert_equal 1, page.evaluate_script("document.querySelectorAll('turbo-frame#main_content').length")
+    assert_equal 1, page.evaluate_script("document.querySelectorAll('turbo-frame#modal').length")
+  end
 end

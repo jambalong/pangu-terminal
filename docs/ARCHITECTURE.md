@@ -174,6 +174,10 @@ rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
 If a plan exists but belongs to another user, the scoped query raises `RecordNotFound` and returns 404. Returning 403 would confirm the resource exists and leak information about other users' data. 404 prevents enumeration.
 
+## Turbo frames
+
+The layout owns two frames: `main_content` (wraps the page) and `modal` (the dialog host). Views must not add their own. Full pages call `main_content_frame` (`ApplicationHelper`), which adds the frame only for Turbo frame requests, since those are rendered without the layout; on a full load the layout's frame is the only one. Turbo streams that replace `main_content` carry a frame because they replace the element itself; to close a dialog from a stream use `turbo_stream.update "modal", html: ""` (never `replace`, which would delete the host). `test/integration/main_content_frame_test.rb` checks one frame and no repeated ids.
+
 ## Colors and contrast
 
 Text colors come from `var(--ctp-*)` tokens in `base/tokens.css`. `--ctp-overlay0` is deliberately lighter than stock Catppuccin (`#878ca5` instead of `#6c7086`) so muted text passes WCAG AA (4.5:1) on `base`, `mantle` and `crust`; on `surface0` or lighter backgrounds use `--ctp-overlay2` or lighter. The axe system tests enforce contrast on the main pages, so a new low-contrast pairing fails CI.

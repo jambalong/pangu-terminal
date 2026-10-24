@@ -30,6 +30,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Docs: `docs/DEPLOYMENT.md` records the owner's Render and Neon answers (five env vars, pooled Neon endpoint on PostgreSQL 17.11, `WEB_CONCURRENCY=2`, no Render shell) and documents running maintenance tasks from a local checkout against Neon.
 
 ### Fixed
+- Pages no longer contain nested duplicate `main_content` and `modal` frames (invalid HTML that screen readers and future Turbo versions could trip over). The optimizer's plan picker can still be reopened after choosing a plan.
 - The web app manifest pointed at an icon file that did not exist; it now uses `/favicon.png`.
 
 ### Removed
