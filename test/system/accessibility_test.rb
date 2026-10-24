@@ -142,7 +142,7 @@ class AccessibilityTest < ApplicationSystemTestCase
 
     click_link "> SELECT A PLAN"
     assert_selector "[role=dialog]"
-    click_button "Kumokiri"
+    click_button "Use all plans (1)"
     assert_no_selector "[role=dialog]"
 
     find("a.optimizer-plan-card").click
@@ -160,5 +160,40 @@ class AccessibilityTest < ApplicationSystemTestCase
 
     assert_equal 1, page.evaluate_script("document.querySelectorAll('turbo-frame#main_content').length")
     assert_equal 1, page.evaluate_script("document.querySelectorAll('turbo-frame#modal').length")
+  end
+
+  test "choosing several plans works from the keyboard and is announced as a group" do
+    sign_in_through_form
+    %w[ Kumokiri ].each { |name| Plan.create!(user: @user, subject: Weapon.find_by!(name: name), plan_data: { "input" => {}, "output" => {} }) }
+    Plan.create!(user: @user, subject: Weapon.where.not(name: "Kumokiri").first, plan_data: { "input" => {}, "output" => {} })
+    visit optimizer_path
+
+    click_link "> SELECT A PLAN"
+    assert_selector "[role=dialog] fieldset legend", text: "Or pick the ones you want"
+    assert_no_axe_violations(skip: SKIPPED)
+
+    page.driver.browser.keyboard.type(:Tab) until page.evaluate_script("document.activeElement.type") == "checkbox"
+    page.driver.browser.keyboard.type(:Space)
+    page.driver.browser.keyboard.type(:Tab)
+    page.driver.browser.keyboard.type(:Space)
+    assert_selector ".optimizer-plan-select-card:has(input:checked)", count: 2
+
+    click_button "Use selected plans"
+    assert_no_selector "[role=dialog]"
+    assert_selector ".optimizer-plan-name", text: "2 plans"
+  end
+
+  test "all plans can be chosen in one click and the card names the scope" do
+    sign_in_through_form
+    2.times do |i|
+      Plan.create!(user: @user, subject: Weapon.order(:id).offset(i).first, plan_data: { "input" => {}, "output" => {} })
+    end
+    visit optimizer_path
+
+    click_link "> SELECT A PLAN"
+    click_button "Use all plans (2)"
+
+    assert_selector ".optimizer-plan-name", text: "All plans (2)"
+    assert_no_axe_violations(skip: SKIPPED)
   end
 end

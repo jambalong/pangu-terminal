@@ -88,7 +88,7 @@ Size: S under a day, M a few days, L a week or more. "Data" means it needs game 
 | # | Feature | Why it fits | Size | Needs |
 | --- | --- | --- | --- | --- |
 | 1 | **OAuth sign-in (Google, Discord)** (owner priority; a tester did not want to share an email). **Shipped**; owner still has to create the OAuth clients and set the env vars, see [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps). | "Zero friction to try": players should not have to hand over an email. | L | done |
-| 2 | **Whole-account optimizer**: run the optimizer over all plans (or a chosen set) instead of one at a time | The core question is "what should I farm next across everything I want". `Plan.fetch_materials_summary` and `SynthesisService` already aggregate. | M | none |
+| 2 | **Whole-account optimizer** (shipped): run the optimizer over all plans (or a chosen set) instead of one at a time | The core question is "what should I farm next across everything I want". `Plan.fetch_materials_summary` and `SynthesisService` already aggregate. | M | none |
 | 3 | **Waveplate timeline**: turn total Waveplates into "about N days of regeneration" (builds on 2) | Makes the plan feel real and helps players choose what to build first. | S | confirm the regen rate and cap (assumed 1 Waveplate per 6 minutes, cap 240) |
 | 4 | **Faster inventory entry**: grid with keyboard navigation, JSON/CSV export and import (the API already exposes inventory) | Inventory is the highest-effort part of using the app; less friction means more accurate advice. | M | none |
 | 5 | **Plan priority**: order plans and weight the optimizer toward the top ones | Lets "farm for X first" be explicit instead of implied. | M | pairs with 2 |

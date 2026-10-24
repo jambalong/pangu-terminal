@@ -17,7 +17,7 @@ class FarmingAdviceRequestTest < ActiveSupport::TestCase
   end
 
   test "is pending and enqueues the job on a cache miss" do
-    assert_enqueued_with(job: FarmingAdviceJob, args: [ @user.id, @plan.id ]) do
+    assert_enqueued_with(job: FarmingAdviceJob, args: [ @user.id, [ @plan.id ] ]) do
       assert_equal [ :pending, nil ], @request.fetch
     end
     assert Rails.cache.read(@advisor.pending_key)

@@ -57,4 +57,55 @@ class OptimizerServiceTest < ActiveSupport::TestCase
     # Measured at 11 for these three materials; a jump means a new N+1.
     assert_operator count, :<=, 15
   end
+
+  test "several plans are summed so a shared material is counted once" do
+    other_weapon = Weapon.where.not(id: @plan.subject_id).first
+    other = Plan.create!(
+      user: @user, subject: other_weapon,
+      plan_data: { "input" => {}, "output" => { @shell_credit.id.to_s => 1000, @basic_energy_core.id.to_s => 2 } }
+    )
+
+    combined = OptimizerService.call(user: @user, plans: [ @plan, other ])
+
+    assert_equal 25480 + 1000, combined[:results][@shell_credit.id][:deficit]
+    assert_equal 38 + 2, combined[:results][@basic_energy_core.id][:deficit]
+    assert_equal 6, combined[:results][@lf_whisperin_core.id][:deficit]
+  end
+
+  test "inventory is subtracted once from the combined need" do
+    other = Plan.create!(
+      user: @user, subject: Weapon.where.not(id: @plan.subject_id).first,
+      plan_data: { "input" => {}, "output" => { @shell_credit.id.to_s => 1000 } }
+    )
+    @user.inventory_item_for(@shell_credit).update!(quantity: 20000)
+
+    combined = OptimizerService.call(user: @user, plans: [ @plan, other ])
+
+    assert_equal 25480 + 1000 - 20000, combined[:results][@shell_credit.id][:deficit]
+  end
+
+  test "a plan with no output and an empty list are tolerated" do
+    blank = Plan.create!(user: @user, subject: Weapon.where.not(id: @plan.subject_id).first, plan_data: { "input" => {} })
+
+    assert_equal OptimizerService.call(user: @user, plans: [ @plan ])[:results].keys.sort,
+                 OptimizerService.call(user: @user, plans: [ @plan, blank ])[:results].keys.sort
+    assert_equal({}, OptimizerService.call(user: @user, plans: [])[:results])
+  end
+
+  test "the single-plan keyword still works" do
+    assert_equal OptimizerService.call(user: @user, plan: @plan)[:results].keys,
+                 OptimizerService.call(user: @user, plans: [ @plan ])[:results].keys
+  end
+
+  test "many plans do not add queries per plan" do
+    plans = Weapon.where.not(id: @plan.subject_id).limit(3).map do |weapon|
+      Plan.create!(user: @user, subject: weapon, plan_data: { "input" => {}, "output" => { @shell_credit.id.to_s => 10 } })
+    end
+    count = 0
+    counter = ->(*, payload) { count += 1 unless %w[SCHEMA TRANSACTION].include?(payload[:name]) || payload[:cached] }
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      OptimizerService.call(user: @user, plans: [ @plan ] + plans)
+    end
+    assert_operator count, :<=, 15
+  end
 end

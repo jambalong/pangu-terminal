@@ -46,8 +46,8 @@ class UserJourneyTest < ApplicationSystemTestCase
     visit optimizer_path
     assert_text "Waveplate Optimizer"
     click_link "> SELECT A PLAN"
-    assert_text "Select a Plan"
-    click_button "Kumokiri"
+    assert_text "Choose plans"
+    click_button "Use all plans (1)"
     click_button "> RUN OPTIMIZER"
     assert_selector ".optimizer-metrics", wait: 10
   end

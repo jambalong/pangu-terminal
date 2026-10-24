@@ -3,17 +3,13 @@ class OptimizersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_plans
+  before_action :apply_selection_params, only: [ :index, :select_plan ]
+  before_action :load_selection
 
   def index
-    @inventory_empty = !current_user.inventory_items.where("quantity > 0").exists?
-    @selected_plan = if params[:plan_id].present?
-      session[:optimizer_plan_id] = params[:plan_id]
-      @plans.find_by(id: params[:plan_id])
-    elsif session[:optimizer_plan_id].present?
-      @plans.find_by(id: session[:optimizer_plan_id])
-    end
+    @inventory_empty = inventory_empty?
 
-    if @selected_plan && params[:run] && sol3_phase_set?
+    if @selected_plans.any? && params[:run] && sol3_phase_set?
       @results, @chain_coverage, @totals = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
     end
@@ -24,16 +20,13 @@ class OptimizersController < ApplicationController
   end
 
   def select_plan
-    @inventory_empty = !current_user.inventory_items.where("quantity > 0").exists?
-    session[:optimizer_plan_id] = params[:plan_id]
-    @selected_plan = @plans.find_by(id: params[:plan_id])
+    @inventory_empty = inventory_empty?
   end
 
   def advise
-    @selected_plan = @plans.find_by(id: session[:optimizer_plan_id])
-    return head :no_content unless @selected_plan && sol3_phase_set?
+    return head :no_content unless @selected_plans.any? && sol3_phase_set?
 
-    status, advice = FarmingAdviceRequest.new(user: current_user, plan: @selected_plan).fetch
+    status, advice = FarmingAdviceRequest.new(user: current_user, plans: @selected_plans).fetch
 
     render partial: "farming_advice", locals: { pending: status == :pending, advice: advice }
   end
@@ -46,12 +39,45 @@ class OptimizersController < ApplicationController
     current_user.sol3_phase.present?
   end
 
+  def inventory_empty?
+    !current_user.inventory_items.where("quantity > 0").exists?
+  end
+
   def load_plans
     @plans = load_current_plans
   end
 
+  # The selection lives in the session: every plan (so plans created later are
+  # included), or a chosen set of plan ids. A single `plan_id` is still accepted.
+  def apply_selection_params
+    permitted = params.permit(:plan_id, :all, plan_ids: [])
+
+    if permitted[:all].present?
+      session[:optimizer_all] = true
+      session.delete(:optimizer_plan_ids)
+    elsif permitted[:plan_ids].present? || permitted[:plan_id].present?
+      session[:optimizer_all] = false
+      session[:optimizer_plan_ids] = Array(permitted[:plan_ids].presence || permitted[:plan_id]).map(&:to_s)
+    end
+  end
+
+  # Only the user's own plans can be selected; foreign or deleted ids are ignored.
+  def load_selection
+    @all_plans_selected = session[:optimizer_all].present? && @plans.any?
+    ids = session[:optimizer_plan_ids].presence || Array(session[:optimizer_plan_id].presence)
+
+    @selected_plans =
+      if @all_plans_selected
+        @plans.to_a
+      elsif ids.present?
+        @plans.where(id: ids).to_a
+      else
+        []
+      end
+  end
+
   def compute_optimizer_results
-    optimizer = OptimizerService.call(user: current_user, plan: @selected_plan)
+    optimizer = OptimizerService.call(user: current_user, plans: @selected_plans)
     [ optimizer[:results], optimizer[:chain_coverage], optimizer[:totals] ]
   end
 end
