@@ -103,7 +103,7 @@ class InventoryImportsControllerTest < ActionDispatch::IntegrationTest
   test "the inventory page links to export and import" do
     get inventory_items_path
 
-    assert_select "nav[aria-label='Inventory data'] a", count: 3
+    assert_select "nav[aria-label='Inventory data'] a", count: 4
     assert_select "a[href$='/inventory/export.csv']"
     assert_select "a[href$='/inventory/export.json']"
     assert_select "a[href$='/inventory/import']"

@@ -34,6 +34,8 @@ Rails.application.routes.draw do
       end
     end
 
+    get "inventory/quick", to: "inventory_quick_entries#show", as: :inventory_quick_entry
+    patch "inventory/quick", to: "inventory_quick_entries#update"
     get "inventory/export", to: "inventory_exports#show", as: :inventory_export
     get "inventory/import", to: "inventory_imports#new", as: :new_inventory_import
     post "inventory/import", to: "inventory_imports#create", as: :inventory_import

@@ -52,7 +52,7 @@
             <% unless step[:done] %>
               <span>The optimizer subtracts it from your plans and shows what you can craft instead of farm.</span>
               <% if state == "is-current" %>
-                <%= link_to "Open inventory", inventory_items_path, class: "onboarding-action", data: { turbo_frame: "main_content", turbo_action: "advance" } %>
+                <%= link_to "Enter inventory", inventory_quick_entry_path, class: "onboarding-action", data: { turbo_frame: "main_content", turbo_action: "advance" } %>
               <% end %>
             <% end %>
           <% end %>

@@ -230,4 +230,35 @@ class AccessibilityTest < ApplicationSystemTestCase
     assert_no_axe_violations(skip: SKIPPED)
     assert_equal 500, @user.inventory_items.find_by!(material: Material.find_by!(name: "Shell Credit")).quantity
   end
+
+  test "quick entry is keyboard driven, saves, and reports a bad entry accessibly" do
+    sign_in_through_form
+    shell = Material.find_by!(name: "Shell Credit")
+    core = Material.find_by!(name: "Basic Energy Core")
+    visit inventory_quick_entry_path
+    assert_selector "h1", text: "Quick entry"
+    assert_no_axe_violations(skip: SKIPPED)
+
+    assert_selector "#quantity_#{shell.id}:focus"
+    page.driver.browser.keyboard.type("25k")
+    page.driver.browser.keyboard.type(:Enter)
+    assert_selector "#quantity_#{Material.order(:id).second.id}:focus"
+    page.driver.browser.keyboard.type([ :shift, :Enter ])
+    assert_selector "#quantity_#{shell.id}:focus"
+
+    find("#quantity_#{core.id}").fill_in with: "plenty"
+    click_button "Save changes"
+
+    assert_selector ".quick-errors[role=alert]"
+    assert_selector "#quantity_#{core.id}[aria-invalid=true]"
+    assert_selector "#quantity_#{core.id}:focus"
+    assert_no_axe_violations(skip: SKIPPED)
+    assert_equal 0, @user.inventory_items.find_by!(material: shell).quantity, "nothing is saved when an entry is bad"
+
+    find("#quantity_#{core.id}").fill_in with: "40"
+    click_button "Save changes"
+
+    assert_text "Saved 2 materials."
+    assert_equal [ 25_000, 40 ], [ @user.inventory_items.find_by!(material: shell).quantity, @user.inventory_items.find_by!(material: core).quantity ]
+  end
 end
