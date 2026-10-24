@@ -37,6 +37,17 @@
   border-color: var(--ctp-green);
 }
 
+.flash-close {
+  float: right;
+  margin-left: 0.75rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .flash-prefix {
   font-weight: 900;
   margin-right: 0.5rem;

@@ -248,7 +248,7 @@
 }
 
 .qty-separator {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--ctp-overlay0);
   margin: 0 2px;
 }
 
