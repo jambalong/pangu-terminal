@@ -1,0 +1,70 @@
+.shared-plan {
+  max-width: 44rem;
+  margin: 1rem auto;
+}
+
+.shared-plan-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.shared-plan-title {
+  color: var(--ctp-mauve);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.shared-plan-subtitle {
+  margin-top: 0.15rem;
+  color: var(--ctp-subtext0);
+}
+
+.shared-plan-heading {
+  margin-bottom: 0.75rem;
+  color: var(--ctp-text);
+  font-size: 1.1rem;
+}
+
+.shared-plan-materials {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.5rem;
+}
+
+.shared-plan-material {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 0.5rem;
+}
+
+.shared-plan-material-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--ctp-text);
+}
+
+.shared-plan-material-qty {
+  color: var(--ctp-text);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.shared-plan-cta {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ctp-surface0);
+  color: var(--ctp-subtext0);
+}
+
+.shared-plan-cta a {
+  color: var(--ctp-mauve);
+}

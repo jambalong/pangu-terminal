@@ -10,6 +10,9 @@
         <% if rank %>
           <span class="plan-rank" aria-label="Priority <%= rank %> of <%= total %>">#<%= rank %></span>
         <% end %>
+        <% if plan.shared? %>
+          <span class="shared-badge">Shared</span>
+        <% end %>
       </h3>
     </div>
 
@@ -29,6 +32,12 @@
                 data: ({ controller: "focus-on-connect" } if focus_on == direction) %>
         <% end %>
       <% end %>
+
+      <%= link_to "Share",
+          plan_share_path(plan),
+          data: { turbo_frame: "modal" },
+          class: "edit-link",
+          aria: { label: "Share #{plan.subject.name}" } %>
 
       <%= link_to "Edit",
           edit_plan_path(plan),

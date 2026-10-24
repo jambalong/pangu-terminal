@@ -42,6 +42,21 @@ class Plan < ApplicationRecord
     self.guest_token == guest_token
   end
 
+  # Sharing: a random 128-bit token makes the plan's materials viewable at
+  # /p/<token> without an account. Revoking deletes the token, which kills the link.
+  def shared?
+    share_token.present?
+  end
+
+  def share!
+    update_columns(share_token: SecureRandom.urlsafe_base64(16)) unless shared?
+    share_token
+  end
+
+  def unshare!
+    update_columns(share_token: nil)
+  end
+
   private
 
   # New plans go to the end of their owner's list (a user's, or a guest's).

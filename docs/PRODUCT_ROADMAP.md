@@ -92,7 +92,7 @@ Size: S under a day, M a few days, L a week or more. "Data" means it needs game 
 | 3 | **Waveplate timeline** (shipped, values confirmed 2026-10-24): turn total Waveplates into "about N days of regeneration" (builds on 2) | Makes the plan feel real and helps players choose what to build first. | S | confirm the regen rate and cap (assumed 1 Waveplate per 6 minutes, cap 240) |
 | 4 | **Faster inventory entry** (shipped: quick entry page, JSON/CSV import and export): grid with keyboard navigation, JSON/CSV export and import (the API already exposes inventory) | Inventory is the highest-effort part of using the app; less friction means more accurate advice. | M | none |
 | 5 | **Plan priority** (shipped): order plans and weight the optimizer toward the top ones | Lets "farm for X first" be explicit instead of implied. | M | pairs with 2 |
-| 6 | **Shareable read-only plan link**: a tokenized public page of a plan and its totals (shows no username or email unless the owner opts in) | Community growth and "help me plan" threads; works for guests. | M | a nullable `share_token` on `plans` |
+| 6 | **Shareable read-only plan link** (shipped): a tokenized public page of a plan and its totals (shows no username or email unless the owner opts in) | Community growth and "help me plan" threads; works for guests. | M | a nullable `share_token` on `plans` |
 
 ### Next
 

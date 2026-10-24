@@ -293,4 +293,47 @@ class AccessibilityTest < ApplicationSystemTestCase
     assert_equal [ second.subject.name, first.subject.name ], all(".optimizer-order-name").map(&:text)
     assert_no_axe_violations(skip: SKIPPED)
   end
+
+  test "sharing a plan: create the link, copy it, a stranger sees it, then stop sharing" do
+    sign_in_through_form
+    shell = Material.find_by!(name: "Shell Credit")
+    plan = Plan.create!(user: @user, subject: Weapon.find_by!(name: "Kumokiri"),
+                        plan_data: { "input" => {}, "output" => { shell.id.to_s => 25480 } })
+    visit plans_path
+
+    click_link "Share", match: :first
+    assert_selector "[role=dialog] h2", text: "Share Kumokiri"
+    assert_no_axe_violations(skip: SKIPPED)
+    click_button "Create link"
+
+    assert_selector "input#share-url[readonly]"
+    assert_no_axe_violations(skip: SKIPPED)
+    path = URI(find("input#share-url").value).path
+    assert_equal "/p/#{plan.reload.share_token}", path
+
+    click_button "Copy link"
+    assert_selector "[role=status]", text: /copied|Ctrl\+C/i
+
+    using_session("stranger") do
+      visit path
+      assert_selector "h1", text: "Kumokiri"
+      assert_text "Shell Credit"
+      assert_text "25,480"
+      assert_no_text @user.email
+      assert_no_axe_violations(skip: SKIPPED)
+    end
+
+    # Back from the second session: reload, as the first one was in the background.
+    visit plans_path
+    assert_selector ".shared-badge", text: "Shared"
+    click_link "Share", match: :first
+    click_button "Stop sharing"
+    assert_selector "button", text: "Create link"
+    assert_not plan.reload.shared?
+
+    using_session("stranger") do
+      visit path
+      assert_no_selector "h1", text: "Kumokiri"
+    end
+  end
 end

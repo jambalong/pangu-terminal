@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     root to: "dashboards#show", as: :authenticated_root
 
     resources :plans, path: "planner" do
+      resource :share, only: [ :show, :create, :destroy ], controller: "plan_shares"
       member do
         get :confirm_delete
         patch :move
@@ -69,6 +70,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get "p/:token", to: "shared_plans#show", as: :shared_plan, constraints: { token: /[A-Za-z0-9_-]{16,64}/ }
   get "user-manual", to: "pages#user_manual", as: :user_manual
   get "privacy", to: "pages#privacy", as: :privacy
 
