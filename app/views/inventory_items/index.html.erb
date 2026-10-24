@@ -39,6 +39,12 @@
       <% end %>
     </div>
 
+    <nav class="inventory-data-links" aria-label="Inventory data">
+      <%= link_to "Export CSV", inventory_export_path(format: :csv), data: { turbo: false } %>
+      <%= link_to "Export JSON", inventory_export_path(format: :json), data: { turbo: false } %>
+      <%= link_to "Import", new_inventory_import_path, data: { turbo_frame: "main_content", turbo_action: "advance" } %>
+    </nav>
+
     <% if @nothing_owned %>
       <div class="inventory-hint">
         <strong>Start with what you own.</strong>

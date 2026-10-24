@@ -34,6 +34,7 @@
       <li class="nav-section-head">Core Features</li>
       <li><a href="#creating-a-plan">Creating a Plan</a></li>
       <li><a href="#managing-inventory">Managing Inventory</a></li>
+      <li class="nav-sub"><a href="#import-export">Import and Export</a></li>
       <li><a href="#reconciliation">Reconciliation View</a></li>
       <li><a href="#optimizer">Waveplate Optimizer</a></li>
       <li><a href="#farming-advisor">Farming Advisor</a></li>
@@ -154,6 +155,9 @@
       <strong>Tip</strong>
       You do not need to fill in every field. Materials left blank default to 0.
     </div>
+    <h3 id="import-export">Import and export</h3>
+    <p>Use <strong>Export CSV</strong> or <strong>Export JSON</strong> at the top of the Inventory page to download everything you have recorded, one line per material. Edit the quantities in a spreadsheet or text editor, then use <strong>Import</strong> to upload the file (or paste its contents). Materials are matched by their key or name, only quantities change, and anything the file does not mention is left alone. Rows that cannot be used, such as an unknown material or a quantity that is not a whole number, are skipped and listed so you can fix them. The JSON uses the same shape as the API's inventory.</p>
+
   </section>
 
   <%# ── 05. Reconciliation View ── %>

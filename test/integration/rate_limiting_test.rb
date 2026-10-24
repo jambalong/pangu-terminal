@@ -55,4 +55,10 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
     assert_equal 0, Rack::Attack.cache.store.instance_variable_get(:@data).size,
       "/up must not write throttle counters (they live in the database in production)"
   end
+
+  test "returns 429 after too many inventory imports from one IP" do
+    21.times { post "/app/inventory/import", params: {} }
+
+    assert_response :too_many_requests
+  end
 end

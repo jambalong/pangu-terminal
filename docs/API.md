@@ -113,7 +113,7 @@ curl -X POST https://panguterminal.ambalong.dev/api/v1/plans \
 
 ### GET /api/v1/inventory
 
-Returns the authenticated user's full inventory as a flat hash of material keys to quantities. Materials with no recorded quantity return `0`.
+Returns the authenticated user's full inventory as a flat hash of material keys to quantities. The website's **Export JSON** download and **Import** form use this same shape. Materials with no recorded quantity return `0`.
 ```bash
 curl https://panguterminal.ambalong.dev/api/v1/inventory \
   -H "Authorization: Bearer <token>"

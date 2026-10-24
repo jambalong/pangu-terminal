@@ -214,4 +214,20 @@ class AccessibilityTest < ApplicationSystemTestCase
     assert_text "Counting the 100 you have now"
     assert_no_axe_violations(skip: SKIPPED)
   end
+
+  test "the inventory import page and a finished import are accessible" do
+    sign_in_through_form
+    visit inventory_items_path
+    click_link "Import"
+    assert_selector "h1", text: "Import inventory"
+    assert_no_axe_violations(skip: SKIPPED)
+
+    fill_in "Or paste it here", with: "key,quantity\nshell_credit,500\nnot_a_material,3"
+    click_button "Import"
+
+    assert_text "Import finished"
+    assert_text "unknown material"
+    assert_no_axe_violations(skip: SKIPPED)
+    assert_equal 500, @user.inventory_items.find_by!(material: Material.find_by!(name: "Shell Credit")).quantity
+  end
 end
