@@ -11,6 +11,8 @@
   justify-content: space-between;
   flex-shrink: 0;
   margin: 1rem 1rem 0.25rem;
+  /* leave room for the modal's close button (2rem wide, 1rem from the edge) */
+  padding-right: 2.5rem;
 }
 
 .config-title {
