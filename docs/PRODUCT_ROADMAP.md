@@ -2,53 +2,28 @@
 
 One document for where the project is going and what keeps it healthy. Part 1 is the product roadmap (the feature list is a proposal drafted from the project's identity; the owner set the first priority). Part 2 is the maintenance backlog and decisions. Part 3 is the history of what shipped. Check items off and add a `CHANGELOG.md` entry as they land. Last reviewed 2026-10-23 (game version 3.7 released 2026-09-30).
 
-# Priorities (reviewed 2026-10-23)
+# Priorities (reviewed 2026-10-24)
 
-Everything considered so far, in the order to do it. Part 1 and Part 2 below keep the detail.
+Shipped: OAuth sign-in (Google; Discord wired but off), the accessibility and semantic HTML pass (axe in the system tests, skip link, dialog focus, live regions, AA contrast, phone tap targets), the whole-account optimizer, the Waveplate timeline, quick inventory entry with import and export, plan priority, shareable plan links, onboarding, hardening, the uptime workflow and the link preview image. Part 1 and Part 2 below keep the detail.
 
 ## 0. Owner actions (no code)
 
-- [ ] Create the Google OAuth client and add `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` in Render (steps in [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps)), then test one login. Discord later.
-- [ ] Keep the free Render instance awake (uptime monitor on `/up`, every 10 minutes) before sharing the link.
-- [ ] Check Neon's backup window.
-- [ ] Confirm the Waveplate regeneration values (1 per 6 minutes, cap 240) so the timeline can be built.
-- [ ] Optional: a 1200x630 link preview image; edit the PR descriptions that carry the appended footer.
+- [ ] Create the free uptime monitor on `/up` (5 minute interval, email alerts) so the free Render instance stays awake. The GitHub Actions workflow is only a backup.
+- [ ] Add the Discord OAuth app and `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` in Render when you want that button.
+- [ ] Check Neon's backup window and the Neon and Render usage pages.
+- [ ] A screen reader pass (NVDA, VoiceOver or TalkBack) and a real phone pass; automation cannot cover either.
+- [ ] Edit the PR descriptions that carry the appended footer.
 
-## 1. Accessibility and semantic HTML (next)
+## 1. Next
 
-An axe-core run on the main pages (2026-10-23) plus a manual read of the views found:
+1. "Log a run" (Part 1, item 7): the best next step for the core loop.
+2. Event multipliers (item 8) and the this-week view (item 9).
+3. `rake content:check` for patch day (item 10).
 
-| Area | Finding | Size |
-| --- | --- | --- |
-| Page language | `<html>` has no `lang` (every page, serious) | S |
-| Names and labels | Dashboard SOL3 select has no accessible name (critical); sign-in and settings have no `h1`; images without `alt` in inventory cards, the optimizer plan list and the landing page | S |
-| Headings | Plan and inventory cards jump from `h1` to `h3` | S |
-| Landmarks | No skip link; the manual's two navs share a role without labels; the navbar `nav` needs a label and `aria-current` on the active link | S |
-| Interactive elements | The plan accordion header is a `div` with a click handler (not keyboard reachable); needs a `button` with `aria-expanded` | S |
-| Modals | The shared modal has no `role="dialog"`, label, focus move, focus trap or focus return | M |
-| Live regions | Flash messages and form errors are not announced (`role="status"`/`alert`, `aria-describedby` on invalid fields) | S |
-| Focus and motion | One `:focus-visible` rule and eight `outline: none`; no `prefers-reduced-motion` handling | S |
-| Contrast | Muted text tokens fail AA in 158 inventory spots, the manual and the landing step numbers; raise the text tokens to AA while keeping the look | M |
-| Links in text | Links inside paragraphs rely on color alone (add an underline) | S |
-| Duplicate `main_content` | The layout and every page both render a frame with that id; fix inside this pass | M |
-| Regression guard | Run axe in the system tests so this stays fixed. Needs a test-only dependency or a vendored file; ask first (new gems are on the ask list) | S |
+## 2. Maintenance and later
 
-Not covered by automation, so still to do by hand: keyboard-only walkthrough of every flow, zoom to 200 percent, and a screen reader pass (cannot be done from the sandbox; a short owner check with NVDA, VoiceOver or TalkBack is worth it).
-
-## 2. Roadmap features (Part 1 "Now" order)
-
-1. Whole-account optimizer (build the new UI to the accessibility rules above).
-2. Waveplate timeline (waits on the values above).
-3. Faster inventory entry with JSON and CSV import and export (keyboard grid).
-4. Plan priority.
-5. Shareable read-only plan link (needs `share_token` on `plans`).
-
-## 3. Maintenance and later
-
-- Discord sign-in when you want it (`omniauth-discord` is old; re-check it then).
-- Automatic pruning of abandoned guest plans (now only a manual task); an error tracker.
-- Optional terms page; the unexplained one-off full-suite failure (see Observations) if it reappears.
-- Part 1 "Next" and "Later" items stay as listed (log a run, event multipliers, this-week view, patch-day tooling, Tacet Fields, bot, localization, PWA, backup/restore).
+- Optional terms page; an error tracker; automatic pruning of abandoned guest plans (now a manual task).
+- Part 1 "Next" and "Later" items stay as listed.
 
 # Part 1: Product
 
@@ -146,7 +121,7 @@ The earlier plan (username accounts, optional email, recovery codes, `/recover`)
 
 ## Observations and decisions
 
-- A single full-suite failure was seen once locally on the first run after a branch switch and migration (18 runs since, including from freshly created parallel-worker databases, and every CI run, were green). It could not be reproduced and its text was not captured. If it shows up again, keep the Minitest seed and the failure output before re-running.
+- The occasional unexplained CI failure of the `test` job was a flaky rate limit test (a request burst straddling a one-minute throttle window); the tests now freeze time. If another intermittent failure shows up, find it by running the suite several times before re-running CI.
 
 Decided to leave as is (revisit only if the stated trigger happens):
 
