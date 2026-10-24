@@ -10,7 +10,7 @@
           data: { turbo_stream: true },
           class: "optimizer-plan-select-card" do %>
         <% if plan.subject.image_url.present? %>
-          <%= image_tag plan.subject.image_url, class: "optimizer-plan-select-icon" %>
+          <%= image_tag plan.subject.image_url, class: "optimizer-plan-select-icon", alt: "" %>
         <% end %>
         <div class="optimizer-plan-select-info">
           <span class="optimizer-plan-select-name"><%= plan.subject.name %></span>

@@ -26,6 +26,8 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 | `test/integration/rate_limiting_test.rb` | Rack::Attack throttles (uses an isolated `MemoryStore`) |
 | `test/integration/security_headers_test.rb` | CSP (nonce, no inline scripts, no framing) and Permissions-Policy headers |
 | `test/system/content_security_policy_test.rb` | Real Chrome loads public and signed-in pages and fails on any CSP violation |
+| `test/system/accessibility_test.rb` | axe-core on the main pages (public and signed in) plus keyboard checks: skip link, accordion button state, `aria-current` |
+| `test/integration/semantic_layout_test.rb` | Language, landmarks, live regions, one `h1` per page, no nested navs |
 | `test/system/user_journey_test.rb` | Sign in -> set SOL3 phase -> create plan -> edit inventory -> optimizer |
 
 ## Test helper behavior (`test/test_helper.rb`)
@@ -39,6 +41,10 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 - **Inventory callback**: `User#initialize_inventory` is skipped (set/unset in `setup`/`teardown`); create rows with `user.inventory_item_for(material)` or call `user.send(:initialize_inventory)` (system test does this).
 - Devise integration helpers (`sign_in`) are included.
 - `config/environments/test.rb` eager loads when `CI` is set.
+
+## Accessibility testing
+
+`assert_no_axe_violations(skip: [...])` (in `test/application_system_test_case.rb`) runs axe-core against the current page in Chrome and lists violations. The axe script is vendored at `test/support/axe.min.js` (axe-core 4.10.2, MPL-2.0, header kept) because the `axe-core-capybara` gem needs Selenium, which this suite does not use. Add new pages to `test/system/accessibility_test.rb`; only add a rule to `SKIPPED` for a known gap with a follow-up. axe finds roughly a third of accessibility problems, so keyboard-only and screen reader checks stay manual.
 
 ## CI (`.github/workflows/ci.yml`, on PRs and pushes to `main`)
 

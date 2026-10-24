@@ -20,11 +20,20 @@ export default class extends Controller {
 
   updateActiveLinks() {
     const path = window.location.pathname;
-    this.plannerTarget.classList.toggle("active-state", path.startsWith("/app/planner"));
-    this.inventoryTarget.classList.toggle("active-state", path.startsWith("/app/inventory"));
-    this.optimizerTarget.classList.toggle("active-state", path.startsWith("/app/optimizer"));
+    this.markActive(this.plannerTarget, path.startsWith("/app/planner"));
+    this.markActive(this.inventoryTarget, path.startsWith("/app/inventory"));
+    this.markActive(this.optimizerTarget, path.startsWith("/app/optimizer"));
     if (this.hasDashboardTarget) {
-      this.dashboardTarget.classList.toggle("active-state", path === "/app");
+      this.markActive(this.dashboardTarget, path === "/app");
+    }
+  }
+
+  markActive(link, active) {
+    link.classList.toggle("active-state", active);
+    if (active) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
     }
   }
 

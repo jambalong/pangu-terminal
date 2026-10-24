@@ -210,7 +210,8 @@
   overflow: hidden;
 }
 
-.api-keys-section h3 {
+.settings-heading,
+.api-keys-section h2 {
   font-size: 1.1rem;
   font-weight: 800;
   text-transform: uppercase;
