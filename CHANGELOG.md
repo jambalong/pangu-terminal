@@ -5,6 +5,9 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Fixed
+- The home page and the user manual showed v1.5.0; they now show the current version, and a test keeps them in step with the changelog.
+
 ## [1.6.0] - 2026-10-24
 
 ### Added

@@ -4,7 +4,7 @@ Guidance for AI coding agents (and humans) working in this repository. Keep this
 
 ## What this is
 
-**Pangu Terminal** is a Rails app for *Wuthering Waves* players: plan material costs for Resonators/weapons, track inventory, detect synthesis (3:1 crafting), estimate Waveplate farming runs, and get LLM farming advice. Live at https://panguterminal.ambalong.dev (Render + Neon). Current version: see `CHANGELOG.md`.
+**Pangu Terminal** is a Rails app for *Wuthering Waves* players: plan material costs for Resonators/weapons, track inventory, detect synthesis (3:1 crafting), estimate Waveplate farming runs, and get LLM farming advice. Live at https://panguterminal.ambalong.dev (Render + Neon). Current version: see `CHANGELOG.md`. When you cut a release, also bump the version text in `README.md`, `app/views/pages/home.html.erb` and `app/views/pages/user_manual.html.erb`; `test/version_consistency_test.rb` fails if they drift.
 
 ## Stack
 
