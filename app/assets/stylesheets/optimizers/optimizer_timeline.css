@@ -1,0 +1,36 @@
+.optimizer-metric-note {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--ctp-subtext0);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.optimizer-metrics-footnote {
+  margin: -0.25rem 0 1.5rem;
+  color: var(--ctp-subtext0);
+  font-size: 0.8rem;
+}
+
+.optimizer-bank {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.optimizer-bank-label {
+  color: var(--ctp-subtext0);
+  font-size: 0.875rem;
+}
+
+.optimizer-bank-input {
+  width: 6rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--ctp-base);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 0.5rem;
+  color: var(--ctp-text);
+  font-family: inherit;
+}

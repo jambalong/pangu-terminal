@@ -196,4 +196,22 @@ class AccessibilityTest < ApplicationSystemTestCase
     assert_selector ".optimizer-plan-name", text: "All plans (2)"
     assert_no_axe_violations(skip: SKIPPED)
   end
+
+  test "optimizer results with the Waveplate timeline are accessible" do
+    sign_in_through_form
+    shell_credit = Material.find_by!(name: "Shell Credit")
+    Plan.create!(user: @user, subject: Weapon.find_by!(name: "Kumokiri"),
+                 plan_data: { "input" => {}, "output" => { shell_credit.id.to_s => 25480 } })
+    visit optimizer_path
+    click_link "> SELECT A PLAN"
+    click_button "Use all plans (1)"
+
+    fill_in "Waveplates you have now (optional)", with: "100"
+    click_button "> RUN OPTIMIZER"
+
+    assert_selector ".optimizer-metrics", wait: 10
+    assert_selector ".optimizer-metric-label", text: /time to regenerate/i
+    assert_text "Counting the 100 you have now"
+    assert_no_axe_violations(skip: SKIPPED)
+  end
 end

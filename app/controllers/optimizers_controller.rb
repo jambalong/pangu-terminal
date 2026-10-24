@@ -5,6 +5,7 @@ class OptimizersController < ApplicationController
   before_action :load_plans
   before_action :apply_selection_params, only: [ :index, :select_plan ]
   before_action :load_selection
+  before_action :load_waveplate_bank, only: [ :index, :select_plan ]
 
   def index
     @inventory_empty = inventory_empty?
@@ -12,6 +13,7 @@ class OptimizersController < ApplicationController
     if @selected_plans.any? && params[:run] && sol3_phase_set?
       @results, @chain_coverage, @totals = compute_optimizer_results
       @farming_priority = FarmingPriorityService.call(@results)
+      @timeline = WaveplateTimeline.call(total: @totals[:total_wp], banked: @waveplate_bank)
     end
   end
 
@@ -74,6 +76,12 @@ class OptimizersController < ApplicationController
       else
         []
       end
+  end
+
+  # Waveplates the player has right now (optional); remembered for the session.
+  def load_waveplate_bank
+    session[:waveplate_bank] = params[:waveplate_bank].to_s.to_i.clamp(0, WaveplateTimeline::CAP) if params.key?(:waveplate_bank)
+    @waveplate_bank = session[:waveplate_bank].to_i
   end
 
   def compute_optimizer_results

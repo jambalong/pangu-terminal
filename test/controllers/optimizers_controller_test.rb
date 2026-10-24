@@ -392,3 +392,47 @@ class OptimizersControllerSelectionTest < ActionDispatch::IntegrationTest
     assert_select "input[value='#{@foreign.id}']", count: 0
   end
 end
+
+class OptimizersControllerTimelineTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create!(email: "timeline@example.com", password: "password123", sol3_phase: 3)
+    @shell_credit = Material.find_by!(name: "Shell Credit")
+    @plan = Plan.create!(user: @user, subject: Weapon.find_by!(name: "Kumokiri"),
+                         plan_data: { "input" => {}, "output" => { @shell_credit.id.to_s => 25480 } })
+    sign_in @user
+  end
+
+  test "results show the time to regenerate the Waveplates needed" do
+    get optimizer_path, params: { plan_id: @plan.id, run: 1 }
+
+    assert_select ".optimizer-metric-label", text: "Time to regenerate"
+    assert_select ".optimizer-metric-note", text: /1 Waveplate every 6 minutes \(240 a day\)/
+    assert_select ".optimizer-metrics-footnote", text: /holds 240/
+  end
+
+  test "a banked amount is counted and remembered for the session" do
+    get optimizer_path, params: { plan_id: @plan.id, run: 1, waveplate_bank: 120 }
+
+    assert_select ".optimizer-metric-note", text: /Counting the 120 you have now/
+    assert_select "input#waveplate_bank[value='120']"
+
+    get optimizer_path, params: { run: 1 }
+    assert_select ".optimizer-metric-note", text: /Counting the 120/
+  end
+
+  test "an out-of-range or junk bank is clamped" do
+    get optimizer_path, params: { plan_id: @plan.id, run: 1, waveplate_bank: 99_999 }
+    assert_select "input#waveplate_bank[value='240']"
+
+    get optimizer_path, params: { run: 1, waveplate_bank: "abc" }
+    assert_select "input#waveplate_bank[value]", count: 0
+    assert_select "input#waveplate_bank[placeholder='0']"
+  end
+
+  test "the bank field has a visible label and limits" do
+    get optimizer_path, params: { plan_id: @plan.id }
+
+    assert_select "label[for=waveplate_bank]", text: /Waveplates you have now/
+    assert_select "input#waveplate_bank[type=number][min='0'][max='240']"
+  end
+end
