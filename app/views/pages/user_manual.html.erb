@@ -34,6 +34,7 @@
       <li class="nav-section-head">Core Features</li>
       <li><a href="#creating-a-plan">Creating a Plan</a></li>
       <li><a href="#managing-inventory">Managing Inventory</a></li>
+      <li class="nav-sub"><a href="#quick-entry">Quick Entry</a></li>
       <li class="nav-sub"><a href="#import-export">Import and Export</a></li>
       <li><a href="#reconciliation">Reconciliation View</a></li>
       <li><a href="#optimizer">Waveplate Optimizer</a></li>
@@ -155,6 +156,9 @@
       <strong>Tip</strong>
       You do not need to fill in every field. Materials left blank default to 0.
     </div>
+    <h3 id="quick-entry">Quick entry</h3>
+    <p>Open <strong>Quick entry</strong> from the Inventory page (or from the checklist on your dashboard) to type your quantities in one go. It lists the materials your plans need and how many they need; press <kbd>Enter</kbd> or the down arrow to move to the next one, <kbd>Shift</kbd>+<kbd>Enter</kbd> or the up arrow to go back, and <strong>Save changes</strong> when done. Numbers like <code>1,200</code> and <code>25k</code> work. If an entry is not a number, nothing is saved and the entries to fix are listed. <strong>Show every material</strong> lists the full catalogue.</p>
+
     <h3 id="import-export">Import and export</h3>
     <p>Use <strong>Export CSV</strong> or <strong>Export JSON</strong> at the top of the Inventory page to download everything you have recorded, one line per material. Edit the quantities in a spreadsheet or text editor, then use <strong>Import</strong> to upload the file (or paste its contents). Materials are matched by their key or name, only quantities change, and anything the file does not mention is left alone. Rows that cannot be used, such as an unknown material or a quantity that is not a whole number, are skipped and listed so you can fix them. The JSON uses the same shape as the API's inventory.</p>
 

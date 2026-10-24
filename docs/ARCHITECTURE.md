@@ -178,6 +178,10 @@ If a plan exists but belongs to another user, the scoped query raises `RecordNot
 
 `InventoryExporter` lists every material with the user's quantity (zero when none); `InventoryExportsController` serves it as CSV or as the API's flat key => quantity JSON. `InventoryImporter` applies a file: `InventoryTable` parses CSV (header optional, comma/semicolon/tab, quoted fields; written by hand because Ruby 3.4 no longer bundles a CSV library) or JSON (flat map or list of entries), materials are matched by `snake_case_name` or normalized name, quantities must be whole numbers up to 2,000,000,000, and valid rows are applied in one `upsert_all` while the rest are reported and skipped. Limits: 1 MB, 5,000 rows, `imports/ip` throttle (20 POSTs per hour). `InventoryImportsController` renders the result on the same page.
 
+## Quick entry
+
+`InventoryQuickEntryList` builds the page (the materials the user's plans need, or all of them when there are no plans or `?all=1`, grouped by category in game order, with owned and needed totals); `InventoryBulkUpdater` saves the form all-or-nothing (blank means zero, `QuantityParser` accepts `1,200` and `25k`, the first bad entry set is returned with messages and nothing is written). `quick_entry_controller.js` moves focus with Enter, Shift+Enter and the arrow keys and saves with Ctrl/Cmd+Enter. Only known material ids are read from the params.
+
 ## Turbo frames
 
 The layout owns two frames: `main_content` (wraps the page) and `modal` (the dialog host). Views must not add their own. Full pages call `main_content_frame` (`ApplicationHelper`), which adds the frame only for Turbo frame requests, since those are rendered without the layout; on a full load the layout's frame is the only one. Turbo streams that replace `main_content` carry a frame because they replace the element itself; to close a dialog from a stream use `turbo_stream.update "modal", html: ""` (never `replace`, which would delete the host). `test/integration/main_content_frame_test.rb` checks one frame and no repeated ids.

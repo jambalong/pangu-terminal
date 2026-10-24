@@ -3,7 +3,7 @@
 # materials the file does not mention are left alone. Rows that cannot be used
 # are skipped and reported, never guessed at, and the rest are applied together.
 class InventoryImporter < ApplicationService
-  MAX_QUANTITY = 2_000_000_000
+  MAX_QUANTITY = QuantityParser::MAX
   MAX_ROWS = 5_000
 
   def initialize(user:, content:)
@@ -23,7 +23,7 @@ class InventoryImporter < ApplicationService
 
     parsed[:rows].each do |row|
       material = find_material(row[:ident])
-      quantity = parse_quantity(row[:quantity])
+      quantity = QuantityParser.parse(row[:quantity])
 
       if row[:ident].blank?
         skipped << skip(row, "no material name or key")
@@ -87,15 +87,5 @@ class InventoryImporter < ApplicationService
 
   def normalize(text)
     text.to_s.downcase.gsub(/\s+/, " ").strip
-  end
-
-  def parse_quantity(raw)
-    case raw
-    when Integer then raw.negative? ? nil : raw
-    when Float then raw >= 0 && raw == raw.to_i ? raw.to_i : nil
-    when String
-      cleaned = raw.strip.delete(", _ ")
-      cleaned.match?(/\A\d+(\.0+)?\z/) ? cleaned.to_i : nil
-    end
   end
 end
