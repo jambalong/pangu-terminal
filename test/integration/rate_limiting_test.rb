@@ -47,4 +47,12 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
 
     assert_response :too_many_requests
   end
+
+  test "health checks are never throttled or counted" do
+    301.times { get rails_health_check_path }
+
+    assert_response :ok
+    assert_equal 0, Rack::Attack.cache.store.instance_variable_get(:@data).size,
+      "/up must not write throttle counters (they live in the database in production)"
+  end
 end

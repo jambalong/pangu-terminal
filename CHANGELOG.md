@@ -8,9 +8,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 - Contextual onboarding: a new account's dashboard shows a short "Get started" checklist (set your SOL3 phase, create a plan, enter what you own) that ticks itself off from your data and can be hidden for good. Empty pages now explain themselves: the planner offers a first plan (and tells guests no account is needed), the inventory says to start with what you own, and the optimizer points to the planner when there are no plans and warns that results assume an empty inventory. A new account's first sign-in greets you with your username.
 - Link previews and search basics: pages now carry a description, canonical URL and Open Graph/Twitter tags (so a shared link shows a title, summary and icon), `robots.txt` keeps the app, accounts and API out of search while allowing the public pages, and a small `sitemap.xml` lists them.
-
-### Fixed
-- The web app manifest pointed at an icon file that did not exist; it now uses `/favicon.png`.
+- `test/views/partials_test.rb`: guard rails that fail when a partial lacks a locals declaration or reads an instance variable.
 - Security headers: an enforcing Content-Security-Policy (scripts only from the app or with a per-request nonce; no framing) and a Permissions-Policy that turns off camera, microphone, geolocation, payment and USB.
 - Abuse limits ahead of wider sharing: the Farming Advisor now has a daily generation budget (20 per account and 500 overall; cached advice and polling are free) and shows a notice when it is spent; plan creation is limited to 60 per hour per IP and the fallback sign-up form to 5 per hour per IP.
 - Username: new accounts get a neutral lowercase name like `rover-4821` instead of your Google or Discord name, and you can change it under Account Settings (3 to 16 characters: lowercase letters, numbers, `.`, `_`, `-`). It never needs a password to change. The navbar caps the name's width.
@@ -21,16 +19,15 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Rate limit on `/users/auth/*` (20 requests per minute per IP).
 
 ### Changed
+- Health checks (`/up`) are exempt from rate limiting, so Render's health check and uptime monitors no longer write throttle counters to the database. That lets the free Neon database sleep when nobody is using the app.
 - The sign-in page leads with the provider buttons; the email form moves behind **Sign in with email** and the sign-up form is removed. Existing email and password accounts keep working. Until a provider is configured on the server the old sign-up form stays available, so there is always a way to create an account.
 - `users.email` is optional (new `identities` table, `users.display_name`).
-
-### Changed
 - Views: every partial now declares strict locals and takes its data as locals instead of controller instance variables (plan cards, materials summary, inventory cards, optimizer results, farming advice). The duplicated modal shell and material/portrait markup moved into `shared/_modal`, `shared/_material_icon` and `shared/_subject_portrait`. `sorted_plan_materials` now takes the materials lookup as an argument. No visible change.
 - Docs: `docs/ROADMAP.md` merged into `docs/PRODUCT_ROADMAP.md` (one roadmap: product, maintenance backlog, history). The feature roadmap is reprioritized with username accounts (email optional, with recovery codes) first, and carries a full implementation spec for it.
 - Docs: `docs/DEPLOYMENT.md` records the owner's Render and Neon answers (five env vars, pooled Neon endpoint on PostgreSQL 17.11, `WEB_CONCURRENCY=2`, no Render shell) and documents running maintenance tasks from a local checkout against Neon.
 
-### Added
-- `test/views/partials_test.rb`: guard rails that fail when a partial lacks a locals declaration or reads an instance variable.
+### Fixed
+- The web app manifest pointed at an icon file that did not exist; it now uses `/favicon.png`.
 
 ### Removed
 - Unused `rarity_border_class` / `rarity_bg_class` helpers.
