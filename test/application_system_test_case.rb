@@ -37,11 +37,19 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     message = violations.map { |v| "[#{v["impact"]}] #{v["id"]}: #{v["help"]} (#{v["targets"].join(", ")})" }.join("\n")
     assert_empty violations, "Accessibility violations on #{current_path}:\n#{message}"
   end
+end
 
-  setup do
-    original = $stdout
-    $stdout = File.open(File::NULL, "w")
-    Rails.application.load_seed
-    $stdout = original
-  end
+# Seed the static game data once per process, outside any test transaction, so it
+# persists across tests. Seeding in `setup` ran inside each test's transaction (it
+# was rolled back every time) and re-`load`ed the seed files, which redefine their
+# top-level constants and print an "already initialized constant" warning per test.
+# The system suite is below the parallelization threshold, so `parallelize_setup`
+# does not run for it.
+original_stdout = $stdout
+$stdout = File.open(File::NULL, "w")
+begin
+  Rails.application.load_seed
+ensure
+  $stdout.close
+  $stdout = original_stdout
 end
