@@ -6,6 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Fixed
+- API rate limit: the throttle's cache key used the raw API token, which Solid Cache stores readably in the database. It now uses the token's SHA-256 digest, the same form `api_keys` stores. Old entries age out of the cache table within two weeks (Solid Cache's default `max_age`).
 - Quick entry: after a save with a bad entry, keyboard focus now goes to the first box that needs fixing every time. Before, it sometimes landed on the first box of the list, depending on how fast the page loaded.
 - The home page and the user manual showed v1.5.0; they now show the current version, and a test keeps them in step with the changelog.
 

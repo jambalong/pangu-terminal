@@ -26,6 +26,36 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
     assert_equal "Rate limit exceeded. Try again later.", json["error"]
   end
 
+  test "the API throttle keys its cache entry by a digest, never the raw token" do
+    get api_v1_inventory_index_path, headers: { "Authorization" => "Bearer #{@raw_token}" }
+
+    keys = Rack::Attack.cache.store.instance_variable_get(:@data).keys
+    api_keys = keys.select { |key| key.include?("api/token") }
+
+    assert_equal 1, api_keys.size
+    refute api_keys.any? { |key| key.downcase.include?(@raw_token.downcase) },
+      "the raw token must not appear in the cache key (Solid Cache stores keys readably in the database)"
+    assert api_keys.first.end_with?(":api/token:#{Digest::SHA256.hexdigest(@raw_token)}")
+  end
+
+  test "the API throttle counts each token separately" do
+    other_raw_token = @user.api_keys.create!(name: "other key").raw_token
+
+    61.times { get api_v1_inventory_index_path, headers: { "Authorization" => "Bearer #{@raw_token}" } }
+    assert_response :too_many_requests
+
+    get api_v1_inventory_index_path, headers: { "Authorization" => "Bearer #{other_raw_token}" }
+    assert_response :ok
+  end
+
+  test "API requests without a token do not create an api/token counter" do
+    get api_v1_inventory_index_path
+
+    assert_response :unauthorized
+    keys = Rack::Attack.cache.store.instance_variable_get(:@data).keys
+    assert keys.none? { |key| key.include?("api/token") }
+  end
+
   test "returns 429 after exceeding the OAuth throttle" do
     21.times { get "/users/auth/unknown" }
 

@@ -64,9 +64,13 @@ class Rack::Attack
   ### API Token Throttle ###
   # Scoped to /api/ routes only. Keyed by token so each API consumer
   # gets their own bucket, so one abusive client can't affect others.
+  # The discriminator becomes part of the cache key, and Solid Cache stores keys
+  # readably in the database, so key the bucket by the SHA-256 digest (the same
+  # form ApiKey stores) and never by the raw token.
   throttle("api/token", limit: 60, period: 1.minute) do |req|
     if req.path.start_with?("/api")
-      req.get_header("HTTP_AUTHORIZATION")&.delete_prefix("Bearer ")
+      token = req.get_header("HTTP_AUTHORIZATION")&.delete_prefix("Bearer ")
+      Digest::SHA256.hexdigest(token) if token
     end
   end
 
