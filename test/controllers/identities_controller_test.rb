@@ -7,11 +7,12 @@ class IdentitiesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  test "unlinks when the user still has email and password" do
-    assert_difference "Identity.count", -1 do
+  test "refuses to unlink when only a leftover password remains, since password sign-in is gone" do
+    assert_no_difference "Identity.count" do
       delete identity_path(@identity)
     end
     assert_redirected_to edit_user_registration_path
+    assert_match(/Link another sign-in provider/, flash[:alert])
   end
 
   test "unlinks when another provider remains" do
@@ -35,7 +36,7 @@ class IdentitiesControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Identity.count" do
       delete identity_path(identity)
     end
-    assert_match(/another sign-in method/, flash[:alert])
+    assert_match(/Link another sign-in provider/, flash[:alert])
   end
 
   test "returns 404 for another user's identity" do

@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
+         :rememberable, :validatable,
          :omniauthable, omniauth_providers: OauthProviders.names
 
   has_many :identities, dependent: :destroy
@@ -46,9 +46,10 @@ class User < ApplicationRecord
     !password? && identities.any?
   end
 
-  # A way to sign in that does not depend on the identity being removed.
+  # A way to sign in that does not depend on the identity being removed. There is
+  # no password sign-in any more, so only another linked provider counts.
   def can_unlink?(identity)
-    identities.reject { |other| other == identity }.any? || (password? && email.present?)
+    identities.reject { |other| other == identity }.any?
   end
 
   def inventory_item_for(material)

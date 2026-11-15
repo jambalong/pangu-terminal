@@ -1,15 +1,18 @@
 require "test_helper"
 
 class ApplicationControllerTest < ActionDispatch::IntegrationTest
+  include OauthTestHelper
+
   setup do
-    @user = User.create!(email: "sync@example.com", password: "password123")
+    @user = User.new(display_name: "syncer")
+    @user.identities.build(provider: "discord", uid: "app-1")
+    @user.save!
+    mock_oauth(:discord, uid: "app-1")
     @weapon = Weapon.find_by!(name: "Kumokiri")
   end
 
   test "sign in redirects to dashboard" do
-    post user_session_path, params: {
-      user: { email: @user.email, password: @user.password }
-    }
+    sign_in_via_oauth(:discord)
 
     assert_redirected_to authenticated_root_path
   end
@@ -25,9 +28,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
 
     cookies[:guest_token] = guest_token
 
-    post user_session_path, params: {
-      user: { email: @user.email, password: "password123" }
-    }
+    sign_in_via_oauth(:discord)
 
     guest_plan.reload
     assert_equal @user.id, guest_plan.user_id
@@ -52,9 +53,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     cookies[:guest_token] = guest_token
 
     assert_difference "Plan.count", -1 do
-      post user_session_path, params: {
-        user: { email: @user.email, password: "password123" }
-      }
+      sign_in_via_oauth(:discord)
     end
 
     assert_raises(ActiveRecord::RecordNotFound) { duplicate_guest_plan.reload }
@@ -72,9 +71,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
 
     cookies[:guest_token] = guest_token
 
-    post user_session_path, params: {
-      user: { email: @user.email, password: "password123" }
-    }
+    sign_in_via_oauth(:discord)
 
     assert cookies[:guest_token].blank?
   end
@@ -87,9 +84,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_no_difference "Plan.count" do
-      post user_session_path, params: {
-        user: { email: @user.email, password: "password123" }
-      }
+      sign_in_via_oauth(:discord)
     end
   end
 

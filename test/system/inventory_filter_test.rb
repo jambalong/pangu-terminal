@@ -7,11 +7,7 @@ class InventoryFilterTest < ApplicationSystemTestCase
   end
 
   test "typing in the search box filters the grid without a submit click" do
-    visit new_user_session_path
-    fill_in "Email", with: "filter@example.com"
-    fill_in "Password", with: "password123"
-    click_button "Sign In"
-    assert_text "Dashboard"
+    sign_in_as(@user)
 
     visit inventory_items_path
     assert_text "Shell Credit"

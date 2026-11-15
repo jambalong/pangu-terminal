@@ -1,6 +1,8 @@
 require "test_helper"
 
 class SemanticLayoutTest < ActionDispatch::IntegrationTest
+  include OauthTestHelper
+
   test "pages declare their language" do
     [ root_path, user_manual_path, privacy_path, new_user_session_path ].each do |path|
       get path
@@ -20,7 +22,9 @@ class SemanticLayoutTest < ActionDispatch::IntegrationTest
     get new_user_session_path
     assert_select "#flash-container[role=status][aria-live=polite]"
 
-    post user_session_path, params: { user: { email: "nobody@example.com", password: "wrong-password" } }
+    OmniAuth.config.mock_auth[:discord] = :invalid_credentials
+    sign_in_via_oauth(:discord)
+    follow_redirect!
     assert_select "#flash-container .flash-message.alert[role=alert]"
   end
 
@@ -49,11 +53,16 @@ class SemanticLayoutTest < ActionDispatch::IntegrationTest
   end
 
   test "error messages stay until dismissed and notices fade on their own" do
-    post user_session_path, params: { user: { email: "nobody@example.com", password: "wrong-password" } }
+    OmniAuth.config.mock_auth[:discord] = :invalid_credentials
+    sign_in_via_oauth(:discord)
+    follow_redirect!
     assert_select ".flash-message.alert[data-flash-persist-value=true] button.flash-close"
 
-    user = User.create!(email: "flash@example.com", password: "password123")
-    post user_session_path, params: { user: { email: user.email, password: "password123" } }
+    user = User.new(display_name: "flashy")
+    user.identities.build(provider: "discord", uid: "flash-1")
+    user.save!
+    mock_oauth(:discord, uid: "flash-1")
+    sign_in_via_oauth(:discord)
     follow_redirect!
     assert_select ".flash-message.notice[data-flash-persist-value=false]"
     assert_select ".flash-message.notice button.flash-close", count: 0

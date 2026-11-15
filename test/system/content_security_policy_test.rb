@@ -28,11 +28,7 @@ class ContentSecurityPolicyTest < ApplicationSystemTestCase
   end
 
   test "signed-in pages and the plan modal load without violations" do
-    visit new_user_session_path
-    fill_in "Email", with: "csp@example.com"
-    fill_in "Password", with: "password123"
-    click_button "Sign In"
-    assert_text "Dashboard"
+    sign_in_as(@user)
     assert_no_csp_violations
 
     [ plans_path, inventory_items_path, optimizer_path, edit_user_registration_path ].each do |path|

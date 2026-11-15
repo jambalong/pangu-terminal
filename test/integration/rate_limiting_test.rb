@@ -62,14 +62,6 @@ class RateLimitingTest < ActionDispatch::IntegrationTest
     assert_response :too_many_requests
   end
 
-  test "the legacy sign-in form is still throttled per email" do
-    6.times do
-      post user_session_path, params: { user: { email: "victim@example.com", password: "nope" } }, headers: { "REMOTE_ADDR" => "10.0.0.#{rand(200)}" }
-    end
-
-    assert_response :too_many_requests
-  end
-
   test "returns 429 after too many plan creations from one IP" do
     61.times { post "/app/planner", params: {} }
 
