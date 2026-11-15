@@ -1,10 +1,11 @@
 name: Uptime
 
-# Backup for the external uptime monitor: pings /up every 10 minutes so the free
-# Render instance stays awake (it sleeps after about 15 idle minutes) and a
-# failed run emails the repository owner. /up does no database work, so this
-# does not use Neon compute. Scheduled runs can be delayed by GitHub; the
-# external monitor (5 minute interval) is the primary check.
+# Coarse backup for the external uptime monitor: scheduled to ping /up every 10
+# minutes, and a failed run emails the repository owner. /up does no database
+# work, so this does not use Neon compute. GitHub delays scheduled runs heavily
+# (in practice hours apart), so this does NOT keep the free Render instance
+# awake (it sleeps after about 15 idle minutes); the external monitor
+# (5 minute interval) is the primary check and the keep-awake.
 
 on:
   schedule:
