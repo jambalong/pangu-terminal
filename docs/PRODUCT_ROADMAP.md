@@ -8,7 +8,7 @@ Shipped: OAuth sign-in (Google; Discord wired but off), the accessibility and se
 
 ## 0. Owner actions (no code)
 
-- [ ] Create the free uptime monitor on `/up` (5 minute interval, email alerts) so the free Render instance stays awake. The GitHub Actions workflow is only a backup.
+- [x] Create the free uptime monitor on `/up` (5 minute interval, email alerts) so the free Render instance stays awake (done: UptimeRobot). The GitHub Actions workflow is only a coarse backup; GitHub delays scheduled runs too much to keep the instance awake.
 - [ ] Add the Discord OAuth app and `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` in Render when you want that button.
 - [ ] Check Neon's backup window and the Neon and Render usage pages.
 - [ ] A screen reader pass (NVDA, VoiceOver or TalkBack) and a real phone pass; automation cannot cover either.
