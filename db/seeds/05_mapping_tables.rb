@@ -14,7 +14,7 @@ puts "  --> Creating Mapping Tables..."
 
 RESONATORS = {
   # 5-Star Resonators
-  # Added in 3.2 - 3.7
+  # Added in 3.2 - 3.8
   sigrika:           $SEED_DATA[:sigrika],
   denia:             $SEED_DATA[:denia],
   hiyuki:            $SEED_DATA[:hiyuki],
@@ -27,6 +27,8 @@ RESONATORS = {
   qingxiao:          $SEED_DATA[:qingxiao],
   jingran:           $SEED_DATA[:jingran],
   hsin:              $SEED_DATA[:hsin],
+  lily:              $SEED_DATA[:lily],
+  suoming:           $SEED_DATA[:suoming],
   aemeath:        $SEED_DATA[:aemeath],
   augusta:        $SEED_DATA[:augusta],
   brant:          $SEED_DATA[:brant],
@@ -80,7 +82,7 @@ RESONATORS = {
 
 WEAPONS = {
   # 5-Star Weapons
-  # Added in 3.2 - 3.7
+  # Added in 3.2 - 3.8
   azure_oath:              $SEED_DATA[:azure_oath],
   blooming_jadehaven:      $SEED_DATA[:blooming_jadehaven],
   firstlights_herald:      $SEED_DATA[:firstlights_herald],
@@ -92,6 +94,8 @@ WEAPONS = {
   solsworn_ciphers:        $SEED_DATA[:solsworn_ciphers],
   spectral_trigger:        $SEED_DATA[:spectral_trigger],
   thousandfold_deliverance: $SEED_DATA[:thousandfold_deliverance],
+  lullaby:                 $SEED_DATA[:lullaby],
+  unspoken_rue:            $SEED_DATA[:unspoken_rue],
   abyss_surges:           $SEED_DATA[:abyss_surges],
   ages_of_harvest:        $SEED_DATA[:ages_of_harvest],
   blazing_brilliance:     $SEED_DATA[:blazing_brilliance],
@@ -178,7 +182,7 @@ WEAPONS = {
 }.freeze
 
 MATERIALS = {
-  # Added in 3.2 - 3.7 (boss drops, flowers, weekly boss drops)
+  # Added in 3.2 - 3.8 (boss drops, flowers, weekly boss drops)
   forged_empyreans_sigh:     $SEED_DATA[:forged_empyreans_sigh],
   nightmare_flashdrive:      $SEED_DATA[:nightmare_flashdrive],
   solidaritys_loneflame:     $SEED_DATA[:solidaritys_loneflame],
@@ -262,6 +266,8 @@ MATERIALS = {
   gemini_spore:           $SEED_DATA[:gemini_spore],
   moss_amber:             $SEED_DATA[:moss_amber],
   rimewisp:               $SEED_DATA[:rimewisp],
+  miasmic_branch:         $SEED_DATA[:miasmic_branch],
+  reverie_lily:           $SEED_DATA[:reverie_lily],
 
   # Enemy Drops
   whisperin_core_set: [
@@ -439,7 +445,7 @@ end
 # The order of elements MUST match the arguments of map_resonator_materials:
 # [resonator, boss_mat, flower_mat, enemy_mat, weekly_boss_mat]
 RESONATOR_MAPPING_DATA = [
-  # Added in 3.2 - 3.7
+  # Added in 3.2 - 3.8
   [ RESONATORS[:sigrika], MATERIALS[:our_choice], MATERIALS[:arithmetic_shell], MATERIALS[:exoswarm_pendant_set], MATERIALS[:gold_in_memory] ],
   [ RESONATORS[:denia], MATERIALS[:burning_judgment], MATERIALS[:dream_of_stars], MATERIALS[:mech_core_set], MATERIALS[:we_who_question] ],
   [ RESONATORS[:hiyuki], MATERIALS[:our_choice], MATERIALS[:redbell], MATERIALS[:exoswarm_core_set], MATERIALS[:we_who_question] ],
@@ -452,6 +458,8 @@ RESONATOR_MAPPING_DATA = [
   [ RESONATORS[:qingxiao], MATERIALS[:forged_empyreans_sigh], MATERIALS[:blade_blossom], MATERIALS[:autopuppet_kernel_set], MATERIALS[:we_who_question] ],
   [ RESONATORS[:jingran], MATERIALS[:forged_empyreans_sigh], MATERIALS[:cloudperch_seed], MATERIALS[:whisperin_core_set], MATERIALS[:skyward_glazed_heart] ],
   [ RESONATORS[:hsin], MATERIALS[:solidaritys_loneflame], MATERIALS[:bloom_of_hearkening], MATERIALS[:autopuppet_kernel_set], MATERIALS[:remnant_of_the_wheel] ],
+  [ RESONATORS[:lily], MATERIALS[:suncoveters_reach], MATERIALS[:reverie_lily], MATERIALS[:exoswarm_core_set], MATERIALS[:gold_in_memory] ],
+  [ RESONATORS[:suoming], MATERIALS[:forged_empyreans_sigh], MATERIALS[:miasmic_branch], MATERIALS[:howler_core_set], MATERIALS[:remnant_of_the_wheel] ],
   # 5-star Resonators
   [ RESONATORS[:aemeath],       MATERIALS[:our_choice],                    MATERIALS[:moss_amber],            MATERIALS[:exoswarm_core_set],        MATERIALS[:gold_in_memory] ],
   [ RESONATORS[:augusta],       MATERIALS[:blighted_crown_of_puppet_king], MATERIALS[:luminous_calendula],    MATERIALS[:tidal_residuum_core_set],  MATERIALS[:when_irises_bloom] ],
@@ -636,11 +644,13 @@ WEAPON_MAPPING_DATA = {
     WEAPONS[:glint_of_clouds],
     WEAPONS[:laser_shearer],
     WEAPONS[:pulsation_bracer],
-    WEAPONS[:solsworn_ciphers]
+    WEAPONS[:solsworn_ciphers],
+    WEAPONS[:unspoken_rue]
   ].freeze,
 
   MATERIALS[:exoswarm_pendant_set] => [
     # 5-Star
+    WEAPONS[:lullaby],
     WEAPONS[:phasic_homogenizer],
     WEAPONS[:radiance_cleaver],
     WEAPONS[:skull_thrasher],
