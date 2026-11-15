@@ -2,7 +2,7 @@
   <h1 class="auth-title">Sign In</h1>
 
   <% if OauthProviders.any? %>
-    <p class="hint-text">Pick a provider to sign in. If you are new, signing in creates your account. We use only your provider account ID: no email and no password.</p>
+    <p class="hint-text oauth-intro">Pick a provider to sign in. If you are new, signing in creates your account. We use only your provider account ID: no email and no password.</p>
     <%= render "devise/shared/oauth_buttons" %>
   <% else %>
     <p class="status-msg" role="status">Sign-in is not available: no sign-in provider is configured on this server.</p>

@@ -24,6 +24,18 @@ class Users::SessionsAndSignupTest < ActionDispatch::IntegrationTest
     assert_select "input[name='user[email]']", count: 0
   end
 
+  test "each provider button has a hidden brand icon and its name as the label" do
+    with_oauth_env(:google_oauth2, :discord, :github) do
+      get new_user_session_path
+    end
+
+    assert_select ".oauth-button", count: 3
+    assert_select ".oauth-button svg.oauth-icon[aria-hidden=true]", count: 3
+    assert_select ".oauth-button span", text: "Continue with Google"
+    assert_select ".oauth-button span", text: "Continue with Discord"
+    assert_select ".oauth-button span", text: "Continue with GitHub"
+  end
+
   test "there is no password sign-in, sign-up or password reset" do
     User.create!(email: "legacy@example.com", password: "password123")
 

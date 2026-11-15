@@ -8,6 +8,9 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 - GitHub sign-in alongside Google and Discord. It asks for no scope, so only your public profile is shared and no email is requested. Set `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to turn it on.
 
+### Changed
+- Sign-in page: the Google, Discord and GitHub buttons now show each provider's logo, and there is more space between the intro text and the buttons.
+
 ### Removed
 - Email and password sign-in, sign-up and password reset. Accounts are created and signed in with Google, Discord or GitHub only; the password and email section of Account Settings is gone, and only the username and SOL3 phase can be changed there. The `logins/*` and `signups/ip` rate limits, the password-reset email and the Postmark SMTP setup (`POSTMARK_API_TOKEN`) went with it. Existing password accounts must link a provider in Settings before this ships, or they are locked out.
 
