@@ -6,7 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Added
-- Game data: the Resonators Lily and Suoming and their signature weapons Lullaby and Unspoken Rue, with their ascension materials, including two new local specialties (Reverie Lily and Miasmic Branch). Suoming's skill icons are not available yet.
+- Game data: the Resonators Lily and Suoming and their signature weapons Lullaby and Unspoken Rue, with their ascension materials, including two new local specialties (Reverie Lily and Miasmic Branch).
 - GitHub sign-in alongside Google and Discord. It asks for no scope, so only your public profile is shared and no email is requested. Set `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to turn it on.
 
 ### Changed
