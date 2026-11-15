@@ -6,6 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [Unreleased]
 
 ### Fixed
+- Quick entry: after a save with a bad entry, keyboard focus now goes to the first box that needs fixing every time. Before, it sometimes landed on the first box of the list, depending on how fast the page loaded.
 - The home page and the user manual showed v1.5.0; they now show the current version, and a test keeps them in step with the changelog.
 
 ## [1.6.0] - 2026-10-24

@@ -6,12 +6,20 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["field"]
 
-  // Start in the first box, except on a touch screen, where that would
-  // pop the on-screen keyboard over the page, so wait for a tap. A box that needs
-  // fixing already has autofocus from the server.
+  // A box that needs fixing has autofocus from the server. Focus it here rather
+  // than leave it to the browser: the browser skips autofocus once a script has
+  // moved focus, so whether it won depended on whether this controller connected
+  // before or after the page's autofocus pass. Otherwise start in the first box,
+  // except on a touch screen, where that would pop the on-screen keyboard over
+  // the page, so wait for a tap.
   connect() {
     const alreadyFocused = this.fieldTargets.some((field) => field === document.activeElement)
-    if (!alreadyFocused && this.hasFieldTarget && !window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
+    if (alreadyFocused) return
+
+    const needsFixing = this.fieldTargets.find((field) => field.hasAttribute("autofocus"))
+    if (needsFixing) {
+      needsFixing.focus()
+    } else if (this.hasFieldTarget && !window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
       this.fieldTargets[0].focus()
     }
   }
