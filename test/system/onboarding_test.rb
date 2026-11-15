@@ -4,11 +4,7 @@ class OnboardingTest < ApplicationSystemTestCase
   setup do
     @user = User.create!(email: "onboard@example.com", password: "password123")
     @user.send(:initialize_inventory)
-    visit new_user_session_path
-    fill_in "Email", with: "onboard@example.com"
-    fill_in "Password", with: "password123"
-    click_button "Sign In"
-    assert_text "Dashboard"
+    sign_in_as(@user)
   end
 
   test "the checklist can be hidden and stays hidden after a reload" do

@@ -1,19 +1,24 @@
 require "application_system_test_case"
 
 class UserJourneyTest < ApplicationSystemTestCase
+  include OauthTestHelper
+
   setup do
-    @user = User.create!(email: "system@example.com", password: "password123")
+    @user = User.new(display_name: "journey")
+    @user.identities.build(provider: "discord", uid: "journey-1")
+    @user.save!
     @user.send(:initialize_inventory)
+    mock_oauth(:discord, uid: "journey-1")
   end
 
   test "complete user journey: sign in, set SOL3 phase, create plan, update inventory, view optimizer results" do
     # Sign in
-    visit new_user_session_path
-    fill_in "Email", with: "system@example.com"
-    fill_in "Password", with: "password123"
-    click_button "Sign In"
-    assert_text "Signed in successfully."
-    assert_text "Dashboard"
+    with_oauth_env(:discord) do
+      visit new_user_session_path
+      click_button "Continue with Discord"
+      assert_text "Successfully authenticated from Discord account."
+      assert_text "Dashboard"
+    end
 
     # Set SOL3 phase from Dashboard
     select "Phase 8", from: "user_sol3_phase"

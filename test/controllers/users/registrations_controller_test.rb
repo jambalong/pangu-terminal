@@ -9,60 +9,35 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # after_update_path_for
-  test "redirects to root after profile update when sol3_phase is present and password is blank" do
-    patch update_user_registration_path, params: {
-      user: {
-        email: @user.email,
-        sol3_phase: 4,
-        password: "",
-        password_confirmation: "",
-        current_password: "password123"
-      }
-    }
+  test "redirects to root after an update that includes sol3_phase" do
+    patch update_user_registration_path, params: { user: { sol3_phase: 4 } }
 
     assert_redirected_to authenticated_root_path
   end
 
-  test "redirects to edit after profile update when sol3_phase is absent" do
-    patch update_user_registration_path, params: {
-      user: {
-        email: @user.email,
-        password: "",
-        password_confirmation: "",
-        current_password: "password123"
-      }
-    }
+  test "redirects to edit after an update without sol3_phase" do
+    patch update_user_registration_path, params: { user: { display_name: "someone" } }
 
     assert_redirected_to edit_user_registration_path
   end
 
-  # update_resource
-  test "updates user without current_password when password fields are blank" do
-    new_email = "updated@example.com"
-
+  # Only username and SOL3 phase can be changed
+  test "email and password parameters are ignored" do
     patch update_user_registration_path, params: {
       user: {
-        email: new_email,
-        password: "",
-        password_confirmation: "",
-        current_password: "password123"
-      }
-    }
-
-    assert_equal new_email, @user.reload.email
-  end
-
-  test "updates password when password fields are present" do
-    patch update_user_registration_path, params: {
-      user: {
-        email: @user.email,
+        email: "updated@example.com",
         password: "newpassword123",
         password_confirmation: "newpassword123",
-        current_password: "password123"
+        current_password: "password123",
+        sol3_phase: 4
       }
     }
 
-    assert @user.reload.valid_password?("newpassword123")
+    @user.reload
+    assert_equal "registrations@example.com", @user.email
+    assert @user.valid_password?("password123")
+    assert_not @user.valid_password?("newpassword123")
+    assert_equal 4, @user.sol3_phase
   end
 
   # OAuth-only accounts
@@ -80,7 +55,7 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, oauth_user.reload.errors.count
   end
 
-  test "OAuth user can add an email and password without a current password" do
+  test "an OAuth user cannot add an email or a password" do
     oauth_user = User.new
     oauth_user.identities.build(provider: "discord", uid: "r-2")
     oauth_user.save!
@@ -90,8 +65,9 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
       user: { email: "added@example.com", password: "password123", password_confirmation: "password123" }
     }
 
-    assert_equal "added@example.com", oauth_user.reload.email
-    assert oauth_user.valid_password?("password123")
+    oauth_user.reload
+    assert_nil oauth_user.email
+    assert_not oauth_user.password?
   end
 
   test "OAuth user can set SOL3 phase" do
@@ -116,24 +92,12 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "password users still must confirm their current password" do
-    patch update_user_registration_path, params: {
-      user: { email: "other@example.com", password: "", password_confirmation: "", current_password: "wrong" }
-    }
-
-    assert_equal "registrations@example.com", @user.reload.email
-  end
-
-  test "settings page hides the current password field for OAuth users" do
-    oauth_user = User.new
-    oauth_user.identities.build(provider: "discord", uid: "r-5")
-    oauth_user.save!
-    sign_in oauth_user
-
+  test "settings page has no email or password fields, even for an account that still has a password" do
     get edit_user_registration_path
 
     assert_response :success
-    assert_select "#user_current_password", count: 0
+    assert_select "input[type=password]", count: 0
+    assert_select "input[name='user[email]']", count: 0
   end
 
   test "settings page shows linked providers and link buttons for configured ones" do
@@ -143,9 +107,20 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
       get edit_user_registration_path
     end
 
-    assert_select "form[action=?]", identity_path(@user.identities.first)
     assert_select "form[action=?]", "/users/auth/google_oauth2"
     assert_select "form[action=?]", "/users/auth/discord", count: 0
+    # The only linked provider cannot be unlinked; the page says to link a second one.
+    assert_select "form[action=?]", identity_path(@user.identities.first), count: 0
+    assert_select ".hint-text", text: /Link a second provider/
+  end
+
+  test "settings page offers Unlink once a second provider is linked" do
+    @user.identities.create!(provider: "discord", uid: "r-6")
+    @user.identities.create!(provider: "github", uid: "r-8")
+
+    get edit_user_registration_path
+
+    assert_select "form[action=?]", identity_path(@user.identities.first)
   end
 
   test "username can be changed without a password and is lowercased" do

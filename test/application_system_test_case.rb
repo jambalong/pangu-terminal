@@ -2,6 +2,19 @@ require "test_helper"
 require "capybara/cuprite"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
+  include Warden::Test::Helpers
+
+  setup { Warden.test_mode! }
+  teardown { Warden.test_reset! }
+
+  # Signs a user in without the browser flow. The real OAuth round trip (button,
+  # callback, account creation) is covered in OauthSignInTest and UserJourneyTest.
+  def sign_in_as(user)
+    login_as(user, scope: :user)
+    visit authenticated_root_path
+    assert_text "Dashboard"
+  end
+
   # Rails registers the Cuprite driver itself from these options (a separate
   # Capybara.register_driver block would be overridden). The 30s process_timeout
   # covers a cold CI runner starting Chrome (Ferrum's default is 10s);

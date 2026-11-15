@@ -13,17 +13,14 @@ class ApplicationController < ActionController::Base
     authenticated_root_path
   end
 
-  def after_sign_up_path_for(resource)
-    sync_guest_plans(resource)
-    authenticated_root_path
-  end
-
   def after_sign_out_path_for(resource)
     root_path
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :sol3_phase, :display_name ])
+    # Replaces Devise's defaults (email, password...): with no password sign-in,
+    # the only account fields a person can change are these two.
+    devise_parameter_sanitizer.permit(:account_update) { |user| user.permit(:sol3_phase, :display_name) }
   end
 
   private

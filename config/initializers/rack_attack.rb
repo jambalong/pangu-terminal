@@ -23,21 +23,10 @@ class Rack::Attack
     req.ip # unless req.path.start_with?('/assets')
   end
 
-  ### Brute Force Login Protection ###
-  throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
-    req.ip if req.path == "/sign-in" && req.post?
-  end
-
-  throttle("logins/email", limit: 5, period: 20.seconds) do |req|
-    if req.path == "/sign-in" && req.post?
-      req.params["user"]&.dig("email").to_s.downcase.gsub(/\s+/, "").presence
-    end
-  end
-
-  ### Account and Plan Creation Throttles ###
+  ### Plan Creation and Sharing Throttles ###
   # Guests can create plans without an account, so one client could otherwise
-  # fill the database by dropping its cookie. The sign-up form only exists as a
-  # fallback while no OAuth provider is configured.
+  # fill the database by dropping its cookie. There is no password sign-in or
+  # sign-up form to protect: accounts come from OAuth, throttled below.
   throttle("plans/create/ip", limit: 60, period: 1.hour) do |req|
     req.ip if req.path == "/app/planner" && req.post?
   end
@@ -48,10 +37,6 @@ class Rack::Attack
 
   throttle("imports/ip", limit: 20, period: 1.hour) do |req|
     req.ip if req.path == "/app/inventory/import" && req.post?
-  end
-
-  throttle("signups/ip", limit: 5, period: 1.hour) do |req|
-    req.ip if req.path == "/signup" && req.post?
   end
 
   ### OAuth Throttle ###

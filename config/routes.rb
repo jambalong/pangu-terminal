@@ -12,14 +12,12 @@ Rails.application.routes.draw do
   devise_for :users, skip: [ :sessions, :registrations ],
     controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   devise_scope :user do
+    # Accounts are created and signed in through OAuth only (see
+    # Users::OmniauthCallbacksController); there is no password form.
     get "sign-in", to: "devise/sessions#new", as: :new_user_session
-    post "sign-in", to: "devise/sessions#create", as: :user_session
     delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
 
-    get "signup", to: "users/registrations#new", as: :new_user_registration
-    post "signup", to: "users/registrations#create", as: :user_registration
-    delete "signup", to: "users/registrations#destroy"
-
+    delete "settings", to: "users/registrations#destroy", as: :user_registration
     get "settings", to: "users/registrations#edit", as: :edit_user_registration
     patch "settings", to: "users/registrations#update", as: :update_user_registration
     put "settings", to: "users/registrations#update"

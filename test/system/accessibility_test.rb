@@ -3,6 +3,8 @@ require "application_system_test_case"
 # Runs axe-core on the main pages, including WCAG AA color contrast. Rules
 # listed in SKIPPED would be known gaps with a follow-up; the list is empty.
 class AccessibilityTest < ApplicationSystemTestCase
+  include OauthTestHelper
+
   SKIPPED = %w[].freeze
 
   setup do
@@ -11,17 +13,21 @@ class AccessibilityTest < ApplicationSystemTestCase
   end
 
   def sign_in_through_form
-    visit new_user_session_path
-    fill_in "Email", with: "a11y@example.com"
-    fill_in "Password", with: "password123"
-    click_button "Sign In"
-    assert_text "Dashboard"
+    sign_in_as(@user)
   end
 
   test "public pages have no axe violations" do
     [ root_path, new_user_session_path, privacy_path, user_manual_path, plans_path ].each do |path|
       visit path
       assert_selector "body"
+      assert_no_axe_violations(skip: SKIPPED)
+    end
+  end
+
+  test "the sign-in page with every provider has no axe violations" do
+    with_oauth_env(:google_oauth2, :discord, :github) do
+      visit new_user_session_path
+      assert_button "Continue with GitHub"
       assert_no_axe_violations(skip: SKIPPED)
     end
   end
@@ -122,17 +128,19 @@ class AccessibilityTest < ApplicationSystemTestCase
   end
 
   test "an error message outlives the old 2.5 second timeout and can be dismissed" do
-    visit new_user_session_path
-    fill_in "Email", with: "a11y@example.com"
-    fill_in "Password", with: "wrong-password"
-    click_button "Sign In"
+    OmniAuth.config.mock_auth[:discord] = :invalid_credentials
 
-    assert_selector ".flash-message.alert"
-    sleep 3.2
-    assert_selector ".flash-message.alert"
+    with_oauth_env(:discord) do
+      visit new_user_session_path
+      click_button "Continue with Discord"
 
-    click_button "Dismiss message"
-    assert_no_selector ".flash-message.alert", wait: 3
+      assert_selector ".flash-message.alert"
+      sleep 3.2
+      assert_selector ".flash-message.alert"
+
+      click_button "Dismiss message"
+      assert_no_selector ".flash-message.alert", wait: 3
+    end
   end
 
   test "the optimizer plan picker can be opened again after choosing a plan" do
