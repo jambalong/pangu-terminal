@@ -230,15 +230,16 @@ throttle("logins/email", limit: 5, period: 20.seconds) do |req|
   end
 end
 
-# API: keyed by token, not IP
+# API: keyed by the SHA-256 digest of the token, not IP and never the raw token
 throttle("api/token", limit: 60, period: 1.minute) do |req|
   if req.path.start_with?("/api")
-    req.get_header("HTTP_AUTHORIZATION")&.delete_prefix("Bearer ")
+    token = req.get_header("HTTP_AUTHORIZATION")&.delete_prefix("Bearer ")
+    Digest::SHA256.hexdigest(token) if token
   end
 end
 ```
 
-The API throttle keys on the bearer token so each consumer gets an independent bucket. One abusive client cannot affect others on the same network. The throttled responder returns JSON for `/api/` routes and plain text elsewhere.
+The API throttle keys on the SHA-256 digest of the bearer token so each consumer gets an independent bucket. One abusive client cannot affect others on the same network. The discriminator becomes part of the cache key, and Solid Cache stores keys readably (`solid_cache_entries.key` is a `bytea` column), so never use a secret, a raw token or other personal data as a discriminator. (The `logins/email` and IP throttles still put an email address or IP in their keys.) The throttled responder returns JSON for `/api/` routes and plain text elsewhere.
 
 ## LLM Context Injection
 The Farming Advisor does not rely on the model's game knowledge. Live player data is injected into the system prompt: deficits, farming priority ranking, synthesis chain coverage across all tiers, and SOL3 phase. The model is instructed to reason only over those numbers:

@@ -294,7 +294,7 @@ curl https://panguterminal.ambalong.dev/api/v1/plans/1/waveplate-summary \
 
 - Tokens: `pt_` + urlsafe base64; only the SHA-256 digest is stored in `api_keys.token`. Raw token is shown once at creation. Max 3 keys per user (`ApiKey#api_key_limit`). `last_used_at` is touched on each authenticated request.
 - Keys are created and revoked in the web UI via `ApiKeysController` (`POST/DELETE /app/api_keys`), not through the API.
-- Throttle: `config/initializers/rack_attack.rb` (`api/token`, 60/min keyed by the Authorization header value). See [ARCHITECTURE.md](ARCHITECTURE.md#rackattack-rate-limiting).
+- Throttle: `config/initializers/rack_attack.rb` (`api/token`, 60/min keyed by the SHA-256 digest of the Authorization header token, so the raw token never reaches the cache). See [ARCHITECTURE.md](ARCHITECTURE.md#rackattack-rate-limiting).
 
 ## Known doc/code caveats
 
