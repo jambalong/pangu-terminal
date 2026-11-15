@@ -15,12 +15,18 @@
   background-color: var(--ctp-mantle);
   border: 1px solid var(--ctp-surface0);
   border-radius: 0.75rem;
-  transition: border-color 0.2s ease;
   margin-top: 1rem;
 }
 
+/* One rounded focus ring around the whole field. The input's own ring (the
+   site-wide :focus-visible style) is turned off so the two do not nest. */
 .search-field:focus-within {
-  border-color: var(--ctp-mauve);
+  outline: 2px solid var(--ctp-mauve);
+  outline-offset: 2px;
+}
+
+.search-input:focus-visible {
+  outline: none !important;
 }
 
 .search-icon {

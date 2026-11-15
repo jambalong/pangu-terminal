@@ -20,6 +20,11 @@ export default class extends Controller {
         }
       }
 
+      // A short last section (the FAQ) can never reach the activation line, even
+      // scrolled all the way down, so at the bottom of the page pick the last one.
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom) current = targets[targets.length - 1];
+
       navLinks.forEach((link) => {
         link.classList.toggle("active", link.getAttribute("href") === "#" + current?.id);
       });
