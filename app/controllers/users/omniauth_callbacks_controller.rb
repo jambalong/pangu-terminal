@@ -1,6 +1,7 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2 = handle_auth
   def discord = handle_auth
+  def github = handle_auth
 
   def failure
     redirect_to(user_signed_in? ? edit_user_registration_path : new_user_session_path,

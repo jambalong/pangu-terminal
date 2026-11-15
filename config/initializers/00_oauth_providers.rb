@@ -4,7 +4,9 @@
 module OauthProviders
   PROVIDERS = {
     google_oauth2: { label: "Google", id: "GOOGLE_CLIENT_ID", secret: "GOOGLE_CLIENT_SECRET", scope: "openid,profile" },
-    discord: { label: "Discord", id: "DISCORD_CLIENT_ID", secret: "DISCORD_CLIENT_SECRET", scope: "identify" }
+    discord: { label: "Discord", id: "DISCORD_CLIENT_ID", secret: "DISCORD_CLIENT_SECRET", scope: "identify" },
+    # No scope: GitHub then returns only public profile data, and no email is requested.
+    github: { label: "GitHub", id: "GITHUB_CLIENT_ID", secret: "GITHUB_CLIENT_SECRET", scope: nil }
   }.freeze
 
   def self.names = PROVIDERS.keys

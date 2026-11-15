@@ -30,6 +30,19 @@ class Users::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     assert_match(/\Arover-\d{4}\z/, Identity.find_by!(provider: "google_oauth2", uid: "g-1").user.display_name)
   end
 
+  test "creates users from github with a neutral username, not the github name" do
+    mock_oauth(:github, uid: "gh-1", name: "Octo Cat")
+
+    assert_difference [ "User.count", "Identity.count" ], 1 do
+      sign_in_via_oauth(:github)
+    end
+
+    assert_redirected_to authenticated_root_path
+    user = Identity.find_by!(provider: "github", uid: "gh-1").user
+    assert_match(/\Arover-\d{4}\z/, user.display_name)
+    assert_nil user.email
+  end
+
   test "returning user signs in to the same account" do
     user = User.new(display_name: "back-again")
     user.identities.build(provider: "discord", uid: "d-2")

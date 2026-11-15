@@ -278,10 +278,11 @@ Devise.setup do |config|
   # registers all of them with dummy credentials so OmniAuth test mode works.
   # Scopes are minimal on purpose: no email is requested from either provider.
   OauthProviders::PROVIDERS.each do |provider, settings|
+    options = settings[:scope].present? ? { scope: settings[:scope] } : {}
     if OauthProviders.configured?(provider)
-      config.omniauth provider, ENV.fetch(settings[:id]), ENV.fetch(settings[:secret]), scope: settings[:scope]
+      config.omniauth provider, ENV.fetch(settings[:id]), ENV.fetch(settings[:secret]), **options
     elsif Rails.env.test?
-      config.omniauth provider, "test-id", "test-secret", scope: settings[:scope]
+      config.omniauth provider, "test-id", "test-secret", **options
     end
   end
 

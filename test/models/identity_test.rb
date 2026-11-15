@@ -3,7 +3,8 @@ require "test_helper"
 class IdentityTest < ActiveSupport::TestCase
   test "provider must be a known provider" do
     user = User.create!(email: "idm@example.com", password: "password123")
-    assert_not user.identities.build(provider: "github", uid: "1").valid?
+    assert_not user.identities.build(provider: "twitter", uid: "1").valid?
+    assert user.identities.build(provider: "github", uid: "1").valid?
   end
 
   test "provider and uid are unique together" do
