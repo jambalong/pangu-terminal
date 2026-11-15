@@ -41,3 +41,5 @@ shorekeeper:
   resonance_skill: Resonance-Skill-
 lily:
   basic_attack: Normal-Attack
+suoming:
+  basic_attack: Normal-Attack

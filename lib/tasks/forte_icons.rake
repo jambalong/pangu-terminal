@@ -28,14 +28,23 @@ namespace :forte do
 
   SKILL_LABEL_OVERRIDES_RAKE = YAML.load_file(Rails.root.join("config/skill_label_overrides.yml")).freeze
 
-  # Icons missing from wutheringlab, fetched from another source instead.
-  # Key: "<slug>/<skill_key>". The icon is still saved as <label>.webp (64x64).
+  WUTHERINGLAB_BASE = "https://wutheringlab.com/wp-content/uploads"
+
+  # Icons that cannot be reached with the default "<Name>-<Label>.webp" URL, fetched
+  # from an explicit URL instead. Key: "<slug>/<skill_key>". The icon is still saved
+  # as <label>.webp (64x64).
   SKILL_ICON_URL_OVERRIDES = {
     # Hiyuki's Inherent Skill 1 ("Fine Snow") is not on wutheringlab
-    "hiyuki/inherent_skill_1" => "https://static.wikia.nocookie.net/wutheringwaves/images/5/51/Skill_Fine_Snow.png/revision/latest"
+    "hiyuki/inherent_skill_1" => "https://static.wikia.nocookie.net/wutheringwaves/images/5/51/Skill_Fine_Snow.png/revision/latest",
+    # Suoming's files on wutheringlab carry a hash suffix in the name
+    "suoming/basic_attack"         => "#{WUTHERINGLAB_BASE}/Suoming-Normal-Attack-8f654e40.webp",
+    "suoming/resonance_skill"      => "#{WUTHERINGLAB_BASE}/Suoming-Resonance-Skill-661cd4cc.webp",
+    "suoming/forte_circuit"        => "#{WUTHERINGLAB_BASE}/Suoming-Forte-Circuit-82895ac4.webp",
+    "suoming/resonance_liberation" => "#{WUTHERINGLAB_BASE}/Suoming-Resonance-Liberation-dbcee6f2.webp",
+    "suoming/intro_skill"          => "#{WUTHERINGLAB_BASE}/Suoming-Intro-Skill-b2f1750b.webp",
+    "suoming/inherent_skill_1"     => "#{WUTHERINGLAB_BASE}/Suoming-Inherent-Skill-1-df5ba78c.webp",
+    "suoming/inherent_skill_2"     => "#{WUTHERINGLAB_BASE}/Suoming-Inherent-Skill-2-96445d58.webp"
   }.freeze
-
-  WUTHERINGLAB_BASE = "https://wutheringlab.com/wp-content/uploads"
 
   desc "Download stat bonus icons from wuwa.wiki into public/images/forte/stats/"
   task download_stat_icons: :environment do
