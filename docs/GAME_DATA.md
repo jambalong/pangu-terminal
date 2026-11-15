@@ -16,7 +16,7 @@ How *Wuthering Waves* concepts map onto this codebase, and how to update game da
 | **EXP potions/cores** | Plans express EXP needs in rarity-2 terms; higher-rarity EXP items count via `exp_value` (`SynthesisService#calculate_exp_satisfaction`). |
 | **Waveplate** | Stamina resource. `sources.waveplate_cost` is per run. It regenerates 1 per 6 minutes and the bar caps at 240 (`WaveplateTimeline`, confirmed by the owner 2026-10-24). |
 | **SOL3 phase** | 1..8 progression phase of the game's Sol-III world level, set per user (`users.sol3_phase`); selects which `drop_rates` rows apply. |
-| **Lahai-Roi (LF) forgery sets** | Newer Resonators and weapons use a different set of weapon-type (forgery) materials (`WeaponTypeMaterial.region = "lahai_roi"` vs `"base"`): Broken Wing Polarizer (Sword), LF Carved Crystal (Broadblade), Incomplete Combustor (Pistols), LF Waveworn Shard (Gauntlets), Spliced String (Rectifier). Membership is **hard-coded** by name in `LAHAI_ROI_RESONATORS` (`app/services/resonator_ascension_planner.rb`) and `LAHAI_ROI_WEAPONS` (`app/services/weapon_ascension_planner.rb`). Despite the name, it now covers every post-3.0 Resonator that uses these sets, including the Mengzhou ones. |
+| **Lahai-Roi (LF) forgery sets** | Newer Resonators and weapons use a different set of weapon-type (forgery) materials (`WeaponTypeMaterial.region = "lahai_roi"` vs `"base"`): Broken Wing Polarizer (Sword), LF Carved Crystal (Broadblade), Incomplete Combustor (Pistols), LF Waveworn Shard (Gauntlets), Spliced String (Rectifier). Membership is **hard-coded** by name in `LAHAI_ROI_RESONATORS` (`db/seeds/01_resonators.rb`) and `LAHAI_ROI_WEAPONS` (`db/seeds/02_weapons.rb`); the seeds store it in the `region` column and the planners read that column. Despite the name, it now covers every post-3.0 Resonator that uses these sets, including the Mengzhou ones. |
 
 ## Seed pipeline
 
@@ -57,7 +57,7 @@ Seeded records point at files under `public/images/` (`resonators/`, `weapons/`,
 **Forte skill icons: `bin/rails forte:download_skill_icons`** fetches from wutheringlab by Resonator name and skill label (`<Name>-<Label>.webp`).
 
 - Newer Resonators (and a few older ones) label the basic attack `Normal-Attack`, Shorekeeper's skill has a trailing hyphen: these are per-slug entries in `config/skill_label_overrides.yml`, the single source read by both `db/seeds/01_resonators.rb` (stored icon paths) and `lib/tasks/forte_icons.rake` (download URL).
-- Icons wutheringlab lacks come from `SKILL_ICON_URL_OVERRIDES` in the rake file (key `"<slug>/<skill_key>"`), e.g. Hiyuki's Inherent Skill 1 from the Fandom wiki's `Skill_Fine_Snow.png`.
+- Icons wutheringlab lacks, or serves under a different file name, come from `SKILL_ICON_URL_OVERRIDES` in the rake file (key `"<slug>/<skill_key>"`, any full URL): Hiyuki's Inherent Skill 1 from the Fandom wiki's `Skill_Fine_Snow.png`, and all of Suoming's icons, whose wutheringlab files carry a hash suffix (`Suoming-Resonance-Skill-661cd4cc.webp`) that the default `<Name>-<Label>.webp` URL cannot guess. The icon is still saved under the label name (`normal-attack.webp` when the label override applies).
 - After changing label overrides run `bin/rails db:seed` so stored `forte_icons` paths update (production seeds on boot).
 
 ## Adding a new weapon

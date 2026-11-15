@@ -8,7 +8,7 @@ Framework: Minitest (`rails/test_help`), SimpleCov (+ Cobertura for Codecov), Ca
 bin/rails test                                 # everything except system tests
 bin/rails test test/models/plan_test.rb        # one file
 bin/rails test test/models/plan_test.rb:12     # one test by line
-bin/rails test:system                          # test/system/user_journey_test.rb (headless Chrome)
+bin/rails test:system                          # test/system/*_test.rb (headless Chrome)
 bin/ci                                         # full local gate defined in config/ci.rb
 ```
 
@@ -28,7 +28,9 @@ Prerequisite: Postgres running (see [DEVELOPMENT.md](DEVELOPMENT.md)). Coverage 
 | `test/system/content_security_policy_test.rb` | Real Chrome loads public and signed-in pages and fails on any CSP violation |
 | `test/system/accessibility_test.rb` | axe-core on the main pages (public and signed in) plus keyboard checks: skip link, accordion button state, `aria-current` |
 | `test/integration/semantic_layout_test.rb` | Language, landmarks, live regions, one `h1` per page, no nested navs |
-| `test/system/user_journey_test.rb` | Sign in -> set SOL3 phase -> create plan -> edit inventory -> optimizer |
+| `test/system/user_journey_test.rb` | Sign in with the OAuth button -> set SOL3 phase -> create plan -> edit inventory -> optimizer |
+| `test/system/oauth_sign_in_test.rb` | The provider buttons (Google, Discord, GitHub) create an account through OmniAuth test mode; no password field; the unavailable message with no provider |
+| `test/system/user_manual_test.rb` | The manual sidebar highlights the section being read, including the last one at the bottom of the page |
 
 ## Test helper behavior (`test/test_helper.rb`)
 

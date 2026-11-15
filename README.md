@@ -266,7 +266,7 @@ Key decisions, each documented with code in **[docs/ARCHITECTURE.md](docs/ARCHIT
 
 - **Service objects** for business logic (planners, synthesis, drop rates, optimizer, farming priority, LLM advisor)
 - **JSONB plan caching** and **polymorphic plans** (Resonator | Weapon)
-- **Guest user system** with a migration path to registered accounts
+- **Guest user system** with a migration path to OAuth-only accounts (no passwords or emails stored for new accounts)
 - **Turbo Streams** for live inventory/synthesis updates
 - **SHA-256 hashed API tokens**; **404 instead of 403** for non-owner resources; **Rack::Attack** per-key throttling
 - **LLM context injection**, a thin `LlmClient` wrapper, and an **async Turbo Frame** so the advisor never blocks the page
@@ -280,7 +280,7 @@ More documentation: [docs/README.md](docs/README.md) (data model, game data, dev
 | Backend | Rails 8.1 + Ruby 3.4 |
 | Database | PostgreSQL 17 (Neon) |
 | Frontend | Hotwire (Turbo + Stimulus), plain CSS (Propshaft), importmap |
-| Auth & security | Devise, Rack::Attack, SHA-256 hashed API tokens |
+| Auth & security | Devise with OAuth-only sign-in (Google, Discord, GitHub), Rack::Attack, SHA-256 hashed API tokens |
 | LLM | RubyLLM 2 with Gemini |
 | Cache / jobs / cable | Solid Cache, Solid Queue, Solid Cable |
 | Deployment | Docker + Render |

@@ -4,13 +4,14 @@ One document for where the project is going and what keeps it healthy. Part 1 is
 
 # Priorities (reviewed 2026-10-24)
 
-Shipped: OAuth-only sign-in (Google, Discord, GitHub; no email or password), the accessibility and semantic HTML pass (axe in the system tests, skip link, dialog focus, live regions, AA contrast, phone tap targets), the whole-account optimizer, the Waveplate timeline, quick inventory entry with import and export, plan priority, shareable plan links, onboarding, hardening, the uptime workflow and the link preview image. Part 1 and Part 2 below keep the detail.
+Shipped: OAuth-only sign-in (Google, Discord, GitHub; no email or password), game data through 3.8, the accessibility and semantic HTML pass (axe in the system tests, skip link, dialog focus, live regions, AA contrast, phone tap targets), the whole-account optimizer, the Waveplate timeline, quick inventory entry with import and export, plan priority, shareable plan links, onboarding, hardening, the uptime workflow and the link preview image. Part 1 and Part 2 below keep the detail.
 
 ## 0. Owner actions (no code)
 
 - [x] Create the free uptime monitor on `/up` (5 minute interval, email alerts) so the free Render instance stays awake (done: UptimeRobot). The GitHub Actions workflow is only a coarse backup; GitHub delays scheduled runs too much to keep the instance awake.
 - [ ] Add the Discord and GitHub OAuth apps and their `*_CLIENT_ID` / `*_CLIENT_SECRET` variables in Render when you want those buttons (see [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps)).
-- [ ] Before deploying the OAuth-only change: link Google in Settings on your own account, decide about any other password account (delete it or have its owner link a provider), then delete `POSTMARK_API_TOKEN` in Render.
+- [x] OAuth-only sign-in is deployed (Google, Discord and GitHub apps created, variables set in Render, `POSTMARK_API_TOKEN` deleted).
+- [ ] Delete the remaining email/password accounts in Neon (they can no longer sign in; the owner decided not to migrate them). Sign in once with a provider afterwards to create a fresh account.
 - [ ] Check Neon's backup window and the Neon and Render usage pages.
 - [ ] A screen reader pass (NVDA, VoiceOver or TalkBack) and a real phone pass; automation cannot cover either.
 - [ ] Edit the PR descriptions that carry the appended footer.
@@ -105,8 +106,8 @@ The earlier plan (username accounts, optional email, recovery codes, `/recover`)
 
 ## Game data (waiting on the owner)
 
-- [ ] **Deferred until the owner has the data (do not add new Resonators, weapons or materials before then):** Suoming (Electro Sword; flower Miasmic Branch; boss Forged Empyrean's Sigh; enemy set Howler Core; skill boss Remnant of the Wheel; stats unknown) and her weapon Unspoken Rue (Sword on the Polarizer set per wiki "likely"; enemy-drop set unknown). Adding a Lahai-Roi-era Resonator or weapon is a seed-list edit (`LAHAI_ROI_*`, see [GAME_DATA.md](GAME_DATA.md)).
-- [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase range (`DropRate::SOL3_PHASES`) against 3.7. Needs the owner's data.
+- [x] Suoming, Lily and their weapons Unspoken Rue and Lullaby are in the seeds (3.7 and 3.8 debuts), with the owner's wiki-sourced materials, the new flowers Miasmic Branch and Reverie Lily, art and skill icons. Adding a Lahai-Roi-era Resonator or weapon is a seed-list edit (`LAHAI_ROI_*`, see [GAME_DATA.md](GAME_DATA.md)); never add one without the owner's data.
+- [ ] Check cost tables (`04_cost_templates.rb`) and the SOL3 phase range (`DropRate::SOL3_PHASES`) against the current version (3.8). Needs the owner's data.
 - [ ] Tacet Fields data (see feature 11).
 
 ## Platform
