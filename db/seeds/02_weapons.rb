@@ -26,7 +26,8 @@ WEAPON_DATA = {
       "Glint of Clouds",
       "Laser Shearer",
       "Red Spring",
-      "Unflickering Valor"
+      "Unflickering Valor",
+      "Unspoken Rue"
     ],
     4 => [
       "Commando of Conviction",
@@ -67,6 +68,7 @@ WEAPON_DATA = {
 
   "Pistols" => {
     5 => [
+      "Lullaby",
       "Lux & Umbra",
       "Phasic Homogenizer",
       "Skull Thrasher",
@@ -154,6 +156,7 @@ LAHAI_ROI_WEAPONS = [
   "Frostburn",
   "Glint of Clouds",
   "Laser Shearer",
+  "Lullaby",
   "Phasic Homogenizer",
   "Pulsation Bracer",
   "Radiance Cleaver",
@@ -162,7 +165,8 @@ LAHAI_ROI_WEAPONS = [
   "Spectral Trigger",
   "Spectrum Blaster",
   "Starfield Calibrator",
-  "Thousandfold Deliverance"
+  "Thousandfold Deliverance",
+  "Unspoken Rue"
 ].freeze
 
 WEAPON_DATA.each do | weapon_type, rarities |

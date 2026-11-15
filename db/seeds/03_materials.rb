@@ -154,7 +154,11 @@ FLOWER_DATA = [
   { name: "Moss Amber", rarity: 1 },
   { name: "Past Reveries", rarity: 1 },
   { name: "Redbell", rarity: 1 },
-  { name: "Rimewisp", rarity: 1 }
+  { name: "Rimewisp", rarity: 1 },
+
+  # Added in 3.7 and 3.8 (region not recorded)
+  { name: "Miasmic Branch", rarity: 1 },
+  { name: "Reverie Lily", rarity: 1 }
 ].freeze
 
 seed_material_set(FLOWER_DATA, "flower", "Ascension Material", default_description: "A material used for Resonator Ascension.")
