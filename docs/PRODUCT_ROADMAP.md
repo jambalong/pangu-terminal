@@ -4,12 +4,13 @@ One document for where the project is going and what keeps it healthy. Part 1 is
 
 # Priorities (reviewed 2026-10-24)
 
-Shipped: OAuth sign-in (Google; Discord wired but off), the accessibility and semantic HTML pass (axe in the system tests, skip link, dialog focus, live regions, AA contrast, phone tap targets), the whole-account optimizer, the Waveplate timeline, quick inventory entry with import and export, plan priority, shareable plan links, onboarding, hardening, the uptime workflow and the link preview image. Part 1 and Part 2 below keep the detail.
+Shipped: OAuth-only sign-in (Google, Discord, GitHub; no email or password), the accessibility and semantic HTML pass (axe in the system tests, skip link, dialog focus, live regions, AA contrast, phone tap targets), the whole-account optimizer, the Waveplate timeline, quick inventory entry with import and export, plan priority, shareable plan links, onboarding, hardening, the uptime workflow and the link preview image. Part 1 and Part 2 below keep the detail.
 
 ## 0. Owner actions (no code)
 
 - [x] Create the free uptime monitor on `/up` (5 minute interval, email alerts) so the free Render instance stays awake (done: UptimeRobot). The GitHub Actions workflow is only a coarse backup; GitHub delays scheduled runs too much to keep the instance awake.
-- [ ] Add the Discord OAuth app and `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` in Render when you want that button.
+- [ ] Add the Discord and GitHub OAuth apps and their `*_CLIENT_ID` / `*_CLIENT_SECRET` variables in Render when you want those buttons (see [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps)).
+- [ ] Before deploying the OAuth-only change: link Google in Settings on your own account, decide about any other password account (delete it or have its owner link a provider), then delete `POSTMARK_API_TOKEN` in Render.
 - [ ] Check Neon's backup window and the Neon and Render usage pages.
 - [ ] A screen reader pass (NVDA, VoiceOver or TalkBack) and a real phone pass; automation cannot cover either.
 - [ ] Edit the PR descriptions that carry the appended footer.
@@ -62,7 +63,7 @@ Size: S under a day, M a few days, L a week or more. "Data" means it needs game 
 
 | # | Feature | Why it fits | Size | Needs |
 | --- | --- | --- | --- | --- |
-| 1 | **OAuth sign-in (Google, Discord)** (owner priority; a tester did not want to share an email). **Shipped**; owner still has to create the OAuth clients and set the env vars, see [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps). | "Zero friction to try": players should not have to hand over an email. | L | done |
+| 1 | **OAuth sign-in (Google, Discord, GitHub)** (owner priority; a tester did not want to share an email). **Shipped**; owner still has to create the OAuth clients and set the env vars, see [DEPLOYMENT.md](DEPLOYMENT.md#oauth-sign-in-setup-owner-steps). | "Zero friction to try": players should not have to hand over an email. | L | done |
 | 2 | **Whole-account optimizer** (shipped): run the optimizer over all plans (or a chosen set) instead of one at a time | The core question is "what should I farm next across everything I want". `Plan.fetch_materials_summary` and `SynthesisService` already aggregate. | M | none |
 | 3 | **Waveplate timeline** (shipped, values confirmed 2026-10-24): turn total Waveplates into "about N days of regeneration" (builds on 2) | Makes the plan feel real and helps players choose what to build first. | S | confirm the regen rate and cap (assumed 1 Waveplate per 6 minutes, cap 240) |
 | 4 | **Faster inventory entry** (shipped: quick entry page, JSON/CSV import and export): grid with keyboard navigation, JSON/CSV export and import (the API already exposes inventory) | Inventory is the highest-effort part of using the app; less friction means more accurate advice. | M | none |
@@ -98,7 +99,7 @@ Contextual onboarding (dashboard checklist and empty-state hints) and a hardenin
 
 ### Item 1: OAuth sign-in (replaces the username spec)
 
-The earlier plan (username accounts, optional email, recovery codes, `/recover`) is **superseded**. The owner chose OAuth-only account creation: players sign in with Google or Discord, no email or password is entered, and the app requests no email scope (Discord `identify`, Google `openid profile`). Reasons: it removes the email objection directly, avoids building recovery codes and a recovery throttle, and offloads credential storage and account recovery to the providers. Legacy email/password users keep working; the sign-up form stays only as a fallback while no provider is configured. Design and decisions are in [ARCHITECTURE.md](ARCHITECTURE.md#authentication-and-ownership); `users.email` is nullable and `identities` holds `(provider, uid)`.
+The earlier plan (username accounts, optional email, recovery codes, `/recover`) is **superseded**. The owner chose OAuth-only account creation: players sign in with Google, Discord or GitHub, no email or password is entered, and the app requests no email scope (Discord `identify`, Google `openid profile`, GitHub none). Reasons: it removes the email objection directly, avoids building recovery codes and a recovery throttle, and offloads credential storage and account recovery to the providers. Email/password sign-in, sign-up and reset were removed once only a couple of legacy accounts remained. Design and decisions are in [ARCHITECTURE.md](ARCHITECTURE.md#authentication-and-ownership); `users.email` is nullable and `identities` holds `(provider, uid)`.
 
 # Part 2: Maintenance backlog
 

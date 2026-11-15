@@ -24,15 +24,16 @@ bin/dev                       # http://localhost:3000
 
 `.env` is loaded by `dotenv-rails` and gitignored. `config/database.yml` connects to `127.0.0.1:5432` using those variables for development and test; production uses `DATABASE_URL`.
 
-## Local account
+## Local sign-in
 
-Any email-shaped address and a password of 6 to 128 characters works (no email confirmation). A throwaway dev account:
+Accounts come only from OAuth (Google, Discord, GitHub), so with no provider variables set `/sign-in` says sign-in is unavailable. Guests can still use the planner at `/app/planner`. To sign in locally, register a free OAuth app with one provider and put its credentials in `.env`. GitHub is the quickest: Settings, Developer settings, OAuth Apps, New OAuth App, homepage `http://localhost:3000`, callback URL `http://localhost:3000/users/auth/github/callback`, then set:
 
 ```bash
-bin/rails runner 'User.create!(email: "dev@example.com", password: "password123")'
+GITHUB_CLIENT_ID=...
+GITHUB_CLIENT_SECRET=...
 ```
 
-or sign up at `http://localhost:3000/signup`. Guest plans created at `/app/planner` move to the account on sign-in. Remove it with `bin/rails runner 'User.find_by(email: "dev@example.com")&.destroy'`.
+Restart `bin/dev`. Google (`/users/auth/google_oauth2/callback`) and Discord (`/users/auth/discord/callback`) work the same way with `GOOGLE_CLIENT_ID/SECRET` and `DISCORD_CLIENT_ID/SECRET`. The first sign-in creates an account with a random username (`rover-1234`); guest plans move to it. Tests never need real providers: they use OmniAuth test mode (see [TESTING.md](TESTING.md)).
 
 ## Windows / WSL2
 

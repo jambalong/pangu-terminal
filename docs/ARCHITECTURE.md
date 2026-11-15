@@ -14,9 +14,9 @@ Pangu Terminal is a conventional Rails 8.1 monolith (Hotwire front end, PostgreS
 
 ## Authentication and ownership
 
-- Web users: Devise (`database_authenticatable, registerable, recoverable, rememberable, validatable, omniauthable`). New accounts come from OAuth (Google, Discord): `Users::OmniauthCallbacksController` finds an `Identity` by `(provider, uid)` or creates a `User` plus `Identity`, then signs in (`sync_guest_plans` runs through `after_sign_in_path_for`). Providers are read from ENV by `OauthProviders` (`config/initializers/00_oauth_providers.rb`); a provider with unset variables registers no strategy and shows no button. Scopes request no email, so OAuth users have `email = NULL`. Provider names are never stored: a new account gets a neutral lowercase username (`User.generate_display_name`, `rover-1234`) that the user can edit in Settings (3 to 16 characters so the navbar never needs an ellipsis; CSS still caps `.user-badge` for older long names). The username form posts only `display_name`, which `Users::RegistrationsController` accepts without a password. Linking happens only while signed in (never by matching email, which would allow account takeover via an unverified provider email); `IdentitiesController#destroy` unlinks unless it is the last way in. The email sign-up form (`Users::RegistrationsController#new/create`) is only reachable while no provider is configured, so production always has a way to create an account. The request phase is POST-only (`omniauth-rails_csrf_protection`). Reasons for OAuth-only instead of username accounts: a tester would not give an email, and a username/password scheme needs recovery codes and its own abuse handling, while the providers already handle both.
-- Legacy email/password users keep working (sign-in form behind "Sign in with email", password reset by email). Sign-in/sign-up/settings routes are customised in `config/routes.rb` (`/sign-in`, `/signup`, `/settings`); `Users::RegistrationsController` allows a password-free update when the sole param is `sol3_phase`, and for OAuth-only users (no password to confirm); password users must still confirm their current password.
-- Guests: `PlansController#set_guest_token` stores a UUID in `cookies.permanent[:guest_token]`. On sign-in/sign-up, `ApplicationController#sync_guest_plans` claims the guest's plans (dropping duplicates of subjects the user already planned) and clears the cookie.
+- Web users: Devise (`database_authenticatable, registerable, rememberable, validatable, omniauthable`). Accounts exist only through OAuth (Google, Discord, GitHub): `Users::OmniauthCallbacksController` finds an `Identity` by `(provider, uid)` or creates a `User` plus `Identity`, then signs in (`sync_guest_plans` runs through `after_sign_in_path_for`). Providers are read from ENV by `OauthProviders` (`config/initializers/00_oauth_providers.rb`); a provider with unset variables registers no strategy and shows no button, and with none set `/sign-in` says sign-in is unavailable. Scopes request no email (GitHub requests no scope at all), so OAuth users have `email = NULL`. Provider names are never stored: a new account gets a neutral lowercase username (`User.generate_display_name`, `rover-1234`) that the user can edit in Settings (3 to 16 characters so the navbar never needs an ellipsis; CSS still caps `.user-badge` for older long names). Linking happens only while signed in (never by matching email, which would allow account takeover via an unverified provider email); `IdentitiesController#destroy` unlinks only while another provider stays linked. The request phase is POST-only (`omniauth-rails_csrf_protection`). Reasons for OAuth-only: a tester would not give an email, and a password scheme needs reset email, recovery and its own abuse handling, while the providers already handle all of that.
+- There is no password sign-in, sign-up or reset: `config/routes.rb` routes only `GET /sign-in` (the provider buttons), `DELETE /logout` and `/settings` (edit, update, and `DELETE` to delete the account). `Users::RegistrationsController` updates with `update_without_password`, and `ApplicationController#configure_permitted_parameters` permits only `display_name` and `sol3_phase`, so email and password params are ignored. The `email` and `encrypted_password` columns stay for a few older accounts and are unused.
+- Guests: `PlansController#set_guest_token` stores a UUID in `cookies.permanent[:guest_token]`. On sign-in, `ApplicationController#sync_guest_plans` claims the guest's plans (dropping duplicates of subjects the user already planned) and clears the cookie.
 - `PlanLoading#load_current_plans` is the single place that scopes plans to the current user or guest; always go through it (or `current_user.plans`) instead of `Plan.find`.
 - Optimizer, inventory, dashboard and API-key pages require `authenticate_user!`; the planner works for guests.
 
@@ -211,23 +211,12 @@ Guidance appears where the user is stuck, with no stored onboarding state. `Onbo
 `config/initializers/content_security_policy.rb` sends an enforcing policy: same-origin by default, scripts only from the app or with the per-request nonce (importmap tags get it automatically, so there is no inline-script allowance and inline event handlers are not allowed; forms that submit on change use the `auto-submit` Stimulus controller), styles allow inline because views use `style=` attributes, plus Google Fonts for CSS and font files, no plugins, no framing (`frame-ancestors 'none'`). `form-action` is deliberately unset: browsers apply it to redirects after a form post and it would block the hand-off to Google or Discord. `Permissions-Policy` (set in `config/application.rb`, because the Rails DSL still emits the old `Feature-Policy`) disables camera, microphone, geolocation, payment and USB. Anything new that loads from another host (an analytics script, an image CDN) must be added to the policy; `test/system/content_security_policy_test.rb` loads the main pages in Chrome and fails on any violation.
 
 ## Rack::Attack Rate Limiting
-The throttles below, plus `plans/create/ip` (60 POSTs per hour on `/app/planner`; guests need no account, so this stops one client filling the database by dropping its cookie), `signups/ip` (5 POSTs per hour on `/signup`, the fallback form), `imports/ip` (20 inventory import POSTs per hour), `shared/ip` (60 shared-plan page requests per minute), a safelist for `/up` (no throttling or counting, since counters are database writes) and `oauth/ip` (20 requests per minute per IP on `/users/auth/*`, covering both the request and callback phases). Three separate throttles with different strategies:
+The throttles below, plus `plans/create/ip` (60 POSTs per hour on `/app/planner`; guests need no account, so this stops one client filling the database by dropping its cookie), `imports/ip` (20 inventory import POSTs per hour), `shared/ip` (60 shared-plan page requests per minute), a safelist for `/up` (no throttling or counting, since counters are database writes) and `oauth/ip` (20 requests per minute per IP on `/users/auth/*`, covering both the request and callback phases). Two separate throttles with different strategies:
 
 ```ruby
 # General: catch scrapers and misconfigured clients
 throttle("req/ip", limit: 300, period: 5.minutes) do |req|
   req.ip
-end
-
-# Brute force: limit login attempts by IP and email
-throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
-  req.ip if req.path == "/sign-in" && req.post?
-end
-
-throttle("logins/email", limit: 5, period: 20.seconds) do |req|
-  if req.path == "/sign-in" && req.post?
-    req.params["user"]&.dig("email").to_s.downcase.presence
-  end
 end
 
 # API: keyed by the SHA-256 digest of the token, not IP and never the raw token
@@ -239,7 +228,7 @@ throttle("api/token", limit: 60, period: 1.minute) do |req|
 end
 ```
 
-The API throttle keys on the SHA-256 digest of the bearer token so each consumer gets an independent bucket. One abusive client cannot affect others on the same network. The discriminator becomes part of the cache key, and Solid Cache stores keys readably (`solid_cache_entries.key` is a `bytea` column), so never use a secret, a raw token or other personal data as a discriminator. (The `logins/email` and IP throttles still put an email address or IP in their keys.) The throttled responder returns JSON for `/api/` routes and plain text elsewhere.
+The API throttle keys on the SHA-256 digest of the bearer token so each consumer gets an independent bucket. One abusive client cannot affect others on the same network. The discriminator becomes part of the cache key, and Solid Cache stores keys readably (`solid_cache_entries.key` is a `bytea` column), so never use a secret, a raw token or other personal data as a discriminator. (The IP throttles still put an IP address in their keys.) The throttled responder returns JSON for `/api/` routes and plain text elsewhere.
 
 ## LLM Context Injection
 The Farming Advisor does not rely on the model's game knowledge. Live player data is injected into the system prompt: deficits, farming priority ranking, synthesis chain coverage across all tiers, and SOL3 phase. The model is instructed to reason only over those numbers:

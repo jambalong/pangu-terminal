@@ -20,9 +20,9 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 | --- | --- |
 | `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` (includes `gemini_api_key` for the Farming Advisor) |
 | `DATABASE_URL` | Neon connection string. Used for the primary, cache, queue and cable databases (`config/database.yml`), so one Neon database holds all tables. It is the **pooled** endpoint (host contains `-pooler`, PgBouncer). Neon runs **PostgreSQL 17.11**, matching CI and `docker-compose.yml`. `database.yml` sets no `prepared_statements: false` or `advisory_locks: false`; migrations run through the pooler without problems (for example the 2026-10-22 region migration). If you ever see advisory-lock or prepared-statement errors, point `DATABASE_URL` at Neon's direct endpoint. |
-| `POSTMARK_API_TOKEN` | Postmark SMTP (port 2525) for password-reset emails (only legacy email/password accounts can reset a password) |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google OAuth client. Optional: with either unset the Google button is hidden and the provider is disabled. |
 | `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` | Discord OAuth application. Same behavior. |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | GitHub OAuth app. Same behavior. |
 | `APP_HOST` | Optional. Public hostname for allowed hosts and mailer links; default `panguterminal.ambalong.dev`. Set it if the custom domain changes. |
 | `SOLID_QUEUE_IN_PUMA` | Optional. When set, ActiveJob uses Solid Queue (processed inside Puma) instead of the default in-process `:async` adapter. Not needed: `FarmingAdviceJob` is short and its result is cached, so a restart only costs one regenerated advice. |
 | `ADVISOR_DAILY_LIMIT_PER_USER`, `ADVISOR_DAILY_LIMIT_GLOBAL` | Optional. Farming Advisor generations per account and in total per day (defaults 20 and 500). Each new generation is one Gemini call; cached advice and polling are free. Raise them if the Gemini quota allows, lower them to protect it. |
@@ -33,19 +33,20 @@ Production runs on **Render** (Docker web service) with **PostgreSQL on Neon**, 
 
 Render service (from the dashboard settings page): web service `pangu-terminal`, runtime Docker, **Free** instance type, region **Oregon (US West)**, source `jambalong/pangu-terminal` branch `main`, custom domain `panguterminal.ambalong.dev`. The free tier sleeps when idle, so the first request can take up to a minute (the uptime monitor above prevents that). A deploy or an instance restart can also cause a few minutes of 502s or hanging pages while the container boots, because `bin/docker-entrypoint` runs `db:prepare` and `db:seed:if_changed` before serving; the monitor logged one 5 minute 502 this way on 2026-11-14. Render's Events and Logs tabs show the cause. Maintenance mode and edge caching are paid-only features and unavailable.
 
-Environment tab (as of 2026-10-23) holds exactly five variables: `DATABASE_URL`, `POSTMARK_API_TOKEN`, `RAILS_ENV` (`production`), `RAILS_MASTER_KEY` and `WEB_CONCURRENCY` (`2`). The optional variables in the table above (`APP_HOST`, `EXTRA_HOSTS`, `SOLID_QUEUE_IN_PUMA`, `RAILS_LOG_LEVEL`) are unset and use their defaults. Never commit secret values.
+Environment tab (as of 2026-10-23) held five variables: `DATABASE_URL`, `POSTMARK_API_TOKEN`, `RAILS_ENV` (`production`), `RAILS_MASTER_KEY` and `WEB_CONCURRENCY` (`2`). `POSTMARK_API_TOKEN` is no longer read (the app sends no email), so it can be deleted, and the OAuth variables above are added when a provider is set up. The optional variables in the table above (`APP_HOST`, `EXTRA_HOSTS`, `SOLID_QUEUE_IN_PUMA`, `RAILS_LOG_LEVEL`) are unset and use their defaults. Never commit secret values.
 
 ### OAuth sign-in setup (owner steps)
 
-New accounts are created with Google or Discord (see [ARCHITECTURE.md](ARCHITECTURE.md#authentication-and-ownership)). Until at least one provider is configured, production shows no OAuth buttons and keeps the old email sign-up form as a fallback; once one is configured the sign-up form closes.
+Accounts are created and signed in with Google, Discord or GitHub only (see [ARCHITECTURE.md](ARCHITECTURE.md#authentication-and-ownership)); there is no email or password sign-in. With no provider configured, `/sign-in` says sign-in is unavailable, so set up at least one before deploying. Before removing password sign-in from a deployment that still has password accounts, have each of those users link a provider in Settings, or they are locked out.
 
 - [ ] Google Cloud Console: create an OAuth consent screen and a **Web** OAuth client. Authorized redirect URI: `https://panguterminal.ambalong.dev/users/auth/google_oauth2/callback`.
 - [ ] Discord Developer Portal: create an application, OAuth2 page, add redirect `https://panguterminal.ambalong.dev/users/auth/discord/callback`.
 - [ ] On the consent screen Branding page set the home page to `https://panguterminal.ambalong.dev` and the privacy policy to `https://panguterminal.ambalong.dev/privacy` (Google requires both to publish), add `ambalong.dev` under authorized domains, and leave the logo empty (a logo triggers verification). Then publish the app so any Google account can sign in.
-- [ ] Render: add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` as environment variables, then redeploy.
+- [ ] GitHub: Settings, Developer settings, OAuth Apps, New OAuth App. Homepage `https://panguterminal.ambalong.dev`, authorization callback URL `https://panguterminal.ambalong.dev/users/auth/github/callback`. No scopes are requested.
+- [ ] Render: add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` (whichever providers you enable) as environment variables, then redeploy.
 - [ ] Check `/sign-in` shows the buttons and that signing in with each provider lands on the dashboard.
 
-Scopes are minimal: Discord `identify`, Google `openid profile`; no email is requested or stored. Redirect URIs are built from the request host, so a new hostname needs its own redirect URI at each provider. Rate limit: 20 requests per minute per IP on `/users/auth/*`.
+Scopes are minimal: Discord `identify`, Google `openid profile`, GitHub none (public profile only); no email is requested or stored. Redirect URIs are built from the request host, so a new hostname needs its own redirect URI at each provider. Rate limit: 20 requests per minute per IP on `/users/auth/*`.
 
 `public/robots.txt` and `public/sitemap.xml` are static files with the production hostname written in; update them if the custom domain changes. Canonical and Open Graph URLs use `APP_HOST` (default `panguterminal.ambalong.dev`).
 
