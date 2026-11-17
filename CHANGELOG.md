@@ -8,6 +8,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Changed
 - Privacy policy contact address is now support@ambalong.dev (it was a Google Group address).
 - Privacy policy: removed the note about older email and password accounts (none are left), added that request counters per IP address are kept for up to about two weeks to limit abuse, added a pointer to the sign-in providers' own privacy policies, and updated the date.
+- Privacy policy: the "What we store" and "Services that process data" lists now show bullets instead of an unexplained indent.
 
 ## [2.0.0] - 2026-11-15
 
