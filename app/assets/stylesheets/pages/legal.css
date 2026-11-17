@@ -23,6 +23,7 @@
 }
 
 .legal-page ul {
+  list-style: disc;
   padding-left: 1.25rem;
 }
 
