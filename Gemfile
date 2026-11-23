@@ -68,7 +68,7 @@ end
 gem "devise", "~> 5.0"
 gem "rack-attack", "~> 6.8"
 
-gem "ruby_llm", "~> 2.1"
+gem "ruby_llm", "~> 2.2"
 
 gem "omniauth", "~> 2.3"
 gem "omniauth-google-oauth2", "~> 1.2"
