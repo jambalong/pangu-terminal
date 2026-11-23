@@ -70,7 +70,7 @@ gem "rack-attack", "~> 6.8"
 
 gem "ruby_llm", "~> 2.1"
 
-gem "omniauth", "~> 2.3"
+gem "omniauth", "~> 2.4"
 gem "omniauth-google-oauth2", "~> 1.2"
 gem "omniauth-discord", "~> 1.2"
 gem "omniauth-github", "~> 2.0"
